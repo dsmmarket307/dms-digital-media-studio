@@ -111,12 +111,7 @@ export default async function DemoPage({ params }: Props) {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
-      {!isPublished && (
-        <div style={{ background: pr, color: "#fff", padding: "8px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa — DMS Digital Media Studio</span>
-          <a href="https://dms-digital-media-studio.vercel.app" style={{ color: "#fff", fontSize: 12, textDecoration: "underline", fontWeight: 700 }}>Quiero mi sitio</a>
-        </div>
-      )}
+      
 
       <nav>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -332,4 +327,5 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
 
