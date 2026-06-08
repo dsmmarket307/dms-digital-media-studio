@@ -355,19 +355,7 @@ export default function ClientBuilder() {
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         <input ref={fileRef} type="file" accept="image/*" style={{ display:"none" }} onChange={handleLogoUpload} />
 
-        <aside style={{ width:240, background:"#fff", borderRight:"1px solid #e5e7eb", minHeight:"100vh", position:"sticky", top:0, display:"flex", flexDirection:"column", flexShrink:0 }} className="hidden md:flex">
-          <div style={{ padding:"24px 20px 16px", borderBottom:"1px solid #f0f0f0" }}>
-            <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={120} height={38} /></Link>
-          </div>
-          <nav style={{ flex:1, padding:"12px 10px", display:"flex", flexDirection:"column", gap:2 }}>
-            {MENU.map(item => <MenuItem key={item.href} item={item} permitido={rutasPermitidas.includes(item.href)} />)}
-          </nav>
-          <div style={{ padding:"12px 16px", borderTop:"1px solid #f0f0f0" }}>
-            <div style={{ background:`${pr}10`, borderRadius:8, padding:"8px 12px", textAlign:"center" }}>
-              <p style={{ fontSize:10, fontWeight:700, color:pr, textTransform:"uppercase", letterSpacing:1, margin:0 }}>Plan {planActivo}</p>
-            </div>
-          </div>
-        </aside>
+
 
         <div style={{ flex:1, display:"flex", flexDirection:"column" }}>
           <header style={{ background:"#fff", borderBottom:"1px solid #e5e7eb", padding:"16px 24px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
