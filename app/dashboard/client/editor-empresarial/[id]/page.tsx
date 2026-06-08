@@ -10,8 +10,9 @@ const FONTS = [
   { label: "Minimalista", value: "'Arial', sans-serif" },
   { label: "Tecnica", value: "'Courier New', monospace" },
 ];
-const FONT_SIZES = ["14px", "15px", "16px", "17px", "18px", "20px"];
+
 const SECTION_LABELS: Record<string, string> = {
+  productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
   estadisticas: "Estadisticas", planes: "Planes", testimonios: "Testimonios",
@@ -41,7 +42,7 @@ function Field({ label, value, onChange, multiline = false }: { label: string; v
   );
 }
 
-export default function EditorProfesional() {
+export default function PageBuilderEditor() {
   const params = useParams();
   const id = params.id as string;
   const router = useRouter();
@@ -66,20 +67,18 @@ export default function EditorProfesional() {
   const logoRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgTarget, setImgTarget] = useState<string>("");
+  const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
 
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
-      const { data: sub } = await supabase.from("subscriptions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
-      if (sub?.plan !== "profesional" || sub?.status !== "active") {
-        router.push("/dashboard/client/suscripcion");
-        return;
-      }
+      const { data: sub } = await supabase.from("subscriptions").select("plan,status").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+      if (sub?.plan !== "empresarial" || sub?.status !== "active") { router.push("/dashboard/client"); return; }
       const { data } = await supabase.from("generated_websites").select("*").eq("id", id).eq("user_id", user.id).single();
       if (!data) { router.push("/dashboard/client/builder"); return; }
       setSite(data);
-      const c = data.professional_content ?? data.generated_content ?? {};
+      const c = data.generated_content ?? {};
       if (!c.nosotros) c.nosotros = { titulo: "Quienes somos", descripcion: "Descripcion de la empresa", mision: "Nuestra mision", vision: "Nuestra vision" };
       if (!c.galeria) c.galeria = { titulo: "Galeria", items: [] };
       if (!c.equipo) c.equipo = { titulo: "Nuestro Equipo", miembros: [] };
@@ -94,15 +93,20 @@ export default function EditorProfesional() {
       const categoria = data.website_type ?? "negocio";
       const existingImages = data.custom_images ?? {};
       const newImages = { ...existingImages };
+      const queries: Record<string, string> = {
+        hero: `${categoria} professional`,
+        servicios: `${categoria} services`,
+        testimonios: `${categoria} people happy`,
+      };
       await Promise.all(["hero", "servicios", "testimonios"].map(async (key) => {
         if (!newImages[key]) {
-          const queries: Record<string, string> = { hero: `${categoria} professional`, servicios: `${categoria} services`, testimonios: `${categoria} people happy` };
           const url = await fetchPexels(queries[key]);
           if (url) newImages[key] = url;
         }
       }));
       setImages(newImages);
-      if (data.status === "published") setPublishedUrl(`${window.location.origin}/demo/${id}/profesional`);
+      if (data.status === "published") setPublishedUrl(`${window.location.origin}/demo/${id}`);
+      setPublishedVersion(data.published_version ?? "basica");
       setLoading(false);
     }
     load();
@@ -111,7 +115,7 @@ export default function EditorProfesional() {
   async function handleSave(publish = false) {
     setSaving(true);
     await supabase.from("generated_websites").update({
-      professional_content: content,
+      generated_content: content,
       primary_color: primaryColor,
       secondary_color: secondaryColor,
       logo_url: logoUrl,
@@ -119,10 +123,11 @@ export default function EditorProfesional() {
       font_size: fontSize,
       custom_images: images,
       status: publish ? "published" : "draft",
+      published_version: publishedVersion,
     }).eq("id", id);
     setSaving(false);
     setSaved(true);
-    if (publish) setPublishedUrl(`${window.location.origin}/demo/${id}/profesional`);
+    if (publish) setPublishedUrl(`${window.location.origin}/demo/${id}`);
     setTimeout(() => setSaved(false), 3000);
   }
 
@@ -227,11 +232,12 @@ export default function EditorProfesional() {
       <div style={{ marginBottom: 14 }}>
         <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, marginBottom: 6 }}>{label}</label>
         <div style={{ display: "flex", gap: 6 }}>
-          <button onClick={() => triggerImg(target)} style={{ flex: 1, padding: "8px", borderRadius: 8, border: `1px dashed ${primaryColor}`, background: `${primaryColor}08`, color: primaryColor, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={() => triggerImg(target)} style={{ flex: 1, padding: "8px", borderRadius: 8, border: `1px dashed ${primaryColor}`, background: `${primaryColor}08`, color: primaryColor, fontSize: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             {uploadingImg === target ? "Subiendo..." : "Cambiar imagen"}
           </button>
           {pexelsQuery && (
-            <button onClick={() => refreshPexels(target, pexelsQuery)} style={{ padding: "8px 10px", borderRadius: 8, border: `1px dashed ${primaryColor}`, background: `${primaryColor}08`, color: primaryColor, fontSize: 12, cursor: "pointer" }} title="Nueva imagen automatica">
+            <button onClick={() => refreshPexels(target, pexelsQuery)} style={{ padding: "8px 10px", borderRadius: 8, border: `1px dashed ${primaryColor}`, background: `${primaryColor}08`, color: primaryColor, fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }} title="Nueva imagen">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
             </button>
           )}
@@ -262,15 +268,22 @@ export default function EditorProfesional() {
       <input ref={logoRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoUpload} />
       <input ref={imgRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
 
-      <div style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexShrink: 0 }}>
+      {/* TOPBAR */}
+      <div style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexShrink: 0, zIndex: 50 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <button onClick={() => router.push("/dashboard/client/builder")} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#555" }}>Volver</button>
+          <button onClick={() => router.push("/dashboard/client/builder")} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#555", display: "flex", alignItems: "center", gap: 6 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Volver
+          </button>
           <span style={{ fontWeight: 800, fontSize: 15, color: "#111" }}>{site.project_name}</span>
-          <span style={{ fontSize: 11, background: "rgba(124,58,237,0.1)", color: "#7c3aed", padding: "2px 8px", borderRadius: 999, fontWeight: 700 }}>Profesional</span>
+          <span style={{ fontSize: 11, background: "rgba(124,58,237,0.1)", color: "#7c3aed", padding: "2px 8px", borderRadius: 999, fontWeight: 700 }}>{site.website_type}</span>
         </div>
-        <div style={{ display: "flex", gap: 6 }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           {(["desktop", "tablet", "mobile"] as const).map(v => (
-            <button key={v} onClick={() => setView(v)} style={{ padding: "6px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: view === v ? pr : "#f3f4f6", color: view === v ? "#fff" : "#555" }}>
+            <button key={v} onClick={() => setView(v)} style={{ padding: "6px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: view === v ? pr : "#f3f4f6", color: view === v ? "#fff" : "#555", display: "flex", alignItems: "center", gap: 5 }}>
+              {v === "desktop" && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>}
+              {v === "tablet" && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>}
+              {v === "mobile" && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>}
               {v === "desktop" ? "Desktop" : v === "tablet" ? "Tablet" : "Mobile"}
             </button>
           ))}
@@ -278,27 +291,42 @@ export default function EditorProfesional() {
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           {publishedUrl && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: "6px 12px" }}>
-              <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 600 }}>Publicado:</span>
-              <a href={publishedUrl} target="_blank" style={{ fontSize: 11, color: "#16a34a", fontWeight: 700, textDecoration: "underline", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{publishedUrl}</a>
-              <button onClick={() => navigator.clipboard.writeText(publishedUrl)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 13 }} title="Copiar">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 600 }}>Publicado</span>
+              <a href={publishedUrl} target="_blank" style={{ fontSize: 11, color: "#16a34a", fontWeight: 700, textDecoration: "underline", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{publishedUrl}</a>
+              <button onClick={() => navigator.clipboard.writeText(publishedUrl)} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }} title="Copiar">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
           )}
-          <a href={`/demo/${id}/profesional`} target="_blank" style={{ background: "#f3f4f6", color: "#555", padding: "7px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Ver sitio</a>
-          <button onClick={() => handleSave(false)} disabled={saving} style={{ background: saved ? "#10b981" : "#f3f4f6", color: saved ? "#fff" : "#555", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#f3f4f6", borderRadius: 8, padding: 3 }}>
+            {(["basica", "profesional"] as const).map(v => (
+              <button key={v} onClick={() => setPublishedVersion(v)} style={{ padding: "5px 12px", borderRadius: 6, border: "none", cursor: "pointer", fontSize: 11, fontWeight: 700, background: publishedVersion === v ? "#fff" : "transparent", color: publishedVersion === v ? "#111" : "#888", boxShadow: publishedVersion === v ? "0 1px 4px rgba(0,0,0,0.1)" : "none", textTransform: "capitalize" }}>
+                {v === "basica" ? "Basica" : "Profesional"}
+              </button>
+            ))}
+          </div>
+          <a href={`/demo/${id}`} target="_blank" style={{ background: "#f3f4f6", color: "#555", padding: "7px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 5 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Ver demo
+          </a>
+          <button onClick={() => handleSave(false)} disabled={saving} style={{ background: saved ? "#10b981" : "#f3f4f6", color: saved ? "#fff" : "#555", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
           </button>
-          <button onClick={() => handleSave(true)} style={{ background: pr, color: "#fff", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Publicar</button>
+          <button onClick={() => handleSave(true)} style={{ background: pr, color: "#fff", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Publicar
+          </button>
         </div>
       </div>
 
-      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+      <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+        {/* PANEL IZQUIERDO */}
         <div style={{ width: 200, background: "#fff", borderRight: "1px solid #e5e7eb", display: "flex", flexDirection: "column", overflow: "auto", flexShrink: 0 }}>
           <div style={{ padding: "12px 14px 8px", borderBottom: "1px solid #f0f0f0" }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", margin: 0 }}>Secciones</p>
           </div>
-          <nav style={{ padding: "8px", flex: 1 }}>
+          <nav style={{ padding: "8px 8px", flex: 1 }}>
             {sections.map(s => (
               <button key={s} onClick={() => setSelectedSection(s)} style={{ display: "block", width: "100%", textAlign: "left", padding: "8px 12px", borderRadius: 8, border: "none", cursor: "pointer", marginBottom: 3, fontWeight: selectedSection === s ? 700 : 500, fontSize: 12, background: selectedSection === s ? `${pr}15` : "transparent", color: selectedSection === s ? pr : "#555", borderLeft: selectedSection === s ? `3px solid ${pr}` : "3px solid transparent" }}>
                 {SECTION_LABELS[s]}
@@ -323,28 +351,41 @@ export default function EditorProfesional() {
             </div>
             <div style={{ marginBottom: 8 }}>
               <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Logo</label>
-              <button onClick={() => logoRef.current?.click()} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+              <button onClick={() => logoRef.current?.click()} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 {uploadingLogo ? "Subiendo..." : logoUrl ? "Cambiar" : "Subir logo"}
               </button>
               {logoUrl && <img src={logoUrl} alt="logo" style={{ width: "100%", height: 40, objectFit: "contain", marginTop: 6, background: "#f8f8f8", borderRadius: 6 }} />}
             </div>
-            <div style={{ marginBottom: 6 }}>
+            <div style={{ marginBottom: 8 }}>
               <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Fuente</label>
               <select value={font} onChange={e => setFont(e.target.value)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "5px 6px", fontSize: 11 }}>
                 {FONTS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Tamano</label>
-              <select value={fontSize} onChange={e => setFontSize(e.target.value)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "5px 6px", fontSize: 11 }}>
-                {FONT_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 6 }}>Tamano de letra</label>
+              <div style={{ display: "flex", gap: 4 }}>
+                {[{ label: "S", size: "14px", title: "Pequeno" }, { label: "M", size: "16px", title: "Mediano" }, { label: "L", size: "20px", title: "Grande" }].map(({ label, size, title }) => (
+                  <button key={size} onClick={() => setFontSize(size)} title={title} style={{ flex: 1, padding: "6px 4px", borderRadius: 6, border: `1px solid ${fontSize === size ? pr : "#e5e7eb"}`, background: fontSize === size ? `${pr}15` : "#fff", color: fontSize === size ? pr : "#777", fontSize: label === "S" ? 10 : label === "M" ? 13 : 16, fontWeight: 700, cursor: "pointer" }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
+        {/* PANEL CENTRAL - PREVIEW CON SCROLL */}
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
-          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 8, padding: "6px 12px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", flexShrink: 0, alignSelf: "flex-start" }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span style={{ fontSize: 11, color: "#888", fontWeight: 600 }}>Vista previa</span>
+            <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
+            <span style={{ fontSize: 11, color: "#555", fontWeight: 600 }}>{view === "desktop" ? "Escritorio" : view === "tablet" ? "Tableta" : "Movil"}</span>
+          </div>
+          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize }}>
+
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 36, objectFit: "contain" }} />}
@@ -352,6 +393,7 @@ export default function EditorProfesional() {
               </div>
               <span style={{ background: pr, color: "#fff", padding: "5px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600 }}>{content?.hero?.cta_principal ?? "Contactar"}</span>
             </div>
+
             <div style={{ position: "relative", minHeight: 280, background: `linear-gradient(135deg,${pr},${sc || "#1a1a1a"})`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
               {images.hero && <img src={images.hero} alt="hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
               <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "2rem", color: "#fff", background: "rgba(0,0,0,0.45)", width: "100%" }}>
@@ -364,12 +406,15 @@ export default function EditorProfesional() {
                 </div>
               </div>
             </div>
+
             {content?.nosotros && (
               <div style={{ padding: "2rem", background: "#fff" }}>
                 <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>{content.nosotros.titulo}</h2>
+                {images.nosotros && <img src={images.nosotros} alt="nosotros" style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 12, marginBottom: 12 }} />}
                 <p style={{ fontSize: 13, color: "#555", lineHeight: 1.7, textAlign: "center" }}>{content.nosotros.descripcion}</p>
               </div>
             )}
+
             {content?.servicios && (
               <div style={{ padding: "2rem", background: "#f8f9fa" }}>
                 <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Lo que ofrecemos</h2>
@@ -379,6 +424,25 @@ export default function EditorProfesional() {
                     <div key={i} style={{ background: "#fff", borderRadius: 10, padding: "1rem", border: "1px solid #f0f0f0" }}>
                       <p style={{ fontWeight: 700, fontSize: 11, marginBottom: 4, color: "#111" }}>{s.titulo}</p>
                       <p style={{ fontSize: 10, color: "#888", lineHeight: 1.5 }}>{s.descripcion}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {content?.productos?.length > 0 && (
+              <div style={{ padding: "2rem", background: "#f8f9fa" }}>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Nuestros Productos</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
+                  {content.productos.slice(0, 6).map((p: any, i: number) => (
+                    <div key={i} style={{ background: "#fff", borderRadius: 10, overflow: "hidden", border: "1px solid #f0f0f0", textAlign: "center" }}>
+                      {p.imagenes && p.imagenes.length > 0 ? <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 80, objectFit: "cover" }} /> : <div style={{ width: "100%", height: 80, background: `${pr}18`, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={pr} strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>}
+                      <div style={{ padding: "0.75rem" }}>
+                        <p style={{ fontWeight: 700, fontSize: 11, color: "#111", marginBottom: 4 }}>{p.nombre}</p>
+                        <p style={{ fontSize: 12, fontWeight: 800, color: pr, marginBottom: 4 }}>{p.precio}</p>
+                        {p.tallas && <p style={{ fontSize: 9, color: "#888" }}>Tallas: {p.tallas}</p>}
+                        {p.colores && <p style={{ fontSize: 9, color: "#888" }}>Colores: {p.colores}</p>}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -394,6 +458,7 @@ export default function EditorProfesional() {
                 ))}
               </div>
             )}
+
             {content?.testimonios && (
               <div style={{ padding: "2rem" }}>
                 <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Clientes satisfechos</h2>
@@ -408,6 +473,7 @@ export default function EditorProfesional() {
                 </div>
               </div>
             )}
+
             {content?.contacto && (
               <div style={{ padding: "2rem", background: `linear-gradient(135deg,${pr},${sc || "#1a1a1a"})`, color: "#fff", textAlign: "center" }}>
                 <h2 style={{ fontSize: "1.2rem", fontWeight: 800, marginBottom: 8 }}>{content.contacto.titulo}</h2>
@@ -415,6 +481,7 @@ export default function EditorProfesional() {
                 {content.contacto.whatsapp && <span style={{ background: "#25D366", color: "#fff", padding: "8px 20px", borderRadius: 10, fontWeight: 700, fontSize: 13, display: "inline-block" }}>WhatsApp</span>}
               </div>
             )}
+
             <div style={{ padding: "1.5rem", background: sc || "#111", textAlign: "center" }}>
               {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 36, objectFit: "contain", margin: "0 auto 8px", display: "block", filter: "brightness(0) invert(1)" }} />}
               <p style={{ color: pr, fontWeight: 700, fontSize: 13 }}>{content?.footer?.nombre_empresa}</p>
@@ -423,25 +490,65 @@ export default function EditorProfesional() {
           </div>
         </div>
 
+        {/* PANEL DERECHO */}
         <div style={{ width: 290, background: "#fff", borderLeft: "1px solid #e5e7eb", overflow: "auto", flexShrink: 0 }}>
           <div style={{ padding: "14px 16px 8px", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, background: "#fff", zIndex: 5 }}>
             <p style={{ fontSize: 13, fontWeight: 800, color: "#111", margin: 0 }}>{SECTION_LABELS[selectedSection]}</p>
           </div>
           <div style={{ padding: "14px" }}>
             {selectedSection === "hero" && (<>
-              <Field label="Titulo" value={content?.hero?.titulo} onChange={v => updateText(["hero","titulo"], v)} />
-              <Field label="Subtitulo" value={content?.hero?.subtitulo} onChange={v => updateText(["hero","subtitulo"], v)} multiline />
-              <Field label="Boton principal" value={content?.hero?.cta_principal} onChange={v => updateText(["hero","cta_principal"], v)} />
-              <Field label="Boton secundario" value={content?.hero?.cta_secundario} onChange={v => updateText(["hero","cta_secundario"], v)} />
-              <ImgUploader label="Imagen Hero" target="hero" pexelsQuery={`${categoria} professional`} />
+              <Field label="Titulo" value={content?.hero?.titulo} onChange={(v) => updateText(["hero", "titulo"], v)} />
+              <Field label="Subtitulo" value={content?.hero?.subtitulo} onChange={(v) => updateText(["hero", "subtitulo"], v)} multiline />
+              <Field label="Boton principal" value={content?.hero?.cta_principal} onChange={(v) => updateText(["hero", "cta_principal"], v)} />
+              <Field label="Boton secundario" value={content?.hero?.cta_secundario} onChange={(v) => updateText(["hero", "cta_secundario"], v)} />
+              <ImgUploader label="Imagen Hero Principal" target="hero" pexelsQuery={`${categoria} professional`} />
               <ImgUploader label="Imagen Servicios" target="servicios" pexelsQuery={`${categoria} services`} />
               <ImgUploader label="Imagen Testimonios" target="testimonios" pexelsQuery={`${categoria} people happy`} />
             </>)}
+            {selectedSection === "productos" && (<>
+              {content?.productos?.map((p: any, i: number) => (
+                <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Producto {i + 1}</span>
+                    <button onClick={() => removeArrayItem("productos", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                  </div>
+                  <Field label="Nombre" value={p.nombre} onChange={(v) => updateArray("productos", i, "nombre", v)} />
+                  <Field label="Precio" value={p.precio} onChange={(v) => updateArray("productos", i, "precio", v)} />
+                  <Field label="Descripcion" value={p.descripcion} onChange={(v) => updateArray("productos", i, "descripcion", v)} multiline />
+                  <Field label="Categoria" value={p.categoria} onChange={(v) => updateArray("productos", i, "categoria", v)} />
+                  <Field label="Tallas (ej: S, M, L, XL)" value={p.tallas ?? ""} onChange={(v) => updateArray("productos", i, "tallas", v)} />
+                  <Field label="Colores (ej: Rojo, Azul, Verde)" value={p.colores ?? ""} onChange={(v) => updateArray("productos", i, "colores", v)} />
+                  <div style={{ marginBottom: 8 }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 6 }}>Imagenes del producto (max 5)</label>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6, marginBottom: 6 }}>
+                      {(p.imagenes ?? []).map((img: string, j: number) => (
+                        <div key={j} style={{ position: "relative" }}>
+                          <img src={img} alt={`prod-${i}-${j}`} style={{ width: "100%", height: 60, objectFit: "cover", borderRadius: 6 }} />
+                          <button onClick={() => {
+                            setContent((prev: any) => {
+                              const next = JSON.parse(JSON.stringify(prev));
+                              next.productos[i].imagenes.splice(j, 1);
+                              return next;
+                            });
+                          }} style={{ position: "absolute", top: 2, right: 2, background: "#ef4444", color: "#fff", border: "none", borderRadius: 4, width: 16, height: 16, fontSize: 10, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>x</button>
+                        </div>
+                      ))}
+                    </div>
+                    {(!p.imagenes || p.imagenes.length < 5) && (
+                      <button onClick={() => { setImgTarget(`producto_${i}`); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                        {uploadingImg === `producto_${i}` ? "Subiendo..." : `Subir imagen (${(p.imagenes ?? []).length}/5)`}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <button onClick={() => addArrayItem("productos", { nombre: "Nuevo producto", precio: "$0", descripcion: "Descripcion", categoria: "General", tallas: "", colores: "", imagenes: [], destacado: false })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar producto</button>
+            </>)}
             {selectedSection === "nosotros" && (<>
-              <Field label="Titulo" value={content?.nosotros?.titulo} onChange={v => updateText(["nosotros","titulo"], v)} />
-              <Field label="Descripcion" value={content?.nosotros?.descripcion} onChange={v => updateText(["nosotros","descripcion"], v)} multiline />
-              <Field label="Mision" value={content?.nosotros?.mision} onChange={v => updateText(["nosotros","mision"], v)} multiline />
-              <Field label="Vision" value={content?.nosotros?.vision} onChange={v => updateText(["nosotros","vision"], v)} multiline />
+              <Field label="Titulo" value={content?.nosotros?.titulo} onChange={(v) => updateText(["nosotros", "titulo"], v)} />
+              <Field label="Descripcion" value={content?.nosotros?.descripcion} onChange={(v) => updateText(["nosotros", "descripcion"], v)} multiline />
+              <Field label="Mision" value={content?.nosotros?.mision} onChange={(v) => updateText(["nosotros", "mision"], v)} multiline />
+              <Field label="Vision" value={content?.nosotros?.vision} onChange={(v) => updateText(["nosotros", "vision"], v)} multiline />
               <ImgUploader label="Imagen Nosotros" target="nosotros" pexelsQuery={`${categoria} team`} />
             </>)}
             {selectedSection === "servicios" && content?.servicios && (<>
@@ -449,19 +556,20 @@ export default function EditorProfesional() {
               {content.servicios.map((s: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Servicio {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Servicio {i + 1}</span>
                     <button onClick={() => removeArrayItem("servicios", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Titulo" value={s.titulo} onChange={v => updateArray("servicios", i, "titulo", v)} />
-                  <Field label="Descripcion" value={s.descripcion} onChange={v => updateArray("servicios", i, "descripcion", v)} multiline />
+                  <Field label="Titulo" value={s.titulo} onChange={(v) => updateArray("servicios", i, "titulo", v)} />
+                  <Field label="Descripcion" value={s.descripcion} onChange={(v) => updateArray("servicios", i, "descripcion", v)} multiline />
                 </div>
               ))}
               <button onClick={() => addArrayItem("servicios", { titulo: "Nuevo servicio", descripcion: "Descripcion" })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar servicio</button>
             </>)}
             {selectedSection === "galeria" && (<>
-              <Field label="Titulo" value={content?.galeria?.titulo} onChange={v => updateText(["galeria","titulo"], v)} />
-              <button onClick={() => triggerImg("galeria_new")} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginBottom: 14 }}>
-                {uploadingImg === "galeria_new" ? "Subiendo..." : "+ Agregar imagen"}
+              <Field label="Titulo" value={content?.galeria?.titulo} onChange={(v) => updateText(["galeria", "titulo"], v)} />
+              <button onClick={() => triggerImg("galeria_new")} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                {uploadingImg === "galeria_new" ? "Subiendo..." : "Agregar imagen"}
               </button>
               {content?.galeria?.items?.map((img: string, i: number) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
@@ -471,16 +579,16 @@ export default function EditorProfesional() {
               ))}
             </>)}
             {selectedSection === "equipo" && (<>
-              <Field label="Titulo" value={content?.equipo?.titulo} onChange={v => updateText(["equipo","titulo"], v)} />
+              <Field label="Titulo" value={content?.equipo?.titulo} onChange={(v) => updateText(["equipo", "titulo"], v)} />
               {content?.equipo?.miembros?.map((m: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Miembro {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Miembro {i + 1}</span>
                     <button onClick={() => removeNestedItem("equipo", "miembros", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Nombre" value={m.nombre} onChange={v => updateNestedArray("equipo", "miembros", i, "nombre", v)} />
-                  <Field label="Cargo" value={m.cargo} onChange={v => updateNestedArray("equipo", "miembros", i, "cargo", v)} />
-                  <Field label="Descripcion" value={m.descripcion} onChange={v => updateNestedArray("equipo", "miembros", i, "descripcion", v)} multiline />
+                  <Field label="Nombre" value={m.nombre} onChange={(v) => updateNestedArray("equipo", "miembros", i, "nombre", v)} />
+                  <Field label="Cargo" value={m.cargo} onChange={(v) => updateNestedArray("equipo", "miembros", i, "cargo", v)} />
+                  <Field label="Descripcion" value={m.descripcion} onChange={(v) => updateNestedArray("equipo", "miembros", i, "descripcion", v)} multiline />
                 </div>
               ))}
               <button onClick={() => addNestedItem("equipo", "miembros", { nombre: "Nuevo miembro", cargo: "Cargo", descripcion: "" })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar miembro</button>
@@ -489,26 +597,26 @@ export default function EditorProfesional() {
               {content?.estadisticas?.items?.map((e: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Estadistica {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Estadistica {i + 1}</span>
                     <button onClick={() => removeNestedItem("estadisticas", "items", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Numero" value={e.numero} onChange={v => updateNestedArray("estadisticas", "items", i, "numero", v)} />
-                  <Field label="Label" value={e.label} onChange={v => updateNestedArray("estadisticas", "items", i, "label", v)} />
+                  <Field label="Numero" value={e.numero} onChange={(v) => updateNestedArray("estadisticas", "items", i, "numero", v)} />
+                  <Field label="Label" value={e.label} onChange={(v) => updateNestedArray("estadisticas", "items", i, "label", v)} />
                 </div>
               ))}
               <button onClick={() => addNestedItem("estadisticas", "items", { numero: "100+", label: "Clientes" })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar estadistica</button>
             </>)}
             {selectedSection === "planes" && (<>
-              <Field label="Titulo" value={content?.planes?.titulo} onChange={v => updateText(["planes","titulo"], v)} />
+              <Field label="Titulo" value={content?.planes?.titulo} onChange={(v) => updateText(["planes", "titulo"], v)} />
               {content?.planes?.items?.map((p: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Plan {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Plan {i + 1}</span>
                     <button onClick={() => removeNestedItem("planes", "items", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Nombre" value={p.nombre} onChange={v => updateNestedArray("planes", "items", i, "nombre", v)} />
-                  <Field label="Precio" value={p.precio} onChange={v => updateNestedArray("planes", "items", i, "precio", v)} />
-                  <Field label="Periodo" value={p.periodo} onChange={v => updateNestedArray("planes", "items", i, "periodo", v)} />
+                  <Field label="Nombre" value={p.nombre} onChange={(v) => updateNestedArray("planes", "items", i, "nombre", v)} />
+                  <Field label="Precio" value={p.precio} onChange={(v) => updateNestedArray("planes", "items", i, "precio", v)} />
+                  <Field label="Periodo" value={p.periodo} onChange={(v) => updateNestedArray("planes", "items", i, "periodo", v)} />
                 </div>
               ))}
               <button onClick={() => addNestedItem("planes", "items", { nombre: "Plan Basico", precio: "$99.000", periodo: "mes", popular: false })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar plan</button>
@@ -517,11 +625,11 @@ export default function EditorProfesional() {
               {content.beneficios.map((b: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Beneficio {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Beneficio {i + 1}</span>
                     <button onClick={() => removeArrayItem("beneficios", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Titulo" value={b.titulo} onChange={v => updateArray("beneficios", i, "titulo", v)} />
-                  <Field label="Descripcion" value={b.descripcion} onChange={v => updateArray("beneficios", i, "descripcion", v)} multiline />
+                  <Field label="Titulo" value={b.titulo} onChange={(v) => updateArray("beneficios", i, "titulo", v)} />
+                  <Field label="Descripcion" value={b.descripcion} onChange={(v) => updateArray("beneficios", i, "descripcion", v)} multiline />
                 </div>
               ))}
               <button onClick={() => addArrayItem("beneficios", { titulo: "Nuevo beneficio", descripcion: "Descripcion" })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar beneficio</button>
@@ -531,12 +639,12 @@ export default function EditorProfesional() {
               {content.testimonios.map((t: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Testimonio {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Testimonio {i + 1}</span>
                     <button onClick={() => removeArrayItem("testimonios", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Nombre" value={t.nombre} onChange={v => updateArray("testimonios", i, "nombre", v)} />
-                  <Field label="Cargo" value={t.cargo} onChange={v => updateArray("testimonios", i, "cargo", v)} />
-                  <Field label="Texto" value={t.texto} onChange={v => updateArray("testimonios", i, "texto", v)} multiline />
+                  <Field label="Nombre" value={t.nombre} onChange={(v) => updateArray("testimonios", i, "nombre", v)} />
+                  <Field label="Cargo" value={t.cargo} onChange={(v) => updateArray("testimonios", i, "cargo", v)} />
+                  <Field label="Texto" value={t.texto} onChange={(v) => updateArray("testimonios", i, "texto", v)} multiline />
                 </div>
               ))}
               <button onClick={() => addArrayItem("testimonios", { nombre: "Nuevo cliente", cargo: "Cargo", texto: "Excelente servicio" })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar testimonio</button>
@@ -545,27 +653,27 @@ export default function EditorProfesional() {
               {content.faq.map((f: any, i: number) => (
                 <div key={i} style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Pregunta {i+1}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Pregunta {i + 1}</span>
                     <button onClick={() => removeArrayItem("faq", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                   </div>
-                  <Field label="Pregunta" value={f.pregunta} onChange={v => updateArray("faq", i, "pregunta", v)} />
-                  <Field label="Respuesta" value={f.respuesta} onChange={v => updateArray("faq", i, "respuesta", v)} multiline />
+                  <Field label="Pregunta" value={f.pregunta} onChange={(v) => updateArray("faq", i, "pregunta", v)} />
+                  <Field label="Respuesta" value={f.respuesta} onChange={(v) => updateArray("faq", i, "respuesta", v)} multiline />
                 </div>
               ))}
               <button onClick={() => addArrayItem("faq", { pregunta: "Nueva pregunta", respuesta: "Respuesta" })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar pregunta</button>
             </>)}
             {selectedSection === "contacto" && (<>
-              <Field label="Titulo" value={content?.contacto?.titulo} onChange={v => updateText(["contacto","titulo"], v)} />
-              <Field label="Descripcion" value={content?.contacto?.descripcion} onChange={v => updateText(["contacto","descripcion"], v)} multiline />
-              <Field label="Telefono" value={content?.contacto?.telefono} onChange={v => updateText(["contacto","telefono"], v)} />
-              <Field label="WhatsApp" value={content?.contacto?.whatsapp} onChange={v => updateText(["contacto","whatsapp"], v)} />
-              <Field label="Email" value={content?.contacto?.email} onChange={v => updateText(["contacto","email"], v)} />
-              <Field label="Direccion" value={content?.contacto?.direccion} onChange={v => updateText(["contacto","direccion"], v)} />
+              <Field label="Titulo" value={content?.contacto?.titulo} onChange={(v) => updateText(["contacto", "titulo"], v)} />
+              <Field label="Descripcion" value={content?.contacto?.descripcion} onChange={(v) => updateText(["contacto", "descripcion"], v)} multiline />
+              <Field label="Telefono" value={content?.contacto?.telefono} onChange={(v) => updateText(["contacto", "telefono"], v)} />
+              <Field label="WhatsApp" value={content?.contacto?.whatsapp} onChange={(v) => updateText(["contacto", "whatsapp"], v)} />
+              <Field label="Email" value={content?.contacto?.email} onChange={(v) => updateText(["contacto", "email"], v)} />
+              <Field label="Direccion" value={content?.contacto?.direccion} onChange={(v) => updateText(["contacto", "direccion"], v)} />
             </>)}
             {selectedSection === "footer" && (<>
-              <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={v => updateText(["footer","nombre_empresa"], v)} />
-              <Field label="Descripcion" value={content?.footer?.descripcion} onChange={v => updateText(["footer","descripcion"], v)} multiline />
-              <Field label="Copyright" value={content?.footer?.copyright} onChange={v => updateText(["footer","copyright"], v)} />
+              <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={(v) => updateText(["footer", "nombre_empresa"], v)} />
+              <Field label="Descripcion" value={content?.footer?.descripcion} onChange={(v) => updateText(["footer", "descripcion"], v)} multiline />
+              <Field label="Copyright" value={content?.footer?.copyright} onChange={(v) => updateText(["footer", "copyright"], v)} />
             </>)}
           </div>
         </div>

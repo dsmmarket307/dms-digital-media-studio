@@ -1,0 +1,1 @@
+export default function EditorEmpresarialClientLayout({ children }: { children: React.ReactNode }) { return <>{children}</> }

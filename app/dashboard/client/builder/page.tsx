@@ -537,6 +537,8 @@ export default function ClientBuilder() {
         </div>
         <div style={{ display:"flex", gap:8, alignItems:"center" }}>
           {miSitio && <a href={`/demo/${miSitio.id}`} target="_blank" style={{ background:"#f3f4f6", color:"#555", padding:"6px 12px", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>Ver demo</a>}
+          {planActivo === "empresarial" && miSitio && <a href={`/dashboard/client/editor-empresarial/${miSitio.id}`} style={{ background:"#7c3aed", color:"#fff", padding:"6px 12px", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>Editor Avanzado</a>}
+          {planActivo === "profesional" && miSitio && <a href={`/dashboard/client/editor/${miSitio.id}`} style={{ background:"#7c3aed", color:"#fff", padding:"6px 12px", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>Editor Avanzado</a>}
           <button onClick={() => setEditando(true)} style={{ background:"#f3f4f6", color:"#555", border:"none", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:700, cursor:"pointer" }}>Regenerar</button>
           <button onClick={() => handleSave(false)} disabled={saving} style={{ background: saved ? "#10b981" : "#f3f4f6", color: saved ? "#fff" : "#555", border:"none", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:700, cursor:"pointer" }}>
             {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
