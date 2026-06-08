@@ -1,8 +1,6 @@
 ﻿"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import Link from "next/link";
-import Image from "next/image";
 
 export default function Soporte() {
   const supabase = createClient();
@@ -20,11 +18,7 @@ export default function Soporte() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
       setUser(user);
-      const { data } = await supabase
-        .from("soporte_mensajes")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      const { data } = await supabase.from("soporte_mensajes").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
       setMensajes(data ?? []);
     }
     load();
@@ -35,19 +29,8 @@ export default function Soporte() {
     if (!user) return;
     setSending(true);
     const { data: prof } = await supabase.from("profiles").select("name,email").eq("id", user.id).single();
-    await supabase.from("soporte_mensajes").insert({
-      user_id: user.id,
-      nombre: prof?.name ?? "",
-      email: prof?.email ?? user.email,
-      asunto: form.asunto,
-      mensaje: form.mensaje,
-      estado: "pendiente",
-    });
-    const { data } = await supabase
-      .from("soporte_mensajes")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+    await supabase.from("soporte_mensajes").insert({ user_id: user.id, nombre: prof?.name ?? "", email: prof?.email ?? user.email, asunto: form.asunto, mensaje: form.mensaje, estado: "pendiente" });
+    const { data } = await supabase.from("soporte_mensajes").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
     setMensajes(data ?? []);
     setForm({ asunto: "", mensaje: "" });
     setSending(false);
@@ -57,16 +40,8 @@ export default function Soporte() {
   async function handleResponderCliente(id: string) {
     if (!respuestaCliente.trim()) return;
     setSavingResp(true);
-    await supabase.from("soporte_mensajes").update({
-      respuesta_cliente: respuestaCliente,
-      respuesta_cliente_at: new Date().toISOString(),
-      estado: "pendiente",
-    }).eq("id", id);
-    const { data } = await supabase
-      .from("soporte_mensajes")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+    await supabase.from("soporte_mensajes").update({ respuesta_cliente: respuestaCliente, respuesta_cliente_at: new Date().toISOString(), estado: "pendiente" }).eq("id", id);
+    const { data } = await supabase.from("soporte_mensajes").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
     setMensajes(data ?? []);
     setRespuestaCliente("");
     setRespondiendo(null);
@@ -80,148 +55,89 @@ export default function Soporte() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 min-h-screen sticky top-0">
-        <div className="p-6 border-b border-gray-100">
-          <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={120} height={38} /></Link>
+    <div style={{ padding: "2rem", minWidth: 0, maxWidth: 700 }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>Soporte</h1>
+        <p style={{ color: "#888", fontSize: 13, marginTop: 4 }}>Estamos aqui para ayudarte.</p>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: "1.5rem" }}>
+        {[
+          { label: "WhatsApp", value: "Respuesta inmediata", href: "https://wa.me/573000000000", btn: "Abrir WhatsApp" },
+          { label: "Correo", value: "dms.digitalstudio@outlook.com", href: "mailto:dms.digitalstudio@outlook.com", btn: "Enviar correo" },
+          { label: "Horario", value: "Lun - Vie 8am - 6pm", href: "#", btn: "Ver horario" },
+        ].map(c => (
+          <div key={c.label} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: "1rem", textAlign: "center" }}>
+            <p style={{ fontWeight: 700, color: "#111", fontSize: 13, marginBottom: 4 }}>{c.label}</p>
+            <p style={{ fontSize: 11, color: "#888", marginBottom: 8 }}>{c.value}</p>
+            <a href={c.href} style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", textDecoration: "none" }}>{c.btn}</a>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 4, marginBottom: "1.5rem", borderBottom: "1px solid #e5e7eb" }}>
+        {(["nuevo","historial"] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ padding: "8px 16px", fontSize: 13, fontWeight: 600, background: "none", border: "none", cursor: "pointer", borderBottom: tab === t ? "2px solid #7c3aed" : "2px solid transparent", color: tab === t ? "#7c3aed" : "#888" }}>
+            {t === "nuevo" ? "Nuevo mensaje" : `Mis mensajes (${mensajes.length})`}
+          </button>
+        ))}
+      </div>
+      {tab === "nuevo" && (
+        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "1.5rem" }}>
+          <h2 style={{ fontSize: 14, fontWeight: 800, color: "#111", marginBottom: 16 }}>Enviar mensaje</h2>
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Asunto</label>
+              <input required value={form.asunto} onChange={e => setForm({ ...form, asunto: e.target.value })} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" }} placeholder="Como podemos ayudarte?" />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Mensaje</label>
+              <textarea required rows={5} value={form.mensaje} onChange={e => setForm({ ...form, mensaje: e.target.value })} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", resize: "none", boxSizing: "border-box" }} placeholder="Describe tu consulta..." />
+            </div>
+            <button type="submit" disabled={sending} style={{ width: "100%", background: "#7c3aed", color: "#fff", border: "none", borderRadius: 10, padding: "10px", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: sending ? 0.6 : 1 }}>
+              {sending ? "Enviando..." : "Enviar mensaje"}
+            </button>
+          </form>
         </div>
-        <nav className="flex-1 px-4 py-6 space-y-1">
-          {[
-            { href: "/dashboard/client", label: "Inicio" },
-            { href: "/dashboard/client/sitio", label: "Mi Sitio Web" },
-            { href: "/dashboard/client/galeria", label: "Galeria" },
-            { href: "/dashboard/client/reservas", label: "Reservas" },
-            { href: "/dashboard/client/leads", label: "Leads" },
-            { href: "/dashboard/client/facturacion", label: "Facturacion" },
-            { href: "/dashboard/client/soporte", label: "Soporte", active: true },
-          ].map(item => (
-            <Link key={item.href} href={item.href} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${(item as any).active ? "bg-purple-50 text-purple-600" : "text-gray-600 hover:bg-purple-50 hover:text-purple-600"}`}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
-
-      <main className="flex-1 px-6 py-8 max-w-2xl w-full mx-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Soporte</h1>
-          <p className="text-gray-500 text-sm mt-1">Estamos aqui para ayudarte.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          {[
-            { label: "WhatsApp", value: "Respuesta inmediata", href: "https://wa.me/573000000000", btn: "Abrir WhatsApp" },
-            { label: "Correo", value: "dms.digitalstudio@outlook.com", href: "mailto:dms.digitalstudio@outlook.com", btn: "Enviar correo" },
-            { label: "Horario", value: "Lun - Vie 8am - 6pm", href: "#", btn: "Ver horario" },
-          ].map(c => (
-            <div key={c.label} className="bg-white border border-gray-200 rounded-xl p-5 text-center">
-              <p className="font-bold text-gray-900 text-sm mb-1">{c.label}</p>
-              <p className="text-xs text-gray-500 mb-3">{c.value}</p>
-              <a href={c.href} className="text-xs font-semibold text-purple-600 hover:underline">{c.btn}</a>
+      )}
+      {tab === "historial" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {mensajes.length === 0 ? (
+            <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "3rem", textAlign: "center", color: "#ccc" }}>No has enviado mensajes aun.</div>
+          ) : mensajes.map(m => (
+            <div key={m.id} style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "1.25rem" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
+                <div>
+                  <p style={{ fontWeight: 700, color: "#111", fontSize: 13, margin: 0 }}>{m.asunto}</p>
+                  <p style={{ fontSize: 11, color: "#aaa", marginTop: 2 }}>{new Date(m.created_at).toLocaleDateString("es-CO")}</p>
+                </div>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: ESTADO_COLORS[m.estado]?.bg, color: ESTADO_COLORS[m.estado]?.color }}>{ESTADO_COLORS[m.estado]?.label ?? m.estado}</span>
+              </div>
+              <div style={{ background: "#f8f9fa", borderRadius: 8, padding: "10px 12px", marginBottom: 8 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#888", marginBottom: 4 }}>Tu mensaje:</p>
+                <p style={{ fontSize: 13, color: "#555", margin: 0 }}>{m.mensaje}</p>
+              </div>
+              {m.respuesta && (
+                <div style={{ borderLeft: "3px solid #7c3aed", paddingLeft: 12, background: "rgba(124,58,237,0.04)", borderRadius: "0 8px 8px 0", padding: "10px 12px", marginBottom: 8 }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", marginBottom: 4 }}>Respuesta DMS:</p>
+                  <p style={{ fontSize: 13, color: "#555", margin: 0 }}>{m.respuesta}</p>
+                </div>
+              )}
+              {m.respuesta && m.estado !== "cerrado" && (
+                respondiendo === m.id ? (
+                  <div style={{ marginTop: 8 }}>
+                    <textarea value={respuestaCliente} onChange={e => setRespuestaCliente(e.target.value)} rows={3} placeholder="Escribe tu respuesta..." style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", resize: "none", boxSizing: "border-box", marginBottom: 8 }} />
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button onClick={() => handleResponderCliente(m.id)} disabled={savingResp || !respuestaCliente.trim()} style={{ background: "#7c3aed", color: "#fff", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>{savingResp ? "Enviando..." : "Enviar"}</button>
+                      <button onClick={() => { setRespondiendo(null); setRespuestaCliente(""); }} style={{ background: "#f3f4f6", color: "#555", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Cancelar</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => setRespondiendo(m.id)} style={{ fontSize: 12, color: "#7c3aed", fontWeight: 700, background: "none", border: "none", cursor: "pointer", padding: 0, marginTop: 4 }}>Responder al equipo DMS</button>
+                )
+              )}
             </div>
           ))}
         </div>
-
-        <div className="flex gap-2 mb-6 border-b border-gray-200">
-          {(["nuevo","historial"] as const).map(t => (
-            <button key={t} onClick={() => setTab(t)} className="px-4 py-2 text-sm font-semibold capitalize transition-colors" style={{ borderBottom: tab === t ? "2px solid #7c3aed" : "2px solid transparent", color: tab === t ? "#7c3aed" : "#6b7280" }}>
-              {t === "nuevo" ? "Nuevo mensaje" : `Mis mensajes (${mensajes.length})`}
-            </button>
-          ))}
-        </div>
-
-        {tab === "nuevo" && (
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="font-bold text-gray-900 mb-4">Enviar mensaje</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Asunto</label>
-                <input type="text" required value={form.asunto} onChange={e => setForm({ ...form, asunto: e.target.value })} className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-600" placeholder="Como podemos ayudarte?" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Mensaje</label>
-                <textarea required rows={5} value={form.mensaje} onChange={e => setForm({ ...form, mensaje: e.target.value })} className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-600 resize-none" placeholder="Describe tu consulta..." />
-              </div>
-              <button type="submit" disabled={sending} className="w-full bg-purple-600 text-white py-3 rounded-xl font-semibold text-sm hover:bg-purple-700 transition-colors disabled:opacity-50">
-                {sending ? "Enviando..." : "Enviar mensaje"}
-              </button>
-            </form>
-          </div>
-        )}
-
-        {tab === "historial" && (
-          <div className="space-y-4">
-            {mensajes.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-400">
-                No has enviado mensajes aun.
-              </div>
-            ) : (
-              mensajes.map(m => (
-                <div key={m.id} className="bg-white rounded-2xl border border-gray-200 p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <p className="font-bold text-gray-900 text-sm">{m.asunto}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{new Date(m.created_at).toLocaleDateString("es-CO", { day:"2-digit", month:"long", year:"numeric", hour:"2-digit", minute:"2-digit" })}</p>
-                    </div>
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: ESTADO_COLORS[m.estado]?.bg, color: ESTADO_COLORS[m.estado]?.color }}>
-                      {ESTADO_COLORS[m.estado]?.label ?? m.estado}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-gray-50 rounded-xl p-3">
-                      <p className="text-xs font-semibold text-gray-500 mb-1">Tu mensaje:</p>
-                      <p className="text-sm text-gray-600 leading-relaxed">{m.mensaje}</p>
-                    </div>
-
-                    {m.respuesta && (
-                      <div className="border-l-4 border-purple-400 pl-4 bg-purple-50 py-3 rounded-r-xl">
-                        <p className="text-xs font-semibold text-purple-600 mb-1">Respuesta del equipo DMS:</p>
-                        <p className="text-sm text-gray-700 leading-relaxed">{m.respuesta}</p>
-                        {m.respondido_at && <p className="text-xs text-gray-400 mt-1">{new Date(m.respondido_at).toLocaleDateString("es-CO", { day:"2-digit", month:"long", year:"numeric", hour:"2-digit", minute:"2-digit" })}</p>}
-                      </div>
-                    )}
-
-                    {m.respuesta_cliente && (
-                      <div className="bg-gray-50 rounded-xl p-3 border-l-4 border-gray-300">
-                        <p className="text-xs font-semibold text-gray-500 mb-1">Tu respuesta:</p>
-                        <p className="text-sm text-gray-600 leading-relaxed">{m.respuesta_cliente}</p>
-                        {m.respuesta_cliente_at && <p className="text-xs text-gray-400 mt-1">{new Date(m.respuesta_cliente_at).toLocaleDateString("es-CO", { day:"2-digit", month:"long", year:"numeric", hour:"2-digit", minute:"2-digit" })}</p>}
-                      </div>
-                    )}
-
-                    {m.respuesta && m.estado !== "cerrado" && (
-                      respondiendo === m.id ? (
-                        <div className="mt-3">
-                          <textarea
-                            value={respuestaCliente}
-                            onChange={e => setRespuestaCliente(e.target.value)}
-                            rows={3}
-                            placeholder="Escribe tu respuesta..."
-                            className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-600 resize-none mb-2"
-                          />
-                          <div className="flex gap-2">
-                            <button onClick={() => handleResponderCliente(m.id)} disabled={savingResp || !respuestaCliente.trim()} className="text-xs bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:opacity-50">
-                              {savingResp ? "Enviando..." : "Enviar respuesta"}
-                            </button>
-                            <button onClick={() => { setRespondiendo(null); setRespuestaCliente(""); }} className="text-xs bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
-                              Cancelar
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <button onClick={() => setRespondiendo(m.id)} className="text-xs text-purple-600 font-semibold hover:underline mt-1">
-                          Responder al equipo DMS
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        )}
-      </main>
+      )}
     </div>
   );
 }

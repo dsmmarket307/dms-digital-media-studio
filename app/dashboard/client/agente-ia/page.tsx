@@ -2,21 +2,6 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-
-const MENU = [
-  { href: "/dashboard/client", label: "Inicio" },
-  { href: "/dashboard/client/sitio", label: "Mi Sitio Web" },
-  { href: "/dashboard/client/galeria", label: "Galeria" },
-  { href: "/dashboard/client/reservas", label: "Reservas" },
-  { href: "/dashboard/client/leads", label: "Leads" },
-  { href: "/dashboard/client/crm", label: "CRM Pipeline" },
-  { href: "/dashboard/client/automatizaciones", label: "Automatizaciones" },
-  { href: "/dashboard/client/agente-ia", label: "Agente IA", active: true },
-  { href: "/dashboard/client/facturacion", label: "Facturacion" },
-  { href: "/dashboard/client/soporte", label: "Soporte" },
-];
 
 export default function AgenteIA() {
   const router = useRouter();
@@ -36,7 +21,6 @@ export default function AgenteIA() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
-      const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
       if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
       const { data: s } = await supabase.from("generated_websites").select("id, project_name").eq("user_id", user.id);
@@ -83,50 +67,34 @@ export default function AgenteIA() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex" }}>
+    <div style={{ padding: "2rem", minWidth: 0, maxWidth: 700 }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      <aside style={{ width: 240, background: "#fff", borderRight: "1px solid #e5e7eb", minHeight: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex", flexDirection: "column" }} className="hidden md:flex">
-        <div style={{ padding: "24px 20px 16px", borderBottom: "1px solid #f0f0f0" }}>
-          <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={110} height={34} /></Link>
-        </div>
-        <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 2 }}>
-          {MENU.map(item => (
-            <Link key={item.href} href={item.href} style={{ display: "flex", alignItems: "center", padding: "9px 14px", borderRadius: 10, textDecoration: "none", fontSize: 13, fontWeight: (item as any).active ? 700 : 500, color: (item as any).active ? "#7c3aed" : "#555", background: (item as any).active ? "rgba(124,58,237,0.08)" : "transparent", borderLeft: (item as any).active ? "3px solid #7c3aed" : "3px solid transparent" }}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
-
-      <main style={{ flex: 1, padding: "2rem", minWidth: 0, maxWidth: 700 }}>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>Agente IA</h1>
-          <p style={{ color: "#888", fontSize: 13, marginTop: 4 }}>Configura tu asistente inteligente para atender clientes automaticamente.</p>
-        </div>
-
-        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "1.5rem" }}>
-          {sites.length > 0 && (
-            <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Sitio Web</label>
-              <select value={form.site_id} onChange={e => setForm(prev => ({ ...prev, site_id: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none" }}>
-                <option value="">Seleccionar sitio</option>
-                {sites.map(s => <option key={s.id} value={s.id}>{s.project_name}</option>)}
-              </select>
-            </div>
-          )}
-          <Field label="Nombre del agente" field="nombre" />
-          <Field label="Descripcion del negocio" field="descripcion" multiline />
-          <Field label="Servicios que ofrece" field="servicios" multiline />
-          <Field label="Preguntas frecuentes" field="faq" multiline />
-          <Field label="Horario de atencion" field="horario" />
-          <Field label="WhatsApp" field="whatsapp" />
-          <Field label="Correo" field="correo" />
-          <Field label="Direccion" field="direccion" />
-          <button onClick={guardar} disabled={saving} style={{ background: saved ? "#10b981" : "#7c3aed", color: "#fff", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", marginTop: 8 }}>
-            {saving ? "Guardando..." : saved ? "Guardado" : agente ? "Actualizar Agente" : "Crear Agente"}
-          </button>
-        </div>
-      </main>
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>Agente IA</h1>
+        <p style={{ color: "#888", fontSize: 13, marginTop: 4 }}>Configura tu asistente inteligente para atender clientes automaticamente.</p>
+      </div>
+      <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "1.5rem" }}>
+        {sites.length > 0 && (
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Sitio Web</label>
+            <select value={form.site_id} onChange={e => setForm(prev => ({ ...prev, site_id: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none" }}>
+              <option value="">Seleccionar sitio</option>
+              {sites.map(s => <option key={s.id} value={s.id}>{s.project_name}</option>)}
+            </select>
+          </div>
+        )}
+        <Field label="Nombre del agente" field="nombre" />
+        <Field label="Descripcion del negocio" field="descripcion" multiline />
+        <Field label="Servicios que ofrece" field="servicios" multiline />
+        <Field label="Preguntas frecuentes" field="faq" multiline />
+        <Field label="Horario de atencion" field="horario" />
+        <Field label="WhatsApp" field="whatsapp" />
+        <Field label="Correo" field="correo" />
+        <Field label="Direccion" field="direccion" />
+        <button onClick={guardar} disabled={saving} style={{ background: saved ? "#10b981" : "#7c3aed", color: "#fff", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", marginTop: 8 }}>
+          {saving ? "Guardando..." : saved ? "Guardado" : agente ? "Actualizar Agente" : "Crear Agente"}
+        </button>
+      </div>
     </div>
   );
 }

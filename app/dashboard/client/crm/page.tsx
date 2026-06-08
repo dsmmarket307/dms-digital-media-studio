@@ -2,33 +2,10 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
 
 const COLUMNAS = ["nuevo", "contactado", "propuesta", "negociacion", "ganado", "perdido"];
-
-const COLUMNA_LABELS: Record<string, string> = {
-  nuevo: "Nuevo", contactado: "Contactado", propuesta: "Propuesta",
-  negociacion: "Negociacion", ganado: "Ganado", perdido: "Perdido",
-};
-
-const COLUMNA_COLORS: Record<string, string> = {
-  nuevo: "#6366f1", contactado: "#3b82f6", propuesta: "#f59e0b",
-  negociacion: "#f97316", ganado: "#10b981", perdido: "#ef4444",
-};
-
-const MENU = [
-  { href: "/dashboard/client", label: "Inicio" },
-  { href: "/dashboard/client/sitio", label: "Mi Sitio Web" },
-  { href: "/dashboard/client/galeria", label: "Galeria" },
-  { href: "/dashboard/client/reservas", label: "Reservas" },
-  { href: "/dashboard/client/leads", label: "Leads" },
-  { href: "/dashboard/client/crm", label: "CRM Pipeline", active: true },
-  { href: "/dashboard/client/automatizaciones", label: "Automatizaciones" },
-  { href: "/dashboard/client/agente-ia", label: "Agente IA" },
-  { href: "/dashboard/client/facturacion", label: "Facturacion" },
-  { href: "/dashboard/client/soporte", label: "Soporte" },
-];
+const COLUMNA_LABELS: Record<string, string> = { nuevo: "Nuevo", contactado: "Contactado", propuesta: "Propuesta", negociacion: "Negociacion", ganado: "Ganado", perdido: "Perdido" };
+const COLUMNA_COLORS: Record<string, string> = { nuevo: "#6366f1", contactado: "#3b82f6", propuesta: "#f59e0b", negociacion: "#f97316", ganado: "#10b981", perdido: "#ef4444" };
 
 export default function CRMCliente() {
   const router = useRouter();
@@ -36,7 +13,6 @@ export default function CRMCliente() {
   const [leads, setLeads] = useState<any[]>([]);
   const [pipeline, setPipeline] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<any>(null);
   const [dragging, setDragging] = useState<any>(null);
   const [vista, setVista] = useState<"kanban" | "lista">("kanban");
   const [filtro, setFiltro] = useState("");
@@ -48,16 +24,14 @@ export default function CRMCliente() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
-      const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
       if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
-      const { data: l } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
+      const { data: l } = await supabase.from("leads").select("*").eq("fuente", "manual").order("created_at", { ascending: false });
       const { data: p } = await supabase.from("crm_pipeline").select("*").eq("user_id", user.id);
       const pipelineMap: Record<number, string> = {};
       (p ?? []).forEach((item: any) => { pipelineMap[item.lead_id] = item.columna; });
       setLeads(l ?? []);
       setPipeline(pipelineMap);
-      setProfile(prof);
       setLoading(false);
     }
     load();
@@ -82,27 +56,14 @@ export default function CRMCliente() {
     setAddingLead(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const { data } = await supabase.from("leads").insert({
-      nombre: newLead.nombre,
-      email: newLead.email,
-      telefono: newLead.telefono,
-      empresa: newLead.empresa,
-      mensaje: newLead.mensaje,
-      estado: "nuevo",
-      fuente: "manual",
-    }).select().single();
-    if (data) {
-      setLeads(prev => [data, ...prev]);
-      setPipeline(prev => ({ ...prev, [data.id]: "nuevo" }));
-    }
+    const { data } = await supabase.from("leads").insert({ nombre: newLead.nombre, email: newLead.email, telefono: newLead.telefono, empresa: newLead.empresa, mensaje: newLead.mensaje, estado: "nuevo", fuente: "manual" }).select().single();
+    if (data) { setLeads(prev => [data, ...prev]); setPipeline(prev => ({ ...prev, [data.id]: "nuevo" })); }
     setNewLead({ nombre: "", email: "", telefono: "", empresa: "", mensaje: "" });
     setShowModal(false);
     setAddingLead(false);
   }
 
-  const leadsFiltrados = leads.filter(l =>
-    !filtro || l.nombre?.toLowerCase().includes(filtro.toLowerCase()) || l.email?.toLowerCase().includes(filtro.toLowerCase())
-  );
+  const leadsFiltrados = leads.filter(l => !filtro || l.nombre?.toLowerCase().includes(filtro.toLowerCase()) || l.email?.toLowerCase().includes(filtro.toLowerCase()));
 
   if (loading) return (
     <div style={{ minHeight: "100vh", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -112,114 +73,95 @@ export default function CRMCliente() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex" }}>
+    <div style={{ padding: "2rem", minWidth: 0 }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      <aside style={{ width: 240, background: "#fff", borderRight: "1px solid #e5e7eb", minHeight: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex", flexDirection: "column" }} className="hidden md:flex">
-        <div style={{ padding: "24px 20px 16px", borderBottom: "1px solid #f0f0f0" }}>
-          <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={110} height={34} /></Link>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem", flexWrap: "wrap", gap: 12 }}>
+        <div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>CRM Pipeline</h1>
+          <p style={{ color: "#888", fontSize: 13, marginTop: 4 }}>Gestiona tus leads y oportunidades de negocio.</p>
         </div>
-        <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 2 }}>
-          {MENU.map(item => (
-            <Link key={item.href} href={item.href} style={{ display: "flex", alignItems: "center", padding: "9px 14px", borderRadius: 10, textDecoration: "none", fontSize: 13, fontWeight: (item as any).active ? 700 : 500, color: (item as any).active ? "#7c3aed" : "#555", background: (item as any).active ? "rgba(124,58,237,0.08)" : "transparent", borderLeft: (item as any).active ? "3px solid #7c3aed" : "3px solid transparent" }}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
-
-      <main style={{ flex: 1, padding: "2rem", minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>CRM Pipeline</h1>
-            <p style={{ color: "#888", fontSize: 13, marginTop: 4 }}>Gestiona tus leads y oportunidades de negocio.</p>
-          </div>
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <button onClick={() => setShowModal(true)} style={{ padding: "7px 16px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: "#7c3aed", color: "#fff" }}>+ Nuevo Lead</button>
-            <input placeholder="Buscar lead..." value={filtro} onChange={e => setFiltro(e.target.value)} style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 12px", fontSize: 13, outline: "none", width: 180 }} />
-            <button onClick={() => setVista("kanban")} style={{ padding: "7px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: vista === "kanban" ? "#7c3aed" : "#f3f4f6", color: vista === "kanban" ? "#fff" : "#555" }}>Kanban</button>
-            <button onClick={() => setVista("lista")} style={{ padding: "7px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: vista === "lista" ? "#7c3aed" : "#f3f4f6", color: vista === "lista" ? "#fff" : "#555" }}>Lista</button>
-          </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <button onClick={() => setShowModal(true)} style={{ padding: "7px 16px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: "#7c3aed", color: "#fff" }}>+ Nuevo Lead</button>
+          <input placeholder="Buscar lead..." value={filtro} onChange={e => setFiltro(e.target.value)} style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 12px", fontSize: 13, outline: "none", width: 180 }} />
+          <button onClick={() => setVista("kanban")} style={{ padding: "7px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: vista === "kanban" ? "#7c3aed" : "#f3f4f6", color: vista === "kanban" ? "#fff" : "#555" }}>Kanban</button>
+          <button onClick={() => setVista("lista")} style={{ padding: "7px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: vista === "lista" ? "#7c3aed" : "#f3f4f6", color: vista === "lista" ? "#fff" : "#555" }}>Lista</button>
         </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginBottom: "1.5rem" }}>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginBottom: "1.5rem" }}>
+        {COLUMNAS.map(col => {
+          const count = leadsFiltrados.filter(l => getColumna(l.id) === col).length;
+          return (
+            <div key={col} style={{ background: "#fff", borderRadius: 12, padding: "1rem", border: "1px solid #f0f0f0", borderTop: `3px solid ${COLUMNA_COLORS[col]}` }}>
+              <p style={{ fontSize: 22, fontWeight: 800, color: COLUMNA_COLORS[col], margin: 0 }}>{count}</p>
+              <p style={{ fontSize: 11, color: "#888", margin: 0, marginTop: 2 }}>{COLUMNA_LABELS[col]}</p>
+            </div>
+          );
+        })}
+      </div>
+      {vista === "kanban" && (
+        <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 16 }}>
           {COLUMNAS.map(col => {
-            const count = leadsFiltrados.filter(l => getColumna(l.id) === col).length;
+            const leadsCol = leadsFiltrados.filter(l => getColumna(l.id) === col);
             return (
-              <div key={col} style={{ background: "#fff", borderRadius: 12, padding: "1rem", border: "1px solid #f0f0f0", borderTop: `3px solid ${COLUMNA_COLORS[col]}` }}>
-                <p style={{ fontSize: 22, fontWeight: 800, color: COLUMNA_COLORS[col], margin: 0 }}>{count}</p>
-                <p style={{ fontSize: 11, color: "#888", margin: 0, marginTop: 2 }}>{COLUMNA_LABELS[col]}</p>
+              <div key={col} onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); if (dragging) moverLead(dragging.id, col); setDragging(null); }} style={{ minWidth: 220, background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", display: "flex", flexDirection: "column", flexShrink: 0 }}>
+                <div style={{ padding: "12px 14px", borderBottom: "1px solid #f0f0f0", display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: COLUMNA_COLORS[col] }} />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{COLUMNA_LABELS[col]}</span>
+                  <span style={{ marginLeft: "auto", fontSize: 11, background: "#f3f4f6", color: "#888", padding: "1px 7px", borderRadius: 999, fontWeight: 700 }}>{leadsCol.length}</span>
+                </div>
+                <div style={{ padding: 10, display: "flex", flexDirection: "column", gap: 8, minHeight: 80 }}>
+                  {leadsCol.map(lead => (
+                    <div key={lead.id} draggable onDragStart={() => setDragging(lead)} onDragEnd={() => setDragging(null)} style={{ background: "#f8f9fa", borderRadius: 10, padding: "10px 12px", cursor: "grab", border: "1px solid #e5e7eb" }}>
+                      <p style={{ fontWeight: 700, fontSize: 13, color: "#111", margin: 0, marginBottom: 4 }}>{lead.nombre}</p>
+                      <p style={{ fontSize: 11, color: "#888", margin: 0 }}>{lead.email}</p>
+                      {lead.telefono && <p style={{ fontSize: 11, color: "#888", margin: 0, marginTop: 2 }}>{lead.telefono}</p>}
+                      {lead.mensaje && <p style={{ fontSize: 11, color: "#aaa", margin: 0, marginTop: 4, lineHeight: 1.4 }}>{lead.mensaje.slice(0, 60)}{lead.mensaje.length > 60 ? "..." : ""}</p>}
+                      <p style={{ fontSize: 10, color: "#ccc", margin: 0, marginTop: 6 }}>{new Date(lead.created_at).toLocaleDateString("es-CO")}</p>
+                      <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap" }}>
+                        {COLUMNAS.filter(c => c !== col).map(c => (
+                          <button key={c} onClick={() => moverLead(lead.id, c)} style={{ fontSize: 9, padding: "2px 6px", borderRadius: 6, border: `1px solid ${COLUMNA_COLORS[c]}`, background: "transparent", color: COLUMNA_COLORS[c], cursor: "pointer", fontWeight: 700 }}>{COLUMNA_LABELS[c]}</button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  {leadsCol.length === 0 && <p style={{ fontSize: 12, color: "#ccc", textAlign: "center", padding: "1rem 0" }}>Sin leads</p>}
+                </div>
               </div>
             );
           })}
         </div>
-
-        {vista === "kanban" && (
-          <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 16 }}>
-            {COLUMNAS.map(col => {
-              const leadsCol = leadsFiltrados.filter(l => getColumna(l.id) === col);
-              return (
-                <div key={col} onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); if (dragging) moverLead(dragging.id, col); setDragging(null); }} style={{ minWidth: 220, background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", display: "flex", flexDirection: "column", flexShrink: 0 }}>
-                  <div style={{ padding: "12px 14px", borderBottom: "1px solid #f0f0f0", display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: COLUMNA_COLORS[col] }} />
-                    <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{COLUMNA_LABELS[col]}</span>
-                    <span style={{ marginLeft: "auto", fontSize: 11, background: "#f3f4f6", color: "#888", padding: "1px 7px", borderRadius: 999, fontWeight: 700 }}>{leadsCol.length}</span>
-                  </div>
-                  <div style={{ padding: 10, display: "flex", flexDirection: "column", gap: 8, minHeight: 80 }}>
-                    {leadsCol.map(lead => (
-                      <div key={lead.id} draggable onDragStart={() => setDragging(lead)} onDragEnd={() => setDragging(null)} style={{ background: "#f8f9fa", borderRadius: 10, padding: "10px 12px", cursor: "grab", border: "1px solid #e5e7eb" }}>
-                        <p style={{ fontWeight: 700, fontSize: 13, color: "#111", margin: 0, marginBottom: 4 }}>{lead.nombre}</p>
-                        <p style={{ fontSize: 11, color: "#888", margin: 0 }}>{lead.email}</p>
-                        {lead.telefono && <p style={{ fontSize: 11, color: "#888", margin: 0, marginTop: 2 }}>{lead.telefono}</p>}
-                        {lead.mensaje && <p style={{ fontSize: 11, color: "#aaa", margin: 0, marginTop: 4, lineHeight: 1.4 }}>{lead.mensaje.slice(0, 60)}{lead.mensaje.length > 60 ? "..." : ""}</p>}
-                        <p style={{ fontSize: 10, color: "#ccc", margin: 0, marginTop: 6 }}>{new Date(lead.created_at).toLocaleDateString("es-CO")}</p>
-                        <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap" }}>
-                          {COLUMNAS.filter(c => c !== col).map(c => (
-                            <button key={c} onClick={() => moverLead(lead.id, c)} style={{ fontSize: 9, padding: "2px 6px", borderRadius: 6, border: `1px solid ${COLUMNA_COLORS[c]}`, background: "transparent", color: COLUMNA_COLORS[c], cursor: "pointer", fontWeight: 700 }}>{COLUMNA_LABELS[c]}</button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    {leadsCol.length === 0 && <p style={{ fontSize: 12, color: "#ccc", textAlign: "center", padding: "1rem 0" }}>Sin leads</p>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {vista === "lista" && (
-          <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", overflow: "hidden" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-              <thead>
-                <tr style={{ background: "#f8f9fa", borderBottom: "1px solid #e5e7eb" }}>
-                  {["Nombre", "Correo", "Telefono", "Estado", "Fecha"].map(h => (
-                    <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {leadsFiltrados.map(lead => (
-                  <tr key={lead.id} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                    <td style={{ padding: "10px 16px", fontWeight: 600, color: "#111" }}>{lead.nombre}</td>
-                    <td style={{ padding: "10px 16px", color: "#555" }}>{lead.email}</td>
-                    <td style={{ padding: "10px 16px", color: "#888" }}>{lead.telefono ?? "---"}</td>
-                    <td style={{ padding: "10px 16px" }}>
-                      <select value={getColumna(lead.id)} onChange={e => moverLead(lead.id, e.target.value)} style={{ border: `1px solid ${COLUMNA_COLORS[getColumna(lead.id)]}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: COLUMNA_COLORS[getColumna(lead.id)], background: "#fff", cursor: "pointer" }}>
-                        {COLUMNAS.map(c => <option key={c} value={c}>{COLUMNA_LABELS[c]}</option>)}
-                      </select>
-                    </td>
-                    <td style={{ padding: "10px 16px", color: "#aaa", fontSize: 12 }}>{new Date(lead.created_at).toLocaleDateString("es-CO")}</td>
-                  </tr>
+      )}
+      {vista === "lista" && (
+        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ background: "#f8f9fa", borderBottom: "1px solid #e5e7eb" }}>
+                {["Nombre", "Correo", "Telefono", "Estado", "Fecha"].map(h => (
+                  <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const }}>{h}</th>
                 ))}
-                {leadsFiltrados.length === 0 && (
-                  <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: "#ccc" }}>No hay leads aun.</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </main>
-
+              </tr>
+            </thead>
+            <tbody>
+              {leadsFiltrados.map(lead => (
+                <tr key={lead.id} style={{ borderBottom: "1px solid #f0f0f0" }}>
+                  <td style={{ padding: "10px 16px", fontWeight: 600, color: "#111" }}>{lead.nombre}</td>
+                  <td style={{ padding: "10px 16px", color: "#555" }}>{lead.email}</td>
+                  <td style={{ padding: "10px 16px", color: "#888" }}>{lead.telefono ?? "---"}</td>
+                  <td style={{ padding: "10px 16px" }}>
+                    <select value={getColumna(lead.id)} onChange={e => moverLead(lead.id, e.target.value)} style={{ border: `1px solid ${COLUMNA_COLORS[getColumna(lead.id)]}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: COLUMNA_COLORS[getColumna(lead.id)], background: "#fff", cursor: "pointer" }}>
+                      {COLUMNAS.map(c => <option key={c} value={c}>{COLUMNA_LABELS[c]}</option>)}
+                    </select>
+                  </td>
+                  <td style={{ padding: "10px 16px", color: "#aaa", fontSize: 12 }}>{new Date(lead.created_at).toLocaleDateString("es-CO")}</td>
+                </tr>
+              ))}
+              {leadsFiltrados.length === 0 && (
+                <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: "#ccc" }}>No hay leads aun.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
       {showModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 16, padding: 24, width: "100%", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}>
