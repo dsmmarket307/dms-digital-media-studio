@@ -795,6 +795,37 @@ export default function ClientBuilder() {
               <Field label="Nombre empresa" value={content.footer.nombre_empresa} onChange={v => updateText(["footer","nombre_empresa"], v)} />
               <Field label="Descripcion" value={content.footer.descripcion} onChange={v => updateText(["footer","descripcion"], v)} multiline />
               <Field label="Copyright" value={content.footer.copyright} onChange={v => updateText(["footer","copyright"], v)} />
+              <div style={{ marginTop: 16, borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 10 }}>Redes Sociales</p>
+                <Field label="Facebook (URL)" value={content.footer.facebook ?? ""} onChange={v => updateText(["footer","facebook"], v)} />
+                <Field label="Instagram (URL)" value={content.footer.instagram ?? ""} onChange={v => updateText(["footer","instagram"], v)} />
+                <Field label="TikTok (URL)" value={content.footer.tiktok ?? ""} onChange={v => updateText(["footer","tiktok"], v)} />
+                <Field label="WhatsApp (numero)" value={content.footer.whatsapp ?? ""} onChange={v => updateText(["footer","whatsapp"], v)} />
+              </div>
+              <div style={{ marginTop: 16, borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 10 }}>Boton Principal</p>
+                <Field label="Texto del boton" value={content.footer.btn_label ?? ""} onChange={v => updateText(["footer","btn_label"], v)} />
+                <Field label="Enlace del boton" value={content.footer.btn_url ?? ""} onChange={v => updateText(["footer","btn_url"], v)} />
+              </div>
+              <div style={{ marginTop: 16, borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 10 }}>Secciones en Navbar</p>
+                {["nosotros","servicios","testimonios","faq","contacto"].map(sec => {
+                  const hidden = content.footer.navbar_hidden ?? [];
+                  const isHidden = hidden.includes(sec);
+                  return (
+                    <div key={sec} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 0", borderBottom: "1px solid #f9f9f9" }}>
+                      <span style={{ fontSize: 13, color: "#555", textTransform: "capitalize" }}>{sec}</span>
+                      <button onClick={() => {
+                        const current = content.footer.navbar_hidden ?? [];
+                        const next = isHidden ? current.filter((s: string) => s !== sec) : [...current, sec];
+                        updateText(["footer","navbar_hidden"], next as any);
+                      }} style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 6, border: "none", cursor: "pointer", background: isHidden ? "#f3f4f6" : `${pr}15`, color: isHidden ? "#aaa" : pr }}>
+                        {isHidden ? "Oculto" : "Visible"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </>)}
 
           </div>
@@ -803,4 +834,5 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
 

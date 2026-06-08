@@ -309,16 +309,14 @@ export default async function DemoPage({ params }: Props) {
           <h3 style={{ color: pr, fontWeight: 700, fontSize: "1.2rem", marginBottom: ".5rem" }}>{c?.footer?.nombre_empresa}</h3>
           <p style={{ fontSize: ".85rem", color: "rgba(255,255,255,.5)" }}>{c?.footer?.descripcion}</p>
           <div className="social-icons">
-            <a href="#" className="social-icon" title="Facebook">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="#" className="social-icon" title="Instagram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>
-            </a>
-            <a href="#" className="social-icon" title="TikTok">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
-            </a>
+            {c?.footer?.facebook && <a href={c.footer.facebook} target="_blank" rel="noopener noreferrer" className="social-icon" title="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>}
+            {c?.footer?.instagram && <a href={c.footer.instagram} target="_blank" rel="noopener noreferrer" className="social-icon" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg></a>}
+            {c?.footer?.tiktok && <a href={c.footer.tiktok} target="_blank" rel="noopener noreferrer" className="social-icon" title="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg></a>}
+            {c?.footer?.whatsapp && <a href={`https://wa.me/${c.footer.whatsapp.replace(/\D/g,"")}`} target="_blank" rel="noopener noreferrer" className="social-icon" title="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>}
           </div>
+          {c?.footer?.btn_label && c?.footer?.btn_url && (
+            <a href={c.footer.btn_url} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: "1rem", background: pr, color: "#fff", padding: "10px 28px", borderRadius: 10, fontWeight: 700, fontSize: "0.95rem", textDecoration: "none" }}>{c.footer.btn_label}</a>
+          )}
           <div className="footer-bottom">
             <p style={{ fontSize: ".85rem", color: "rgba(255,255,255,.5)" }}>{c?.footer?.copyright}</p>
           </div>
@@ -327,5 +325,6 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
 
 
