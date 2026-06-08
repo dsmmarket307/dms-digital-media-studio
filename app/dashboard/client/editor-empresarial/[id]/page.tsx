@@ -55,6 +55,7 @@ export default function PageBuilderEditor() {
   const [saved, setSaved] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<string>("hero");
+  const [navHidden, setNavHidden] = useState<string[]>([]);
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [font, setFont] = useState(FONTS[0].value);
   const [fontSize, setFontSize] = useState("16px");
@@ -86,6 +87,7 @@ export default function PageBuilderEditor() {
       if (!c.planes) c.planes = { titulo: "Nuestros Planes", items: [] };
       setContent(c);
       setPrimaryColor(data.primary_color ?? "#7c3aed");
+      setNavHidden(data.navbar_hidden ?? []);
       setSecondaryColor(data.secondary_color ?? "#000000");
       setLogoUrl(data.logo_url ?? "");
       setFont(data.font_family ?? FONTS[0].value);
@@ -122,6 +124,7 @@ export default function PageBuilderEditor() {
       font_family: font,
       font_size: fontSize,
       custom_images: images,
+      navbar_hidden: navHidden,
       status: publish ? "published" : "draft",
       published_version: publishedVersion,
     }).eq("id", id);

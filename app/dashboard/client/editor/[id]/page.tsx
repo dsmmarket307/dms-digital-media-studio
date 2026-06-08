@@ -54,6 +54,7 @@ export default function EditorProfesional() {
   const [saved, setSaved] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<string>("hero");
+  const [navHidden, setNavHidden] = useState<string[]>([]);
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [font, setFont] = useState(FONTS[0].value);
   const [fontSize, setFontSize] = useState("16px");
@@ -87,6 +88,7 @@ export default function EditorProfesional() {
       if (!c.planes) c.planes = { titulo: "Nuestros Planes", items: [] };
       setContent(c);
       setPrimaryColor(data.primary_color ?? "#7c3aed");
+      setNavHidden(data.navbar_hidden ?? []);
       setSecondaryColor(data.secondary_color ?? "#000000");
       setLogoUrl(data.logo_url ?? "");
       setFont(data.font_family ?? FONTS[0].value);
@@ -118,6 +120,7 @@ export default function EditorProfesional() {
       font_family: font,
       font_size: fontSize,
       custom_images: images,
+      navbar_hidden: navHidden,
       status: publish ? "published" : "draft",
     }).eq("id", id);
     setSaving(false);
@@ -300,9 +303,16 @@ export default function EditorProfesional() {
           </div>
           <nav style={{ padding: "8px", flex: 1 }}>
             {sections.map(s => (
-              <button key={s} onClick={() => setSelectedSection(s)} style={{ display: "block", width: "100%", textAlign: "left", padding: "8px 12px", borderRadius: 8, border: "none", cursor: "pointer", marginBottom: 3, fontWeight: selectedSection === s ? 700 : 500, fontSize: 12, background: selectedSection === s ? `${pr}15` : "transparent", color: selectedSection === s ? pr : "#555", borderLeft: selectedSection === s ? `3px solid ${pr}` : "3px solid transparent" }}>
-                {SECTION_LABELS[s]}
-              </button>
+              <div key={s} style={{ display:"flex", alignItems:"center", gap:4, marginBottom:3 }}>
+                <button onClick={() => setSelectedSection(s)} style={{ flex:1, textAlign:"left", padding:"8px 12px", borderRadius:8, border:"none", cursor:"pointer", fontWeight: selectedSection===s ? 700 : 500, fontSize:12, background: selectedSection===s ? `${pr}15` : "transparent", color: selectedSection===s ? pr : "#555", borderLeft: selectedSection===s ? `3px solid ${pr}` : "3px solid transparent" }}>
+                  {SECTION_LABELS[s]}
+                </button>
+                {s !== "hero" && s !== "footer" && (
+                  <button onClick={() => setNavHidden(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s])} title={navHidden.includes(s) ? "Oculto en navbar" : "Visible en navbar"} style={{ padding:"4px 6px", borderRadius:6, border:"1px solid #e5e7eb", background: navHidden.includes(s) ? "#f3f4f6" : `${pr}15`, color: navHidden.includes(s) ? "#aaa" : pr, fontSize:10, fontWeight:700, cursor:"pointer", flexShrink:0 }}>
+                    {navHidden.includes(s) ? "OFF" : "ON"}
+                  </button>
+                )}
+              </div>
             ))}
           </nav>
           <div style={{ padding: "12px 10px", borderTop: "1px solid #f0f0f0" }}>

@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -65,6 +65,7 @@ export default async function DemoPage({ params }: Props) {
   const font = site.font_family ?? "'Segoe UI', sans-serif";
   const fontSize = site.font_size ?? "16px";
   const isPublished = site.status === "published";
+  const navHidden: string[] = site.navbar_hidden ?? [];
 
   const css = `
     *{box-sizing:border-box;margin:0;padding:0}
@@ -123,12 +124,12 @@ export default async function DemoPage({ params }: Props) {
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: pr }}>{c?.footer?.nombre_empresa ?? site.project_name}</span>
         </div>
         <ul className="nav-links">
-          {c?.nosotros && <li><a href="#nosotros">Nosotros</a></li>}
-          {c?.productos && c.productos.length > 0 && <li><a href="#productos">Productos</a></li>}
-          {c?.servicios && <li><a href="#servicios">Servicios</a></li>}
-          {c?.testimonios && <li><a href="#testimonios">Testimonios</a></li>}
-          {c?.faq && <li><a href="#faq">FAQ</a></li>}
-          {c?.contacto && <li><a href="#contacto">Contacto</a></li>}
+          {c?.nosotros && !navHidden.includes("nosotros") && <li><a href="#nosotros">Nosotros</a></li>}
+          {c?.productos && c.productos.length > 0 && !navHidden.includes("productos") && <li><a href="#productos">Productos</a></li>}
+          {c?.servicios && !navHidden.includes("servicios") && <li><a href="#servicios">Servicios</a></li>}
+          {c?.testimonios && !navHidden.includes("testimonios") && <li><a href="#testimonios">Testimonios</a></li>}
+          {c?.faq && !navHidden.includes("faq") && <li><a href="#faq">FAQ</a></li>}
+          {c?.contacto && !navHidden.includes("contacto") && <li><a href="#contacto">Contacto</a></li>}
         </ul>
         <a href="#contacto" style={{ background: pr, color: "#fff", padding: "0.5rem 1.25rem", borderRadius: 8, textDecoration: "none", fontSize: "0.875rem", fontWeight: 700 }}>
           {c?.hero?.cta_principal ?? "Contactar"}
