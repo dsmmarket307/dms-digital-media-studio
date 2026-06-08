@@ -99,7 +99,7 @@ export default function ClientSidebar() {
       </aside>
 
       {/* MOBILE HEADER */}
-      <header style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }} className="flex md:hidden">
+      <header style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "12px 16px", display: "none", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }} className="flex md:hidden">
         <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={100} height={32} /></Link>
         <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
           {menuOpen ? (
@@ -119,3 +119,4 @@ export default function ClientSidebar() {
     </>
   );
 }
+
