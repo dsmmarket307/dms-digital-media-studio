@@ -51,12 +51,13 @@ export default function CRMCliente() {
       const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
       if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
-      const { data: l } = await supabase.from("leads").select("*").eq("email", prof?.email).order("created_at", { ascending: false });
+      const { data: l } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
       const { data: p } = await supabase.from("crm_pipeline").select("*").eq("user_id", user.id);
       const pipelineMap: Record<number, string> = {};
       (p ?? []).forEach((item: any) => { pipelineMap[item.lead_id] = item.columna; });
       setLeads(l ?? []);
       setPipeline(pipelineMap);
+      setProfile(prof);
       setLoading(false);
     }
     load();
@@ -75,13 +76,25 @@ export default function CRMCliente() {
   }
 
   function getColumna(leadId: number) { return pipeline[leadId] ?? "nuevo"; }
+
   async function agregarLead() {
     if (!newLead.nombre) return;
     setAddingLead(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const { data } = await supabase.from("crm_pipeline").insert({ user_id: user.id, ...newLead, origen: "Manual", estado: "nuevo" }).select().single();
-    if (data) { setLeads(prev => [data, ...prev]); }
+    const { data } = await supabase.from("leads").insert({
+      nombre: newLead.nombre,
+      email: newLead.email,
+      telefono: newLead.telefono,
+      empresa: newLead.empresa,
+      mensaje: newLead.mensaje,
+      estado: "nuevo",
+      fuente: "manual",
+    }).select().single();
+    if (data) {
+      setLeads(prev => [data, ...prev]);
+      setPipeline(prev => ({ ...prev, [data.id]: "nuevo" }));
+    }
     setNewLead({ nombre: "", email: "", telefono: "", empresa: "", mensaje: "" });
     setShowModal(false);
     setAddingLead(false);
@@ -206,7 +219,8 @@ export default function CRMCliente() {
           </div>
         )}
       </main>
-    {showModal && (
+
+      {showModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 16, padding: 24, width: "100%", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: "#111", marginBottom: 16 }}>Nuevo Lead</h2>
