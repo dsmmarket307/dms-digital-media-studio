@@ -158,7 +158,7 @@ export default function ClientBuilder() {
   const rutasPermitidas = PLAN_ACCESO[planActivo] ?? ["/dashboard/client", "/dashboard/client/suscripcion"];
   const sections = planActivo === "empresarial" ? SECTIONS_EMPRESARIAL : planActivo === "profesional" ? SECTIONS_PROFESIONAL : SECTIONS_BASICO;
   const canAddRemove = planActivo === "profesional" || planActivo === "empresarial";
-  const canChangeTipo = planActivo === "profesional" || planActivo === "empresarial";
+  const canChangeTipo = planActivo === "basico" || planActivo === "profesional" || planActivo === "empresarial";
   const pr = primaryColor;
   const previewWidth = view === "desktop" ? "100%" : view === "tablet" ? "768px" : "375px";
 
@@ -803,3 +803,4 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
