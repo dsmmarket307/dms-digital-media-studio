@@ -1,0 +1,79 @@
+﻿import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { MercadoPagoConfig, Preference } from "mercadopago";
+
+const mp = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN! });
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+
+const PLANES: Record<string, { nombre: string; precio: number }> = {
+  basico:      { nombre: "Plan Basico",      precio: 49000  },
+  profesional: { nombre: "Plan Profesional", precio: 99000  },
+  empresarial: { nombre: "Plan Empresarial", precio: 199000 },
+};
+
+export async function POST(req: NextRequest) {
+  try {
+    const { plan, user_id, site_id, payer_email, payer_name } = await req.json();
+    if (!plan || !user_id) return NextResponse.json({ error: "plan y user_id son requeridos" }, { status: 400 });
+    const planData = PLANES[plan];
+    if (!planData) return NextResponse.json({ error: "Plan no valido" }, { status: 400 });
+
+    const siteUrl = process.env.NEXT_PUBLIC_URL || "https://dms-digital-media-studio.vercel.app";
+    const preference = new Preference(mp);
+    const result = await preference.create({
+      body: {
+        items: [{
+          id: `suscripcion-${plan}`,
+          title: `DMS Digital Studio - ${planData.nombre}`,
+          quantity: 1,
+          unit_price: planData.precio,
+          currency_id: "COP",
+        }],
+        payer: { email: payer_email, name: payer_name ?? payer_email },
+        external_reference: JSON.stringify({ type: "suscripcion", user_id, site_id: site_id ?? null, plan, payer_email }),
+        back_urls: {
+          success: `${siteUrl}/dashboard/client/suscripcion?status=success&plan=${plan}`,
+          failure: `${siteUrl}/dashboard/client/suscripcion?status=failure`,
+          pending: `${siteUrl}/dashboard/client/suscripcion?status=pending&plan=${plan}`,
+        },
+        auto_return: "approved",
+        notification_url: `${siteUrl}/api/mercadopago/webhook`,
+      },
+    });
+
+    if (!result.init_point) return NextResponse.json({ error: "Error creando preferencia" }, { status: 500 });
+    return NextResponse.json({ init_point: result.init_point });
+  } catch (error: any) {
+    console.error("Suscripcion Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const user_id = searchParams.get("user_id");
+    if (!user_id) return NextResponse.json({ error: "user_id requerido" }, { status: 400 });
+
+    const { data, error } = await supabase
+      .from("subscriptions")
+      .select("*")
+      .eq("user_id", user_id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) return NextResponse.json({ subscription: null });
+
+    const now = new Date();
+    const periodEnd = new Date(data.current_period_end);
+    if (data.status === "active" && now > periodEnd) {
+      await supabase.from("subscriptions").update({ status: "expired" }).eq("id", data.id);
+      data.status = "expired";
+    }
+
+    return NextResponse.json({ subscription: data });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
