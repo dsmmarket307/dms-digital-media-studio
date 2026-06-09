@@ -7,8 +7,8 @@ import Image from "next/image";
 
 const PLAN_ACCESO: Record<string, string[]> = {
   basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
+  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
+  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
 };
 
 const MENU = [
@@ -18,6 +18,7 @@ const MENU = [
   { href: "/dashboard/client/galeria", label: "Galeria" },
   { href: "/dashboard/client/reservas", label: "Reservas" },
   { href: "/dashboard/client/leads", label: "Leads" },
+  { href: "/dashboard/client/dominios", label: "Dominios" },
   { href: "/dashboard/client/crm", label: "CRM Pipeline" },
   { href: "/dashboard/client/automatizaciones", label: "Automatizaciones" },
   { href: "/dashboard/client/agente-ia", label: "Agente IA" },
@@ -119,4 +120,5 @@ export default function ClientSidebar() {
     </>
   );
 }
+
 
