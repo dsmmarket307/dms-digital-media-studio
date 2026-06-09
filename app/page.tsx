@@ -86,48 +86,12 @@ const REDES = [
 ];
 
 const SITIOS_IA = [
-  {
-    nombre: "Aura Spa & Wellness",
-    categoria: "Spa / Bienestar",
-    color: "#b8860b",
-    bg: "linear-gradient(135deg, #f5f0e0 0%, #e8d5a3 100%)",
-    icono: "S",
-  },
-  {
-    nombre: "Restaurante La Brasa",
-    categoria: "Gastronomia",
-    color: "#c0392b",
-    bg: "linear-gradient(135deg, #fdf0ed 0%, #f5c6bb 100%)",
-    icono: "R",
-  },
-  {
-    nombre: "Clinica Estetica Glow",
-    categoria: "Salud / Estetica",
-    color: "#8e44ad",
-    bg: "linear-gradient(135deg, #f8f0ff 0%, #e8d0f5 100%)",
-    icono: "C",
-  },
-  {
-    nombre: "Inmobiliaria El Dorado",
-    categoria: "Inmobiliaria",
-    color: "#1a6b3a",
-    bg: "linear-gradient(135deg, #edfaf3 0%, #b8e8cc 100%)",
-    icono: "I",
-  },
-  {
-    nombre: "Boutique Moda Latina",
-    categoria: "Moda / Retail",
-    color: "#c0392b",
-    bg: "linear-gradient(135deg, #fff0f5 0%, #f5c0d0 100%)",
-    icono: "B",
-  },
-  {
-    nombre: "Firma Juridica Mejia",
-    categoria: "Legal / Abogados",
-    color: "#1a3a6b",
-    bg: "linear-gradient(135deg, #f0f4ff 0%, #c0ccf0 100%)",
-    icono: "F",
-  },
+  { nombre: "Aura Spa & Wellness", categoria: "Spa / Bienestar", url: "https://www.miispa.com.mx" },
+  { nombre: "Restaurante La Brasa", categoria: "Gastronomia", url: "https://www.labrasa.com.co" },
+  { nombre: "Clinica Estetica Glow", categoria: "Salud / Estetica", url: "https://www.clinicaglow.com.co" },
+  { nombre: "Inmobiliaria El Dorado", categoria: "Inmobiliaria", url: "https://www.century21.com.co" },
+  { nombre: "Boutique Moda Latina", categoria: "Moda / Retail", url: "https://www.zara.com/co" },
+  { nombre: "Firma Juridica Mejia", categoria: "Legal / Abogados", url: "https://www.consultoriajuridica.co" },
 ];
 
 const STAT_ICONS = [
@@ -151,6 +115,52 @@ function useCountUp(target: number, duration: number, start: boolean) {
     requestAnimationFrame(step);
   }, [start, target, duration]);
   return count;
+}
+
+function SitioCard({ sitio }: { sitio: typeof SITIOS_IA[0] }) {
+  const screenshotUrl = `https://api.microlink.io/?url=${encodeURIComponent(sitio.url)}&screenshot=true&meta=false&embed=screenshot.url`;
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.06)", background: "#fff", transition: "transform 0.2s, box-shadow 0.2s" }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(124,58,237,0.15)"; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.08)"; }}>
+      <div style={{ position: "relative", height: 200, background: "#f3f4f6", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 28, background: "rgba(240,240,240,0.95)", display: "flex", alignItems: "center", padding: "0 10px", gap: 6, zIndex: 2 }}>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }}/>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }}/>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#28ca41" }}/>
+          <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.9)", borderRadius: 4, marginLeft: 8, display: "flex", alignItems: "center", paddingLeft: 8 }}>
+            <span style={{ fontSize: 9, color: "#999" }}>dms.studio/{sitio.nombre.toLowerCase().replace(/ /g, "-").replace(/&/g, "y")}</span>
+          </div>
+        </div>
+        {!imgError ? (
+          <img
+            src={screenshotUrl}
+            alt={sitio.nombre}
+            onError={() => setImgError(true)}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", marginTop: 0 }}
+          />
+        ) : (
+          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #f5f0ff 0%, #e8d5ff 100%)" }}>
+            <span style={{ fontSize: 40, fontWeight: 900, color: "#7c3aed" }}>{sitio.nombre[0]}</span>
+          </div>
+        )}
+      </div>
+      <div style={{ padding: "16px 20px 20px" }}>
+        <p style={{ fontWeight: 700, fontSize: 14, color: "#111", margin: "0 0 6px" }}>{sitio.nombre}</p>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", background: "rgba(124,58,237,0.08)", padding: "3px 10px", borderRadius: 20 }}>{sitio.categoria}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span style={{ fontSize: 12, color: "#555" }}>Generado con IA en minutos</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span style={{ fontSize: 12, color: "#555" }}>Listo para publicar</span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Home() {
@@ -213,13 +223,13 @@ export default function Home() {
             { href: "/portafolio", label: "Portafolio" },
             { href: "#contacto", label: "Contacto" },
           ].map(item => (
-            <Link key={item.href} href={item.href} style={{ fontSize: 17, fontWeight: 800, color: "#222", textDecoration: "none", letterSpacing: "0.01em" }} className="hover:text-purple-600 transition-colors">
+            <Link key={item.href} href={item.href} style={{ fontSize: 14, fontWeight: 700, color: "#222", textDecoration: "none", letterSpacing: "0.01em" }} className="hover:text-purple-600 transition-colors">
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <Link href="/auth/login" className="hidden md:block" style={{ fontSize: 17, fontWeight: 800, color: "#444", textDecoration: "none" }}>
+          <Link href="/auth/login" className="hidden md:block" style={{ fontSize: 14, fontWeight: 700, color: "#444", textDecoration: "none" }}>
             Ingresar
           </Link>
           <Link href="/auth/register" style={{ background: "#7c3aed", color: "#fff", padding: "9px 22px", borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: "none" }} className="hidden md:block hover:opacity-90 transition-opacity">
@@ -246,13 +256,13 @@ export default function Home() {
             { href: "/portafolio", label: "Portafolio" },
             { href: "#contacto", label: "Contacto" },
           ].map(item => (
-            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} style={{ fontSize: 16, fontWeight: 700, color: "#222", textDecoration: "none" }} className="hover:text-purple-600">
+            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} style={{ fontSize: 14, fontWeight: 700, color: "#222", textDecoration: "none" }} className="hover:text-purple-600">
               {item.label}
             </Link>
           ))}
           <hr style={{ borderColor: "#f0f0f0" }} />
-          <Link href="/auth/login" onClick={() => setMenuOpen(false)} style={{ fontSize: 17, fontWeight: 800, color: "#444", textDecoration: "none" }}>Ingresar</Link>
-          <Link href="/auth/register" onClick={() => setMenuOpen(false)} style={{ background: "#7c3aed", color: "#fff", padding: "10px 0", borderRadius: 10, fontSize: 15, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>Registrarse</Link>
+          <Link href="/auth/login" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, fontWeight: 700, color: "#444", textDecoration: "none" }}>Ingresar</Link>
+          <Link href="/auth/register" onClick={() => setMenuOpen(false)} style={{ background: "#7c3aed", color: "#fff", padding: "10px 0", borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>Registrarse</Link>
         </div>
       )}
 
@@ -372,35 +382,7 @@ export default function Home() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
             {SITIOS_IA.map((sitio, i) => (
-              <div key={i} style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.06)", background: "#fff", transition: "transform 0.2s, box-shadow 0.2s" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(124,58,237,0.15)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.08)"; }}>
-                <div style={{ background: sitio.bg, height: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, position: "relative" }}>
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 28, background: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", padding: "0 10px", gap: 6 }}>
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }}/>
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }}/>
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#28ca41" }}/>
-                    <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.7)", borderRadius: 4, marginLeft: 8, display: "flex", alignItems: "center", paddingLeft: 8 }}>
-                      <span style={{ fontSize: 9, color: "#999" }}>dms.studio/{sitio.nombre.toLowerCase().replace(/ /g,"-")}</span>
-                    </div>
-                  </div>
-                  <div style={{ width: 56, height: 56, borderRadius: 16, background: sitio.color, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 24, fontWeight: 900, boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}>
-                    {sitio.icono}
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: sitio.color }}>{sitio.nombre}</div>
-                </div>
-                <div style={{ padding: "16px 20px 20px" }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", background: "rgba(124,58,237,0.08)", padding: "3px 10px", borderRadius: 20 }}>{sitio.categoria}</span>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span style={{ fontSize: 12, color: "#555" }}>Generado con IA en minutos</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span style={{ fontSize: 12, color: "#555" }}>Listo para publicar</span>
-                  </div>
-                </div>
-              </div>
+              <SitioCard key={i} sitio={sitio} />
             ))}
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
