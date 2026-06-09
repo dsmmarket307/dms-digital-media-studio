@@ -86,11 +86,11 @@ const REDES = [
 ];
 
 const SITIOS_IA = [
-  { nombre: "Aura Spa & Wellness", categoria: "Spa / Bienestar", url: "https://www.spathecollective.com" },
-  { nombre: "Restaurante La Brasa", categoria: "Gastronomia", url: "https://www.restaurantbenbrown.com" },
+  { nombre: "Aura Spa & Wellness", categoria: "Spa / Bienestar", url: "https://www.fourseasons.com/spas" },
+  { nombre: "Restaurante La Brasa", categoria: "Gastronomia", url: "https://www.nobu-restaurants.com" },
   { nombre: "Clinica Estetica Glow", categoria: "Salud / Estetica", url: "https://www.glowmedspa.com" },
-  { nombre: "Inmobiliaria El Dorado", categoria: "Inmobiliaria", url: "https://www.compass.com" },
-  { nombre: "Boutique Moda Latina", categoria: "Moda / Retail", url: "https://www.free-people.com" },
+  { nombre: "Inmobiliaria El Dorado", categoria: "Inmobiliaria", url: "https://www.remax.com.co" },
+  { nombre: "Boutique Moda Latina", categoria: "Moda / Retail", url: "https://www.anthropologie.com" },
   { nombre: "Firma Juridica Mejia", categoria: "Legal / Abogados", url: "https://www.legalzoom.com" },
 ];
 
@@ -549,4 +549,5 @@ export default function Home() {
     </main>
   );
 }
+
 
