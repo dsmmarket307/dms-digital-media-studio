@@ -647,7 +647,6 @@ export default function ClientBuilder() {
               <Field label="Boton secundario" value={content.hero.cta_secundario} onChange={v => updateText(["hero","cta_secundario"], v)} />
               <Field label="Enlace boton secundario" value={content.hero.cta_secundario_url ?? "#servicios"} onChange={v => updateText(["hero","cta_secundario_url"], v)} />
               <ImgUploader label="Imagen Banner" target="hero" pexelsQuery={`${form.website_type} professional`} />
-            </>)}
 
             {selectedSection === "servicios" && content?.servicios && (<>
               <ImgUploader label="Imagen Servicios" target="servicios" pexelsQuery={`${form.website_type} services`} />
@@ -664,7 +663,6 @@ export default function ClientBuilder() {
               {canAddRemove ? (
                 <button onClick={() => addArrayItem("servicios", { titulo:"Nuevo servicio", descripcion:"Descripcion" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar servicio</button>
               ) : <UpgradeBadge plan="Profesional" />}
-            </>)}
 
             {selectedSection === "testimonios" && content?.testimonios && (<>
               <ImgUploader label="Imagen Testimonios" target="testimonios" pexelsQuery={`${form.website_type} people happy`} />
@@ -682,7 +680,6 @@ export default function ClientBuilder() {
               {canAddRemove ? (
                 <button onClick={() => addArrayItem("testimonios", { nombre:"Cliente", cargo:"Ciudad", texto:"Excelente servicio" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar testimonio</button>
               ) : <UpgradeBadge plan="Profesional" />}
-            </>)}
 
             {selectedSection === "nosotros" && (<>
               {canChangeTipo ? (<>
@@ -691,7 +688,6 @@ export default function ClientBuilder() {
                 <Field label="Mision" value={content?.nosotros?.mision ?? ""} onChange={v => updateText(["nosotros","mision"], v)} multiline />
                 <Field label="Vision" value={content?.nosotros?.vision ?? ""} onChange={v => updateText(["nosotros","vision"], v)} multiline />
               </>) : <UpgradeBadge plan="Profesional" />}
-            </>)}
 
             {selectedSection === "beneficios" && (<>
               {canChangeTipo && content?.beneficios ? (<>
@@ -707,7 +703,6 @@ export default function ClientBuilder() {
                 ))}
                 {canAddRemove && <button onClick={() => addArrayItem("beneficios", { titulo:"Nuevo beneficio", descripcion:"Descripcion" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar beneficio</button>}
               </>) : <UpgradeBadge plan="Profesional" />}
-            </>)}
 
             {selectedSection === "faq" && (<>
               {canChangeTipo && content?.faq ? (<>
@@ -723,7 +718,6 @@ export default function ClientBuilder() {
                 ))}
                 {canAddRemove && <button onClick={() => addArrayItem("faq", { pregunta:"Nueva pregunta", respuesta:"Respuesta" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar pregunta</button>}
               </>) : <UpgradeBadge plan="Profesional" />}
-            </>)}
 
             {selectedSection === "estadisticas" && (<>
               {planActivo === "empresarial" && content?.estadisticas ? (<>
@@ -739,7 +733,6 @@ export default function ClientBuilder() {
                 ))}
                 <button onClick={() => addNestedItem("estadisticas", "items", { numero:"100+", label:"Clientes" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar estadistica</button>
               </>) : <UpgradeBadge plan="Empresarial" />}
-            </>)}
 
             {selectedSection === "galeria" && (<>
               {planActivo === "empresarial" ? (<>
@@ -748,7 +741,6 @@ export default function ClientBuilder() {
                   {uploadingImg === "galeria_new" ? "Subiendo..." : "Agregar imagen"}
                 </button>
               </>) : <UpgradeBadge plan="Empresarial" />}
-            </>)}
 
             {selectedSection === "equipo" && (<>
               {planActivo === "empresarial" && content?.equipo ? (<>
@@ -765,7 +757,6 @@ export default function ClientBuilder() {
                 ))}
                 <button onClick={() => addNestedItem("equipo", "miembros", { nombre:"Nuevo miembro", cargo:"Cargo" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar miembro</button>
               </>) : <UpgradeBadge plan="Empresarial" />}
-            </>)}
 
             {selectedSection === "planes" && (<>
               {planActivo === "empresarial" && content?.planes ? (<>
@@ -782,7 +773,6 @@ export default function ClientBuilder() {
                 ))}
                 <button onClick={() => addNestedItem("planes", "items", { nombre:"Plan Basico", precio:"$99.000", periodo:"mes" })} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>+ Agregar plan</button>
               </>) : <UpgradeBadge plan="Empresarial" />}
-            </>)}
 
             {selectedSection === "contacto" && content?.contacto && (<>
               <Field label="Titulo" value={content.contacto.titulo} onChange={v => updateText(["contacto","titulo"], v)} />
@@ -791,7 +781,6 @@ export default function ClientBuilder() {
               <Field label="WhatsApp" value={content.contacto.whatsapp} onChange={v => updateText(["contacto","whatsapp"], v)} />
               <Field label="Email" value={content.contacto.email} onChange={v => updateText(["contacto","email"], v)} />
               <Field label="Direccion" value={content.contacto.direccion} onChange={v => updateText(["contacto","direccion"], v)} />
-            </>)}
 
             {selectedSection === "footer" && content?.footer && (<>
               <Field label="Nombre empresa" value={content.footer.nombre_empresa} onChange={v => updateText(["footer","nombre_empresa"], v)} />
@@ -827,7 +816,10 @@ export default function ClientBuilder() {
                     </div>
                   );
                 })}
+
               </div>
+
+            </>)}
 
             {selectedSection === "paginas_extra" && (<>
               <p style={{ fontSize: 12, color: "#888", marginBottom: 16 }}>Crea paginas adicionales como menu, productos, galeria, etc.</p>
@@ -851,8 +843,6 @@ export default function ClientBuilder() {
               ) : (
                 <p style={{ fontSize: 12, color: "#aaa", textAlign: "center" }}>Limite de paginas alcanzado para tu plan</p>
               )}
-            </>)}
-            </>)}
 
           </div>
         </div>
