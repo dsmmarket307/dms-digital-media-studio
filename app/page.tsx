@@ -86,12 +86,12 @@ const REDES = [
 ];
 
 const SITIOS_IA = [
-  { nombre: "Aura Spa & Wellness", categoria: "Spa / Bienestar", url: "https://www.fourseasons.com/spas" },
-  { nombre: "Restaurante La Brasa", categoria: "Gastronomia", url: "https://www.nobu-restaurants.com" },
-  { nombre: "Clinica Estetica Glow", categoria: "Salud / Estetica", url: "https://www.glowmedspa.com" },
-  { nombre: "Inmobiliaria El Dorado", categoria: "Inmobiliaria", url: "https://www.remax.com.co" },
-  { nombre: "Boutique Moda Latina", categoria: "Moda / Retail", url: "https://www.anthropologie.com" },
-  { nombre: "Firma Juridica Mejia", categoria: "Legal / Abogados", url: "https://www.legalzoom.com" },
+  { nombre: "Aura Spa & Wellness", categoria: "Spa / Bienestar", img: "/sitio-spa.webp" },
+  { nombre: "Restaurante La Brasa", categoria: "Gastronomia", img: "/sitio-restaurante.webp" },
+  { nombre: "Tu Sonrisa", categoria: "Salud / Dental", img: "/sitio-dental.webp" },
+  { nombre: "Carlos Inmobiliaria", categoria: "Inmobiliaria", img: "/sitio-inmobiliaria.webp" },
+  { nombre: "Moto Rize", categoria: "Automotriz", img: "/sitio-moto.webp" },
+  { nombre: "Santo Abogados", categoria: "Legal / Abogados", img: "/sitio-abogados.webp" },
 ];
 
 const STAT_ICONS = [
@@ -118,9 +118,6 @@ function useCountUp(target: number, duration: number, start: boolean) {
 }
 
 function SitioCard({ sitio }: { sitio: typeof SITIOS_IA[0] }) {
-  const screenshotUrl = `https://api.microlink.io/?url=${encodeURIComponent(sitio.url)}&screenshot=true&meta=false&embed=screenshot.url`;
-  const [imgError, setImgError] = useState(false);
-
   return (
     <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.06)", background: "#fff", transition: "transform 0.2s, box-shadow 0.2s" }}
       onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(124,58,237,0.15)"; }}
@@ -134,19 +131,7 @@ function SitioCard({ sitio }: { sitio: typeof SITIOS_IA[0] }) {
             <span style={{ fontSize: 9, color: "#999" }}>dms.studio/{sitio.nombre.toLowerCase().replace(/ /g, "-").replace(/&/g, "y")}</span>
           </div>
         </div>
-        {!imgError ? (
-          <img
-            src={screenshotUrl}
-            alt={sitio.nombre}
-            onError={() => setImgError(true)}
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", marginTop: 0 }}
-          />
-        ) : (
-          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #f5f0ff 0%, #e8d5ff 100%)" }}>
-            <span style={{ fontSize: 40, fontWeight: 900, color: "#7c3aed" }}>{sitio.nombre[0]}</span>
-          </div>
-        )}
-      </div>
+        <img src={sitio.img} alt={sitio.nombre} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", marginTop: 28 }} />
       <div style={{ padding: "16px 20px 20px" }}>
         <p style={{ fontWeight: 700, fontSize: 14, color: "#111", margin: "0 0 6px" }}>{sitio.nombre}</p>
         <span style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", background: "rgba(124,58,237,0.08)", padding: "3px 10px", borderRadius: 20 }}>{sitio.categoria}</span>
@@ -549,5 +534,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 
