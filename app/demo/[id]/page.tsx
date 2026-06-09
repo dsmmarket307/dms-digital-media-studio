@@ -65,7 +65,7 @@ export default async function DemoPage({ params }: Props) {
   const font = site.font_family ?? "'Segoe UI', sans-serif";
   const fontSize = site.font_size ?? "16px";
   const isPublished = site.status === "published";
-  const navHidden: string[] = site.navbar_hidden ?? [];
+  const navHidden: string[] = site.navbar_hidden ?? c?.footer?.navbar_hidden ?? [];
 
   const css = `
     *{box-sizing:border-box;margin:0;padding:0}
@@ -145,7 +145,7 @@ export default async function DemoPage({ params }: Props) {
         </div>
       </div>
 
-      {c?.nosotros && (
+      {c?.nosotros && !navHidden.includes("nosotros") && (
         <section id="nosotros">
           <div className="wrap">
             <p className="label">Nosotros</p>
@@ -166,7 +166,7 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-      {c?.servicios && (
+      {c?.servicios && !navHidden.includes("servicios") && (
         <section id="servicios" className="bg-l">
           <div className="wrap">
             <p className="label">Servicios</p>
@@ -246,7 +246,7 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-      {c?.testimonios && (
+      {c?.testimonios && !navHidden.includes("testimonios") && (
         <section id="testimonios" className="bg-l">
           <div className="wrap">
             <p className="label">Testimonios</p>
@@ -270,7 +270,7 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-      {c?.faq && (
+      {c?.faq && !navHidden.includes("faq") && (
         <section id="faq">
           <div className="wrap" style={{ maxWidth: 700 }}>
             <p className="label">FAQ</p>
@@ -285,7 +285,7 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-      {c?.contacto && (
+      {c?.contacto && !navHidden.includes("contacto") && (
         <section id="contacto" style={{ padding: "5rem 2rem", background: `linear-gradient(135deg,${pr},${sc||"#1a1a1a"})` }}>
           <div className="wrap contact-s">
             <p className="label" style={{ color: "rgba(255,255,255,0.7)" }}>Contacto</p>
@@ -325,6 +325,8 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
+
 
 
 
