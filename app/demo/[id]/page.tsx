@@ -139,8 +139,8 @@ export default async function DemoPage({ params }: Props) {
           <h1 style={{ fontSize: "clamp(2rem,5vw,3.5rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "1.25rem", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>{c?.hero?.titulo}</h1>
           <p style={{ fontSize: "1.1rem", opacity: 0.95, marginBottom: "2rem", lineHeight: 1.6 }}>{c?.hero?.subtitulo}</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="#contacto" className="btn-w">{c?.hero?.cta_principal}</a>
-            <a href="#servicios" className="btn-o">{c?.hero?.cta_secundario}</a>
+            <a href={c?.hero?.cta_principal_url ?? "#contacto"} className="btn-w">{c?.hero?.cta_principal}</a>
+            <a href={c?.hero?.cta_secundario_url ?? "#servicios"} className="btn-o">{c?.hero?.cta_secundario}</a>
           </div>
         </div>
       </div>
@@ -325,6 +325,7 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
 
 
 

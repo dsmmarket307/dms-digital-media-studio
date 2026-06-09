@@ -643,7 +643,9 @@ export default function ClientBuilder() {
               <Field label="Titulo" value={content.hero.titulo} onChange={v => updateText(["hero","titulo"], v)} />
               <Field label="Subtitulo" value={content.hero.subtitulo} onChange={v => updateText(["hero","subtitulo"], v)} multiline />
               <Field label="Boton principal" value={content.hero.cta_principal} onChange={v => updateText(["hero","cta_principal"], v)} />
+              <Field label="Enlace boton principal" value={content.hero.cta_principal_url ?? "#contacto"} onChange={v => updateText(["hero","cta_principal_url"], v)} />
               <Field label="Boton secundario" value={content.hero.cta_secundario} onChange={v => updateText(["hero","cta_secundario"], v)} />
+              <Field label="Enlace boton secundario" value={content.hero.cta_secundario_url ?? "#servicios"} onChange={v => updateText(["hero","cta_secundario_url"], v)} />
               <ImgUploader label="Imagen Banner" target="hero" pexelsQuery={`${form.website_type} professional`} />
             </>)}
 
@@ -834,5 +836,6 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
 
 
