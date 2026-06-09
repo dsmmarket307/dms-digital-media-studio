@@ -85,17 +85,101 @@ const REDES = [
   },
 ];
 
+const SITIOS_IA = [
+  {
+    nombre: "Aura Spa & Wellness",
+    categoria: "Spa / Bienestar",
+    color: "#b8860b",
+    bg: "linear-gradient(135deg, #f5f0e0 0%, #e8d5a3 100%)",
+    icono: "S",
+  },
+  {
+    nombre: "Restaurante La Brasa",
+    categoria: "Gastronomia",
+    color: "#c0392b",
+    bg: "linear-gradient(135deg, #fdf0ed 0%, #f5c6bb 100%)",
+    icono: "R",
+  },
+  {
+    nombre: "Clinica Estetica Glow",
+    categoria: "Salud / Estetica",
+    color: "#8e44ad",
+    bg: "linear-gradient(135deg, #f8f0ff 0%, #e8d0f5 100%)",
+    icono: "C",
+  },
+  {
+    nombre: "Inmobiliaria El Dorado",
+    categoria: "Inmobiliaria",
+    color: "#1a6b3a",
+    bg: "linear-gradient(135deg, #edfaf3 0%, #b8e8cc 100%)",
+    icono: "I",
+  },
+  {
+    nombre: "Boutique Moda Latina",
+    categoria: "Moda / Retail",
+    color: "#c0392b",
+    bg: "linear-gradient(135deg, #fff0f5 0%, #f5c0d0 100%)",
+    icono: "B",
+  },
+  {
+    nombre: "Firma Juridica Mejia",
+    categoria: "Legal / Abogados",
+    color: "#1a3a6b",
+    bg: "linear-gradient(135deg, #f0f4ff 0%, #c0ccf0 100%)",
+    icono: "F",
+  },
+];
+
+const STAT_ICONS = [
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+];
+
+function useCountUp(target: number, duration: number, start: boolean) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      setCount(Math.floor(progress * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [start, target, duration]);
+  return count;
+}
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [statsVisible, setStatsVisible] = useState(false);
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
+
+  const clientes = useCountUp(1000, 2000, statsVisible);
+  const paises = useCountUp(3, 1500, statsVisible);
+  const anos = useCountUp(2, 1200, statsVisible);
+  const sitios = useCountUp(2000, 2200, statsVisible);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
     }, 3500);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStatsVisible(true); },
+      { threshold: 0.3 }
+    );
+    const el = document.getElementById("estadisticas");
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   async function enviarFormulario(e: React.FormEvent) {
@@ -244,6 +328,89 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ESTADISTICAS */}
+      <section id="estadisticas" style={{ background: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)", padding: "72px 24px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <h2 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(24px,4vw,36px)", textAlign: "center", marginBottom: 8 }}>
+            Resultados que hablan por nosotros
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.75)", textAlign: "center", fontSize: 16, marginBottom: 56 }}>
+            Empresas y emprendedores que ya confian en DMS Digital Media Studio
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32 }}>
+            {[
+              { value: clientes, suffix: "+", label: "Clientes satisfechos", icon: STAT_ICONS[0] },
+              { value: paises, suffix: "+", label: "Paises atendidos", icon: STAT_ICONS[1] },
+              { value: anos, suffix: "+", label: "Anos de experiencia", icon: STAT_ICONS[2] },
+              { value: sitios, suffix: "+", label: "Sitios web creados", icon: STAT_ICONS[3] },
+            ].map((stat, i) => (
+              <div key={i} style={{ textAlign: "center", background: "rgba(255,255,255,0.12)", borderRadius: 20, padding: "32px 20px", border: "1px solid rgba(255,255,255,0.2)" }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>{stat.icon}</div>
+                <div style={{ fontSize: "clamp(32px,5vw,48px)", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
+                  {stat.value.toLocaleString()}{stat.suffix}
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 14, fontWeight: 600, marginTop: 8 }}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* GALERIA SITIOS IA */}
+      <section style={{ padding: "80px 24px", background: "#fafafa" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <span style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", fontSize: 13, fontWeight: 700, padding: "6px 16px", borderRadius: 20, letterSpacing: "0.05em" }}>
+              GENERADO CON IA
+            </span>
+          </div>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(24px,4vw,36px)", textAlign: "center", marginBottom: 12, color: "#111" }}>
+            Sitios web que creamos para nuestros clientes
+          </h2>
+          <p style={{ textAlign: "center", color: "#666", fontSize: 16, marginBottom: 52, maxWidth: 560, margin: "0 auto 52px" }}>
+            Cada sitio es disenado y generado con inteligencia artificial en minutos, listo para publicar.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
+            {SITIOS_IA.map((sitio, i) => (
+              <div key={i} style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.06)", background: "#fff", transition: "transform 0.2s, box-shadow 0.2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(124,58,237,0.15)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.08)"; }}>
+                <div style={{ background: sitio.bg, height: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, position: "relative" }}>
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 28, background: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", padding: "0 10px", gap: 6 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }}/>
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }}/>
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#28ca41" }}/>
+                    <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.7)", borderRadius: 4, marginLeft: 8, display: "flex", alignItems: "center", paddingLeft: 8 }}>
+                      <span style={{ fontSize: 9, color: "#999" }}>dms.studio/{sitio.nombre.toLowerCase().replace(/ /g,"-")}</span>
+                    </div>
+                  </div>
+                  <div style={{ width: 56, height: 56, borderRadius: 16, background: sitio.color, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 24, fontWeight: 900, boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}>
+                    {sitio.icono}
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: sitio.color }}>{sitio.nombre}</div>
+                </div>
+                <div style={{ padding: "16px 20px 20px" }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", background: "rgba(124,58,237,0.08)", padding: "3px 10px", borderRadius: 20 }}>{sitio.categoria}</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span style={{ fontSize: 12, color: "#555" }}>Generado con IA en minutos</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span style={{ fontSize: 12, color: "#555" }}>Listo para publicar</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 48 }}>
+            <Link href="/portafolio" style={{ background: "#7c3aed", color: "#fff", padding: "13px 36px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", display: "inline-block" }}>
+              Ver portafolio completo
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* PLANES */}
       <section id="planes" className="px-6 md:px-10 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">Planes para tu negocio</h2>
@@ -317,12 +484,12 @@ export default function Home() {
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Todo lo que necesitas saber antes de empezar.</p>
         <div className="max-w-3xl mx-auto space-y-4">
           {[
-            { q: "Cuanto cuesta crear una pagina web?", a: "Nuestros planes inician desde $499.000 COP. El precio final depende del tipo de sitio y funcionalidades requeridas. Ofrecemos planes para todos los presupuestos." },
+            { q: "Cuanto cuesta una suscripcion mensual?", a: "Tenemos tres planes: Basico a $49.000 COP/mes (1 landing page), Profesional a $99.000 COP/mes (sitio completo con dominio y SEO) y Empresarial a $199.000 COP/mes (hasta 3 sitios con CRM y automatizacion IA). Sin contratos de permanencia." },
             { q: "En cuanto tiempo entregan el proyecto?", a: "Una landing page basica en 7 dias habiles. Un sitio corporativo completo entre 15 y 25 dias. Trabajamos con cronogramas claros y sin sorpresas." },
             { q: "Necesito conocimientos tecnicos para administrar mi sitio?", a: "No. Te entregamos tu sitio listo y te damos capacitacion para que puedas actualizar contenidos basicos sin necesidad de saber programacion." },
             { q: "Que incluye el servicio de publicidad digital?", a: "Creacion y gestion de campanas en Facebook, Instagram o Google. Incluye diseno de anuncios, segmentacion, optimizacion semanal y reporte mensual de resultados." },
             { q: "Puedo contratar solo un servicio especifico?", a: "Si. Puedes contratar diseno web, publicidad digital, redes sociales o automatizacion IA de forma independiente o combinarlos segun tus necesidades." },
-            { q: "Como funciona el pago?", a: "Aceptamos pagos seguros a traves de Mercado Pago. Para proyectos grandes manejamos cuotas. El pago se realiza antes de iniciar el proyecto." },
+            { q: "Como funciona el pago?", a: "Aceptamos pagos seguros a traves de Mercado Pago. Los planes mensuales se cobran automaticamente. Para proyectos grandes manejamos cuotas acordadas previamente." },
           ].map((faq, i) => (
             <div key={i} className="border border-gray-200 rounded-2xl p-6 hover:border-purple-300 transition-colors">
               <p className="font-bold text-gray-900 mb-2">{faq.q}</p>
