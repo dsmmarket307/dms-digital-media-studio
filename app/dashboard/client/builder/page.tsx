@@ -1,4 +1,7 @@
 ﻿"use client";
+
+            {selectedSection === "paginas_extra" && (<>
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -827,9 +830,11 @@ export default function ClientBuilder() {
                     </div>
                   );
                 })}
-              </div>
+            </>)}
 
             {selectedSection === "paginas_extra" && (<>
+
+
               <p style={{ fontSize: 12, color: "#888", marginBottom: 16 }}>Crea paginas adicionales como menu, productos, galeria, etc.</p>
               {(content?.paginas_extra ?? []).map((pag: any, i: number) => (
                 <div key={i} style={{ background: "#f8f9fa", borderRadius: 10, padding: 12, marginBottom: 12 }}>
