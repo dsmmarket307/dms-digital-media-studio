@@ -28,12 +28,12 @@ const MENU = [
 
 const SECTION_LABELS: Record<string, string> = {
   hero: "Hero Principal", servicios: "Servicios", beneficios: "Beneficios",
-  testimonios: "Testimonios", faq: "FAQ", contacto: "Contacto", footer: "Footer",
+  testimonios: "Testimonios", faq: "FAQ", contacto: "Contacto", footer: "Footer", paginas_extra: "Paginas Extra",
   nosotros: "Nosotros", galeria: "Galeria", equipo: "Equipo",
   estadisticas: "Estadisticas", planes: "Planes",
 };
 
-const SECTIONS_BASICO      = ["hero", "servicios", "testimonios", "contacto", "footer"];
+const SECTIONS_BASICO      = ["hero", "servicios", "testimonios", "contacto", "footer", "paginas_extra"];
 const SECTIONS_PROFESIONAL = ["hero", "nosotros", "servicios", "beneficios", "testimonios", "faq", "contacto", "footer"];
 const SECTIONS_EMPRESARIAL = ["hero", "nosotros", "servicios", "beneficios", "estadisticas", "planes", "testimonios", "faq", "galeria", "equipo", "contacto", "footer"];
 
@@ -828,6 +828,30 @@ export default function ClientBuilder() {
                   );
                 })}
               </div>
+
+            {selectedSection === "paginas_extra" && (<>
+              <p style={{ fontSize: 12, color: "#888", marginBottom: 16 }}>Crea paginas adicionales como menu, productos, galeria, etc.</p>
+              {(content?.paginas_extra ?? []).map((pag: any, i: number) => (
+                <div key={i} style={{ background: "#f8f9fa", borderRadius: 10, padding: 12, marginBottom: 12 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Pagina {i+1}</span>
+                    <button onClick={() => removeArrayItem("paginas_extra", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                  </div>
+                  <Field label="Titulo de la pagina" value={pag.titulo ?? ""} onChange={v => updateArray("paginas_extra", i, "titulo", v)} />
+                  <Field label="Slug (ej: menu, productos)" value={pag.slug ?? ""} onChange={v => updateArray("paginas_extra", i, "slug", v)} />
+                  <Field label="Descripcion" value={pag.descripcion ?? ""} onChange={v => updateArray("paginas_extra", i, "descripcion", v)} multiline />
+                  <div style={{ marginTop: 8, background: "#f0f0f0", borderRadius: 6, padding: "6px 10px" }}>
+                    <p style={{ fontSize: 10, color: "#888" }}>URL de esta pagina:</p>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: pr }}>/demo/[id]/{pag.slug || "mi-pagina"}</p>
+                  </div>
+                </div>
+              ))}
+              {(content?.paginas_extra ?? []).length < (planActivo === "basico" ? 2 : 10) ? (
+                <button onClick={() => addArrayItem("paginas_extra", { titulo: "Nueva pagina", slug: "pagina-" + Date.now(), descripcion: "", items: [] })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Nueva pagina</button>
+              ) : (
+                <p style={{ fontSize: 12, color: "#aaa", textAlign: "center" }}>Limite de paginas alcanzado para tu plan</p>
+              )}
+            </>)}
             </>)}
 
           </div>
@@ -836,6 +860,9 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
+
+
 
 
 
