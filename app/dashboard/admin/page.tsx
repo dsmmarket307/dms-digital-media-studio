@@ -86,6 +86,7 @@ export default function AdminDashboard() {
     { href: "/dashboard/admin/marketing", label: "Centro Marketing IA", desc: "Campanas automaticas con IA para clientes digitales", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/finanzas", label: "Finanzas del Negocio", desc: "Ingresos, egresos y utilidad del estudio", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/inteligencia", label: "Centro de Inteligencia", desc: "Analitica avanzada, metas y proyecciones con IA", color: "#7c3aed", badge: 0, green: false },
+    { href: "/dashboard/admin/dominios", label: "Dominios", desc: "Dominios conectados por clientes", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/suscripciones", label: "Suscripciones", desc: "Clientes activos, MRR y gestion de planes", color: "#059669", badge: sTrial.length, green: true },
   ];
 
@@ -154,3 +155,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
