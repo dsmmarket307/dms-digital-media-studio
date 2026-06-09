@@ -33,9 +33,9 @@ const SECTION_LABELS: Record<string, string> = {
   estadisticas: "Estadisticas", planes: "Planes",
 };
 
-const SECTIONS_BASICO      = ["hero", "servicios", "testimonios", "contacto", "footer", "paginas_extra"];
-const SECTIONS_PROFESIONAL = ["hero", "nosotros", "servicios", "beneficios", "testimonios", "faq", "contacto", "footer"];
-const SECTIONS_EMPRESARIAL = ["hero", "nosotros", "servicios", "beneficios", "estadisticas", "planes", "testimonios", "faq", "galeria", "equipo", "contacto", "footer"];
+const SECTIONS_BASICO: string[]      = ["hero", "servicios", "testimonios", "contacto", "footer", "paginas_extra"];
+const SECTIONS_PROFESIONAL: string[] = ["hero", "nosotros", "servicios", "beneficios", "testimonios", "faq", "contacto", "footer"];
+const SECTIONS_EMPRESARIAL: string[] = ["hero", "nosotros", "servicios", "beneficios", "estadisticas", "planes", "testimonios", "faq", "galeria", "equipo", "contacto", "footer"];
 
 function MenuItem({ item, permitido }: { item: any; permitido: boolean }) {
   if (permitido) {
@@ -860,6 +860,7 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
 
 
 
