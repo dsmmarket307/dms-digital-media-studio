@@ -132,6 +132,7 @@ function SitioCard({ sitio }: { sitio: typeof SITIOS_IA[0] }) {
           </div>
         </div>
         <img src={sitio.img} alt={sitio.nombre} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", marginTop: 28 }} />
+      </div>
       <div style={{ padding: "16px 20px 20px" }}>
         <p style={{ fontWeight: 700, fontSize: 14, color: "#111", margin: "0 0 6px" }}>{sitio.nombre}</p>
         <span style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", background: "rgba(124,58,237,0.08)", padding: "3px 10px", borderRadius: 20 }}>{sitio.categoria}</span>
@@ -534,6 +535,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
