@@ -107,7 +107,7 @@ export default function ClientBuilder() {
   const [userId, setUserId] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [editando, setEditando] = useState(false);
-  const [selectedSection, setSelectedSection] = useState("hero");
+  const [selectedSection, setSelectedSection] = useState<string>("hero");
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [primaryColor, setPrimaryColor] = useState("#7c3aed");
   const [secondaryColor, setSecondaryColor] = useState("#000000");
@@ -860,6 +860,7 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
 
 
 
