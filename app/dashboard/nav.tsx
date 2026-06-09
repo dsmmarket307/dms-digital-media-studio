@@ -26,6 +26,7 @@ const navItems = [
   { href: "/dashboard/admin/crm",          label: "CRM",                 icon: "crm"          },
   { href: "/dashboard/admin/ai-builder",   label: "AI Builder",          icon: "aibuilder"    },
   { href: "/dashboard/admin/prospeccion",  label: "Prospeccion IA",      icon: "prospeccion"  },
+  { href: "/dashboard/admin/dominios", label: "Dominios", icon: "soporte" },
   { href: "/dashboard/admin/soporte",      label: "Soporte",             icon: "soporte"      },
   { href: "/dashboard/admin/marketing",    label: "Marketing IA",        icon: "marketing"    },
   { href: "/dashboard/admin/finanzas",     label: "Finanzas",            icon: "finanzas"     },
