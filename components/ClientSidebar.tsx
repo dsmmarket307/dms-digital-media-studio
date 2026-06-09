@@ -91,8 +91,19 @@ export default function ClientSidebar() {
 
   return (
     <>
+      <style>{`
+        .sidebar-desktop { display: flex; }
+        .sidebar-mobile-header { display: none; }
+        .sidebar-mobile-menu { display: none; }
+        @media (max-width: 768px) {
+          .sidebar-desktop { display: none !important; }
+          .sidebar-mobile-header { display: flex !important; }
+          .sidebar-mobile-menu { display: flex; }
+        }
+      `}</style>
+
       {/* DESKTOP */}
-      <aside style={{ width: 240, background: "#fff", borderRight: "1px solid #e5e7eb", minHeight: "100vh", position: "sticky", top: 0, display: "flex", flexDirection: "column", flexShrink: 0 }} className="hidden md:flex">
+      <aside className="sidebar-desktop" style={{ width: 240, background: "#fff", borderRight: "1px solid #e5e7eb", minHeight: "100vh", position: "sticky", top: 0, flexDirection: "column", flexShrink: 0 }}>
         <div style={{ padding: "24px 20px 16px", borderBottom: "1px solid #f0f0f0" }}>
           <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={110} height={34} /></Link>
         </div>
@@ -100,7 +111,7 @@ export default function ClientSidebar() {
       </aside>
 
       {/* MOBILE HEADER */}
-      <header style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "12px 16px", display: "none", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }} className="flex md:hidden">
+      <header className="sidebar-mobile-header" style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "12px 16px", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40, width: "100%" }}>
         <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={100} height={32} /></Link>
         <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
           {menuOpen ? (
@@ -113,12 +124,10 @@ export default function ClientSidebar() {
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", display: "flex", flexDirection: "column", zIndex: 39 }} className="flex md:hidden">
+        <div className="sidebar-mobile-menu" style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", flexDirection: "column", zIndex: 39, position: "fixed", top: 57, left: 0, right: 0, bottom: 0, overflowY: "auto" }}>
           <SidebarContent />
         </div>
       )}
     </>
   );
 }
-
-
