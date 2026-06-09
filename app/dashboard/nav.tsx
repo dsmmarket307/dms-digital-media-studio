@@ -92,7 +92,15 @@ export default function DashboardNav({ name, email }: { name: string; email: str
     <>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
 
-      <aside style={{ width:240, background:"#ffffff", borderRight:"1px solid rgba(124,58,237,0.1)", display:"flex", flexDirection:"column", minHeight:"100vh", position:"sticky", top:0, flexShrink:0 }} className="hidden md:flex flex-col">
+      <style>{`
+        .admin-sidebar { display: flex; flex-direction: column; }
+        .admin-mobile-header { display: none; }
+        @media (max-width: 768px) {
+          .admin-sidebar { display: none !important; }
+          .admin-mobile-header { display: flex !important; }
+        }
+      `}</style>
+      <aside style={{ width:240, background:"#ffffff", borderRight:"1px solid rgba(124,58,237,0.1)", display:"flex", flexDirection:"column", minHeight:"100vh", position:"sticky", top:0, flexShrink:0 }} className="admin-sidebar">
         <div style={{ padding:"24px 20px 16px", borderBottom:"1px solid rgba(124,58,237,0.08)" }}>
           <img src="/logo-dms.png" alt="DMS Digital Studio" style={{ width:110, objectFit:"contain" }} />
         </div>
@@ -110,7 +118,7 @@ export default function DashboardNav({ name, email }: { name: string; email: str
         </div>
       </aside>
 
-      <div style={{ position:"fixed", top:0, left:0, right:0, height:56, background:"#ffffff", borderBottom:"1px solid rgba(124,58,237,0.1)", zIndex:100, alignItems:"center", justifyContent:"space-between", padding:"0 16px" }} className="flex md:hidden">
+      <div style={{ position:"fixed", top:0, left:0, right:0, height:56, background:"#ffffff", borderBottom:"1px solid rgba(124,58,237,0.1)", zIndex:100, alignItems:"center", justifyContent:"space-between", padding:"0 16px" }} className="admin-mobile-header">
         <img src="/logo-dms.png" alt="DMS Digital Studio" style={{ height:32, objectFit:"contain" }} />
         <button onClick={() => setOpen(!open)} style={{ background:"rgba(124,58,237,0.1)", border:"1px solid rgba(124,58,237,0.2)", cursor:"pointer", color:"#7c3aed", padding:"6px 14px", borderRadius:8, fontSize:13, fontWeight:600, fontFamily:"Poppins,sans-serif" }}>
           {open ? "X" : "Menu"}
@@ -133,5 +141,7 @@ export default function DashboardNav({ name, email }: { name: string; email: str
     </>
   )
 }
+
+
 
 
