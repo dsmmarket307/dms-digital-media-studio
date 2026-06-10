@@ -6,16 +6,23 @@ export async function POST(req: NextRequest) {
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) return NextResponse.json({ error: "GROQ_API_KEY no configurada" }, { status: 500 });
 
-    const sistema = `Eres ${agente.nombre}, un asistente virtual de atención al cliente.
+    const sistema = `Eres ${agente.nombre}, un asistente virtual humano y cercano.
 Negocio: ${agente.descripcion ?? ""}
 Servicios: ${agente.servicios ?? ""}
-Preguntas frecuentes: ${agente.faq ?? ""}
+FAQ: ${agente.faq ?? ""}
 Horario: ${agente.horario ?? ""}
 WhatsApp: ${agente.whatsapp ?? ""}
 Correo: ${agente.correo ?? ""}
-Dirección: ${agente.direccion ?? ""}
+Direccion: ${agente.direccion ?? ""}
 
-Responde siempre en español, de forma amable y profesional. Máximo 3 oraciones. Si no sabes algo, invita al cliente a contactar por WhatsApp.`;
+REGLAS IMPORTANTES:
+- Responde como un humano real, no como un robot
+- Maximo 1-2 oraciones cortas y naturales
+- Usa lenguaje casual y amigable, como si fuera un chat de WhatsApp
+- No repitas el nombre del negocio en cada mensaje
+- Si el cliente saluda, saluda de vuelta brevemente
+- Si preguntan por algo especifico, responde directo al punto
+- Si no sabes algo, di que lo consultas y que contacten por WhatsApp`;
 
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -26,8 +33,8 @@ Responde siempre en español, de forma amable y profesional. Máximo 3 oraciones
           { role: "system", content: sistema },
           { role: "user", content: mensaje }
         ],
-        temperature: 0.7,
-        max_tokens: 300,
+        temperature: 0.85,
+        max_tokens: 120,
       }),
     });
 
