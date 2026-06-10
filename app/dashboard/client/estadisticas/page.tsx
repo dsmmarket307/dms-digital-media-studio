@@ -141,18 +141,6 @@ export default function Estadisticas() {
     <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex" }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <aside style={{ width: 240, background: "#fff", borderRight: "1px solid #e5e7eb", minHeight: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex", flexDirection: "column" }} className="hidden md:flex">
-        <div style={{ padding: "24px 20px 16px", borderBottom: "1px solid #f0f0f0" }}>
-          <Link href="/dashboard/client"><Image src="/logo-dms.png" alt="DMS" width={110} height={34} /></Link>
-        </div>
-        <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 2 }}>
-          {MENU.map(item => (
-            <Link key={item.href} href={item.href} style={{ display: "flex", alignItems: "center", padding: "9px 14px", borderRadius: 10, textDecoration: "none", fontSize: 13, fontWeight: (item as any).active ? 700 : 500, color: (item as any).active ? "#7c3aed" : "#555", background: (item as any).active ? "rgba(124,58,237,0.08)" : "transparent", borderLeft: (item as any).active ? "3px solid #7c3aed" : "3px solid transparent" }}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
 
       <main style={{ flex: 1, padding: "2rem", minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem", flexWrap: "wrap", gap: 12 }}>
