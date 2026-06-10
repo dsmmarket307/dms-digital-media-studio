@@ -1,4 +1,5 @@
 ﻿import { createClient } from "@/lib/supabase/server";
+import ClientChatbot from "@/components/ClientChatbot";
 import { notFound, redirect } from "next/navigation";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -47,6 +48,12 @@ export default async function DemoPage({ params }: Props) {
   const supabase = await createClient();
   const { data: site } = await supabase.from("generated_websites").select("*").eq("id", id).single();
   if (!site) notFound();
+
+  // Cargar agente IA si tiene plan empresarial
+  const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", site.user_id).eq("status", "active").maybeSingle();
+  const { data: agente } = sub?.plan === "empresarial"
+    ? await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).eq("activo", true).maybeSingle()
+    : { data: null };
 
   if (site.status === "published" && site.published_version === "profesional") {
     redirect(`/demo/${id}/profesional`);
@@ -322,9 +329,11 @@ export default async function DemoPage({ params }: Props) {
           </div>
         </div>
       </footer>
+      {agente && <ClientChatbot agente={agente} color={site.primary_color ?? "#7c3aed"} />}
     </>
   );
 }
+
 
 
 
