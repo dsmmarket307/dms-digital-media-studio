@@ -744,7 +744,7 @@ export default function ClientBuilder() {
 
             {selectedSection === "galeria" && (<>
               {planActivo === "empresarial" ? (<>
-                <Field label="Titulo" value={content?.galeria?.titulo ?? ""} onChange={v => updateText(["galeria","titulo"], v)} />
+                <Field label="Titulo" value={content?.galeria?.titulo ?? ""} onChange={v => { if (!content.galeria) setContent((prev: any) => ({ ...prev, galeria: { titulo: v } })); else updateText(["galeria","titulo"], v); }} />
                 <p style={{ fontSize:11, fontWeight:700, color:"#888", textTransform:"uppercase" as const, marginBottom:8, marginTop:4 }}>Imagenes de tu galeria</p>
                 {imagenes.length === 0 ? (
                   <p style={{ fontSize:12, color:"#aaa", marginBottom:12 }}>No tienes imagenes. Subelas en la seccion Galeria.</p>
