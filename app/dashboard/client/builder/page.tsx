@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -113,6 +113,7 @@ export default function ClientBuilder() {
   const [secondaryColor, setSecondaryColor] = useState("#000000");
   const [images, setImages] = useState<Record<string, string>>({});
   const [imgTarget, setImgTarget] = useState("");
+  const [imagenes, setImagenes] = useState<any[]>([]);
   const [form, setForm] = useState({
     project_name: "",
     prompt: "",
@@ -149,6 +150,8 @@ export default function ClientBuilder() {
         });
       }
       setSuscripcion(sub ?? null);
+      const { data: archivos } = await supabase.from("archivos").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
+      setImagenes(archivos ?? []);
       setLoading(false);
     }
     check();
@@ -834,5 +837,12 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
+
+
+
+
+
+
 
 
