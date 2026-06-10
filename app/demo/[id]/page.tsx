@@ -49,11 +49,8 @@ export default async function DemoPage({ params }: Props) {
   const { data: site } = await supabase.from("generated_websites").select("*").eq("id", id).single();
   if (!site) notFound();
 
-  // Cargar agente IA si tiene plan empresarial
-  const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", site.user_id).eq("status", "active").maybeSingle();
-  const { data: agente } = sub?.plan === "empresarial"
-    ? await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).maybeSingle()
-    : { data: null };
+  // Cargar agente IA
+  const { data: agente } = await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).maybeSingle();
 
   if (site.status === "published" && site.published_version === "profesional") {
     redirect(`/demo/${id}/profesional`);
@@ -338,6 +335,7 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
 
 
 
