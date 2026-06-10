@@ -1,6 +1,6 @@
 ﻿import { createClient } from "@/lib/supabase/server";
-
 import { notFound, redirect } from "next/navigation";
+import AgenteChat from "@/components/AgenteChat";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional",
@@ -19,6 +19,9 @@ const CATEGORY_KEYWORDS: Record<string, string> = {
   "Gimnasio": "gym fitness workout bodybuilding",
   "Tecnologia": "technology software developer startup",
   "Turismo": "travel tourism hotel vacation landscape",
+  "Veterinaria": "veterinary pet animal clinic care",
+  "Eventos": "events wedding party celebration",
+  "Consultoria": "consulting business strategy professional",
   "Otro": "business professional modern office",
 };
 
@@ -49,12 +52,11 @@ export default async function DemoPage({ params }: Props) {
   const { data: site } = await supabase.from("generated_websites").select("*").eq("id", id).single();
   if (!site) notFound();
 
-  // Cargar agente IA
-  const { data: agente } = await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).maybeSingle();
-
   if (site.status === "published" && site.published_version === "profesional") {
     redirect(`/demo/${id}/profesional`);
   }
+
+  const { data: agente } = await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).maybeSingle();
 
   const ci = site.custom_images ?? {};
   const imagenes = await getPexelsImages(site.website_type, site.prompt ?? "");
@@ -68,7 +70,6 @@ export default async function DemoPage({ params }: Props) {
   const logo = site.logo_url ?? "";
   const font = site.font_family ?? "'Segoe UI', sans-serif";
   const fontSize = site.font_size ?? "16px";
-  const isPublished = site.status === "published";
   const navHidden: string[] = site.navbar_hidden ?? c?.footer?.navbar_hidden ?? [];
 
   const css = `
@@ -114,9 +115,6 @@ export default async function DemoPage({ params }: Props) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
-
-      
-
       <nav>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {logo && <img src={logo} alt="logo" style={{ height: 50, objectFit: "contain" }} />}
@@ -124,7 +122,6 @@ export default async function DemoPage({ params }: Props) {
         </div>
         <ul className="nav-links">
           {c?.nosotros && !navHidden.includes("nosotros") && <li><a href="#nosotros">Nosotros</a></li>}
-          {c?.productos && c.productos.length > 0 && !navHidden.includes("productos") && <li><a href="#productos">Productos</a></li>}
           {c?.servicios && !navHidden.includes("servicios") && <li><a href="#servicios">Servicios</a></li>}
           {c?.testimonios && !navHidden.includes("testimonios") && <li><a href="#testimonios">Testimonios</a></li>}
           {c?.faq && !navHidden.includes("faq") && <li><a href="#faq">FAQ</a></li>}
@@ -154,7 +151,6 @@ export default async function DemoPage({ params }: Props) {
           <div className="wrap">
             <p className="label">Nosotros</p>
             <h2 className="st">{c.nosotros.titulo}</h2>
-            {ci.nosotros && <img src={ci.nosotros} alt="nosotros" className="sec-img" />}
             <p style={{ textAlign: "center", color: "#555", lineHeight: 1.8, maxWidth: 700, margin: "0 auto 1.5rem" }}>{c.nosotros.descripcion}</p>
             <div className="g2" style={{ marginTop: "2rem" }}>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>
@@ -191,43 +187,6 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-
-      {c?.productos && c.productos.length > 0 && (
-        <section id="productos" style={{ padding: "5rem 2rem", background: "#f8f9fa" }}>
-          <div className="wrap">
-            <p className="label">Productos</p>
-            <h2 className="st">Nuestros Productos</h2>
-            {c.categorias && c.categorias.length > 0 && (
-              <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "2rem" }}>
-                {["Todos", ...c.categorias].map((cat: string, i: number) => (
-                  <span key={i} style={{ padding: "6px 16px", borderRadius: 999, border: `1px solid ${pr}`, color: i === 0 ? "#fff" : pr, background: i === 0 ? pr : "transparent", fontSize: 12, fontWeight: 600 }}>{cat}</span>
-                ))}
-              </div>
-            )}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.5rem" }}>
-              {c.productos.map((p: any, i: number) => (
-                <div key={i} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,.06)", border: "1px solid #f0f0f0", position: "relative" }}>
-                  {p.destacado && (
-                    <div style={{ position: "absolute", top: 12, right: 12, background: pr, color: "#fff", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 999 }}>Destacado</div>
-                  )}
-                  <div style={{ height: 180, background: `linear-gradient(135deg, ${pr}22, ${pr}08)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke={pr} strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                  </div>
-                  <div style={{ padding: "1.25rem" }}>
-                    {p.categoria && <span style={{ fontSize: 10, fontWeight: 700, color: pr, textTransform: "uppercase", letterSpacing: 1 }}>{p.categoria}</span>}
-                    <h3 style={{ fontWeight: 700, fontSize: "1rem", color: "#111", margin: "6px 0 4px" }}>{p.nombre}</h3>
-                    <p style={{ fontSize: ".875rem", color: "#666", lineHeight: 1.5, marginBottom: "1rem" }}>{p.descripcion}</p>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <span style={{ fontSize: "1.1rem", fontWeight: 800, color: pr }}>{p.precio}</span>
-                      <a href={`https://wa.me/?text=Hola, me interesa el producto: ${p.nombre}`} target="_blank" style={{ background: "#25D366", color: "#fff", padding: "6px 14px", borderRadius: 8, textDecoration: "none", fontSize: 12, fontWeight: 700 }}>Pedir</a>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
       {c?.beneficios && (
         <section>
           <div className="wrap">
@@ -326,22 +285,7 @@ export default async function DemoPage({ params }: Props) {
           </div>
         </div>
       </footer>
-      {agente && (
-        <script dangerouslySetInnerHTML={{ __html: `
-          window.__AGENTE__ = ${JSON.stringify(agente)};
-          window.__COLOR__ = "${(agente as any).color ?? site.primary_color ?? "#7c3aed"}";
-        `}} />
-      )}
+      {agente && <AgenteChat agente={agente} color={site.primary_color ?? "#7c3aed"} />}
     </>
   );
 }
-
-
-
-
-
-
-
-
-
-
