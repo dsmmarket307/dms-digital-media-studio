@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 
@@ -205,6 +205,18 @@ export default async function DemoPage({ params }: Props) {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {c?.galeria && (
+        <section id="galeria" className="bg-l">
+          <div className="wrap">
+            <p className="label">Galeria</p>
+            <h2 className="st">{c.galeria.titulo}</h2>
+            {ci.galeria && (
+              <img src={ci.galeria} alt="galeria" className="sec-img" />
+            )}
           </div>
         </section>
       )}
