@@ -745,8 +745,20 @@ export default function ClientBuilder() {
             {selectedSection === "galeria" && (<>
               {planActivo === "empresarial" ? (<>
                 <Field label="Titulo" value={content?.galeria?.titulo ?? ""} onChange={v => updateText(["galeria","titulo"], v)} />
-                <button onClick={() => triggerImg("galeria_new")} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer", marginBottom:12 }}>
-                  {uploadingImg === "galeria_new" ? "Subiendo..." : "Agregar imagen"}
+                <p style={{ fontSize:11, fontWeight:700, color:"#888", textTransform:"uppercase" as const, marginBottom:8, marginTop:4 }}>Imagenes de tu galeria</p>
+                {imagenes.length === 0 ? (
+                  <p style={{ fontSize:12, color:"#aaa", marginBottom:12 }}>No tienes imagenes. Subelas en la seccion Galeria.</p>
+                ) : (
+                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 }}>
+                    {imagenes.map((img: any) => (
+                      <div key={img.id} onClick={() => setImages(prev => ({ ...prev, galeria: img.url }))} style={{ cursor:"pointer", borderRadius:8, overflow:"hidden", border: images.galeria === img.url ? `2px solid ${pr}` : "2px solid transparent" }}>
+                        <img src={img.url} alt={img.nombre} style={{ width:"100%", height:70, objectFit:"cover", display:"block" }} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <button onClick={() => { setImgTarget("galeria_new"); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>
+                  {uploadingImg === "galeria_new" ? "Subiendo..." : "Subir nueva imagen"}
                 </button>
               </>) : <UpgradeBadge plan="Empresarial" />}
             </>)}
