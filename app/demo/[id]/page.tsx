@@ -1,5 +1,5 @@
 ﻿import { createClient } from "@/lib/supabase/server";
-import ClientChatbot from "@/components/ClientChatbot";
+
 import { notFound, redirect } from "next/navigation";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -329,10 +329,16 @@ export default async function DemoPage({ params }: Props) {
           </div>
         </div>
       </footer>
-      {agente && <ClientChatbot agente={agente} color={site.primary_color ?? "#7c3aed"} />}
+      {agente && (
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.__AGENTE__ = ${JSON.stringify(agente)};
+          window.__COLOR__ = "${(agente as any).color ?? site.primary_color ?? "#7c3aed"}";
+        `}} />
+      )}
     </>
   );
 }
+
 
 
 
