@@ -73,7 +73,7 @@ export default function Estadisticas() {
       { data: conversaciones },
       { data: automatizaciones },
     ] = await Promise.all([
-      supabase.from("leads").select("*").eq("email", (await supabase.auth.getUser()).data.user?.email ?? ""),
+      supabase.from("leads").select("*").eq("user_id", user.id),
       supabase.from("crm_pipeline").select("*").eq("user_id", user.id),
       supabase.from("reservas").select("*").eq("user_id", user.id),
       supabase.from("domains").select("*").eq("user_id", user.id),
@@ -239,3 +239,4 @@ export default function Estadisticas() {
     </div>
   );
 }
+
