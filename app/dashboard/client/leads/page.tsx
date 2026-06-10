@@ -14,7 +14,7 @@ export default function LeadsCliente() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
       const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-      const { data } = await supabase.from("leads").select("*").in("fuente", ["manual","chatbot"]).eq("email", prof?.email).order("created_at", { ascending: false });
+      const { data } = await supabase.from("leads").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
       setLeads(data ?? []);
       setLoading(false);
     }
@@ -63,4 +63,5 @@ export default function LeadsCliente() {
     </div>
   );
 }
+
 
