@@ -1,7 +1,7 @@
 ﻿"use client";
 import { useState } from "react";
 
-type Step = "saludo" | "nombre" | "celular" | "correo" | "mensaje" | "cita_fecha" | "cita_hora" | "completado" | "chat";
+type Step = "saludo" | "nombre" | "celular" | "correo" | "mensaje" | "cita_fecha" | "cita_hora" | "reserva_fecha" | "reserva_hora" | "completado" | "chat";
 
 export default function AgenteChat({ agente, color, siteId }: { agente: any; color: string; siteId?: string }) {
   const [open, setOpen] = useState(false);
@@ -13,6 +13,7 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
   ]);
   const [loading, setLoading] = useState(false);
   const [guardado, setGuardado] = useState(false);
+  const [tipoAccion, setTipoAccion] = useState<"cita" | "reserva" | null>(null);
 
   const HORAS = ["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"];
 
@@ -20,8 +21,10 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     setMsgs(prev => [...prev, { role, text }]);
   }
 
-  function esCita(text: string) {
-    return /cita|agendar|reserva|turno|appointment|visita|consulta/i.test(text);
+  function detectarIntencion(text: string): "cita" | "reserva" | null {
+    if (/reserva|reservar|mesa|habitacion|cuarto|espacio/i.test(text)) return "reserva";
+    if (/cita|agendar|turno|appointment|visita|consulta/i.test(text)) return "cita";
+    return null;
   }
 
   async function guardarLead(d: typeof datos, esCitaFlag: boolean) {
@@ -35,6 +38,17 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     } catch {}
   }
 
+  async function guardarReserva(d: typeof datos) {
+    try {
+      await fetch("/api/agente-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...d, agente_id: agente.id, user_id: agente.user_id, site_id: siteId, es_cita: true }),
+      });
+      setGuardado(true);
+    } catch {}
+  }
+
   async function handleInput() {
     const text = input.trim();
     if (!text) return;
@@ -42,10 +56,9 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     addMsg("user", text);
 
     if (step === "saludo" || step === "nombre") {
-      const nombre = text;
-      setDatos(prev => ({ ...prev, nombre }));
+      setDatos(prev => ({ ...prev, nombre: text }));
       setStep("celular");
-      setTimeout(() => addMsg("bot", `Encantado, ${nombre}! Cual es tu numero de celular?`), 400);
+      setTimeout(() => addMsg("bot", `Encantado, ${text}! Cual es tu numero de celular?`), 400);
       return;
     }
 
@@ -59,16 +72,23 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     if (step === "correo") {
       setDatos(prev => ({ ...prev, correo: text }));
       setStep("mensaje");
-      setTimeout(() => addMsg("bot", "Cuéntame, en que te puedo ayudar hoy?"), 400);
+      setTimeout(() => addMsg("bot", "Cuentame, en que te puedo ayudar hoy?"), 400);
       return;
     }
 
     if (step === "mensaje") {
       const nuevoDatos = { ...datos, mensaje: text };
       setDatos(nuevoDatos);
-      if (esCita(text)) {
+      const intencion = detectarIntencion(text);
+
+      if (intencion === "reserva") {
+        setTipoAccion("reserva");
+        setStep("reserva_fecha");
+        setTimeout(() => addMsg("bot", "Claro! Para que fecha quieres hacer la reserva? (ej: 2026-06-29)"), 400);
+      } else if (intencion === "cita") {
+        setTipoAccion("cita");
         setStep("cita_fecha");
-        setTimeout(() => addMsg("bot", "Claro! Para que fecha quieres agendar tu cita? (ej: 2025-06-20)"), 400);
+        setTimeout(() => addMsg("bot", "Claro! Para que fecha quieres agendar tu cita? (ej: 2026-06-29)"), 400);
       } else {
         setStep("chat");
         await guardarLead(nuevoDatos, false);
@@ -92,6 +112,13 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
       return;
     }
 
+    if (step === "reserva_fecha") {
+      setDatos(prev => ({ ...prev, fecha: text }));
+      setStep("reserva_hora");
+      setTimeout(() => addMsg("bot", "A que hora prefieres?"), 400);
+      return;
+    }
+
     if (step === "chat") {
       setLoading(true);
       const res = await fetch("/api/agente-chatbot", {
@@ -109,8 +136,13 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     const nuevoDatos = { ...datos, hora };
     setDatos(nuevoDatos);
     setStep("completado");
-    await guardarLead(nuevoDatos, true);
-    addMsg("bot", `Listo ${datos.nombre}! Tu cita queda agendada para el ${datos.fecha} a las ${hora}. Te contactaremos al ${datos.celular} para confirmar.`);
+    if (tipoAccion === "reserva") {
+      await guardarReserva(nuevoDatos);
+      addMsg("bot", `Listo ${datos.nombre}! Tu reserva queda registrada para el ${datos.fecha} a las ${hora}. Te contactaremos al ${datos.celular} para confirmar.`);
+    } else {
+      await guardarLead(nuevoDatos, true);
+      addMsg("bot", `Listo ${datos.nombre}! Tu cita queda agendada para el ${datos.fecha} a las ${hora}. Te contactaremos al ${datos.celular} para confirmar.`);
+    }
   }
 
   return (
@@ -150,7 +182,7 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
             <div key={i} className={m.role === "bot" ? "cb-b" : "cb-u"}>{m.text}</div>
           ))}
           {loading && <div className="cb-b">Escribiendo...</div>}
-          {step === "cita_hora" && (
+          {(step === "cita_hora" || step === "reserva_hora") && (
             <div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:4}}>
               {HORAS.map(h => (
                 <button key={h} className="hora-btn" onClick={() => seleccionarHora(h)}>{h}</button>
@@ -159,14 +191,16 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
           )}
         </div>
 
-        {step !== "completado" && step !== "cita_hora" && (
+        {step !== "completado" && step !== "cita_hora" && step !== "reserva_hora" && (
           <div id="cb-footer">
             <input id="cb-input" value={input} onChange={e => setInput(e.target.value)} placeholder="Escribe aqui..." onKeyDown={(e) => { if (e.key === "Enter") handleInput(); }} />
             <button id="cb-send" onClick={handleInput}>Enviar</button>
           </div>
         )}
         {step === "completado" && (
-          <div style={{padding:"10px 14px",textAlign:"center",fontSize:12,color:"#10b981",fontWeight:700}}>Cita agendada exitosamente</div>
+          <div style={{padding:"10px 14px",textAlign:"center",fontSize:12,color:"#10b981",fontWeight:700}}>
+            {tipoAccion === "reserva" ? "Reserva registrada exitosamente" : "Cita agendada exitosamente"}
+          </div>
         )}
       </div>
     </>
