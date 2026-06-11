@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
@@ -156,10 +156,10 @@ export default function Home() {
   const [statsVisible, setStatsVisible] = useState(false);
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
 
-  const clientes = useCountUp(1000, 2000, statsVisible);
+  const clientes = useCountUp(100, 2000, statsVisible);
   const paises = useCountUp(3, 1500, statsVisible);
   const anos = useCountUp(2, 1200, statsVisible);
-  const sitios = useCountUp(2000, 2200, statsVisible);
+  const sitios = useCountUp(150, 2200, statsVisible);
 
   useEffect(() => {
     const interval = setInterval(() => {
