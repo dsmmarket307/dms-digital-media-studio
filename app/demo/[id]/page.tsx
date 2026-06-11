@@ -209,14 +209,20 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-      {c?.galeria && (
+      {c?.galeria && !navHidden.includes("galeria") && (
         <section id="galeria" className="bg-l">
           <div className="wrap">
             <p className="label">Galeria</p>
             <h2 className="st">{c.galeria.titulo}</h2>
-            {ci.galeria && (
+            {ci.galeria_imgs?.length > 0 ? (
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"1.5rem",marginTop:"1rem"}}>
+                {ci.galeria_imgs.map((url: string, i: number) => (
+                  <img key={i} src={url} alt={`galeria-${i}`} style={{width:"100%",height:220,objectFit:"cover",borderRadius:16,boxShadow:"0 4px 16px rgba(0,0,0,0.1)"}} />
+                ))}
+              </div>
+            ) : ci.galeria ? (
               <img src={ci.galeria} alt="galeria" className="sec-img" />
-            )}
+            ) : null}
           </div>
         </section>
       )}
