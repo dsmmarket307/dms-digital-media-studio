@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -45,10 +45,10 @@ export default function Reservas() {
     if (!form.nombre) return;
     setSaving(true);
     if (editando) {
-      const { data } = await supabase.from("reservas").update({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha, hora: form.hora, personas: form.personas, estado: form.estado }).eq("id", editando.id).select().single();
+      const { data } = await supabase.from("reservas").update({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha, hora: form.hora, personas: form.personas ? Number(form.personas) : null, estado: form.estado }).eq("id", editando.id).select().single();
       if (data) setReservas(prev => prev.map(r => r.id === editando.id ? data : r));
     } else {
-      const { data } = await supabase.from("reservas").insert({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha, hora: form.hora, personas: form.personas, estado: form.estado, user_id: userId }).select().single();
+      const { data } = await supabase.from("reservas").insert({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha, hora: form.hora, personas: form.personas ? Number(form.personas) : null, estado: form.estado, user_id: userId }).select().single();
       if (data) setReservas(prev => [data, ...prev]);
     }
     setShowModal(false);
