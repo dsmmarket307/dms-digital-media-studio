@@ -3,14 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 
 function parseFecha(fecha: string): string | null {
   if (!fecha) return null;
-  // Si ya es ISO (2026-06-29)
   if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return fecha;
-  // Si es dd/mm/yyyy
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
     const [d, m, y] = fecha.split("/");
     return `${y}-${m}-${d}`;
   }
-  // Si es dd-mm-yyyy
   if (/^\d{2}-\d{2}-\d{4}$/.test(fecha)) {
     const [d, m, y] = fecha.split("-");
     return `${y}-${m}-${d}`;
@@ -19,10 +16,8 @@ function parseFecha(fecha: string): string | null {
 }
 
 function parseHora(hora: string): string | null {
-  if (!hora) return null;
-  // Si ya es HH:mm
+  if (!hora) return hora;
   if (/^\d{2}:\d{2}$/.test(hora)) return hora;
-  // Si es 2:00 PM / 10:00 AM
   const match = hora.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
   if (match) {
     let h = parseInt(match[1]);
@@ -37,31 +32,35 @@ function parseHora(hora: string): string | null {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nombre, celular, correo, mensaje, fecha, hora, agente_id, user_id, site_id, es_cita } = await req.json();
+    const { nombre, celular, correo, mensaje, fecha, hora, agente_id, user_id, site_id, tipo } = await req.json();
     const supabase = await createClient();
-    await supabase.from("leads").insert({
-      nombre,
-      email: correo,
-      telefono: celular,
-      mensaje,
-      estado: "nuevo",
-      fuente: "chatbot",
-      user_id,
-    });
-    if (es_cita && fecha && hora) {
+
+    if (tipo === "reserva") {
       const fechaISO = parseFecha(fecha);
       const horaISO = parseHora(hora);
-      if (fechaISO && horaISO) {
-        await supabase.from("reservas").insert({
-          nombre,
-          telefono: celular,
-          fecha: fechaISO,
-          hora: horaISO,
-          estado: "pendiente",
-          user_id,
-        });
-      }
+      await supabase.from("reservas").insert({
+        nombre,
+        telefono: celular,
+        fecha: fechaISO,
+        hora: horaISO,
+        estado: "pendiente",
+        user_id,
+      });
+    } else {
+      const mensajeFinal = tipo === "cita" && fecha && hora
+        ? `${mensaje ?? ""} | Cita: ${parseFecha(fecha)} a las ${parseHora(hora)}`
+        : mensaje;
+      await supabase.from("leads").insert({
+        nombre,
+        email: correo,
+        telefono: celular,
+        mensaje: mensajeFinal,
+        estado: "nuevo",
+        fuente: tipo === "cita" ? "cita-chatbot" : "chatbot",
+        user_id,
+      });
     }
+
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

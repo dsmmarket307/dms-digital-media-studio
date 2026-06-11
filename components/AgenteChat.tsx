@@ -27,23 +27,12 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     return null;
   }
 
-  async function guardarLead(d: typeof datos, esCitaFlag: boolean) {
+  async function enviar(d: typeof datos, tipo: string) {
     try {
       await fetch("/api/agente-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...d, agente_id: agente.id, user_id: agente.user_id, site_id: siteId, es_cita: esCitaFlag }),
-      });
-      setGuardado(true);
-    } catch {}
-  }
-
-  async function guardarReserva(d: typeof datos) {
-    try {
-      await fetch("/api/agente-lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...d, agente_id: agente.id, user_id: agente.user_id, site_id: siteId, es_cita: true }),
+        body: JSON.stringify({ ...d, agente_id: agente.id, user_id: agente.user_id, site_id: siteId, tipo }),
       });
       setGuardado(true);
     } catch {}
@@ -91,7 +80,7 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
         setTimeout(() => addMsg("bot", "Claro! Para que fecha quieres agendar tu cita? (ej: 2026-06-29)"), 400);
       } else {
         setStep("chat");
-        await guardarLead(nuevoDatos, false);
+        await enviar(nuevoDatos, "lead");
         setLoading(true);
         const res = await fetch("/api/agente-chatbot", {
           method: "POST",
@@ -137,10 +126,10 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
     setDatos(nuevoDatos);
     setStep("completado");
     if (tipoAccion === "reserva") {
-      await guardarReserva(nuevoDatos);
+      await enviar(nuevoDatos, "reserva");
       addMsg("bot", `Listo ${datos.nombre}! Tu reserva queda registrada para el ${datos.fecha} a las ${hora}. Te contactaremos al ${datos.celular} para confirmar.`);
     } else {
-      await guardarLead(nuevoDatos, true);
+      await enviar(nuevoDatos, "cita");
       addMsg("bot", `Listo ${datos.nombre}! Tu cita queda agendada para el ${datos.fecha} a las ${hora}. Te contactaremos al ${datos.celular} para confirmar.`);
     }
   }
