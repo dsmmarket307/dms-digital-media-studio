@@ -158,6 +158,26 @@ export default function ClientDashboard() {
         )}
       </div>
 
+      {planActivo === "basico" && (
+        <div style={{ background: "linear-gradient(135deg, #7c3aed, #4f46e5)", borderRadius: 16, padding: "1.5rem", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 2, margin: "0 0 6px" }}>Sube al Plan Profesional</p>
+            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#fff", margin: "0 0 6px" }}>Desbloquea Galeria, Leads, Reservas y Dominios</h3>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", margin: 0 }}>Por solo $99.000/mes — Todo lo del basico + mucho mas</p>
+          </div>
+          <Link href="/dashboard/client/suscripcion" style={{ background: "#fff", color: "#7c3aed", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 800, textDecoration: "none", flexShrink: 0 }}>Ver Plan Profesional</Link>
+        </div>
+      )}
+      {planActivo === "profesional" && (
+        <div style={{ background: "linear-gradient(135deg, #1e1b4b, #4c1d95)", borderRadius: 16, padding: "1.5rem", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 2, margin: "0 0 6px" }}>Sube al Plan Empresarial</p>
+            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#fff", margin: "0 0 6px" }}>Desbloquea CRM, Agente IA, Automatizaciones y Estadisticas</h3>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", margin: 0 }}>Por solo $199.000/mes — La plataforma empresarial completa</p>
+          </div>
+          <Link href="/dashboard/client/suscripcion" style={{ background: "#fff", color: "#4c1d95", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 800, textDecoration: "none", flexShrink: 0 }}>Ver Plan Empresarial</Link>
+        </div>
+      )}
       <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 14 }}>Accesos rapidos</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
         {MENU.map(item => {
@@ -180,3 +200,4 @@ export default function ClientDashboard() {
     </div>
   );
 }
+
