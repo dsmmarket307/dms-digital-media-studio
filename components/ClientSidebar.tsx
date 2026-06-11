@@ -29,27 +29,9 @@ const icons: Record<string, React.ReactElement> = {
   soporte:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
 };
 
-const MENU_BASICO = [
-  { href: "/dashboard/client", label: "Inicio", icon: "home" },
-  { href: "/dashboard/client/builder", label: "Crear Mi Sitio", icon: "builder" },
-  { href: "/dashboard/client/sitio", label: "Mi Sitio Web", icon: "sitio" },
-  { href: "/dashboard/client/facturacion", label: "Facturacion", icon: "factura" },
-  { href: "/dashboard/client/soporte", label: "Soporte", icon: "soporte" },
-  { href: "/dashboard/client/suscripcion", label: "Mi Suscripcion", icon: "suscrip" },
-];
 
-const MENU_PROFESIONAL = [
-  { href: "/dashboard/client", label: "Inicio", icon: "home" },
-  { href: "/dashboard/client/builder", label: "Crear Mi Sitio", icon: "builder" },
-  { href: "/dashboard/client/sitio", label: "Mi Sitio Web", icon: "sitio" },
-  { href: "/dashboard/client/galeria", label: "Galeria", icon: "galeria" },
-  { href: "/dashboard/client/dominios", label: "Dominios", icon: "dominio" },
-  { href: "/dashboard/client/leads", label: "Leads", icon: "leads" },
-  { href: "/dashboard/client/reservas", label: "Reservas", icon: "reservas" },
-  { href: "/dashboard/client/facturacion", label: "Facturacion", icon: "factura" },
-  { href: "/dashboard/client/soporte", label: "Soporte", icon: "soporte" },
-  { href: "/dashboard/client/suscripcion", label: "Mi Suscripcion", icon: "suscrip" },
-];
+
+
 
 const MENU_EMPRESARIAL: any[] = [
   { href: "/dashboard/client", label: "Inicio", icon: "home" },
@@ -101,7 +83,7 @@ export default function ClientSidebar() {
     router.push("/auth/login");
   }
 
-  const menuItems = plan === "empresarial" ? MENU_EMPRESARIAL : plan === "profesional" ? MENU_PROFESIONAL : MENU_BASICO;
+  const menuItems = MENU_EMPRESARIAL;
 
   const SidebarContent = () => (
     <>
@@ -190,4 +172,5 @@ export default function ClientSidebar() {
     </>
   );
 }
+
 
