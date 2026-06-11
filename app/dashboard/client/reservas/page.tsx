@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -45,10 +45,10 @@ export default function Reservas() {
     if (!form.nombre) return;
     setSaving(true);
     if (editando) {
-      const { data } = await supabase.from("reservas").update({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha, hora: form.hora, personas: form.personas ? Number(form.personas) : null, estado: form.estado }).eq("id", editando.id).select().single();
+      const { data } = await supabase.from("reservas").update({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha || null, hora: form.hora || null, personas: form.personas ? Number(form.personas) : null, estado: form.estado }).eq("id", editando.id).select().single();
       if (data) setReservas(prev => prev.map(r => r.id === editando.id ? data : r));
     } else {
-      const { data } = await supabase.from("reservas").insert({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha, hora: form.hora, personas: form.personas ? Number(form.personas) : null, estado: form.estado, user_id: userId }).select().single();
+      const { data } = await supabase.from("reservas").insert({ nombre: form.nombre, telefono: form.telefono, fecha: form.fecha || null, hora: form.hora || null, personas: form.personas ? Number(form.personas) : null, estado: form.estado, user_id: userId }).select().single();
       if (data) setReservas(prev => [data, ...prev]);
     }
     setShowModal(false);
@@ -139,12 +139,20 @@ export default function Reservas() {
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 16, padding: 24, width: "100%", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: "#111", marginBottom: 16 }}>{editando ? "Editar Reserva" : "Nueva Reserva"}</h2>
-            {[["nombre","Nombre *"],["telefono","Telefono"],["fecha","Fecha"],["hora","Hora"],["personas","Personas"]].map(([field, label]) => (
+            {[["nombre","Nombre *"],["telefono","Telefono"],["personas","Personas"]].map(([field, label]) => (
               <div key={field} style={{ marginBottom: 12 }}>
                 <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 4 }}>{label}</label>
                 <input value={(form as any)[field]} onChange={e => setForm(prev => ({ ...prev, [field]: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />
               </div>
             ))}
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 4 }}>Fecha</label>
+              <input type="date" value={form.fecha} onChange={e => setForm(prev => ({ ...prev, fecha: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 4 }}>Hora</label>
+              <input type="time" value={form.hora} onChange={e => setForm(prev => ({ ...prev, hora: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />
+            </div>
             <div style={{ marginBottom: 12 }}>
               <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 4 }}>Estado</label>
               <select value={form.estado} onChange={e => setForm(prev => ({ ...prev, estado: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none" }}>
