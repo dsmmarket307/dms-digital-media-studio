@@ -32,6 +32,14 @@ export default function Soporte() {
     if (hiloRef.current) hiloRef.current.scrollTop = hiloRef.current.scrollHeight;
   }, [replies]);
 
+  async function eliminarTicket(id: string) {
+    if (!confirm("Eliminar este ticket completo? Esta accion no se puede deshacer.")) return;
+    await supabase.from("soporte_replies").delete().eq("ticket_id", id);
+    await supabase.from("soporte_mensajes").delete().eq("id", id);
+    setTickets(prev => prev.filter(t => t.id !== id));
+    if (ticketAbierto?.id === id) { setTicketAbierto(null); setReplies([]); }
+  }
+
   async function loadReplies(ticketId: string) {
     const { data } = await supabase.from("soporte_replies").select("*").eq("ticket_id", ticketId).order("created_at", { ascending: true });
     setReplies(data ?? []);
@@ -101,7 +109,10 @@ export default function Soporte() {
               <p style={{ fontWeight: 800, fontSize: 14, color: "#111", margin: 0 }}>{ticketAbierto.asunto}</p>
               <p style={{ fontSize: 11, color: "#aaa", marginTop: 2 }}>{new Date(ticketAbierto.created_at).toLocaleDateString("es-CO")}</p>
             </div>
-            <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: ESTADO_COLORS[ticketAbierto.estado]?.bg, color: ESTADO_COLORS[ticketAbierto.estado]?.color }}>{ESTADO_COLORS[ticketAbierto.estado]?.label ?? ticketAbierto.estado}</span>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: ESTADO_COLORS[ticketAbierto.estado]?.bg, color: ESTADO_COLORS[ticketAbierto.estado]?.color }}>{ESTADO_COLORS[ticketAbierto.estado]?.label ?? ticketAbierto.estado}</span>
+              <button onClick={() => eliminarTicket(ticketAbierto.id)} style={{ fontSize: 11, fontWeight: 700, background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 8, padding: "4px 10px", cursor: "pointer" }}>Eliminar ticket</button>
+            </div>
           </div>
           <div style={{ background: "#f8f9fa", borderRadius: 8, padding: "10px 12px", marginTop: 10 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#888", marginBottom: 4 }}>Mensaje inicial:</p>
