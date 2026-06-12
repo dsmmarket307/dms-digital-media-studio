@@ -4,9 +4,9 @@ import Image from "next/image";
 const SERVICIOS = [
   {
     slug: "diseno-web",
-    title: "Diseno Web",
-    desc: "Creamos sitios web modernos, rapidos y optimizados que convierten visitantes en clientes.",
-    items: ["Landing Pages", "Sitios Corporativos", "Tiendas Online", "Portafolios"],
+    title: "Sitios Web con IA",
+    desc: "Crea paginas web profesionales optimizadas para captar clientes en minutos.",
+    items: ["Sitios con IA", "Landing Pages", "Tiendas Online", "Portafolios"],
     icon: (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75">
         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
@@ -15,8 +15,8 @@ const SERVICIOS = [
   },
   {
     slug: "publicidad-digital",
-    title: "Publicidad Digital",
-    desc: "Campanas publicitarias que llegan a tu cliente ideal y generan resultados medibles.",
+    title: "Marketing y Captacion",
+    desc: "Genera mas oportunidades con herramientas de crecimiento digital.",
     items: ["Facebook Ads", "Instagram Ads", "Google Ads", "Remarketing"],
     icon: (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75">
@@ -26,9 +26,9 @@ const SERVICIOS = [
   },
   {
     slug: "automatizacion-ia",
-    title: "Automatizacion IA",
-    desc: "Automatiza tu negocio con inteligencia artificial. Atiende clientes 24/7 sin esfuerzo.",
-    items: ["Chatbots IA", "WhatsApp IA", "Automatizacion de procesos", "Asistentes virtuales"],
+    title: "Automatizaciones Inteligentes",
+    desc: "Automatiza tareas repetitivas y responde clientes las 24 horas.",
+    items: ["Chatbots IA", "WhatsApp IA", "Flujos automaticos", "Asistentes virtuales"],
     icon: (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75">
         <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="5" r="2"/><path d="M8 11V9a4 4 0 0 1 8 0v2"/>
@@ -37,9 +37,9 @@ const SERVICIOS = [
   },
   {
     slug: "redes-sociales",
-    title: "Redes Sociales",
-    desc: "Gestionamos tus redes sociales con contenido profesional que genera comunidad y ventas.",
-    items: ["Gestion de contenido", "Community Manager", "Reels y Stories", "Crecimiento organico"],
+    title: "Gestion de Clientes",
+    desc: "Organiza contactos, oportunidades y ventas desde un CRM integrado.",
+    items: ["CRM integrado", "Gestion de contactos", "Seguimiento de ventas", "Oportunidades"],
     icon: (
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75">
         <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -72,10 +72,10 @@ export default function ServiciosPage() {
       <section className="text-center px-6 py-20 bg-gray-50 border-b">
         <p className="text-sm font-semibold text-purple-600 uppercase tracking-widest mb-3">Lo que hacemos</p>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 max-w-2xl mx-auto leading-tight">
-          Servicios digitales para hacer crecer tu negocio
+          Todo lo que necesitas para digitalizar tu negocio
         </h1>
         <p className="text-gray-500 mt-4 max-w-xl mx-auto">
-          Cada servicio esta disenado para generar resultados reales. Elige lo que necesitas y selecciona el plan ideal.
+          Activa las herramientas que tu negocio necesita y comienza a captar clientes desde una sola plataforma.
         </p>
       </section>
 
@@ -114,7 +114,7 @@ export default function ServiciosPage() {
         <p className="text-purple-200 mb-8 max-w-xl mx-auto">Elige un plan y comienza a transformar tu negocio hoy mismo.</p>
         <div className="flex flex-col md:flex-row gap-4 justify-center">
           <Link href="/planes" className="bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:bg-purple-50 transition-colors">
-            Ver planes y precios
+            Comenzar ahora
           </Link>
           <Link href="/#contacto" className="border border-white text-white px-8 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors">
             Hablar con un asesor
