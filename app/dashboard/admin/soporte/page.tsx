@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ export default function SoporteAdmin() {
   const [archivo, setArchivo] = useState<File | null>(null);
   const [subiendo, setSubiendo] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [zoomImg, setZoomImg] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const hiloRef = useRef<HTMLDivElement>(null);
 
@@ -79,6 +80,18 @@ export default function SoporteAdmin() {
     setTickets(t ?? []);
     setTicketAbierto((prev: any) => ({ ...prev, estado: "respondido" }));
     setSubiendo(false);
+  }
+
+  async function eliminarReply(id: string) {
+    if (!confirm("Eliminar este mensaje?")) return;
+    await supabase.from("soporte_replies").delete().eq("id", id);
+    setReplies(prev => prev.filter(r => r.id !== id));
+  }
+
+  async function eliminarLead(id: number) {
+    if (!confirm("Eliminar este lead?")) return;
+    await supabase.from("leads").delete().eq("id", id);
+    setLeads(prev => prev.filter(l => l.id !== id));
   }
 
   async function cerrarTicket(id: string) {
@@ -162,11 +175,14 @@ export default function SoporteAdmin() {
               const esAdmin = r.rol === "admin";
               return (
                 <div key={r.id} style={{ display: "flex", justifyContent: esAdmin ? "flex-end" : "flex-start" }}>
-                  <div style={{ maxWidth: "75%", background: esAdmin ? "#7c3aed" : "#f3f4f6", color: esAdmin ? "#fff" : "#111", borderRadius: esAdmin ? "12px 12px 2px 12px" : "12px 12px 12px 2px", padding: "10px 14px" }}>
-                    <p style={{ fontSize: 10, fontWeight: 700, marginBottom: 4, opacity: 0.7 }}>{esAdmin ? "DMS Digital" : r.autor}</p>
+                  <div style={{ maxWidth: "75%", background: esAdmin ? "#7c3aed" : "#f3f4f6", color: esAdmin ? "#fff" : "#111", borderRadius: esAdmin ? "12px 12px 2px 12px" : "12px 12px 12px 2px", padding: "10px 14px", position: "relative" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                      <p style={{ fontSize: 10, fontWeight: 700, opacity: 0.7, margin: 0 }}>{esAdmin ? "DMS Digital" : r.autor}</p>
+                      <button onClick={() => eliminarReply(r.id)} style={{ background: "none", border: "none", cursor: "pointer", opacity: 0.5, padding: 0, color: esAdmin ? "#fff" : "#ef4444", fontSize: 11, fontWeight: 700 }} title="Eliminar mensaje">x</button>
+                    </div>
                     {r.mensaje && <p style={{ fontSize: 13, margin: 0, lineHeight: 1.5 }}>{r.mensaje}</p>}
                     {r.archivo_url && r.archivo_tipo === "imagen" && (
-                      <img src={r.archivo_url} alt="evidencia" style={{ maxWidth: 200, borderRadius: 8, marginTop: 8, display: "block" }} />
+                      <img src={r.archivo_url} alt="evidencia" onClick={() => setZoomImg(r.archivo_url)} style={{ maxWidth: 200, borderRadius: 8, marginTop: 8, display: "block", cursor: "zoom-in" }} />
                     )}
                     {r.archivo_url && r.archivo_tipo === "video" && (
                       <video src={r.archivo_url} controls style={{ maxWidth: 200, borderRadius: 8, marginTop: 8, display: "block" }} />
@@ -193,6 +209,12 @@ export default function SoporteAdmin() {
             <p className="text-xs text-gray-400 text-center py-4">Este ticket esta cerrado.</p>
           )}
         </main>
+        {zoomImg && (
+          <div onClick={() => setZoomImg(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 999, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, cursor: "zoom-out" }}>
+            <img src={zoomImg} alt="zoom" style={{ maxWidth: "95%", maxHeight: "90%", borderRadius: 8, boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }} />
+            <a href={zoomImg} download target="_blank" onClick={e => e.stopPropagation()} style={{ position: "absolute", top: 20, right: 20, background: "#7c3aed", color: "#fff", padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Descargar</a>
+          </div>
+        )}
       </div>
     );
   }
@@ -288,6 +310,7 @@ export default function SoporteAdmin() {
                   {l.telefono && (
                     <a href={`https://wa.me/57${l.telefono.replace(/\D/g,"")}`} target="_blank" className="text-xs bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors">WhatsApp</a>
                   )}
+                  <button onClick={() => eliminarLead(l.id)} className="text-xs bg-red-50 text-red-500 px-4 py-2 rounded-lg font-semibold hover:bg-red-100 transition-colors">Eliminar</button>
                 </div>
               </div>
             ))}
