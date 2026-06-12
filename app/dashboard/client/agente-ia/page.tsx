@@ -22,7 +22,7 @@ export default function AgenteIA() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
       const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
-      if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
+      if (sub?.plan !== "empresarial" && sub?.status !== "trial") { router.push("/dashboard/client"); return; }
       const { data: s } = await supabase.from("generated_websites").select("id, project_name").eq("user_id", user.id);
       setSites(s ?? []);
       setUserId(user.id);
@@ -98,3 +98,4 @@ export default function AgenteIA() {
     </div>
   );
 }
+
