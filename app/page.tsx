@@ -382,12 +382,12 @@ export default function Home() {
       {/* PLANES */}
       <section id="planes" className="px-6 md:px-10 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">Planes para tu negocio</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Elige el plan ideal y comienza hoy mismo.</p>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.</p>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {[
-            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", popular: false, items: ["1 Landing Page activa", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"] },
-            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", popular: true, items: ["1 Sitio profesional", "SEO basico", "Dominio personalizado", "Leads integrados"] },
-            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", popular: false, items: ["Hasta 3 sitios activos", "CRM integrado", "Automatizacion IA", "Soporte prioritario"] },
+            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", popular: false, items: ["1 Landing Page activa", "Boton WhatsApp", "Formulario de contacto", "Diseno responsive", "Subdominio DMS", "Soporte basico"] },
+            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", popular: true, items: ["1 Sitio profesional", "Editor Visual", "SEO basico", "Formularios avanzados", "Dominio personalizado", "Leads integrados"] },
+            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", popular: false, items: ["Hasta 3 sitios activos", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"] },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-xl p-8 flex flex-col relative bg-white ${plan.popular ? "border-2 border-purple-600 shadow-lg" : "border border-gray-200 hover:shadow-lg transition-shadow"}`}>
               {plan.popular && (
@@ -405,7 +405,7 @@ export default function Home() {
                 ))}
               </ul>
               <Link href={`/dashboard/client/suscripcion`} className={`mt-8 block text-center py-3 rounded-lg font-semibold transition-colors ${plan.popular ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-900 text-white hover:bg-gray-700"}`}>
-                {plan.name === "Empresarial" ? "Contactar" : "Empezar"}
+                {plan.name === "Empresarial" ? "Contactar" : "Iniciar prueba gratis"}
               </Link>
             </div>
           ))}
