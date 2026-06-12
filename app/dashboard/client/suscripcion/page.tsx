@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -213,7 +213,7 @@ export default function SuscripcionPage() {
           </>
         )}
 
-        {(!suscripcion || suscripcion.status === "expired" || suscripcion.status === "cancelled") && (
+        {(!suscripcion || suscripcion.status === "expired" || suscripcion.status === "cancelled" || suscripcion.status === "trial") && (
           <div style={{ marginTop: 24 }}>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 16 }}>Planes disponibles</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
@@ -227,7 +227,7 @@ export default function SuscripcionPage() {
                   <p style={{ fontSize: 11, color: "#888", marginBottom: 14 }}>COP / mes</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
                     {p.items.map(item => (
-                      <p key={item} style={{ fontSize: 12, color: "#555", margin: 0 }}>— {item}</p>
+                      <p key={item} style={{ fontSize: 12, color: "#555", margin: 0 }}>� {item}</p>
                     ))}
                   </div>
                   <button onClick={() => handleSuscribir(p.slug)} disabled={suscribiendo === p.slug} style={{ display: "block", width: "100%", textAlign: "center", background: p.slug === "profesional" ? "#7c3aed" : "#111", color: "#fff", padding: "9px", borderRadius: 9, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", opacity: suscribiendo === p.slug ? 0.6 : 1 }}>
