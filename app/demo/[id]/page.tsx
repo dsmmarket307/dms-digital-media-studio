@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 
@@ -57,6 +57,27 @@ export default async function DemoPage({ params }: Props) {
   }
 
   const { data: agente } = await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).maybeSingle();
+
+  // Verificar trial
+  const { data: sub } = await supabase.from("subscriptions").select("*").eq("user_id", site.user_id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+  const tieneplanPagado = sub?.status === "active";
+  const trialVencido = sub?.status === "trial" && sub?.trial_end && new Date(sub.trial_end) < new Date();
+  const sinPlan = !sub;
+
+  if (trialVencido || sinPlan) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+        <div style={{ background: "#fff", borderRadius: 20, padding: "3rem 2rem", textAlign: "center", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }}>
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(239,68,68,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.5rem" }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", marginBottom: "0.75rem" }}>Prueba gratuita finalizada</h1>
+          <p style={{ color: "#888", fontSize: 14, lineHeight: 1.7, marginBottom: "2rem" }}>Tu sitio sigue guardado. Activa un plan para publicarlo y que tus clientes puedan verlo.</p>
+          <a href="https://dms-digital-media-studio.vercel.app/dashboard/client/suscripcion" style={{ display: "inline-block", background: "#7c3aed", color: "#fff", padding: "12px 28px", borderRadius: 12, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>Activar mi plan</a>
+        </div>
+      </div>
+    );
+  }
 
   const ci = site.custom_images ?? {};
   const imagenes = await getPexelsImages(site.website_type, site.prompt ?? "");
