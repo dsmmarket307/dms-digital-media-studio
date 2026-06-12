@@ -94,6 +94,14 @@ export default function SoporteAdmin() {
     setLeads(prev => prev.filter(l => l.id !== id));
   }
 
+  async function eliminarTicket(id: string) {
+    if (!confirm("Eliminar este ticket completo? Esta accion no se puede deshacer.")) return;
+    await supabase.from("soporte_replies").delete().eq("ticket_id", id);
+    await supabase.from("soporte_mensajes").delete().eq("id", id);
+    setTickets(prev => prev.filter(t => t.id !== id));
+    if (ticketAbierto?.id === id) { setTicketAbierto(null); setReplies([]); }
+  }
+
   async function cerrarTicket(id: string) {
     await supabase.from("soporte_mensajes").update({ estado: "cerrado" }).eq("id", id);
     setTickets(prev => prev.map(t => t.id === id ? { ...t, estado: "cerrado" } : t));
@@ -160,6 +168,9 @@ export default function SoporteAdmin() {
                     Cerrar ticket
                   </button>
                 )}
+                <button onClick={() => eliminarTicket(ticketAbierto.id)} className="text-xs bg-red-50 text-red-500 px-3 py-1 rounded-lg font-semibold hover:bg-red-100 transition-colors">
+                  Eliminar ticket
+                </button>
               </div>
             </div>
             <div className="bg-gray-50 rounded-xl p-4 mt-4">
