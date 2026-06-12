@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -135,8 +135,12 @@ export default function Soporte() {
           <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "1rem" }}>
             <textarea value={nuevoMensaje} onChange={e => setNuevoMensaje(e.target.value)} rows={3} placeholder="Escribe tu mensaje..." style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", resize: "none", boxSizing: "border-box", marginBottom: 8 }} />
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-              <input ref={fileRef} type="file" accept="image/*,video/*" onChange={e => setArchivo(e.target.files?.[0] ?? null)} style={{ fontSize: 11, color: "#888", flex: 1 }} />
-              {archivo && <span style={{ fontSize: 11, color: "#7c3aed", fontWeight: 700 }}>{archivo.name}</span>}
+              <input ref={fileRef} type="file" accept="image/*,video/*" onChange={e => setArchivo(e.target.files?.[0] ?? null)} style={{ display: "none" }} />
+              <button onClick={() => fileRef.current?.click()} type="button" style={{ display: "flex", alignItems: "center", gap: 6, background: "#f3f4f6", color: "#555", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                Adjuntar archivo
+              </button>
+              {archivo && <span style={{ fontSize: 11, color: "#7c3aed", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 150 }}>{archivo.name}</span>}
               <button onClick={handleEnviarReply} disabled={subiendo || (!nuevoMensaje.trim() && !archivo)} style={{ background: "#7c3aed", color: "#fff", border: "none", borderRadius: 8, padding: "8px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: subiendo ? 0.6 : 1 }}>
                 {subiendo ? "Enviando..." : "Enviar"}
               </button>
