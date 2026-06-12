@@ -89,7 +89,7 @@ export default function ClientDashboard() {
   );
 
   const totalPagado = pagos.filter(p => p.estado === "pagado").reduce((s, p) => s + Number(p.monto), 0);
-  const planActivo = suscripcion?.status === "active" ? suscripcion.plan : null;
+  const planActivo = suscripcion?.status === "active" ? suscripcion.plan : suscripcion?.status === "trial" ? "trial" : null;
   const rutasPermitidas = planActivo ? PLAN_ACCESO[planActivo] ?? [] : ["/dashboard/client", "/dashboard/client/suscripcion"];
   const diasRestantes = suscripcion?.current_period_end ? Math.max(0, Math.ceil((new Date(suscripcion.current_period_end).getTime() - Date.now()) / 86400000)) : 0;
 
@@ -158,6 +158,16 @@ export default function ClientDashboard() {
         )}
       </div>
 
+      {suscripcion?.status === "trial" && (
+        <div style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: 16, padding: "1.25rem 1.5rem", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase" as const, letterSpacing: 2, margin: "0 0 4px" }}>Prueba Gratuita</p>
+            <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>{Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000))} dias restantes</h3>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", margin: 0 }}>Activa un plan para publicar tu sitio y desbloquear todas las funciones.</p>
+          </div>
+          <Link href="/dashboard/client/suscripcion" style={{ background: "#fff", color: "#d97706", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 800, textDecoration: "none", flexShrink: 0 }}>Activar Plan</Link>
+        </div>
+      )}
       {planActivo === "basico" && (
         <div style={{ background: "linear-gradient(135deg, #7c3aed, #4f46e5)", borderRadius: 16, padding: "1.5rem", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
           <div>
@@ -200,4 +210,5 @@ export default function ClientDashboard() {
     </div>
   );
 }
+
 

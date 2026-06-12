@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ export default function RegisterPage() {
     setLoading(true);
     setError("");
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data: authData, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { name } },
@@ -26,6 +26,18 @@ export default function RegisterPage() {
       setError(error.message);
       setLoading(false);
       return;
+    }
+    if (authData.user) {
+      const trialStart = new Date();
+      const trialEnd = new Date();
+      trialEnd.setDate(trialEnd.getDate() + 7);
+      await supabase.from("subscriptions").insert({
+        user_id: authData.user.id,
+        plan: "trial",
+        status: "trial",
+        trial_start: trialStart.toISOString(),
+        trial_end: trialEnd.toISOString(),
+      });
     }
     router.push("/dashboard/client");
   }

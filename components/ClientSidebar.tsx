@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const PLAN_ACCESO: Record<string, string[]> = {
+  trial:       ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
   basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
   profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
   empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
@@ -74,7 +75,7 @@ export default function ClientSidebar() {
       const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       const { data: sub } = await supabase.from("subscriptions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
       setProfile(prof);
-      const planActivo = sub?.status === "active" ? sub.plan : null;
+      const planActivo = sub?.status === "active" ? sub.plan : sub?.status === "trial" ? "trial" : null;
       setPlan(planActivo ?? "");
       setRutasPermitidas(planActivo ? PLAN_ACCESO[planActivo] ?? [] : ["/dashboard/client", "/dashboard/client/suscripcion"]);
     }
@@ -184,5 +185,6 @@ export default function ClientSidebar() {
     </>
   );
 }
+
 
 
