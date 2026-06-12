@@ -750,11 +750,19 @@ export default function ClientBuilder() {
                   <p style={{ fontSize:12, color:"#aaa", marginBottom:12 }}>No tienes imagenes. Subelas en la seccion Galeria.</p>
                 ) : (
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 }}>
-                    {imagenes.map((img: any) => (
-                      <div key={img.id} onClick={() => setImages(prev => ({ ...prev, galeria: img.url }))} style={{ cursor:"pointer", borderRadius:8, overflow:"hidden", border: images.galeria === img.url ? `2px solid ${pr}` : "2px solid transparent" }}>
-                        <img src={img.url} alt={img.nombre} style={{ width:"100%", height:70, objectFit:"cover", display:"block" }} />
-                      </div>
-                    ))}
+                    {imagenes.map((img: any) => {
+                      const seleccionada = (images.galeria_imgs ?? []).includes(img.url);
+                      return (
+                        <div key={img.id} onClick={() => setImages(prev => {
+                          const actuales: string[] = prev.galeria_imgs ?? [];
+                          const nuevas = seleccionada ? actuales.filter(u => u !== img.url) : [...actuales, img.url];
+                          return { ...prev, galeria_imgs: nuevas };
+                        })} style={{ cursor:"pointer", borderRadius:8, overflow:"hidden", border: seleccionada ? `2px solid ${pr}` : "2px solid transparent", position:"relative" }}>
+                          <img src={img.url} alt={img.nombre} style={{ width:"100%", height:70, objectFit:"cover", display:"block" }} />
+                          {seleccionada && <div style={{ position:"absolute", top:4, right:4, width:18, height:18, borderRadius:"50%", background:pr, color:"#fff", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700 }}>OK</div>}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
                 <button onClick={() => { setImgTarget("galeria_new"); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width:"100%", padding:"8px", borderRadius:8, border:`1px dashed ${pr}`, background:`${pr}08`, color:pr, fontSize:12, fontWeight:600, cursor:"pointer" }}>
@@ -824,7 +832,7 @@ export default function ClientBuilder() {
               </div>
               <div style={{ marginTop: 16, borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
                 <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 10 }}>Secciones en Navbar</p>
-                {["nosotros","servicios","testimonios","faq","contacto"].map(sec => {
+                {["nosotros","servicios","galeria","testimonios","faq","contacto"].map(sec => {
                   const hidden = content.footer.navbar_hidden ?? [];
                   const isHidden = hidden.includes(sec);
                   return (
