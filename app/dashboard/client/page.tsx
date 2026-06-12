@@ -99,8 +99,8 @@ export default function ClientDashboard() {
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>Bienvenido, {profile?.name ?? "Cliente"}</h1>
-        <p style={{ color: "#888", fontSize: 13, margin: "4px 0 0" }}>Aqui puedes administrar todo tu sitio web y servicios.</p>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", margin: 0 }}>{suscripcion?.status === "trial" ? `Bienvenido a DMS, ${profile?.name ?? "Cliente"}` : `Bienvenido, ${profile?.name ?? "Cliente"}`}</h1>
+        <p style={{ color: "#888", fontSize: 13, margin: "4px 0 0" }}>{suscripcion?.status === "trial" ? "Tu prueba gratuita esta activa. Crea tu primer sitio web con IA y descubre todo el potencial de la plataforma durante los proximos 7 dias." : "Aqui puedes administrar todo tu sitio web y servicios."}</p>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginBottom: 24 }}>
@@ -164,7 +164,7 @@ export default function ClientDashboard() {
           <div>
             <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase" as const, letterSpacing: 2, margin: "0 0 4px" }}>Prueba Gratuita</p>
             <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>{Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000))} dias restantes</h3>
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", margin: 0 }}>Activa un plan para publicar tu sitio y desbloquear todas las funciones.</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", margin: 0 }}>Estas disfrutando de acceso completo durante tu prueba gratuita. Explora todas las herramientas de DMS y elige tu plan cuando estes listo.</p>
           </div>
           <Link href="/dashboard/client/suscripcion" style={{ background: "#fff", color: "#d97706", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 800, textDecoration: "none", flexShrink: 0 }}>Activar Plan</Link>
         </div>
