@@ -394,8 +394,10 @@ export default function Home() {
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-4 py-1 rounded-full font-semibold">Mas popular</span>
               )}
               <h3 className={`font-bold text-xl ${plan.popular ? "text-purple-600" : "text-gray-800"}`}>{plan.name}</h3>
-              <p className="text-4xl font-bold mt-4 text-gray-900">{plan.price}</p>
-              <p className="text-gray-400 text-sm mt-1">{plan.per}</p>
+              <div className="flex items-baseline gap-2 mt-4">
+                  <p className="text-4xl font-bold text-gray-900">{plan.price}</p>
+                  <p className="text-gray-400 text-sm">{plan.per}</p>
+                </div>
               <ul className="mt-6 space-y-2 text-sm text-gray-600 flex-1">
                 {plan.items.map((item) => (
                   <li key={item} className="flex items-center gap-2">
