@@ -15,8 +15,8 @@ const CAROUSEL_IMAGES = [
 const SERVICIOS = [
   {
     slug: "diseno-web",
-    title: "Diseno Web",
-    desc: "Landing pages, sitios corporativos y tiendas online modernas.",
+    title: "Sitios Web con IA",
+    desc: "Crea paginas web profesionales optimizadas para captar clientes en minutos.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
@@ -25,8 +25,8 @@ const SERVICIOS = [
   },
   {
     slug: "publicidad-digital",
-    title: "Publicidad Digital",
-    desc: "Facebook Ads, Instagram Ads y Google Ads que convierten.",
+    title: "Marketing y Captacion",
+    desc: "Genera mas oportunidades con herramientas de crecimiento digital.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
@@ -35,8 +35,8 @@ const SERVICIOS = [
   },
   {
     slug: "automatizacion-ia",
-    title: "Automatizacion IA",
-    desc: "Chatbots, flujos automaticos y asistentes inteligentes.",
+    title: "Automatizaciones Inteligentes",
+    desc: "Automatiza tareas repetitivas y responde clientes las 24 horas.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="5" r="2"/><path d="M8 11V9a4 4 0 0 1 8 0v2"/>
@@ -45,8 +45,8 @@ const SERVICIOS = [
   },
   {
     slug: "redes-sociales",
-    title: "Redes Sociales",
-    desc: "Gestion de contenido y crecimiento organico real.",
+    title: "Gestion de Clientes",
+    desc: "Organiza contactos, oportunidades y ventas desde un CRM integrado.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
@@ -283,8 +283,8 @@ export default function Home() {
 
       {/* SERVICIOS */}
       <section id="servicios" className="px-6 md:px-10 py-20 bg-gray-50">
-        <h2 className="text-3xl font-bold text-center mb-4">Nuestros Servicios</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Soluciones digitales completas para hacer crecer tu negocio.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">Todo lo que necesitas para crecer online</h2>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma.</p>
         <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {SERVICIOS.map((s) => (
             <div key={s.slug} className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col items-start gap-3">
@@ -299,16 +299,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* COMO TRABAJAMOS */}
+      {/* Como funciona DMS */}
       <section className="px-6 md:px-10 py-20">
-        <h2 className="text-3xl font-bold text-center mb-4">Como trabajamos</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Un proceso simple y transparente para que tu proyecto sea un exito.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">Como funciona DMS</h2>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Pon tu negocio online y comienza a captar clientes en pocos pasos.</p>
         <div className="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
           {[
-            { num: "01", title: "Elige un servicio", desc: "Explora nuestros servicios y encuentra el que necesitas." },
-            { num: "02", title: "Selecciona un plan", desc: "Escoge el plan que mejor se adapta a tu presupuesto." },
-            { num: "03", title: "Realiza el pago", desc: "Pago seguro con Mercado Pago. Sin contratos ni sorpresas." },
-            { num: "04", title: "Iniciamos tu proyecto", desc: "Nuestro equipo comienza a trabajar en menos de 24 horas." },
+            { num: "01", title: "Elige un plan", desc: "Selecciona la solucion ideal para tu negocio." },
+            { num: "02", title: "Crea tu sitio con IA", desc: "Genera una web profesional optimizada para convertir visitantes en clientes." },
+            { num: "03", title: "Activa tus herramientas", desc: "Conecta CRM, formularios, reservas y automatizaciones." },
+            { num: "04", title: "Comienza a vender", desc: "Gestiona clientes y haz crecer tu negocio desde una sola plataforma." },
           ].map((paso) => (
             <div key={paso.num} className="flex flex-col items-center text-center">
               <div className="w-14 h-14 rounded-2xl bg-purple-600 text-white text-xl font-bold flex items-center justify-center mb-4">{paso.num}</div>
@@ -319,7 +319,7 @@ export default function Home() {
         </div>
         <div className="text-center mt-12">
           <Link href="/planes" className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
-            Ver planes y precios
+            Comenzar ahora
           </Link>
         </div>
       </section>
@@ -361,10 +361,10 @@ export default function Home() {
             </span>
           </div>
           <h2 style={{ fontWeight: 800, fontSize: "clamp(24px,4vw,36px)", textAlign: "center", marginBottom: 12, color: "#111" }}>
-            Sitios web que creamos para nuestros clientes
+            Sitios web generados con IA
           </h2>
           <p style={{ textAlign: "center", color: "#666", fontSize: 16, marginBottom: 52, maxWidth: 560, margin: "0 auto 52px" }}>
-            Cada sitio es disenado y generado con inteligencia artificial en minutos, listo para publicar.
+            Explora ejemplos de sitios creados con IA y listos para impulsar negocios reales.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
             {SITIOS_IA.map((sitio, i) => (
@@ -453,7 +453,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto space-y-4">
           {[
             { q: "Cuanto cuesta una suscripcion mensual?", a: "Tenemos tres planes: Basico a $49.000 COP/mes (1 landing page), Profesional a $99.000 COP/mes (sitio completo con dominio y SEO) y Empresarial a $199.000 COP/mes (hasta 3 sitios con CRM y automatizacion IA). Sin contratos de permanencia." },
-            { q: "En cuanto tiempo entregan el proyecto?", a: "Una landing page basica en 7 dias habiles. Un sitio corporativo completo entre 15 y 25 dias. Trabajamos con cronogramas claros y sin sorpresas." },
+            { q: "En cuanto tiempo entregan el proyecto?", a: "Los sitios web pueden generarse en minutos utilizando nuestra tecnologia de IA. Dependiendo de la personalizacion requerida, algunos proyectos pueden requerir ajustes adicionales." },
             { q: "Necesito conocimientos tecnicos para administrar mi sitio?", a: "No. Te entregamos tu sitio listo y te damos capacitacion para que puedas actualizar contenidos basicos sin necesidad de saber programacion." },
             { q: "Que incluye el servicio de publicidad digital?", a: "Creacion y gestion de campanas en Facebook, Instagram o Google. Incluye diseno de anuncios, segmentacion, optimizacion semanal y reporte mensual de resultados." },
             { q: "Puedo contratar solo un servicio especifico?", a: "Si. Puedes contratar diseno web, publicidad digital, redes sociales o automatizacion IA de forma independiente o combinarlos segun tus necesidades." },
