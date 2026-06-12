@@ -111,7 +111,7 @@ export default function ClientBuilder() {
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [primaryColor, setPrimaryColor] = useState("#7c3aed");
   const [secondaryColor, setSecondaryColor] = useState("#000000");
-  const [images, setImages] = useState<Record<string, string>>({});
+  const [images, setImages] = useState<Record<string, any>>({});
   const [imgTarget, setImgTarget] = useState("");
   const [imagenes, setImagenes] = useState<any[]>([]);
   const [form, setForm] = useState({
