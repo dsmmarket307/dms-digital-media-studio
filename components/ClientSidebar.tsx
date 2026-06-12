@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -27,6 +27,7 @@ const icons: Record<string, React.ReactElement> = {
   stats:    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
   factura:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
   suscrip:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
+  ayuda:    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17"/></svg>,
   soporte:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
 };
 
@@ -54,6 +55,7 @@ const MENU_EMPRESARIAL: any[] = [
   { href: "/dashboard/client/facturacion", label: "Facturacion", icon: "factura" },
   { href: "/dashboard/client/suscripcion", label: "Mi Suscripcion", icon: "suscrip" },
   { href: "/dashboard/client/soporte", label: "Soporte", icon: "soporte" },
+  { href: "/dashboard/client/centro-ayuda", label: "Centro de Ayuda", icon: "ayuda" },
 ];
 
 export default function ClientSidebar() {
