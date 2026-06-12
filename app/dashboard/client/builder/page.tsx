@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -158,6 +158,7 @@ export default function ClientBuilder() {
   }, []);
 
   const planActivo = suscripcion?.status === "active" ? (suscripcion.plan ?? "basico") : "basico";
+  const puedePublicar = suscripcion?.status === "active";
   const rutasPermitidas = PLAN_ACCESO[planActivo] ?? ["/dashboard/client", "/dashboard/client/suscripcion"];
   const sections = planActivo === "empresarial" ? SECTIONS_EMPRESARIAL : planActivo === "profesional" ? SECTIONS_PROFESIONAL : SECTIONS_BASICO;
   const canAddRemove = planActivo === "profesional" || planActivo === "empresarial";
@@ -530,7 +531,7 @@ export default function ClientBuilder() {
           <button onClick={() => handleSave(false)} disabled={saving} style={{ background: saved ? "#10b981" : "#f3f4f6", color: saved ? "#fff" : "#555", border:"none", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:700, cursor:"pointer" }}>
             {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
           </button>
-          <button onClick={() => handleSave(true)} style={{ background:pr, color:"#fff", border:"none", borderRadius:8, padding:"6px 14px", fontSize:12, fontWeight:700, cursor:"pointer" }}>Publicar</button>
+          <button onClick={() => puedePublicar ? handleSave(true) : alert("Activa un plan para publicar tu sitio.")} style={{ background: puedePublicar ? pr : "#ccc", color:"#fff", border:"none", borderRadius:8, padding:"6px 14px", fontSize:12, fontWeight:700, cursor:"pointer" }}>Publicar</button>
         </div>
       </div>
 
@@ -857,6 +858,7 @@ export default function ClientBuilder() {
     </div>
   );
 }
+
 
 
 

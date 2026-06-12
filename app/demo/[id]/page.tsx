@@ -64,6 +64,8 @@ export default async function DemoPage({ params }: Props) {
   const trialVencido = sub?.status === "trial" && sub?.trial_end && new Date(sub.trial_end) < new Date();
   const sinPlan = !sub;
 
+  const trialActivo = sub?.status === "trial" && sub?.trial_end && new Date(sub.trial_end) >= new Date();
+
   if (trialVencido || sinPlan) {
     return (
       <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
@@ -136,6 +138,12 @@ export default async function DemoPage({ params }: Props) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
+      {trialActivo && (
+        <div style={{ background: "#7c3aed", color: "#fff", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, position: "sticky", top: 0, zIndex: 999 }}>
+          <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa — Activa un plan para publicar tu sitio con tu dominio personalizado</span>
+          <a href="https://dms-digital-media-studio.vercel.app/dashboard/client/suscripcion" style={{ background: "#fff", color: "#7c3aed", padding: "6px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Activar Plan</a>
+        </div>
+      )}
       <nav>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {logo && <img src={logo} alt="logo" style={{ height: 50, objectFit: "contain" }} />}
@@ -328,3 +336,5 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
+
