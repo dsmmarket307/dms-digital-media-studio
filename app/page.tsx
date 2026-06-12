@@ -265,18 +265,18 @@ export default function Home() {
       {/* HERO */}
       <section id="inicio" className="flex flex-col items-center text-center px-6 py-24">
         <h1 className="text-4xl md:text-6xl font-bold max-w-4xl">
-          Impulsamos negocios con
-          <span className="text-purple-600"> tecnologia, marketing e inteligencia artificial</span>
+          Tu negocio digital completo en
+          <span className="text-purple-600"> minutos</span>
         </h1>
         <p className="text-gray-500 mt-6 max-w-2xl">
-          Creamos paginas web, automatizaciones, campanas publicitarias y estrategias digitales para aumentar tus ventas.
+          Crea tu pagina web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma.
         </p>
         <div className="flex flex-col md:flex-row gap-4 mt-10">
           <Link href="#contacto" className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
-            Solicitar asesoria
+            Crear mi negocio digital
           </Link>
           <Link href="/servicios" className="border border-gray-300 px-8 py-3 rounded-lg hover:border-purple-600 hover:text-purple-600 transition-colors">
-            Ver servicios
+            Ver como funciona
           </Link>
         </div>
       </section>
