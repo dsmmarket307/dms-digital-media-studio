@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function SoporteAdmin() {
   const router = useRouter();
@@ -137,18 +136,10 @@ export default function SoporteAdmin() {
     return (
       <div className="min-h-screen bg-gray-50">
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-          <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image src="/logo-dms.png" alt="DMS" width={120} height={38} />
-              <span className="text-xs bg-purple-100 text-purple-700 font-semibold px-3 py-1 rounded-full">Soporte</span>
-            </div>
-            <button onClick={() => { setTicketAbierto(null); setReplies([]); }} className="text-sm text-gray-500 hover:text-purple-600 transition-colors">
-              &larr; Volver a tickets
-            </button>
-          </div>
-        </header>
         <main className="max-w-3xl mx-auto px-6 py-8">
+          <button onClick={() => { setTicketAbierto(null); setReplies([]); }} className="text-sm text-gray-500 hover:text-purple-600 transition-colors mb-4 inline-block">
+            &larr; Volver a tickets
+          </button>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
             <div className="flex items-start justify-between flex-wrap gap-2">
               <div>
@@ -233,15 +224,6 @@ export default function SoporteAdmin() {
   return (
     <div className="min-h-screen bg-gray-50">
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image src="/logo-dms.png" alt="DMS" width={120} height={38} />
-            <span className="text-xs bg-purple-100 text-purple-700 font-semibold px-3 py-1 rounded-full">Soporte</span>
-          </div>
-          <a href="/dashboard/admin" className="text-sm text-gray-500 hover:text-purple-600 transition-colors">Volver al admin</a>
-        </div>
-      </header>
       <main className="max-w-5xl mx-auto px-6 py-10">
         <div className="mb-8 flex items-start justify-between flex-wrap gap-4">
           <div>
