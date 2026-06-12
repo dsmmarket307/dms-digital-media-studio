@@ -100,7 +100,7 @@ export default function ClientSidebar() {
               <p key={idx} style={{ fontSize: 9, fontWeight: 800, color: "#aaa", textTransform: "uppercase" as const, letterSpacing: 2, padding: "14px 12px 4px", margin: 0 }}>{item.section}</p>
             );
           }
-          const permitido = rutasPermitidas.includes(item.href);
+          const permitido = rutasPermitidas.includes(item.href) || item.href === "/dashboard/client/centro-ayuda";
           const activo = pathname === item.href;
           if (permitido) {
             return (

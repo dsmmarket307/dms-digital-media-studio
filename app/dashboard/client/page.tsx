@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ const MENU = [
   { href: "/dashboard/client/facturacion", label: "Facturacion" },
   { href: "/dashboard/client/soporte", label: "Soporte" },
   { href: "/dashboard/client/suscripcion", label: "Mi Suscripcion" },
+  { href: "/dashboard/client/centro-ayuda", label: "Centro de Ayuda" },
 ];
 
 const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
@@ -191,7 +192,7 @@ export default function ClientDashboard() {
       <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 14 }}>Accesos rapidos</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
         {MENU.map(item => {
-          const permitido = rutasPermitidas.includes(item.href);
+          const permitido = rutasPermitidas.includes(item.href) || item.href === "/dashboard/client/centro-ayuda";
           if (permitido) {
             return (
               <Link key={item.href} href={item.href} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: "16px", display: "flex", alignItems: "center", justifyContent: "space-between", textDecoration: "none", color: "#111", fontSize: 13, fontWeight: 600 }}>
