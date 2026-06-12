@@ -217,7 +217,7 @@ export default function SuscripcionPage() {
           <div style={{ marginTop: 24 }}>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 16 }}>Planes disponibles</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
-              {PLANES.map(p => (
+              {PLANES.filter(p => { if (suscripcion?.status === "active" && suscripcion?.plan === "basico") return p.slug !== "basico"; if (suscripcion?.status === "active" && suscripcion?.plan === "profesional") return p.slug === "empresarial"; return true; }).map(p => (
                 <div key={p.slug} style={{ background: "#fff", borderRadius: 16, padding: 20, border: p.slug === "profesional" ? "2px solid #7c3aed" : "1px solid #e8e8e8", position: "relative" }}>
                   {p.slug === "profesional" && (
                     <span style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#7c3aed", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 10px", borderRadius: 999 }}>MAS POPULAR</span>
