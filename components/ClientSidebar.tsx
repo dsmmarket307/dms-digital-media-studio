@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -63,6 +63,9 @@ export default function ClientSidebar() {
   const [plan, setPlan] = useState<string>("");
   const [rutasPermitidas, setRutasPermitidas] = useState<string[]>(["/dashboard/client", "/dashboard/client/suscripcion"]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md");
+  const fontSizeMap = { sm: 11, md: 13, lg: 15 };
+  const fs = fontSizeMap[fontSize];
 
   useEffect(() => {
     async function load() {
@@ -98,14 +101,14 @@ export default function ClientSidebar() {
           const activo = pathname === item.href;
           if (permitido) {
             return (
-              <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10, textDecoration: "none", fontSize: 13, fontWeight: activo ? 700 : 500, color: activo ? "#7c3aed" : "#555", background: activo ? "rgba(124,58,237,0.08)" : "transparent", borderLeft: activo ? "3px solid #7c3aed" : "3px solid transparent" }}>
+              <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 10, textDecoration: "none", fontSize: fs, fontWeight: activo ? 700 : 500, color: activo ? "#7c3aed" : "#555", background: activo ? "rgba(124,58,237,0.08)" : "transparent", borderLeft: activo ? "3px solid #7c3aed" : "3px solid transparent" }}>
                 <span style={{ color: activo ? "#7c3aed" : "#888", flexShrink: 0 }}>{icons[item.icon]}</span>
                 {item.label}
               </Link>
             );
           }
           return (
-            <div key={item.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "9px 12px", borderRadius: 10, color: "#ccc", fontSize: 13, fontWeight: 500, cursor: "not-allowed" }}>
+            <div key={item.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "9px 12px", borderRadius: 10, color: "#ccc", fontSize: fs, fontWeight: 500, cursor: "not-allowed" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{ color: "#ddd", flexShrink: 0 }}>{icons[item.icon]}</span>
                 <span>{item.label}</span>
@@ -115,6 +118,12 @@ export default function ClientSidebar() {
           );
         })}
       </nav>
+      <div style={{ padding: "8px 14px", display: "flex", alignItems: "center", gap: 6, borderTop: "1px solid #f0f0f0" }}>
+        <span style={{ fontSize: 11, color: "#999", marginRight: 4 }}>Texto:</span>
+        {(["sm","md","lg"] as const).map(s => (
+          <button key={s} onClick={() => setFontSize(s)} style={{ padding: "3px 9px", borderRadius: 8, border: "1px solid", borderColor: fontSize===s ? "#7c3aed" : "rgba(124,58,237,0.2)", background: fontSize===s ? "rgba(124,58,237,0.12)" : "transparent", color: fontSize===s ? "#7c3aed" : "#888", cursor: "pointer", fontSize: s==="sm" ? 10 : s==="md" ? 13 : 16, fontWeight: fontSize===s ? 700 : 400 }}>A</button>
+        ))}
+      </div>
       <div style={{ padding: "12px 16px", borderTop: "1px solid #f0f0f0" }}>
         {plan && (
           <div style={{ background: "rgba(124,58,237,0.08)", borderRadius: 8, padding: "5px 10px", marginBottom: 10, textAlign: "center" }}>
@@ -130,7 +139,10 @@ export default function ClientSidebar() {
             <p style={{ fontSize: 11, color: "#999", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>{profile?.email}</p>
           </div>
         </div>
-        <button onClick={handleLogout} style={{ width: "100%", background: "none", border: "none", textAlign: "left", fontSize: 13, color: "#ef4444", cursor: "pointer", padding: "6px 0", fontWeight: 600 }}>Cerrar sesion</button>
+        <button onClick={handleLogout} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, textAlign: "left", fontSize: 13, color: "#ef4444", cursor: "pointer", padding: "9px 0", fontWeight: 700 }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesion
+        </button>
       </div>
     </>
   );
