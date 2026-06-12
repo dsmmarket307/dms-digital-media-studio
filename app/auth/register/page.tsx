@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -49,8 +49,8 @@ export default function RegisterPage() {
           <Image src="/logo-dms.png" alt="DMS Digital Media Studio" width={160} height={52} priority />
         </div>
         <div className="border border-gray-200 rounded-2xl p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Crear cuenta</h1>
-          <p className="text-gray-500 text-sm mb-6">Accede a tu panel de cliente</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Crea tu cuenta gratis</h1>
+          <p className="text-gray-500 text-sm mb-6">Prueba DMS durante 7 dias y crea tu sitio web con IA, CRM y automatizaciones.</p>
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">
               {error}
@@ -70,7 +70,7 @@ export default function RegisterPage() {
               <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-600" placeholder="Minimo 6 caracteres" />
             </div>
             <button type="submit" disabled={loading} className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:opacity-50">
-              {loading ? "Creando cuenta..." : "Crear cuenta"}
+              {loading ? "Creando cuenta..." : "Comenzar prueba gratuita"}
             </button>
           </form>
           <p className="text-center text-sm text-gray-500 mt-6">
