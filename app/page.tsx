@@ -420,12 +420,12 @@ export default function Home() {
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Resultados reales de negocios que confiaron en nosotros.</p>
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {[
-            { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "En menos de 30 dias duplicamos las reservas gracias a la pagina web y las campanas de publicidad. El equipo de DMS es increible.", inicial: "C" },
-            { nombre: "Maria Gonzalez", cargo: "Directora, Clinica Estetica Cali", texto: "El chatbot de WhatsApp atiende a nuestros clientes las 24 horas. Ya no perdemos consultas por no responder rapido. Totalmente recomendado.", inicial: "M" },
-            { nombre: "Andres Torres", cargo: "Gerente, Inmobiliaria El Dorado", texto: "Nuestra presencia en redes sociales crecio un 400% en 3 meses. Los clientes nos buscan solos. DMS transformo nuestro negocio digital.", inicial: "A" },
-            { nombre: "Laura Ospina", cargo: "Emprendedora, Boutique Moda", texto: "La tienda online que me crearon vende todos los dias. El proceso fue rapido y profesional. Mi negocio nunca habia vendido tanto.", inicial: "L" },
-            { nombre: "Ricardo Mejia", cargo: "Abogado, Firma Mejia y Asociados", texto: "Teniamos miedo de invertir en digital pero los resultados hablan solos. En 60 dias conseguimos 15 clientes nuevos desde Google.", inicial: "R" },
-            { nombre: "Sandra Perez", cargo: "Gerente, Spa Zen Bogota", texto: "El sitio web que nos disenaron es exactamente lo que necesitabamos. Elegante, rapido y nuestros clientes lo adoran.", inicial: "S" },
+            { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "Cree mi sitio web en minutos con la IA de DMS. En 30 dias ya tenia reservas online todos los dias.", inicial: "C" },
+            { nombre: "Maria Gonzalez", cargo: "Directora, Clinica Estetica Cali", texto: "El agente IA atiende a mis clientes las 24 horas. Ya no pierdo consultas por no responder rapido.", inicial: "M" },
+            { nombre: "Andres Torres", cargo: "Gerente, Inmobiliaria El Dorado", texto: "El CRM me ayuda a hacer seguimiento a cada cliente. Cerre 15 negocios en 2 meses desde que use DMS.", inicial: "A" },
+            { nombre: "Laura Ospina", cargo: "Emprendedora, Boutique Moda", texto: "En menos de 10 minutos tenia mi landing page lista. Mis clientes me dicen que se ve muy profesional.", inicial: "L" },
+            { nombre: "Ricardo Mejia", cargo: "Abogado, Firma Mejia y Asociados", texto: "Mi sitio aparece en Google y los clientes me encuentran solos. DMS cambio mi negocio completamente.", inicial: "R" },
+            { nombre: "Sandra Perez", cargo: "Gerente, Spa Zen Bogota", texto: "El formulario de reservas y la galeria de fotos hicieron que mis ventas subieran un 40% el primer mes.", inicial: "S" },
           ].map((t) => (
             <div key={t.nombre} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex mb-4">
@@ -454,12 +454,12 @@ export default function Home() {
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Todo lo que necesitas saber antes de empezar.</p>
         <div className="max-w-3xl mx-auto space-y-4">
           {[
-            { q: "Cuanto cuesta una suscripcion mensual?", a: "Tenemos tres planes: Basico a $49.000 COP/mes (1 landing page), Profesional a $99.000 COP/mes (sitio completo con dominio y SEO) y Empresarial a $199.000 COP/mes (hasta 3 sitios con CRM y automatizacion IA). Sin contratos de permanencia." },
-            { q: "En cuanto tiempo entregan el proyecto?", a: "Los sitios web pueden generarse en minutos utilizando nuestra tecnologia de IA. Dependiendo de la personalizacion requerida, algunos proyectos pueden requerir ajustes adicionales." },
-            { q: "Necesito conocimientos tecnicos para administrar mi sitio?", a: "No. Te entregamos tu sitio listo y te damos capacitacion para que puedas actualizar contenidos basicos sin necesidad de saber programacion." },
-            { q: "Que incluye el servicio de publicidad digital?", a: "Creacion y gestion de campanas en Facebook, Instagram o Google. Incluye diseno de anuncios, segmentacion, optimizacion semanal y reporte mensual de resultados." },
-            { q: "Puedo contratar solo un servicio especifico?", a: "Si. Puedes contratar diseno web, publicidad digital, redes sociales o automatizacion IA de forma independiente o combinarlos segun tus necesidades." },
-            { q: "Como funciona el pago?", a: "Aceptamos pagos seguros a traves de Mercado Pago. Los planes mensuales se cobran automaticamente. Para proyectos grandes manejamos cuotas acordadas previamente." },
+            { q: "Cuanto cuesta usar DMS?", a: "Los planes van desde $49.000/mes. Todos incluyen 7 dias de prueba gratis sin necesidad de tarjeta de credito." },
+            { q: "En cuanto tiempo puedo tener mi sitio web listo?", a: "Con nuestro constructor de IA tu sitio puede estar listo en minutos. Solo describes tu negocio y la IA genera todo automaticamente." },
+            { q: "Necesito conocimientos tecnicos?", a: "No. DMS esta disenado para que cualquier persona pueda crear y gestionar su sitio sin saber programacion." },
+            { q: "Que incluye el plan Profesional?", a: "Sitio completo, editor profesional, galeria, SEO basico, formulario de contacto, reservas, dominio personalizado y leads integrados. Todo desde $99.000/mes." },
+            { q: "Puedo cancelar cuando quiera?", a: "Si. No hay contratos de permanencia. Cancelas cuando quieras desde tu panel sin ninguna penalizacion." },
+            { q: "Como funciona el pago?", a: "Los pagos son mensuales a traves de Mercado Pago. Los primeros 7 dias son completamente gratis, luego se cobra automaticamente segun el plan elegido." },
           ].map((faq, i) => (
             <div key={i} className="border border-gray-200 rounded-2xl p-6 hover:border-purple-300 transition-colors">
               <p className="font-bold text-gray-900 mb-2">{faq.q}</p>
