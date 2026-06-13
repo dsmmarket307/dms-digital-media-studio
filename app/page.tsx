@@ -472,8 +472,8 @@ export default function Home() {
       {/* CONTACTO */}
       <section id="contacto" className="px-6 md:px-10 py-20">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">Solicita una asesoria</h2>
-          <p className="text-center text-gray-500 mb-10">Cuentanos tu proyecto y te respondemos en menos de 24 horas.</p>
+          <h2 className="text-3xl font-bold text-center mb-4">Tienes dudas? Hablemos</h2>
+          <p className="text-center text-gray-500 mb-10">Escribenos y te ayudamos a elegir el plan ideal para tu negocio en menos de 24 horas.</p>
           <form onSubmit={enviarFormulario} className="space-y-4">
             <input type="text" placeholder="Nombre" required value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-purple-600" />
             <input type="email" placeholder="Correo electronico" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-purple-600" />
