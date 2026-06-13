@@ -24,17 +24,17 @@ export default function PortafolioPage() {
         </nav>
         <div className="flex items-center gap-3">
           <Link href="/auth/login" className="text-sm text-gray-600 hover:text-purple-600 font-medium">Ingresar</Link>
-          <Link href="/auth/register" className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-colors">Registrarse</Link>
+          <Link href="/auth/register" className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-colors">Comienza gratis</Link>
         </div>
       </header>
 
       <section className="text-center px-6 py-20 bg-gray-50 border-b">
-        <p className="text-sm font-semibold text-purple-600 uppercase tracking-widest mb-3">Nuestro trabajo</p>
+        <p className="text-sm font-semibold text-purple-600 uppercase tracking-widest mb-3">Generado con IA</p>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 max-w-2xl mx-auto leading-tight">
-          Proyectos que generan resultados reales
+          Sitios web generados con IA
         </h1>
         <p className="text-gray-500 mt-4 max-w-xl mx-auto">
-          Cada proyecto es una historia de exito. Conoce algunos de los trabajos que hemos realizado.
+          Explora ejemplos de sitios creados con IA y listos para impulsar negocios reales.
         </p>
       </section>
 
@@ -56,11 +56,11 @@ export default function PortafolioPage() {
       </section>
 
       <section className="bg-purple-600 px-6 py-16 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">Tu proyecto podria ser el siguiente</h2>
-        <p className="text-purple-200 mb-8 max-w-xl mx-auto">Trabajemos juntos para crear algo increible para tu negocio.</p>
+        <h2 className="text-3xl font-bold text-white mb-4">Crea tu sitio web hoy</h2>
+        <p className="text-purple-200 mb-8 max-w-xl mx-auto">Activa tu prueba gratuita y genera tu sitio web con IA en minutos.</p>
         <div className="flex flex-col md:flex-row gap-4 justify-center">
           <Link href="/planes" className="bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:bg-purple-50 transition-colors">
-            Ver planes y precios
+            Comenzar gratis
           </Link>
           <Link href="/#contacto" className="border border-white text-white px-8 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors">
             Hablar con un asesor
