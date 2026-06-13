@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import Image from "next/image";
 
 const PLANES = [
@@ -8,7 +8,7 @@ const PLANES = [
     price: 49000,
     per: "mes",
     desc: "Ideal para negocios que quieren presencia digital profesional desde cero.",
-    items: ["1 Landing Page activa", "Boton WhatsApp", "Formulario de contacto", "Diseno responsive", "Subdominio DMS", "Soporte basico"],
+    items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"],
     popular: false,
     color: "#6366f1",
     limit: "1 sitio activo",
@@ -19,7 +19,7 @@ const PLANES = [
     price: 99000,
     per: "mes",
     desc: "Para empresas que necesitan un sitio completo con posicionamiento en Google.",
-    items: ["1 Sitio profesional activo", "Editor Visual", "SEO basico", "Formularios avanzados", "Dominio personalizado", "Leads integrados"],
+    items: ["1 Sitio profesional", "Editor Profesional", "Diseno Responsive", "Galeria de imagenes", "SEO basico", "Formulario de contacto", "Reservas", "Dominio personalizado", "Leads integrados"],
     popular: true,
     color: "#7c3aed",
     limit: "1 sitio activo",
@@ -30,7 +30,7 @@ const PLANES = [
     price: 199000,
     per: "mes",
     desc: "Solucion completa con hasta 3 sitios, CRM, IA y soporte prioritario.",
-    items: ["Hasta 3 sitios activos", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"],
+    items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"],
     popular: false,
     color: "#0f172a",
     limit: "3 sitios activos",

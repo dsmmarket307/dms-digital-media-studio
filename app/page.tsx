@@ -385,9 +385,9 @@ export default function Home() {
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.</p>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {[
-            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", popular: false, items: ["1 Landing Page activa", "Boton WhatsApp", "Formulario de contacto", "Diseno responsive", "Subdominio DMS", "Soporte basico"] },
-            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", popular: true, items: ["1 Sitio profesional", "Editor Visual", "SEO basico", "Formularios avanzados", "Dominio personalizado", "Leads integrados"] },
-            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", popular: false, items: ["Hasta 3 sitios activos", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"] },
+            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", popular: false, items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"] },
+            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", popular: true, items: ["1 Sitio profesional", "Editor Profesional", "Diseno Responsive", "Galeria de imagenes", "SEO basico", "Formulario de contacto", "Reservas", "Dominio personalizado", "Leads integrados"] },
+            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", popular: false, items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"] },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-xl p-8 flex flex-col relative bg-white ${plan.popular ? "border-2 border-purple-600 shadow-lg" : "border border-gray-200 hover:shadow-lg transition-shadow"}`}>
               {plan.popular && (
