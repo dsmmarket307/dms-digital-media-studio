@@ -30,7 +30,7 @@ const PLANES = [
     price: 199000,
     per: "mes",
     desc: "Solucion completa con hasta 3 sitios, CRM, IA y soporte prioritario.",
-    items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"],
+    items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Estadisticas", "Dominios personalizados", "Soporte prioritario"],
     popular: false,
     color: "#0f172a",
     limit: "3 sitios activos",

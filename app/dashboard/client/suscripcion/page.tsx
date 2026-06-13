@@ -7,7 +7,7 @@ import Link from "next/link";
 const PLANES = [
   { slug: "basico",      name: "Basico",      price: 49000,  items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"] },
   { slug: "profesional", name: "Profesional", price: 99000,  items: ["1 Sitio profesional", "Editor Profesional", "Diseno Responsive", "Galeria de imagenes", "SEO basico", "Formulario de contacto", "Reservas", "Dominio personalizado", "Leads integrados"] },
-  { slug: "empresarial", name: "Empresarial", price: 199000, items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Dominios personalizados", "Soporte prioritario"] },
+  { slug: "empresarial", name: "Empresarial", price: 199000, items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Estadisticas", "Dominios personalizados", "Soporte prioritario"] },
 ];
 
 const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
