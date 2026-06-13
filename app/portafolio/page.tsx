@@ -2,10 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 
 const PROYECTOS = [
-  { title: "Tienda Online Moda", categoria: "Diseno Web", img: "/carousel-1.png", desc: "E-commerce completo con pasarela de pagos y gestion de inventario." },
-  { title: "Campana Google Ads", categoria: "Publicidad Digital", img: "/carousel-2.png", desc: "Campana publicitaria con ROI del 300% en el primer mes." },
-  { title: "Chatbot IA WhatsApp", categoria: "Automatizacion IA", img: "/carousel-3.png", desc: "Asistente virtual que atiende 200 clientes diarios automaticamente." },
-  { title: "Estrategia Redes Sociales", categoria: "Redes Sociales", img: "/carousel-4.png", desc: "Crecimiento de 5.000 seguidores organicos en 3 meses." },
+  { title: "Aura Spa & Wellness", categoria: "Spa / Bienestar", img: "/sitio-spa.webp", desc: "Sitio web generado con IA en minutos. Reservas online y galeria de servicios." },
+  { title: "Restaurante La Brasa", categoria: "Gastronomia", img: "/sitio-restaurante.webp", desc: "Presencia digital completa con menu, reservas y formulario de contacto." },
+  { title: "Tu Sonrisa", categoria: "Salud / Dental", img: "/sitio-dental.webp", desc: "Sitio profesional con agenda de citas y galeria de tratamientos." },
+  { title: "Carlos Inmobiliaria", categoria: "Inmobiliaria", img: "/sitio-inmobiliaria.webp", desc: "Plataforma de propiedades con formulario de contacto y CRM integrado." },
+  { title: "Moto Rize", categoria: "Automotriz", img: "/sitio-moto.webp", desc: "Sitio automotriz con catalogo de productos y boton WhatsApp." },
+  { title: "Santo Abogados", categoria: "Legal / Abogados", img: "/sitio-abogados.webp", desc: "Presencia digital profesional con formulario de consulta y SEO optimizado." },
 ];
 
 export default function PortafolioPage() {
