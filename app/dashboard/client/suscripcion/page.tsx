@@ -213,7 +213,7 @@ export default function SuscripcionPage() {
           </>
         )}
 
-        {(!suscripcion || suscripcion.status === "expired" || suscripcion.status === "cancelled" || suscripcion.status === "trial") && (
+        {(!suscripcion || suscripcion.status === "expired" || suscripcion.status === "cancelled" || suscripcion.status === "trial" || suscripcion.status === "active") && (
           <div style={{ marginTop: 24 }}>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 16 }}>Planes disponibles</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
