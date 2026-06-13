@@ -219,7 +219,7 @@ export default function Home() {
             Ingresar
           </Link>
           <Link href="/auth/register" style={{ background: "#7c3aed", color: "#fff", padding: "9px 22px", borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: "none" }} className="hidden md:block hover:opacity-90 transition-opacity">
-            Registrarse
+            Comienza gratis
           </Link>
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2.5">
@@ -248,7 +248,7 @@ export default function Home() {
           ))}
           <hr style={{ borderColor: "#f0f0f0" }} />
           <Link href="/auth/login" onClick={() => setMenuOpen(false)} style={{ fontSize: 14, fontWeight: 700, color: "#444", textDecoration: "none" }}>Ingresar</Link>
-          <Link href="/auth/register" onClick={() => setMenuOpen(false)} style={{ background: "#7c3aed", color: "#fff", padding: "10px 0", borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>Registrarse</Link>
+          <Link href="/auth/register" onClick={() => setMenuOpen(false)} style={{ background: "#7c3aed", color: "#fff", padding: "10px 0", borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>Comienza gratis</Link>
         </div>
       )}
 
