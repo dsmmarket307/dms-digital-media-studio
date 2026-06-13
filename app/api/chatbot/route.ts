@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 const CATEGORIAS = [
@@ -144,6 +144,30 @@ Analiza el mensaje y responde SOLO con JSON valido sin texto adicional:
       }).select().single();
 
       return NextResponse.json({ success: true, demo_id: website?.id });
+    }
+
+    // CHAT ASESOR DE VENTAS
+    if (action === "chat") {
+      const { messages, lead_nombre } = body;
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: `Eres Sofia, asesora de ventas de DMS Digital Media Studio, una plataforma SaaS para digitalizar negocios. Eres amable, directa y experta en ventas consultivas. Respondes en espanol, de forma corta y natural, como si fuera WhatsApp. Maximo 2 oraciones por respuesta. No uses listas ni bullets. Tu objetivo es entender la necesidad del cliente y llevarlo a elegir un plan. Los planes son: Basico 49000 pesos mes: 1 landing page, editor basico, diseno responsive, boton WhatsApp, subdominio DMS. Profesional 99000 pesos mes: sitio completo, editor profesional, galeria, SEO, formulario, reservas, dominio propio, leads. Empresarial 199000 pesos mes: sitios ilimitados, editor avanzado, SEO avanzado, CRM, automatizaciones IA, agente IA, estadisticas. Todos incluyen 7 dias de prueba gratis. El cliente se llama ${lead_nombre}.`
+            },
+            ...messages
+          ],
+          temperature: 0.7,
+          max_tokens: 150,
+        }),
+      });
+      const data = await res.json();
+      const reply = data.choices[0]?.message?.content ?? "Claro, en que te puedo ayudar?";
+      return NextResponse.json({ reply });
     }
 
     return NextResponse.json({ error: "Accion no valida" }, { status: 400 });

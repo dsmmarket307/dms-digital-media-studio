@@ -15,11 +15,13 @@ const MENU = [
 ];
 
 type Msg = { role: "bot" | "user"; text?: string; type?: string };
-type Step = "ask_name" | "ask_celular" | "ask_email" | "menu" | "show_planes" | "asesoria" | "done";
+type ChatMsg = { role: "user" | "assistant"; content: string };
+type Step = "ask_name" | "ask_celular" | "ask_email" | "menu" | "show_planes" | "chat" | "done";
 
 export default function ChatbotDMS() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [step, setStep] = useState<Step>("ask_name");
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,7 @@ export default function ChatbotDMS() {
     if (open) {
       setUnread(0);
       if (msgs.length === 0) {
-        setTimeout(() => addBot("Hola! Soy Sofia, asesora de DMS. Me alegra que estes aqui. Como te llamas?"), 400);
+        setTimeout(() => addBot("Hola! Soy Sofia, asesora de DMS. Como te llamas?"), 400);
       }
     }
   }, [open]);
@@ -50,14 +52,25 @@ export default function ChatbotDMS() {
     setMsgs(m => [...m, { role: "user", text }]);
   }
 
-  async function saveLead() {
+  async function chatWithSofia(userMsg: string) {
+    const newHistory: ChatMsg[] = [...chatHistory, { role: "user", content: userMsg }];
+    setChatHistory(newHistory);
+    setLoading(true);
     try {
-      await fetch("/api/chatbot", {
+      const res = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "save_lead", lead, categoria: "chatbot-dms", fuente: "landing" }),
+        body: JSON.stringify({ action: "chat", messages: newHistory, lead_nombre: lead.nombre }),
       });
-    } catch {}
+      const data = await res.json();
+      const reply = data.reply ?? "Un momento por favor.";
+      addBot(reply);
+      setChatHistory(h => [...h, { role: "assistant", content: reply }]);
+    } catch {
+      addBot("Disculpa, hubo un problema. Escríbenos por WhatsApp.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleSend() {
@@ -67,28 +80,37 @@ export default function ChatbotDMS() {
     addUser(val);
 
     if (step === "ask_name") {
+      if (val.split(" ").length < 1 || val.length < 3) {
+        addBot("No te entendi bien, como te llamas?");
+        return;
+      }
       setLead(l => ({ ...l, nombre: val }));
-      addBot(`Que gusto conocerte, ${val}! Y tu numero de celular?`);
+      setTimeout(() => addBot(`Que gusto conocerte, ${val}! Cual es tu numero de celular?`), 800);
       setStep("ask_celular");
     } else if (step === "ask_celular") {
+      if (val.replace(/\D/g, "").length < 7) {
+        addBot("Ese numero no parece valido, me lo escribes de nuevo?");
+        return;
+      }
       setLead(l => ({ ...l, celular: val }));
-      addBot("Perfecto! Y tu correo electronico?");
+      setTimeout(() => addBot("Perfecto! Y tu correo electronico?"), 800);
       setStep("ask_email");
     } else if (step === "ask_email") {
+      if (!val.includes("@") || !val.includes(".")) {
+        addBot("Ese correo no parece valido, me lo escribes de nuevo?");
+        return;
+      }
       const newLead = { ...lead, email: val };
       setLead(newLead);
-      setTimeout(async () => {
-        await fetch("/api/chatbot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "save_lead", lead: newLead, categoria: "chatbot-dms", fuente: "landing" }),
-        });
-      }, 100);
-      addBot(`Listo ${lead.nombre}! En que te puedo ayudar hoy?`, "menu");
+      await fetch("/api/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "save_lead", lead: newLead, categoria: "chatbot-dms", fuente: "landing" }),
+      });
+      setTimeout(() => addBot(`Listo ${lead.nombre}! En que te puedo ayudar hoy?`, "menu"), 800);
       setStep("menu");
-    } else if (step === "asesoria") {
-      addBot("Entendido! Un asesor de DMS te contactara pronto. Tambien puedes escribirnos directamente.", "contacto_final");
-      setStep("done");
+    } else if (step === "chat") {
+      await chatWithSofia(val);
     }
   }
 
@@ -97,30 +119,35 @@ export default function ChatbotDMS() {
     if (!item) return;
     addUser(item.label);
     if (id === "planes") {
-      addBot("Claro! Todos los planes incluyen 7 dias de prueba gratis.", "planes");
+      setTimeout(() => addBot("Claro! Todos los planes incluyen 7 dias de prueba gratis.", "planes"), 800);
       setStep("show_planes");
     } else if (id === "sitio") {
-      addBot("Con DMS tu sitio web se genera con IA en minutos. Te muestro los planes para que elijas el que mas te conviene.", "planes");
+      setTimeout(() => addBot("Con DMS tu sitio web se genera con IA en minutos. Te muestro los planes.", "planes"), 800);
       setStep("show_planes");
     } else if (id === "ia") {
-      addBot("Tenemos chatbots, CRM, automatizaciones y agente IA incluidos en los planes superiores. Te los muestro.", "planes");
+      setTimeout(() => addBot("Tenemos chatbots, CRM, automatizaciones y agente IA. Te muestro los planes.", "planes"), 800);
       setStep("show_planes");
     } else {
-      addBot(`Claro ${lead.nombre}! Cuentame que necesitas y te ayudo.`);
-      setStep("asesoria");
+      setTimeout(() => {
+        addBot(`Con gusto ${lead.nombre}! Cuentame que necesita tu negocio.`);
+        setStep("chat");
+      }, 800);
     }
   }
 
   function selectPlan(plan: typeof PLANES[0]) {
     addUser(`Me interesa el plan ${plan.name}`);
-    addBot(`Excelente eleccion! El plan ${plan.name} a ${plan.price} es perfecto. Puedes comenzar tu prueba gratis en este momento.`, "ir_registro");
+    setTimeout(() => {
+      addBot(`Excelente eleccion! El plan ${plan.name} es perfecto para ti. Puedes empezar tu prueba gratis ahora mismo.`, "ir_registro");
+      setStep("done");
+    }, 800);
   }
 
   function handleKey(e: React.KeyboardEvent) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
   }
 
-  const showInput = step === "ask_name" || step === "ask_celular" || step === "ask_email" || step === "asesoria";
+  const showInput = step === "ask_name" || step === "ask_celular" || step === "ask_email" || step === "chat";
 
   return (
     <>
@@ -224,24 +251,13 @@ export default function ChatbotDMS() {
                     </a>
                   </div>
                 )}
-
-                {m.type === "contacto_final" && (
-                  <div style={{marginTop:8,paddingLeft:36,display:"flex",flexDirection:"column",gap:6}}>
-                    <a href="https://wa.me/573000000000" target="_blank" style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",borderRadius:12,background:"#25D366",color:"#fff",fontWeight:700,fontSize:13,textDecoration:"none"}}>
-                      WhatsApp directo
-                    </a>
-                    <a href="mailto:dms.digitalstudio@outlook.com" style={{display:"block",textAlign:"center",padding:"10px",borderRadius:12,border:"1px solid #e5e7eb",color:"#666",fontSize:12,textDecoration:"none"}}>
-                      dms.digitalstudio@outlook.com
-                    </a>
-                  </div>
-                )}
               </div>
             ))}
 
             {loading && (
               <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
                 <div style={{width:28,height:28,borderRadius:"50%",background:"linear-gradient(135deg,#7c3aed,#4f46e5)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><circle cx="12" cy="8" r="4"/></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="12" cy="8" r="4"/></svg>
                 </div>
                 <div style={{background:"#f3f4f6",borderRadius:"4px 18px 18px 18px",padding:"10px 16px",display:"flex",gap:4,alignItems:"center"}}>
                   {[0,1,2].map(i=>(
