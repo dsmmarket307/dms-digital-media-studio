@@ -522,7 +522,7 @@ export default function Home() {
             <div>
               <h3 style={{ fontWeight: 700, fontSize: 15, marginBottom: 16, color: "#fff" }}>Legal</h3>
               <ul style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[{ href: "#", label: "Politica de Privacidad" }, { href: "#", label: "Terminos y Condiciones" }, { href: "#", label: "Tratamiento de Datos" }].map(l => (
+                {[{ href: "/politica-de-privacidad", label: "Politica de Privacidad" }, { href: "/terminos-y-condiciones", label: "Terminos y Condiciones" }, { href: "/tratamiento-de-datos", label: "Tratamiento de Datos" }].map(l => (
                   <li key={l.label}><Link href={l.href} style={{ color: "#aaa", fontSize: 13, textDecoration: "none" }} className="hover:text-purple-400 transition-colors">{l.label}</Link></li>
                 ))}
               </ul>
