@@ -151,7 +151,22 @@ export default function PageBuilderEditor() {
     const fileName = `img-${imgTarget}-${Date.now()}.${ext}`;
     await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
-    setImages(prev => ({ ...prev, [imgTarget]: data.publicUrl }));
+    if (imgTarget.startsWith("producto_")) {
+      const idx = parseInt(imgTarget.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        if (!next.productos[idx].imagenes) next.productos[idx].imagenes = [];
+        next.productos[idx].imagenes.push(data.publicUrl);
+        return next;
+      });
+    } else if (imgTarget === "galeria_new") {
+      setImages(prev => ({
+        ...prev,
+        galeria_imgs: [...((prev.galeria_imgs as string[]) ?? []), data.publicUrl],
+      }));
+    } else {
+      setImages(prev => ({ ...prev, [imgTarget]: data.publicUrl }));
+    }
     setUploadingImg(null);
   }
 
