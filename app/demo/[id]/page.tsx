@@ -230,10 +230,10 @@ export default async function DemoPage({ params }: Props) {
                 <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem", paddingBottom: "0.5rem", borderBottom: "2px solid #f0f0f0" }}>{cat}</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.5rem" }}>
                   {(c.productos as any[]).filter((p: any) => p.categoria === cat).map((p: any, i: number) => (
-                    <div key={i} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
+                    <div key={i} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s", cursor: "pointer" }} onClick={() => window.location.href = `/demo/${id}/producto/${i}`}>
                       {p.imagenes?.length > 0 ? (
                         <div style={{ position: "relative", overflow: "hidden" }}>
-                          <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
+                          <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
                             {p.imagenes.map((img: string, j: number) => (
                               <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "cover", scrollSnapAlign: "start" }} />
                             ))}
@@ -276,7 +276,7 @@ export default async function DemoPage({ params }: Props) {
                 {(c.productos as any[]).filter((p: any) => !p.categoria).map((p: any, i: number) => (
                   <div key={i} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0" }}>
                     {p.imagenes?.length > 0 ? (
-                      <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
+                      <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
                         {p.imagenes.map((img: string, j: number) => (
                           <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "cover", scrollSnapAlign: "start" }} />
                         ))}
