@@ -117,7 +117,7 @@ export default function PageBuilderEditor() {
   async function handleSave(publish = false) {
     setSaving(true);
     await supabase.from("generated_websites").update({
-      generated_content: content,
+      generated_content: { ...content, footer: { ...(content.footer ?? {}), navbar_hidden: navHidden } },
       primary_color: primaryColor,
       secondary_color: secondaryColor,
       logo_url: logoUrl,
