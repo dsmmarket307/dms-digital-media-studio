@@ -68,6 +68,7 @@ export default function PageBuilderEditor() {
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgTarget, setImgTarget] = useState<string>("");
   const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
+  const [navHidden, setNavHidden] = useState<string[]>([]);
 
   useEffect(() => {
     async function load() {
