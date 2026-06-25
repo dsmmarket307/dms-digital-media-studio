@@ -1,6 +1,7 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import PedidoForm from "./PedidoForm";
+import Carrusel from "./Carrusel";
 
 type Props = { params: Promise<{ id: string; productoId: string }> };
 
@@ -29,11 +30,7 @@ export default async function ProductoDetallePage({ params }: Props) {
         <div style={{ background: "#fff", borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
           <div style={{ position: "relative", overflow: "hidden" }}>
             {p.imagenes?.length > 0 ? (
-              <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", height: 440 }}>
-                {p.imagenes.map((img: string, j: number) => (
-                  <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", flexShrink: 0, height: 440, objectFit: "contain", background: "#f8f9fa", scrollSnapAlign: "start" }} />
-                ))}
-              </div>
+              <Carrusel imagenes={p.imagenes} nombre={p.nombre} />
             ) : (
               <div style={{ height: 440, background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5">
