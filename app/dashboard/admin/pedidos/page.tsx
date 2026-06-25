@@ -6,8 +6,11 @@ export default async function PedidosPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: sites } = await supabase.from("generated_websites").select("id, project_name").eq("user_id", user.id);
-  const siteIds = sites?.map((s: any) => s.id) ?? [];
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
+  const isAdmin = profile?.role === "admin";
+
+  const { data: sites } = await supabase.from("generated_websites").select("id, project_name");
+  const siteIds = isAdmin ? (sites?.map((s: any) => s.id) ?? []) : (sites?.filter((s: any) => s.user_id === user.id).map((s: any) => s.id) ?? []);
 
   const { data: pedidos } = await supabase
     .from("pedidos")
