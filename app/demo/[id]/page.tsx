@@ -232,8 +232,8 @@ export default async function DemoPage({ params }: Props) {
                   {(c.productos as any[]).filter((p: any) => p.categoria === cat).map((p: any, i: number) => (
                     <a key={i} href={`/demo/${id}/producto/${i}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
                       {p.imagenes?.length > 0 ? (
-                        <div style={{ position: "relative", overflow: "hidden", height: 240 }}>
-                          <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%", height: 240 }}>
+                        <div style={{ position: "relative", overflow: "hidden" }}>
+                          <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
                             {p.imagenes.map((img: string, j: number) => (
                               <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "cover", scrollSnapAlign: "start" }} />
                             ))}
