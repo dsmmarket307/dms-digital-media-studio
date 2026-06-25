@@ -230,7 +230,7 @@ export default async function DemoPage({ params }: Props) {
                 <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem", paddingBottom: "0.5rem", borderBottom: "2px solid #f0f0f0" }}>{cat}</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.5rem" }}>
                   {(c.productos as any[]).filter((p: any) => p.categoria === cat).map((p: any, i: number) => (
-                    <div key={i} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
+                    <a key={i} href={`/demo/${id}/producto/${i}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
                       {p.imagenes?.length > 0 ? (
                         <div style={{ position: "relative", overflow: "hidden" }}>
                           <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
@@ -266,7 +266,7 @@ export default async function DemoPage({ params }: Props) {
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>
