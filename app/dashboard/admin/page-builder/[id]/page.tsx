@@ -68,7 +68,6 @@ export default function PageBuilderEditor() {
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgTarget, setImgTarget] = useState<string>("");
   const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
-  const [navHidden, setNavHidden] = useState<string[]>([]);
 
   useEffect(() => {
     async function load() {
@@ -106,7 +105,6 @@ export default function PageBuilderEditor() {
         }
       }));
       setImages(newImages);
-      setNavHidden(data.navbar_hidden ?? []);
       if (data.status === "published") setPublishedUrl(`${window.location.origin}/demo/${id}`);
       setPublishedVersion(data.published_version ?? "basica");
       setLoading(false);
@@ -124,7 +122,6 @@ export default function PageBuilderEditor() {
       font_family: font,
       font_size: fontSize,
       custom_images: images,
-      navbar_hidden: navHidden,
       status: publish ? "published" : "draft",
       published_version: publishedVersion,
     }).eq("id", id);
@@ -356,11 +353,7 @@ export default function PageBuilderEditor() {
                   </button>
                 )}
               </div>
-            ))}erLeft: selectedSection === s ? `3px solid ${pr}` : "3px solid transparent" }}>
-                {SECTION_LABELS[s]}
-              </button>
-            ))}
-          </nav>
+            ))}</nav>
           <div style={{ padding: "12px 10px", borderTop: "1px solid #f0f0f0" }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 10 }}>Global</p>
             <div style={{ marginBottom: 10 }}>
