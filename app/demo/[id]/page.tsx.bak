@@ -66,10 +66,7 @@ export default async function DemoPage({ params }: Props) {
 
   const trialActivo = sub?.status === "trial" && sub?.trial_end && new Date(sub.trial_end) >= new Date();
 
-  const { data: ownerProfile } = await supabase.from("profiles").select("role").eq("id", site.user_id).single();
-  const isAdmin = ownerProfile?.role === "admin";
-
-  if (!isAdmin && (trialVencido || sinPlan)) {
+  if (trialVencido || sinPlan) {
     return (
       <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
         <div style={{ background: "#fff", borderRadius: 20, padding: "3rem 2rem", textAlign: "center", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }}>
