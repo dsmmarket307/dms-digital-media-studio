@@ -235,7 +235,7 @@ export default async function DemoPage({ params }: Props) {
                         <div style={{ position: "relative", overflow: "hidden" }}>
                           <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
                             {p.imagenes.map((img: string, j: number) => (
-                              <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "cover", scrollSnapAlign: "start" }} />
+                              <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "contain", background: "#f8f9fa", scrollSnapAlign: "start" }} />
                             ))}
                           </div>
                           {p.imagenes.length > 1 && (
@@ -278,7 +278,7 @@ export default async function DemoPage({ params }: Props) {
                     {p.imagenes?.length > 0 ? (
                       <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
                         {p.imagenes.map((img: string, j: number) => (
-                          <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "cover", scrollSnapAlign: "start" }} />
+                          <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "contain", background: "#f8f9fa", scrollSnapAlign: "start" }} />
                         ))}
                       </div>
                     ) : (
