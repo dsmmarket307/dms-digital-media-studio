@@ -6,7 +6,7 @@ export default async function PedidosPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: sites } = await supabase.from("generated_websites").select("id, business_name").eq("user_id", user.id);
+  const { data: sites } = await supabase.from("generated_websites").select("id, project_name").eq("user_id", user.id);
   const siteIds = sites?.map((s: any) => s.id) ?? [];
 
   const { data: pedidos } = await supabase
@@ -15,7 +15,7 @@ export default async function PedidosPage() {
     .in("site_id", siteIds.length > 0 ? siteIds : ["none"])
     .order("created_at", { ascending: false });
 
-  const getSiteName = (site_id: string) => sites?.find((s: any) => s.id === site_id)?.business_name ?? site_id;
+  const getSiteName = (site_id: string) => sites?.find((s: any) => s.id === site_id)?.project_name ?? site_id;
 
   const estadoColor: Record<string, string> = {
     pendiente: "#f59e0b",
