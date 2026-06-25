@@ -106,6 +106,7 @@ export default function PageBuilderEditor() {
         }
       }));
       setImages(newImages);
+      setNavHidden(data.navbar_hidden ?? []);
       if (data.status === "published") setPublishedUrl(`${window.location.origin}/demo/${id}`);
       setPublishedVersion(data.published_version ?? "basica");
       setLoading(false);
@@ -123,6 +124,7 @@ export default function PageBuilderEditor() {
       font_family: font,
       font_size: fontSize,
       custom_images: images,
+      navbar_hidden: navHidden,
       status: publish ? "published" : "draft",
       published_version: publishedVersion,
     }).eq("id", id);
