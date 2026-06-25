@@ -6,19 +6,10 @@ export default async function PedidosPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
-  const isAdmin = profile?.role === "admin";
-
-  const { data: sites } = await supabase.from("generated_websites").select("id, project_name");
-  const siteIds = isAdmin ? (sites?.map((s: any) => s.id) ?? []) : (sites?.filter((s: any) => s.user_id === user.id).map((s: any) => s.id) ?? []);
-
   const { data: pedidos } = await supabase
     .from("pedidos")
-    .select("*")
-    .in("site_id", siteIds.length > 0 ? siteIds : ["none"])
+    .select("*, generated_websites(project_name)")
     .order("created_at", { ascending: false });
-
-  const getSiteName = (site_id: string) => sites?.find((s: any) => s.id === site_id)?.project_name ?? site_id;
 
   const estadoColor: Record<string, string> = {
     pendiente: "#f59e0b",
@@ -31,16 +22,12 @@ export default async function PedidosPage() {
     <div style={{ padding: "2rem", fontFamily: "'Segoe UI', sans-serif" }}>
       <div style={{ marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111" }}>Pedidos</h1>
-        <p style={{ color: "#666", fontSize: "0.9rem", marginTop: 4 }}>Pedidos recibidos contra entrega de tus tiendas</p>
+        <p style={{ color: "#666", fontSize: "0.9rem", marginTop: 4 }}>Pedidos recibidos contra entrega</p>
       </div>
 
       {!pedidos || pedidos.length === 0 ? (
         <div style={{ textAlign: "center", padding: "4rem 2rem", background: "#fff", borderRadius: 16, boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" style={{ marginBottom: "1rem" }}>
-            <path d="M5 8h14M5 8a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v0a2 2 0 01-2 2M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8"/>
-          </svg>
-          <p style={{ color: "#888", fontWeight: 600 }}>Aun no tienes pedidos</p>
-          <p style={{ color: "#aaa", fontSize: "0.85rem", marginTop: 4 }}>Los pedidos apareceran aqui cuando alguien compre en tu tienda</p>
+          <p style={{ color: "#888", fontWeight: 600 }}>Aun no hay pedidos</p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -60,9 +47,9 @@ export default async function PedidosPage() {
                   <span>•</span>
                   <span>{p.direccion}{p.barrio ? `, ${p.barrio}` : ""}, {p.ciudad}</span>
                 </div>
-                {p.notas && <p style={{ fontSize: "0.85rem", color: "#888", fontStyle: "italic" }}>"{p.notas}"</p>}
+                {p.notas && <p style={{ fontSize: "0.85rem", color: "#888", fontStyle: "italic" }}>{p.notas}</p>}
                 <div style={{ fontSize: "0.8rem", color: "#aaa", display: "flex", gap: 8 }}>
-                  <span>Tienda: {getSiteName(p.site_id)}</span>
+                  <span>Tienda: {p.generated_websites?.project_name ?? p.site_id}</span>
                   <span>•</span>
                   <span>{new Date(p.created_at).toLocaleString("es-CO")}</span>
                 </div>
