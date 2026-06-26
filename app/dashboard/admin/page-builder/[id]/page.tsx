@@ -540,7 +540,21 @@ export default function PageBuilderEditor() {
                   <Field label="Precio" value={p.precio} onChange={(v) => updateArray("productos", i, "precio", v)} />
                   <Field label="Descripcion" value={p.descripcion} onChange={(v) => updateArray("productos", i, "descripcion", v)} multiline />
                   <Field label="Categoria" value={p.categoria} onChange={(v) => updateArray("productos", i, "categoria", v)} />
-                  <Field label="Tallas (ej: S, M, L, XL)" value={p.tallas ?? ""} onChange={(v) => updateArray("productos", i, "tallas", v)} />
+                  <div style={{ marginBottom: 8 }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 6 }}>Tallas</label>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 6 }}>
+                      {(p.tallas ?? "").split(",").filter(Boolean).map((t: string, j: number) => (
+                        <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", background: "#f3f4f6", borderRadius: 6, fontSize: 11, fontWeight: 600 }}>
+                          {t.trim()}
+                          <button onClick={() => { const arr = (p.tallas ?? "").split(",").filter(Boolean).map((x: string) => x.trim()).filter((_: string, k: number) => k !== j); updateArray("productos", i, "tallas", arr.join(", ")); }} style={{ background: "none", border: "none", cursor: "pointer", color: "#ef4444", fontWeight: 800, fontSize: 12, padding: 0 }}>x</button>
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", gap: 4 }}>
+                      <input id={`talla-input-${i}`} placeholder="Ej: 2-4, S, XL..." style={{ flex: 1, padding: "6px 8px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 11, outline: "none" }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); const val = (e.target as HTMLInputElement).value.trim(); if (val) { const arr = (p.tallas ?? "").split(",").filter(Boolean).map((x: string) => x.trim()); arr.push(val); updateArray("productos", i, "tallas", arr.join(", ")); (e.target as HTMLInputElement).value = ""; } } }} />
+                      <button onClick={() => { const input = document.getElementById(`talla-input-${i}`) as HTMLInputElement; const val = input?.value.trim(); if (val) { const arr = (p.tallas ?? "").split(",").filter(Boolean).map((x: string) => x.trim()); arr.push(val); updateArray("productos", i, "tallas", arr.join(", ")); input.value = ""; } }} style={{ padding: "6px 10px", background: "#111", color: "#fff", border: "none", borderRadius: 6, fontSize: 11, cursor: "pointer", fontWeight: 700 }}>+</button>
+                    </div>
+                  </div>
                   <Field label="Colores (ej: Rojo, Azul, Verde)" value={p.colores ?? ""} onChange={(v) => updateArray("productos", i, "colores", v)} />
                   <div style={{ marginBottom: 8 }}>
                     <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 6 }}>Imagenes del producto (max 5)</label>
