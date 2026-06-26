@@ -253,8 +253,8 @@ export default async function DemoPage({ params }: Props) {
                       )}
                       <div style={{ padding: "1.25rem" }}>
                         <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
-                        {p.descripcion && <p style={{ fontSize: "0.875rem", color: "#666", lineHeight: 1.6, marginBottom: "0.75rem" }}>{p.descripcion}</p>}
-                        <p style={{ fontSize: "1.25rem", fontWeight: 800, color: ci.primary_color ?? "#7c3aed", marginBottom: "0.75rem" }}>{p.precio}</p>
+                        
+                        <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111", marginBottom: "0.75rem" }}>{p.precio}</p>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "0.75rem" }}>
                           {p.tallas && p.tallas.split(",").map((t: string, j: number) => (
                             <span key={j} style={{ padding: "3px 10px", borderRadius: 999, border: "1px solid #e5e7eb", fontSize: "0.75rem", fontWeight: 600, color: "#555" }}>{t.trim()}</span>
@@ -288,8 +288,8 @@ export default async function DemoPage({ params }: Props) {
                     )}
                     <div style={{ padding: "1.25rem" }}>
                       <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
-                      {p.descripcion && <p style={{ fontSize: "0.875rem", color: "#666", lineHeight: 1.6, marginBottom: "0.75rem" }}>{p.descripcion}</p>}
-                      <p style={{ fontSize: "1.25rem", fontWeight: 800, color: ci.primary_color ?? "#7c3aed", marginBottom: "0.75rem" }}>{p.precio}</p>
+                      
+                      <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111", marginBottom: "0.75rem" }}>{p.precio}</p>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                         {p.tallas && p.tallas.split(",").map((t: string, j: number) => (
                           <span key={j} style={{ padding: "3px 10px", borderRadius: 999, border: "1px solid #e5e7eb", fontSize: "0.75rem", fontWeight: 600, color: "#555" }}>{t.trim()}</span>
