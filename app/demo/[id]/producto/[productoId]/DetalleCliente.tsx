@@ -61,7 +61,7 @@ export default function DetalleCliente({ producto, siteId, primaryColor }: { pro
       <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
 
       {producto.descripcion && !mostrarForm && (
-        <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.7 }}>{producto.descripcion}</p>
+        <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 2, letterSpacing: "0.01em", whiteSpace: "pre-line" }}>{producto.descripcion}</p>
       )}
 
       {!mostrarForm && (
