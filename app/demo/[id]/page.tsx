@@ -1,6 +1,7 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
+import EstrellasProducto from "./EstrellasProducto";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional",
@@ -260,6 +261,7 @@ export default async function DemoPage({ params }: Props) {
                       )}
                       <div style={{ padding: "1.25rem" }}>
                         <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
+                        <EstrellasProducto siteId={id} productoIndex={(c.productos as any[]).indexOf(p)} />
                         
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "0.75rem", flexWrap: "wrap" }}>
                         <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111" }}>{p.precio}</p>
@@ -290,6 +292,7 @@ export default async function DemoPage({ params }: Props) {
                     )}
                     <div style={{ padding: "1.25rem" }}>
                       <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
+                        <EstrellasProducto siteId={id} productoIndex={(c.productos as any[]).indexOf(p)} />
                       
                       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "0.75rem", flexWrap: "wrap" }}>
                         <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111" }}>{p.precio}</p>
