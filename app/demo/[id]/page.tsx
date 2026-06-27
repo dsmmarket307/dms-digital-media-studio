@@ -170,9 +170,9 @@ export default async function DemoPage({ params }: Props) {
           {c?.faq && !navHidden.includes("faq") && <li><a href="#faq">FAQ</a></li>}
           {c?.contacto && !navHidden.includes("contacto") && <li><a href="#contacto">Contacto</a></li>}
         </ul>
-        <a href="#contacto" style={{ background: pr, color: "#fff", padding: "0.5rem 1.25rem", bord        {!c?.productos?.length && <a href="#contacto" style={{ background: pr, color: "#fff", padding: "0.5rem 1.25rem", borderRadius: 8, textDecoration: "none", fontSize: "0.875rem", fontWeight: 700 }}>cta_principal ?? "Contactar"}
-        </a>
-      
+        {!c?.productos?.length && <a href="#contacto" style={{ background: pr, color: "#fff", padding: "0.5rem 1.25rem", borderRadius: 8, textDecoration: "none", fontSize: "0.875rem", fontWeight: 700 }}>{c?.hero?.cta_principal ?? "Contactar"}</a>}
+
+
         {c?.productos?.length > 0 && (
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginLeft: 8 }}>
             <a href="#productos" style={{ display: "flex", color: "#111" }}>
