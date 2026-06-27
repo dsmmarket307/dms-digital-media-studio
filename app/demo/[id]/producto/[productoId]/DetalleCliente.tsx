@@ -1,6 +1,6 @@
 ﻿"use client";
 import { useState } from "react";
-import { useCarrito } from "../context/CarritoContext";
+import { useCarrito } from "../../context/CarritoContext";
 import CarritoDrawer from "./CarritoDrawer";
 
 function Estrellas({ valor }: { valor: number }) {

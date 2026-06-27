@@ -1,6 +1,6 @@
 ﻿"use client";
 import { useState } from "react";
-import { useCarrito } from "../context/CarritoContext";
+import { useCarrito } from "../../context/CarritoContext";
 
 export default function CarritoDrawer({ primaryColor, siteId }: { primaryColor: string; siteId: string }) {
   const { items, quitar, limpiar, total, abierto, setAbierto } = useCarrito();

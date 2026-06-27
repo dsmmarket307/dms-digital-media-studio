@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Carrusel from "./Carrusel";
 import DetalleCliente from "./DetalleCliente";
 import Resenas from "./Resenas";
-import { CarritoProvider } from "../context/CarritoContext";
+import { CarritoProvider } from "../../context/CarritoContext";
 
 type Props = { params: Promise<{ id: string; productoId: string }> };
 
