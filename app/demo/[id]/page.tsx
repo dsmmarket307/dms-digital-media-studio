@@ -440,7 +440,11 @@ export default async function DemoPage({ params }: Props) {
           )}
           <div className="footer-bottom">
             <p style={{ fontSize: ".85rem", color: "rgba(255,255,255,.5)" }}>{c?.footer?.copyright}</p>
-          </div>
+            <div style={{ display: "flex", gap: 16, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
+              <a href="/politica-de-privacidad" target="_blank" style={{ fontSize: ".8rem", color: "rgba(255,255,255,.5)", textDecoration: "none" }}>Politica de privacidad</a>
+              <a href="/terminos-y-condiciones" target="_blank" style={{ fontSize: ".8rem", color: "rgba(255,255,255,.5)", textDecoration: "none" }}>Terminos y condiciones</a>
+              <a href="/tratamiento-de-datos" target="_blank" style={{ fontSize: ".8rem", color: "rgba(255,255,255,.5)", textDecoration: "none" }}>Tratamiento de datos</a>
+            </div>
         </div>
       </footer>
       {agente && <AgenteChat agente={agente} color={site.primary_color ?? "#7c3aed"} />}
