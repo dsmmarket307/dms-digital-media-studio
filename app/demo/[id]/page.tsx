@@ -68,7 +68,9 @@ export default async function DemoPage({ params }: Props) {
   const trialActivo = sub?.status === "trial" && sub?.trial_end && new Date(sub.trial_end) >= new Date();
 
   const { data: ownerProfile } = await supabase.from("profiles").select("role").eq("id", site.user_id).single();
-  const isAdmin = ownerProfile?.role === "admin";
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  const { data: currentProfile } = await supabase.from("profiles").select("role").eq("id", currentUser?.id ?? "").maybeSingle();
+  const isAdmin = ownerProfile?.role === "admin" || currentProfile?.role === "admin";
 
   if (!isAdmin && (trialVencido || sinPlan)) {
     return (
