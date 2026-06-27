@@ -75,7 +75,7 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <Estrellas valor={Math.round(promedio)} />
-        {totalResenas > 0 && <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} resenas)</span>}
+        <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} resena{totalResenas !== 1 ? "s" : ""})</span>
         {vendidos > 0 && <span style={{ fontSize: "0.85rem", color: "#888" }}>· +{vendidos} vendidos</span>}
       </div>
       <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
