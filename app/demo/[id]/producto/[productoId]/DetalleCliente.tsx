@@ -1,5 +1,7 @@
 ﻿"use client";
 import { useState } from "react";
+import { useCarrito } from "../context/CarritoContext";
+import CarritoDrawer from "./CarritoDrawer";
 
 function Estrellas({ valor }: { valor: number }) {
   return (
@@ -14,6 +16,7 @@ function Estrellas({ valor }: { valor: number }) {
 }
 
 export default function DetalleCliente({ producto, siteId, primaryColor, vendidos, promedio, totalResenas }: { producto: any; siteId: string; primaryColor: string; vendidos: number; promedio: number; totalResenas: number }) {
+  const { agregar } = useCarrito();
   const [tallaSeleccionada, setTallaSeleccionada] = useState("");
   const [colorSeleccionado, setColorSeleccionado] = useState("");
   const [cantidad, setCantidad] = useState(1);
@@ -114,9 +117,15 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
             </div>
           </div>
 
-          <button onClick={() => setMostrarForm(true)} style={{ width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
-            Pedir ahora
-          </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <button onClick={() => setMostrarForm(true)} style={{ width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
+              Pedir ahora
+            </button>
+            <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
+              Agregar al carrito
+            </button>
+          </div>
+          <CarritoDrawer primaryColor={primaryColor} siteId={siteId} />
         </>
       )}
 

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Carrusel from "./Carrusel";
 import DetalleCliente from "./DetalleCliente";
 import Resenas from "./Resenas";
+import { CarritoProvider } from "../context/CarritoContext";
 
 type Props = { params: Promise<{ id: string; productoId: string }> };
 
@@ -24,6 +25,7 @@ export default async function ProductoDetallePage({ params }: Props) {
   const font = site.font_family ?? "'Segoe UI', sans-serif";
 
   return (
+    <CarritoProvider>
     <div style={{ minHeight: "100vh", background: "#f8f9fa", fontFamily: font }}>
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "2rem 1rem" }}>
         <a href={`/demo/${id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#666", textDecoration: "none", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
@@ -39,5 +41,6 @@ export default async function ProductoDetallePage({ params }: Props) {
         </div>
       </div>
     </div>
+    </CarritoProvider>
   );
 }
