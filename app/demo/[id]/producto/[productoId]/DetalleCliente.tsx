@@ -1,7 +1,19 @@
 ﻿"use client";
 import { useState } from "react";
 
-export default function DetalleCliente({ producto, siteId, primaryColor }: { producto: any; siteId: string; primaryColor: string }) {
+function Estrellas({ valor }: { valor: number }) {
+  return (
+    <div style={{ display: "flex", gap: 2 }}>
+      {[1,2,3,4,5].map(i => (
+        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i <= valor ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+export default function DetalleCliente({ producto, siteId, primaryColor, vendidos, promedio, totalResenas }: { producto: any; siteId: string; primaryColor: string; vendidos: number; promedio: number; totalResenas: number }) {
   const [tallaSeleccionada, setTallaSeleccionada] = useState("");
   const [colorSeleccionado, setColorSeleccionado] = useState("");
   const [cantidad, setCantidad] = useState(1);
@@ -58,6 +70,11 @@ export default function DetalleCliente({ producto, siteId, primaryColor }: { pro
   return (
     <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <Estrellas valor={Math.round(promedio)} />
+        {totalResenas > 0 && <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} resenas)</span>}
+        {vendidos > 0 && <span style={{ fontSize: "0.85rem", color: "#888" }}>· +{vendidos} vendidos</span>}
+      </div>
       <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
 
       {producto.descripcion && !mostrarForm && (
