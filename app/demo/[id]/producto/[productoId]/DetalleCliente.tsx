@@ -78,7 +78,10 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
         <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} resena{totalResenas !== 1 ? "s" : ""})</span>
         {vendidos > 0 && <span style={{ fontSize: "0.85rem", color: "#888" }}>· +{vendidos} vendidos</span>}
       </div>
-      <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
+        {producto.precio_anterior && <p style={{ fontSize: "1.3rem", color: "#aaa", textDecoration: "line-through" }}>{producto.precio_anterior}</p>}
+      </div>
 
       {producto.descripcion && !mostrarForm && (
         <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 2, letterSpacing: "0.01em", whiteSpace: "pre-line" }}>{producto.descripcion}</p>

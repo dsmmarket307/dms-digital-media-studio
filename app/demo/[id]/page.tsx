@@ -91,6 +91,13 @@ export default async function DemoPage({ params }: Props) {
   const img2 = ci.testimonios || imagenes[4] || "";
 
   const c = site.generated_content;
+  const { data: todasResenas } = await supabase.from("resenas").select("producto_index, calificacion").eq("site_id", id);
+  const promediosPorProducto = (todasResenas ?? []).reduce((acc: any, r: any) => {
+    if (!acc[r.producto_index]) acc[r.producto_index] = { suma: 0, total: 0 };
+    acc[r.producto_index].suma += r.calificacion;
+    acc[r.producto_index].total += 1;
+    return acc;
+  }, {});
   const pr = site.primary_color ?? "#7c3aed";
   const sc = site.secondary_color ?? "#000000";
   const logo = site.logo_url ?? "";
@@ -254,7 +261,10 @@ export default async function DemoPage({ params }: Props) {
                       <div style={{ padding: "1.25rem" }}>
                         <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
                         
-                        <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111", marginBottom: "0.75rem" }}>{p.precio}</p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "0.75rem", flexWrap: "wrap" }}>
+                        <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111" }}>{p.precio}</p>
+                        {p.precio_anterior && <p style={{ fontSize: "1rem", color: "#aaa", textDecoration: "line-through" }}>{p.precio_anterior}</p>}
+                      </div>
                         
                         
                       </div>
@@ -281,7 +291,10 @@ export default async function DemoPage({ params }: Props) {
                     <div style={{ padding: "1.25rem" }}>
                       <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
                       
-                      <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111", marginBottom: "0.75rem" }}>{p.precio}</p>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "0.75rem", flexWrap: "wrap" }}>
+                        <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111" }}>{p.precio}</p>
+                        {p.precio_anterior && <p style={{ fontSize: "1rem", color: "#aaa", textDecoration: "line-through" }}>{p.precio_anterior}</p>}
+                      </div>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                         {p.tallas && p.tallas.split(",").map((t: string, j: number) => (
                           <span key={j} style={{ padding: "3px 10px", borderRadius: 999, border: "1px solid #e5e7eb", fontSize: "0.75rem", fontWeight: 600, color: "#555" }}>{t.trim()}</span>

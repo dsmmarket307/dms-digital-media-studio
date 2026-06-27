@@ -538,6 +538,7 @@ export default function PageBuilderEditor() {
                   </div>
                   <Field label="Nombre" value={p.nombre} onChange={(v) => updateArray("productos", i, "nombre", v)} />
                   <Field label="Precio" value={p.precio} onChange={(v) => updateArray("productos", i, "precio", v)} />
+                  <Field label="Precio anterior (tachado, opcional)" value={p.precio_anterior ?? ""} onChange={(v) => updateArray("productos", i, "precio_anterior", v)} />
                   <Field label="Descripcion" value={p.descripcion} onChange={(v) => updateArray("productos", i, "descripcion", v)} multiline />
                   <Field label="Categoria" value={p.categoria} onChange={(v) => updateArray("productos", i, "categoria", v)} />
                   <div style={{ marginBottom: 8 }}>
