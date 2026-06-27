@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
+import ChatbotDMS from "@/components/ChatbotDMS";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Link from "next/link";

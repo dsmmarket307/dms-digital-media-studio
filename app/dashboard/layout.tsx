@@ -2,6 +2,7 @@
 import { createClient } from '@/lib/supabase/server'
 import DashboardNav from './nav'
 import { headers } from 'next/headers'
+import ChatbotDMS from '@/components/ChatbotDMS'
 
 export default async function DashboardLayout({
   children,
@@ -29,6 +30,7 @@ export default async function DashboardLayout({
         <main style={{ flex: 1, overflow: 'auto' }} className="pt-14 md:pt-0">
           {children}
         </main>
+        <ChatbotDMS />
       </div>
     )
   }
