@@ -449,6 +449,7 @@ export default async function DemoPage({ params }: Props) {
         </div>
       </footer>
       {agente && <AgenteChat agente={agente} color={site.primary_color ?? "#7c3aed"} />}
+    </>
   );
 }
 
