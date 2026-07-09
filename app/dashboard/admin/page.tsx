@@ -87,6 +87,7 @@ export default function AdminDashboard() {
     { href: "/dashboard/admin/finanzas", label: "Finanzas del Negocio", desc: "Ingresos, egresos y utilidad del estudio", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/inteligencia", label: "Centro de Inteligencia", desc: "Analitica avanzada, metas y proyecciones con IA", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/dominios", label: "Dominios", desc: "Dominios conectados por clientes", color: "#7c3aed", badge: 0, green: false },
+    { href: "/dashboard/admin/mis-dominios", label: "Mis Dominios", desc: "Conecta y gestiona dominios del administrador", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/suscripciones", label: "Suscripciones", desc: "Clientes activos, MRR y gestion de planes", color: "#059669", badge: sTrial.length, green: true },
   ];
 
