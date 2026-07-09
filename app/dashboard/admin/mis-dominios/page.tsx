@@ -76,7 +76,7 @@ export default function AdminMisDominios() {
 
   async function verificarDNS(id: string, domain: string) {
     try {
-      const res = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+      const res = await fetch(`https://dns.google/resolve?name=${domain.trim()}&type=A`);
       const data = await res.json();
       const ip = data?.Answer?.[0]?.data;
       const verified = ip === "76.76.21.21";
