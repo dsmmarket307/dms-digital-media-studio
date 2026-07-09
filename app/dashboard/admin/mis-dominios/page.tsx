@@ -67,6 +67,11 @@ export default function AdminMisDominios() {
     if (data) {
       setDominios(prev => [data, ...prev]);
       setShowInstrucciones(data);
+      await fetch("/api/vercel/add-domain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ domain: dominioAConectar.trim() }),
+      });
     }
     setDominioAConectar("");
     setSiteSeleccionado("");
