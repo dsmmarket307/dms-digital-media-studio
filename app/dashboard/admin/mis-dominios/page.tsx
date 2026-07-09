@@ -37,7 +37,7 @@ export default function AdminMisDominios() {
       setUserId(user.id);
       const { data: s } = await supabase.from("generated_websites").select("id, project_name");
       setSites(s ?? []);
-      const { data: d } = await supabase.from("domains").select("*, generated_websites(project_name)").eq("user_id", user.id).order("created_at", { ascending: false });
+      const { data: d } = await supabase.from("domains").select("*, generated_websites(project_name)").order("created_at", { ascending: false });
       setDominios(d ?? []);
       setLoading(false);
     }
