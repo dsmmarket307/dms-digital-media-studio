@@ -19,7 +19,12 @@ export async function middleware(request: NextRequest) {
     if (data?.length > 0 && data[0].status === "active") {
       const siteId = data[0].site_id;
       const url = request.nextUrl.clone();
-      url.pathname = `/demo/${siteId}`;
+      const pathname = request.nextUrl.pathname;
+      if (pathname === "/" || pathname === "") {
+        url.pathname = `/demo/${siteId}`;
+      } else {
+        url.pathname = `/demo/${siteId}${pathname}`;
+      }
       return NextResponse.rewrite(url);
     }
   }
