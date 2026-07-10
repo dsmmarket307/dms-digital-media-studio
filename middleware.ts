@@ -1,34 +1,6 @@
 ﻿import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-
 export async function middleware(request: NextRequest) {
-  const hostname = request.headers.get("host") ?? "";
-  const mainDomain = process.env.NEXT_PUBLIC_SITE_URL?.replace("https://", "").replace("http://", "") ?? "dms-digital-media-studio.vercel.app";
-  const isCustomDomain = hostname !== mainDomain && !hostname.includes("vercel.app") && !hostname.includes("localhost");
-
-  if (isCustomDomain) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
-    const res = await fetch(`${supabaseUrl}/rest/v1/domains?domain=eq.${hostname}&select=site_id,status&limit=1`, {
-      headers: {
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-      },
-    });
-    const data = await res.json();
-    if (data?.length > 0 && data[0].status === "active") {
-      const siteId = data[0].site_id;
-      const url = request.nextUrl.clone();
-      const pathname = request.nextUrl.pathname;
-      if (pathname === "/" || pathname === "") {
-        url.pathname = `/demo/${siteId}`;
-      } else {
-        url.pathname = `/demo/${siteId}${pathname}`;
-      }
-      return NextResponse.rewrite(url);
-    }
-  }
-
   let supabaseResponse = NextResponse.next({ request });
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -48,7 +20,7 @@ export async function middleware(request: NextRequest) {
   );
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
-  const publicRoutes = ["/", "/auth/login", "/auth/register", "/demo", "/planes", "/api", "/servicios", "/portafolio", "/contacto", "/politica-de-privacidad", "/terminos-y-condiciones", "/tratamiento-de-datos"];
+  const publicRoutes = ["/", "/auth/login", "/auth/register", "/demo", "/planes", "/api"];
   const isPublic = publicRoutes.some(r => pathname.startsWith(r));
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
@@ -57,7 +29,6 @@ export async function middleware(request: NextRequest) {
   }
   return supabaseResponse;
 }
-
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };
