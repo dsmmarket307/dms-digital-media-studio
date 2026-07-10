@@ -54,9 +54,10 @@ export async function generateMetadata({ params }: Props) {
   const { data: site } = await supabase.from("generated_websites").select("project_name, generated_content, logo_url").eq("id", id).single();
   const nombre = site?.generated_content?.footer?.nombre_empresa ?? site?.project_name ?? "DMS Digital Media Studio";
   const logo = site?.logo_url ?? null;
+  const faviconUrl = logo ? `/api/favicon?id=${id}` : undefined;
   return {
     title: nombre,
-    icons: logo ? { icon: logo, apple: logo } : undefined,
+    icons: faviconUrl ? { icon: faviconUrl, apple: faviconUrl } : undefined,
   };
 }
 
