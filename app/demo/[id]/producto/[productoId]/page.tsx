@@ -7,6 +7,21 @@ import { CarritoProvider } from "../../context/CarritoContext";
 
 type Props = { params: Promise<{ id: string; productoId: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { id, productoId } = await params;
+  const { createClient } = await import("@/lib/supabase/server");
+  const supabase = await createClient();
+  const { data: site } = await supabase.from("generated_websites").select("project_name, generated_content, logo_url").eq("id", id).single();
+  const nombre = site?.generated_content?.footer?.nombre_empresa ?? site?.project_name ?? "DMS Digital Media Studio";
+  const producto = site?.generated_content?.productos?.[parseInt(productoId)];
+  const titulo = producto?.nombre ? `${producto.nombre} | ${nombre}` : nombre;
+  const logo = site?.logo_url ?? null;
+  return {
+    title: titulo,
+    icons: logo ? { icon: `/api/favicon?id=${id}`, apple: `/api/favicon?id=${id}` } : undefined,
+  };
+}
+
 export default async function ProductoDetallePage({ params }: Props) {
   const { id, productoId } = await params;
   const supabase = await createClient();
