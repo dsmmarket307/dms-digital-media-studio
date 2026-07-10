@@ -47,6 +47,15 @@ async function getPexelsImages(websiteType: string, prompt: string): Promise<str
 
 type Props = { params: Promise<{ id: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+  const { createClient } = await import("@/lib/supabase/server");
+  const supabase = await createClient();
+  const { data: site } = await supabase.from("generated_websites").select("project_name, generated_content").eq("id", id).single();
+  const nombre = site?.generated_content?.footer?.nombre_empresa ?? site?.project_name ?? "DMS Digital Media Studio";
+  return { title: nombre };
+}
+
 export default async function DemoPage({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
