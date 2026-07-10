@@ -1,6 +1,7 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
+import { rateLimit } from "@/lib/ratelimit";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

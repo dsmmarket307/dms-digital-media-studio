@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ resenas: resenas ?? [] });
 }
 
+import { rateLimit } from "@/lib/ratelimit";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
