@@ -38,7 +38,7 @@ export default function Login() {
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 440 }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ width: 70, height: 70, borderRadius: 18, overflow: "hidden", margin: "0 auto 12px", boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
+          <div style={{ width: 80, height: 80, borderRadius: "50%", overflow: "hidden", margin: "0 auto 12px", boxShadow: "0 8px 24px rgba(0,0,0,0.3)", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 8 }}>
             <Image src="/logo-dms.png" alt="DMS" width={70} height={70} style={{ objectFit: "cover" }} />
           </div>
           <h1 style={{ color: "#fff", fontSize: "1.4rem", fontWeight: 800, margin: 0 }}>DMS Digital Media Studio</h1>
