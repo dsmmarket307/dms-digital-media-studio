@@ -1,5 +1,8 @@
 ﻿"use client";
+import { useState } from "react";
 export default function Carrusel({ imagenes, nombre }: { imagenes: string[]; nombre: string }) {
+  const [current, setCurrent] = useState(0);
+
   if (!imagenes || imagenes.length === 0) {
     return (
       <div style={{ background: "#f8f9fa", height: 440, display: "flex", alignItems: "center", justifyContent: "center", color: "#bbb" }}>
@@ -10,24 +13,35 @@ export default function Carrusel({ imagenes, nombre }: { imagenes: string[]; nom
     );
   }
 
-  if (imagenes.length === 1) {
-    return (
-      <div style={{ background: "#f8f9fa" }}>
-        <img src={imagenes[0]} alt={nombre} style={{ width: "100%", height: 440, objectFit: "contain", background: "#f8f9fa", display: "block" }} />
-      </div>
-    );
-  }
-
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4, background: "#f8f9fa", padding: 4 }}>
-      {imagenes.map((img, j) => (
-        <img
-          key={j}
-          src={img}
-          alt={`${nombre}-${j}`}
-          style={{ width: "100%", aspectRatio: "1 / 1", objectFit: "cover", background: "#f8f9fa", borderRadius: 8, display: "block" }}
-        />
-      ))}
+    <div style={{ background: "#f8f9fa", display: "flex", flexDirection: "column" }}>
+      <div style={{ height: 440, display: "flex", alignItems: "center", justifyContent: "center", background: "#f8f9fa" }}>
+        <img src={imagenes[current]} alt={nombre} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+      </div>
+
+      {imagenes.length > 1 && (
+        <div style={{ display: "flex", gap: 8, padding: "10px 12px", overflowX: "auto", background: "#fff" }}>
+          {imagenes.map((img, j) => (
+            <button
+              key={j}
+              onClick={() => setCurrent(j)}
+              style={{
+                flexShrink: 0,
+                width: 64,
+                height: 64,
+                padding: 0,
+                borderRadius: 8,
+                border: j === current ? "2px solid #f59e0b" : "2px solid #e5e7eb",
+                overflow: "hidden",
+                background: "#f8f9fa",
+                cursor: "pointer"
+              }}
+            >
+              <img src={img} alt={`${nombre}-${j}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
