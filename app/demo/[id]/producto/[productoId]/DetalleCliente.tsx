@@ -71,48 +71,58 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
   );
 
   return (
-    <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+
+      {/* NOMBRE */}
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
+
+      {/* ESTRELLAS */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <Estrellas valor={Math.round(promedio)} />
         <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} resena{totalResenas !== 1 ? "s" : ""})</span>
         {vendidos > 0 && <span style={{ fontSize: "0.85rem", color: "#888" }}>· +{vendidos} vendidos</span>}
       </div>
+
+      {/* PRECIO */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
         <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
-        {producto.precio_anterior && <p style={{ fontSize: "1.3rem", color: "#aaa", textDecoration: "line-through" }}>{producto.precio_anterior}</p>}
+        {producto.precio_anterior && (
+          <>
+            <p style={{ fontSize: "1.3rem", color: "#aaa", textDecoration: "line-through" }}>{producto.precio_anterior}</p>
+            <span style={{ background: "#fee2e2", color: "#dc2626", fontSize: "0.8rem", fontWeight: 700, padding: "3px 10px", borderRadius: 999 }}>Oferta</span>
+          </>
+        )}
       </div>
-
-      {producto.descripcion && !mostrarForm && (
-        <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 2, letterSpacing: "0.01em", whiteSpace: "pre-line" }}>{producto.descripcion}</p>
-      )}
 
       {!mostrarForm && (
         <>
+          {/* COLOR */}
           {colores.length > 0 && (
             <div>
-              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8 }}>COLOR</p>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Color</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {colores.map((col: string, j: number) => (
-                  <button key={j} onClick={() => setColorSeleccionado(col)} style={{ padding: "8px 16px", borderRadius: 8, border: `2px solid ${colorSeleccionado === col ? "#111" : "#e5e7eb"}`, background: colorSeleccionado === col ? "#111" : "#fff", color: colorSeleccionado === col ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}>{col}</button>
+                  <button key={j} onClick={() => setColorSeleccionado(col)} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${colorSeleccionado === col ? "#111" : "#e5e7eb"}`, background: colorSeleccionado === col ? "#111" : "#fff", color: colorSeleccionado === col ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}>{col}</button>
                 ))}
               </div>
             </div>
           )}
 
+          {/* TALLA */}
           {tallas.length > 0 && (
             <div>
-              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8 }}>TALLA</p>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Talla</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {tallas.map((t: string, j: number) => (
-                  <button key={j} onClick={() => setTallaSeleccionada(t)} style={{ padding: "8px 16px", borderRadius: 8, border: `2px solid ${tallaSeleccionada === t ? "#111" : "#e5e7eb"}`, background: tallaSeleccionada === t ? "#111" : "#fff", color: tallaSeleccionada === t ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}>{t}</button>
+                  <button key={j} onClick={() => setTallaSeleccionada(t)} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${tallaSeleccionada === t ? "#111" : "#e5e7eb"}`, background: tallaSeleccionada === t ? "#111" : "#fff", color: tallaSeleccionada === t ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}>{t}</button>
                 ))}
               </div>
             </div>
           )}
 
+          {/* CANTIDAD */}
           <div>
-            <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8 }}>Cantidad</p>
+            <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Cantidad</p>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <button onClick={() => setCantidad(Math.max(1, cantidad - 1))} style={{ width: 36, height: 36, borderRadius: 8, border: "2px solid #e5e7eb", background: "#fff", fontSize: "1.2rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>-</button>
               <span style={{ fontWeight: 700, fontSize: "1.1rem", minWidth: 30, textAlign: "center" }}>{cantidad}</span>
@@ -120,14 +130,38 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <button onClick={() => setMostrarForm(true)} style={{ width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
-              Pedir ahora
+          {/* BOTONES */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
+            <button onClick={() => setMostrarForm(true)} style={{ width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${primaryColor}44` }}>
+              Realizar Pedido →
             </button>
             <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
               Agregar al carrito
             </button>
           </div>
+
+          {/* DESCRIPCION - abajo de los botones */}
+          {producto.descripcion && (
+            <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Descripcion</p>
+              <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.8, whiteSpace: "pre-line" }}>{producto.descripcion}</p>
+            </div>
+          )}
+
+          {/* CONFIANZA */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: "1px solid #f0f0f0", paddingTop: "1rem" }}>
+            {[
+              { icon: "🚚", text: "Envio a todo Colombia" },
+              { icon: "✅", text: "Garantia de satisfaccion" },
+              { icon: "📦", text: "Contra entrega disponible" },
+            ].map((item, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: "1.1rem" }}>{item.icon}</span>
+                <span style={{ fontSize: "0.85rem", color: "#555", fontWeight: 500 }}>{item.text}</span>
+              </div>
+            ))}
+          </div>
+
           <CarritoDrawer primaryColor={primaryColor} siteId={siteId} />
         </>
       )}
