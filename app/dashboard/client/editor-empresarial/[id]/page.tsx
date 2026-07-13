@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useParams } from "next/navigation";
@@ -12,6 +12,7 @@ const FONTS = [
 ];
 
 const SECTION_LABELS: Record<string, string> = {
+  barraAnuncio: "Barra de Anuncios",
   productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
@@ -85,6 +86,7 @@ export default function PageBuilderEditor() {
       if (!c.equipo) c.equipo = { titulo: "Nuestro Equipo", miembros: [] };
       if (!c.estadisticas) c.estadisticas = { items: [{ numero: "100+", label: "Clientes" }, { numero: "5", label: "Anos de experiencia" }, { numero: "500+", label: "Proyectos" }] };
       if (!c.planes) c.planes = { titulo: "Nuestros Planes", items: [] };
+      if (!c.barraAnuncio) c.barraAnuncio = { activo: false, colorFondo: "#111111", colorTexto: "#f5c542", items: ["+5000 clientes satisfechos", "Garantia 30 dias", "Material de alta calidad", "Entrega en 3-5 dias habiles", "Envio gratis a todo Colombia", "Contra-entrega disponible"] };
       setContent(c);
       setPrimaryColor(data.primary_color ?? "#7c3aed");
       setNavHidden(data.navbar_hidden ?? []);
@@ -218,6 +220,39 @@ export default function PageBuilderEditor() {
     });
   }
 
+  function updateBarraItem(index: number, value: string) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      next.barraAnuncio.items[index] = value;
+      return next;
+    });
+  }
+
+  function addBarraItem() {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      if (!next.barraAnuncio.items) next.barraAnuncio.items = [];
+      next.barraAnuncio.items.push("Nuevo mensaje");
+      return next;
+    });
+  }
+
+  function removeBarraItem(index: number) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      next.barraAnuncio.items.splice(index, 1);
+      return next;
+    });
+  }
+
+  function setBarraField(field: string, value: any) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      next.barraAnuncio[field] = value;
+      return next;
+    });
+  }
+
   function triggerImg(target: string) {
     setImgTarget(target);
     setTimeout(() => imgRef.current?.click(), 100);
@@ -267,7 +302,7 @@ export default function PageBuilderEditor() {
 
   return (
     <div style={{ height: "100vh", background: "#f0f0f0", display: "flex", flexDirection: "column", overflow: "hidden" }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } } * { box-sizing: border-box; }`}</style>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } } @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } * { box-sizing: border-box; }`}</style>
       <input ref={logoRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoUpload} />
       <input ref={imgRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
 
@@ -387,7 +422,20 @@ export default function PageBuilderEditor() {
             <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
             <span style={{ fontSize: 11, color: "#555", fontWeight: 600 }}>{view === "desktop" ? "Escritorio" : view === "tablet" ? "Tableta" : "Movil"}</span>
           </div>
-          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize }}>
+          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize, overflow: "hidden" }}>
+
+            {content?.barraAnuncio?.activo && content?.barraAnuncio?.items?.length > 0 && (
+              <div style={{ background: content.barraAnuncio.colorFondo || "#111111", overflow: "hidden", padding: "8px 0" }}>
+                <div style={{ display: "flex", width: "max-content", animation: "marquee 20s linear infinite" }}>
+                  {[...content.barraAnuncio.items, ...content.barraAnuncio.items].map((txt: string, i: number) => (
+                    <span key={i} style={{ color: content.barraAnuncio.colorTexto || "#f5c542", fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: 20 }}>
+                      {txt}
+                      <span style={{ opacity: 0.6 }}>•</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -499,6 +547,40 @@ export default function PageBuilderEditor() {
             <p style={{ fontSize: 13, fontWeight: 800, color: "#111", margin: 0 }}>{SECTION_LABELS[selectedSection]}</p>
           </div>
           <div style={{ padding: "14px" }}>
+            {selectedSection === "barraAnuncio" && (<>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar barra</span>
+                <button onClick={() => setBarraField("activo", !content.barraAnuncio.activo)} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content.barraAnuncio.activo ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                  <span style={{ position: "absolute", top: 2, left: content.barraAnuncio.activo ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                </button>
+              </div>
+
+              <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Color de fondo</label>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <input type="color" value={content.barraAnuncio.colorFondo} onChange={e => setBarraField("colorFondo", e.target.value)} style={{ width: 30, height: 30, borderRadius: 6, border: "1px solid #e5e7eb", cursor: "pointer" }} />
+                    <span style={{ fontSize: 10, color: "#555" }}>{content.barraAnuncio.colorFondo}</span>
+                  </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Color de texto</label>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <input type="color" value={content.barraAnuncio.colorTexto} onChange={e => setBarraField("colorTexto", e.target.value)} style={{ width: 30, height: 30, borderRadius: 6, border: "1px solid #e5e7eb", cursor: "pointer" }} />
+                    <span style={{ fontSize: 10, color: "#555" }}>{content.barraAnuncio.colorTexto}</span>
+                  </div>
+                </div>
+              </div>
+
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 8, letterSpacing: "0.5px" }}>Mensajes</label>
+              {(content.barraAnuncio.items ?? []).map((txt: string, i: number) => (
+                <div key={i} style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+                  <input value={txt} onChange={e => updateBarraItem(i, e.target.value)} style={{ flex: 1, border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 10px", fontSize: 12, outline: "none" }} />
+                  <button onClick={() => removeBarraItem(i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "0 10px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                </div>
+              ))}
+              <button onClick={addBarraItem} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>+ Agregar mensaje</button>
+            </>)}
             {selectedSection === "hero" && (<>
               <Field label="Titulo" value={content?.hero?.titulo} onChange={(v) => updateText(["hero", "titulo"], v)} />
               <Field label="Subtitulo" value={content?.hero?.subtitulo} onChange={(v) => updateText(["hero", "subtitulo"], v)} multiline />
