@@ -40,7 +40,7 @@ export default function NavbarProducto({ id, logoUrl, primaryColor }: NavbarProd
         </div>
 
         <div className="nav-producto-logo">
-          {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 55, objectFit: "contain" }} />}
+          {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 75, objectFit: "contain" }} />}
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
