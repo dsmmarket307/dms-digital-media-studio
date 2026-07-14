@@ -1,6 +1,7 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Carrusel from "./Carrusel";
+import CarritoDrawer from "./CarritoDrawer";
 import DetalleCliente from "./DetalleCliente";
 import Resenas from "./Resenas";
 import { CarritoProvider } from "../../context/CarritoContext";
