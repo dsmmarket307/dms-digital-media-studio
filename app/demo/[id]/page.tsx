@@ -171,6 +171,19 @@ export default async function DemoPage({ params }: Props) {
           <a href="https://dms-digital-media-studio.vercel.app/dashboard/client/suscripcion" style={{ background: "#fff", color: "#7c3aed", padding: "6px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Activar Plan</a>
         </div>
       )}
+            {c?.barraAnuncio?.activo && c?.barraAnuncio?.items?.length > 0 && c?.productos?.length > 0 && (
+        <div style={{ background: c.barraAnuncio.colorFondo || "#111111", overflow: "hidden", padding: "8px 0" }}>
+          <style>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }`}</style>
+          <div style={{ display: "flex", width: "max-content", animation: "marquee 20s linear infinite" }}>
+            {[...c.barraAnuncio.items, ...c.barraAnuncio.items].map((txt: string, i: number) => (
+              <span key={i} style={{ color: c.barraAnuncio.colorTexto || "#f5c542", fontSize: "12px", fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: "20px" }}>
+                {txt}
+                <span style={{ opacity: 0.6 }}>•</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
       <nav>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {logo && <img src={logo} alt="logo" style={{ height: 50, objectFit: "contain" }} />}
