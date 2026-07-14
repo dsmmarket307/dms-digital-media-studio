@@ -55,6 +55,15 @@ export default async function ProductoDetallePage({ params }: Props) {
           <a href={`/demo/${id}#productos`} style={{ color: "#555", textDecoration: "none", fontWeight: 500 }}>CATALOGO</a>
           <a href={`/demo/${id}#contacto`} style={{ color: "#555", textDecoration: "none", fontWeight: 500 }}>CONTACTO</a>
         </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <a href={`/demo/${id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: "50%", background: "#f3f4f6", color: "#111", textDecoration: "none" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </a>
+          <a href={`/demo/${id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: "50%", background: "#f3f4f6", color: "#111", textDecoration: "none" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+          <CarritoDrawer primaryColor={pr} siteId={id} />
+        </div>
 
         <div style={{ background: "#fff", borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
           <Carrusel imagenes={p.imagenes ?? []} nombre={p.nombre} />
