@@ -36,6 +36,19 @@ export default async function ProductoDetallePage({ params }: Props) {
   return (
     <CarritoProvider>
     <div style={{ minHeight: "100vh", background: "#f8f9fa", fontFamily: font }}>
+      <style>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }`}</style>
+      {site?.generated_content?.barraAnuncio?.activo && site?.generated_content?.barraAnuncio?.items?.length > 0 && (
+        <div style={{ background: site.generated_content.barraAnuncio.colorFondo || "#111111", overflow: "hidden", padding: "8px 0" }}>
+          <div style={{ display: "flex", width: "max-content", animation: "marquee 20s linear infinite" }}>
+            {[...site.generated_content.barraAnuncio.items, ...site.generated_content.barraAnuncio.items].map((txt: string, i: number) => (
+              <span key={i} style={{ color: site.generated_content.barraAnuncio.colorTexto || "#f5c542", fontSize: "12px", fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: "20px" }}>
+                {txt}
+                <span style={{ opacity: 0.6 }}>•</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "2rem 1rem" }}>
         <nav style={{ display: "flex", gap: 24, marginBottom: "1rem", fontSize: "0.9rem" }}>
           <a href={`/demo/${id}`} style={{ color: "#111", textDecoration: "none", fontWeight: 700, borderBottom: `2px solid ${pr}`, paddingBottom: 4 }}>INICIO</a>
