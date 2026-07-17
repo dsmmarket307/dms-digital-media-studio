@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import EditorDescripcion from "@/components/EditorDescripcion";
 import { useRouter, useParams } from "next/navigation";
 
 const FONTS = [
