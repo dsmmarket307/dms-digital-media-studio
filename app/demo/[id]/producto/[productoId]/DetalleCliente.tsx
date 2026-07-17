@@ -144,7 +144,7 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
           {producto.descripcion && (
             <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
               <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Descripcion</p>
-              <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.8, whiteSpace: "pre-line" }}>{producto.descripcion}</p>
+              <div style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />
             </div>
           )}
 
