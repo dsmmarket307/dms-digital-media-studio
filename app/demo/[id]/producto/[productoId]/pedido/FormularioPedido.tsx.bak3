@@ -41,7 +41,7 @@ const DEPARTAMENTOS: Record<string, string[]> = {
 
 export default function FormularioPedido({ producto, siteId, productoId, primaryColor, tallaInicial, colorInicial }: { producto: any; siteId: string; productoId: string; primaryColor: string; tallaInicial?: string; colorInicial?: string }) {
   const pathname = usePathname();
-  const hrefVolver = pathname.replace(/\/pedido$/, "");
+  const hrefVolver = pathname.replace(/\/pedido\$/, "");
   const [cantidad, setCantidad] = useState(1);
   const [departamento, setDepartamento] = useState("");
   const [ciudad, setCiudad] = useState("");
