@@ -1,15 +1,18 @@
 ﻿"use client";
 import { useState } from "react";
-
+import { usePathname } from "next/navigation";
 interface NavbarProductoProps {
   id: string;
   logoUrl?: string;
   primaryColor: string;
 }
-
 export default function NavbarProducto({ id, logoUrl, primaryColor }: NavbarProductoProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const pathname = usePathname();
+  const base = pathname.startsWith(`/demo/${id}`) ? `/demo/${id}` : "";
+  const hrefInicio = base || "/";
+  const hrefCatalogo = base ? `${base}#productos` : "/#productos";
+  const hrefContacto = base ? `${base}#contacto` : "/#contacto";
   return (
     <>
       <style>{`
@@ -26,40 +29,36 @@ export default function NavbarProducto({ id, logoUrl, primaryColor }: NavbarProd
           .hamburger-nav { display: none !important; }
         }
       `}</style>
-
       <div className="nav-producto">
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <button className="hamburger-nav" onClick={() => setMenuOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}>
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
           <div className="nav-producto-links">
-            <a href={`/demo/${id}`} style={{ color: "#111", textDecoration: "none", fontWeight: 700, fontSize: "0.875rem" }}>INICIO</a>
-            <a href={`/demo/${id}#productos`} style={{ color: "#555", textDecoration: "none", fontWeight: 500, fontSize: "0.875rem" }}>CATALOGO</a>
-            <a href={`/demo/${id}#contacto`} style={{ color: "#555", textDecoration: "none", fontWeight: 500, fontSize: "0.875rem" }}>CONTACTO</a>
+            <a href={hrefInicio} style={{ color: "#111", textDecoration: "none", fontWeight: 700, fontSize: "0.875rem" }}>INICIO</a>
+            <a href={hrefCatalogo} style={{ color: "#555", textDecoration: "none", fontWeight: 500, fontSize: "0.875rem" }}>CATALOGO</a>
+            <a href={hrefContacto} style={{ color: "#555", textDecoration: "none", fontWeight: 500, fontSize: "0.875rem" }}>CONTACTO</a>
           </div>
         </div>
-
         <div className="nav-producto-logo">
           {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 75, objectFit: "contain" }} />}
         </div>
-
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <a href={`/demo/${id}#productos`} style={{ display: "flex", color: "#111" }}>
+          <a href={hrefCatalogo} style={{ display: "flex", color: "#111" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </a>
-          <a href={`/demo/${id}`} style={{ display: "flex", color: "#111" }}>
+          <a href={hrefInicio} style={{ display: "flex", color: "#111" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           </a>
         </div>
       </div>
-
       <div className={`nav-producto-overlay${menuOpen ? " open" : ""}`}>
         <button onClick={() => setMenuOpen(false)} style={{ position: "fixed", top: 20, right: 20, background: "none", border: "none", cursor: "pointer" }}>
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <a href={`/demo/${id}`} onClick={() => setMenuOpen(false)}>INICIO</a>
-        <a href={`/demo/${id}#productos`} onClick={() => setMenuOpen(false)}>CATALOGO</a>
-        <a href={`/demo/${id}#contacto`} onClick={() => setMenuOpen(false)}>CONTACTO</a>
+        <a href={hrefInicio} onClick={() => setMenuOpen(false)}>INICIO</a>
+        <a href={hrefCatalogo} onClick={() => setMenuOpen(false)}>CATALOGO</a>
+        <a href={hrefContacto} onClick={() => setMenuOpen(false)}>CONTACTO</a>
       </div>
     </>
   );
