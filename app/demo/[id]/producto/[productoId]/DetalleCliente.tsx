@@ -143,11 +143,22 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
           {/* DESCRIPCION - abajo de los botones */}
           {producto.descripcion && (
             <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Descripcion</p>
               <div style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />
             </div>
           )}
 
-          
+          {/* CONFIANZA */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: "1px solid #f0f0f0", paddingTop: "1rem" }}>
+            {[
+              { icon: "🚚", text: "Envio a todo Colombia" },
+              { icon: "✅", text: "Garantia de satisfaccion" },
+              { icon: "📦", text: "Contra entrega disponible" },
+            ].map((item, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: "1.1rem" }}>{item.icon}</span>
+                <span style={{ fontSize: "0.85rem", color: "#555", fontWeight: 500 }}>{item.text}</span>
+              </div>
             ))}
           </div>
 
