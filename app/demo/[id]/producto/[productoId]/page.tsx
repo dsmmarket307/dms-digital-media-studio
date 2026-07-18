@@ -5,6 +5,7 @@ import CarritoDrawer from "./CarritoDrawer";
 import NavbarProducto from "./NavbarProducto";
 import DetalleCliente from "./DetalleCliente";
 import Resenas from "./Resenas";
+import FaqProducto from "./FaqProducto";
 import { CarritoProvider } from "../../context/CarritoContext";
 type Props = { params: Promise<{ id: string; productoId: string }> };
 export async function generateMetadata({ params }: Props) {
@@ -59,6 +60,9 @@ export default async function ProductoDetallePage({ params }: Props) {
           <DetalleCliente producto={p} siteId={id} primaryColor={pr} vendidos={vendidos ?? 0} promedio={promedio} totalResenas={resenaData?.length ?? 0} />
         </div>
         <div style={{ background: "#fff", borderRadius: 20, padding: "2rem", marginTop: "2rem", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>          <Resenas siteId={id} productoIndex={parseInt(productoId)} />
+          {c?.faq && c.faq.length > 0 && (
+            <FaqProducto faq={c.faq} primaryColor={pr} />
+          )}
         </div>
       </div>
     </div>
