@@ -1,7 +1,6 @@
 ﻿"use client";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const DEPARTAMENTOS: Record<string, string[]> = {
   "Amazonas": ["Leticia", "Puerto Nariño"],
@@ -40,8 +39,6 @@ const DEPARTAMENTOS: Record<string, string[]> = {
 };
 
 export default function FormularioPedido({ producto, siteId, productoId, primaryColor, tallaInicial, colorInicial }: { producto: any; siteId: string; productoId: string; primaryColor: string; tallaInicial?: string; colorInicial?: string }) {
-  const pathname = usePathname();
-  const hrefVolver = pathname.replace(/\/pedido\$/, "");
   const [cantidad, setCantidad] = useState(1);
   const [departamento, setDepartamento] = useState("");
   const [ciudad, setCiudad] = useState("");
@@ -106,7 +103,7 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
       </svg>
       <h2 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#16a34a", marginBottom: "0.5rem" }}>Pedido recibido</h2>
       <p style={{ color: "#555", textAlign: "center" }}>Nos comunicaremos contigo al <strong>{form.telefono}</strong> para coordinar la entrega.</p>
-      <Link href={hrefVolver} style={{ marginTop: "1.5rem", padding: "10px 24px", background: "#f3f4f6", border: "none", borderRadius: 10, cursor: "pointer", fontWeight: 600, textDecoration: "none", color: "#111" }}>Volver al producto</Link>
+      <Link href={`/demo/${siteId}/producto/${productoId}`} style={{ marginTop: "1.5rem", padding: "10px 24px", background: "#f3f4f6", border: "none", borderRadius: 10, cursor: "pointer", fontWeight: 600, textDecoration: "none", color: "#111" }}>Volver al producto</Link>
     </div>
   );
 
@@ -233,7 +230,7 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
       {error && <p style={{ color: "#ef4444", fontSize: "0.85rem" }}>{error}</p>}
 
       <div style={{ display: "flex", gap: 8 }}>
-        <Link href={hrefVolver} style={{ flex: 1, padding: 14, background: "#f3f4f6", border: "none", borderRadius: 12, fontSize: "0.95rem", fontWeight: 600, cursor: "pointer", textAlign: "center", textDecoration: "none", color: "#111" }}>Atras</Link>
+        <Link href={`/demo/${siteId}/producto/${productoId}`} style={{ flex: 1, padding: 14, background: "#f3f4f6", border: "none", borderRadius: 12, fontSize: "0.95rem", fontWeight: 600, cursor: "pointer", textAlign: "center", textDecoration: "none", color: "#111" }}>Atras</Link>
         <button type="submit" disabled={loading} style={{ flex: 2, padding: 14, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "0.95rem", fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}>
           {loading ? "Enviando..." : "Confirmar pedido"}
         </button>
