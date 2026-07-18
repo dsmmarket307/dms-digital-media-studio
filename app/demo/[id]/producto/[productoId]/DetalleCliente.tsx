@@ -148,20 +148,6 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
             </div>
           )}
 
-          {/* CONFIANZA */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: "1px solid #f0f0f0", paddingTop: "1rem" }}>
-            {[
-              { icon: "🚚", text: "Envio a todo Colombia" },
-              { icon: "✅", text: "Garantia de satisfaccion" },
-              { icon: "📦", text: "Contra entrega disponible" },
-            ].map((item, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: "1.1rem" }}>{item.icon}</span>
-                <span style={{ fontSize: "0.85rem", color: "#555", fontWeight: 500 }}>{item.text}</span>
-              </div>
-            ))}
-          </div>
-
           <CarritoDrawer primaryColor={primaryColor} siteId={siteId} />
         </>
       )}
