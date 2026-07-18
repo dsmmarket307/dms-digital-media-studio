@@ -56,6 +56,9 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
           <button style={btnStyle} onClick={() => execCmd("bold")}><b>B</b></button>
           <button style={btnStyle} onClick={() => execCmd("italic")}><i>I</i></button>
           <button style={btnStyle} onClick={() => execCmd("underline")}><u>U</u></button>
+          <button style={btnStyle} onClick={() => execCmd("justifyLeft")}>Izq</button>
+          <button style={btnStyle} onClick={() => execCmd("justifyCenter")}>Centro</button>
+          <button style={btnStyle} onClick={() => execCmd("justifyRight")}>Der</button>
           <button style={btnStyle} onClick={() => execCmd("insertUnorderedList")}>• Lista</button>
           <button style={btnStyle} onClick={() => execCmd("insertOrderedList")}>1. Lista</button>
           <button style={{ ...btnStyle, color: uploading ? "#aaa" : "#7c3aed" }} onClick={() => fileRef.current?.click()} disabled={uploading}>
