@@ -26,9 +26,24 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
   const colores = producto.colores ? producto.colores.split(",").map((c: string) => c.trim()).filter(Boolean) : [];
 
   const pathname = usePathname();
+  const botonColor = producto.boton_color ?? primaryColor;
+  const [cantidad, setCantidad] = useState(1);
+  const ofertasDefault = [
+    { cantidad: 1, descuento: 0, oculta: false },
+    { cantidad: 2, descuento: 15, oculta: false },
+    { cantidad: 3, descuento: 25, oculta: false },
+    { cantidad: 4, descuento: 35, oculta: false },
+  ];
+  const ofertasBase: any[] = producto.ofertas ?? ofertasDefault;
+  const ofertasVisibles = ofertasBase.filter((o: any) => !o.oculta);
+  const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9.]/g, "")) || 0;
+  const ofertaActual = ofertasBase.find((o: any) => o.cantidad === cantidad) ?? ofertasBase[0];
+  const precioTotal = precioBase * cantidad * (1 - (ofertaActual?.descuento ?? 0) / 100);
   const paramsPedido = new URLSearchParams();
   if (tallaSeleccionada) paramsPedido.set("talla", tallaSeleccionada);
   if (colorSeleccionado) paramsPedido.set("color", colorSeleccionado);
+  paramsPedido.set("cantidad", cantidad.toString());
+  paramsPedido.set("precio_total", precioTotal.toString());
   const hrefPedido = `${pathname}/pedido${paramsPedido.toString() ? `?${paramsPedido.toString()}` : ""}`;
 
   return (
@@ -90,8 +105,33 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
         </div>
       )}
 
+      {ofertasVisibles.length > 1 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", textTransform: "uppercase", letterSpacing: 1 }}>Selecciona tu oferta</p>
+          {ofertasVisibles.map((o: any) => {
+            const precioOferta = precioBase * o.cantidad * (1 - o.descuento / 100);
+            const precioSinDesc = precioBase * o.cantidad;
+            const seleccionado = cantidad === o.cantidad;
+            return (
+              <div key={o.cantidad} onClick={() => setCantidad(o.cantidad)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", border: `2px solid ${seleccionado ? botonColor : "#e5e7eb"}`, borderRadius: 12, cursor: "pointer", background: seleccionado ? `${botonColor}08` : "#fff" }}>
+                <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${seleccionado ? botonColor : "#d1d5db"}`, background: seleccionado ? botonColor : "#fff", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {seleccionado && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#fff" }} />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111", margin: 0 }}>{o.cantidad} unidad{o.cantidad > 1 ? "es" : ""}{o.descuento > 0 ? " + envio incluido" : ""}</p>
+                  {o.descuento > 0 && <span style={{ fontSize: "0.75rem", background: botonColor, color: "#fff", padding: "1px 8px", borderRadius: 999, fontWeight: 700 }}>Ahorra {o.descuento}%</span>}
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  {o.descuento > 0 && <p style={{ fontSize: "0.8rem", color: "#aaa", textDecoration: "line-through", margin: 0 }}>${precioSinDesc.toLocaleString("es-CO")}</p>}
+                  <p style={{ fontSize: "1rem", fontWeight: 800, color: "#111", margin: 0 }}>${precioOferta.toLocaleString("es-CO")}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
-        <Link href={hrefPedido} className="btn-rebote" style={{ display: "block", textAlign: "center", width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${primaryColor}44`, textDecoration: "none" }}>
+        <Link href={hrefPedido} className="btn-rebote" style={{ display: "block", textAlign: "center", width: "100%", padding: 16, background: botonColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${botonColor}44`, textDecoration: "none" }}>
           {producto.boton_texto ?? "Realizar Pedido"}
         </Link>
         <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad: 1 })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
