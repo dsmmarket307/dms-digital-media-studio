@@ -1,5 +1,6 @@
 ﻿"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useCarrito } from "../../context/CarritoContext";
 import CarritoDrawer from "./CarritoDrawer";
@@ -24,10 +25,11 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
   const tallas = producto.tallas ? producto.tallas.split(",").map((t: string) => t.trim()).filter(Boolean) : [];
   const colores = producto.colores ? producto.colores.split(",").map((c: string) => c.trim()).filter(Boolean) : [];
 
+  const pathname = usePathname();
   const paramsPedido = new URLSearchParams();
   if (tallaSeleccionada) paramsPedido.set("talla", tallaSeleccionada);
   if (colorSeleccionado) paramsPedido.set("color", colorSeleccionado);
-  const hrefPedido = `/demo/${siteId}/producto/${productoId}/pedido${paramsPedido.toString() ? `?${paramsPedido.toString()}` : ""}`;
+  const hrefPedido = `${pathname}/pedido${paramsPedido.toString() ? `?${paramsPedido.toString()}` : ""}`;
 
   return (
     <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
