@@ -73,17 +73,14 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
   return (
     <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
 
-      {/* NOMBRE */}
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
 
-      {/* ESTRELLAS */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <Estrellas valor={Math.round(promedio)} />
         <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} resena{totalResenas !== 1 ? "s" : ""})</span>
         {vendidos > 0 && <span style={{ fontSize: "0.85rem", color: "#888" }}>· +{vendidos} vendidos</span>}
       </div>
 
-      {/* PRECIO */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
         <p style={{ fontSize: "2rem", fontWeight: 800, color: "#111" }}>{producto.precio}</p>
         {producto.precio_anterior && (
@@ -94,9 +91,22 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
         )}
       </div>
 
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: "10px 0", borderTop: "1px solid #f0f0f0", borderBottom: "1px solid #f0f0f0" }}>
+        {[
+          { icon: "🚚", text: "Envio GRATIS" },
+          { icon: "💵", text: "Pago Contra Entrega" },
+          { icon: "🔒", text: "Compra 100% Segura" },
+          { icon: "⭐", text: "Calidad Garantizada" },
+        ].map((item, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+            <span style={{ fontSize: "0.85rem", color: "#555", fontWeight: 500 }}>{item.text}</span>
+          </div>
+        ))}
+      </div>
+
       {!mostrarForm && (
         <>
-          {/* COLOR */}
           {colores.length > 0 && (
             <div>
               <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Color</p>
@@ -108,7 +118,6 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
             </div>
           )}
 
-          {/* TALLA */}
           {tallas.length > 0 && (
             <div>
               <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Talla</p>
@@ -120,7 +129,6 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
             </div>
           )}
 
-          {/* CANTIDAD */}
           <div>
             <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Cantidad</p>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -130,20 +138,17 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
             </div>
           </div>
 
-          {/* BOTONES */}
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
             <button onClick={() => setMostrarForm(true)} style={{ width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${primaryColor}44` }}>
-              Realizar Pedido →
+              Realizar Pedido
             </button>
             <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
               Agregar al carrito
             </button>
           </div>
 
-          {/* DESCRIPCION - abajo de los botones */}
           {producto.descripcion && (
             <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
-              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Descripcion</p>
               <div style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />
             </div>
           )}
