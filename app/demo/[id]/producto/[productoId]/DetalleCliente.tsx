@@ -149,7 +149,8 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
 
           {producto.descripcion && (
             <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
-              <div style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />
+              <style>{`.desc-producto font[size="1"]{font-size:0.75rem} .desc-producto font[size="2"]{font-size:0.875rem} .desc-producto font[size="3"]{font-size:1rem} .desc-producto font[size="4"]{font-size:1.25rem} .desc-producto font[size="5"]{font-size:1.5rem} .desc-producto font[size="6"]{font-size:2rem} .desc-producto font[size="7"]{font-size:2.5rem}`}</style>
+              <div className="desc-producto" style={{ color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />
             </div>
           )}
 
