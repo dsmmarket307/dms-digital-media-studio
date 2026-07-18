@@ -1,4 +1,5 @@
 ﻿import { createClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 import EstrellasProducto from "./EstrellasProducto";
@@ -101,6 +102,9 @@ export default async function DemoPage({ params }: Props) {
     );
   }
 
+  const headersList = await headers();
+  const hostname = headersList.get("host") ?? "";
+  const isCustomDomain = hostname !== "dms-digital-media-studio.vercel.app" && !hostname.includes("vercel.app") && !hostname.includes("localhost");
   const ci = site.custom_images ?? {};
   const imagenes = await getPexelsImages(site.website_type, site.prompt ?? "");
   const img0 = ci.hero || imagenes[0] || "";
@@ -280,7 +284,7 @@ export default async function DemoPage({ params }: Props) {
                 <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem", paddingBottom: "0.5rem", borderBottom: "2px solid #f0f0f0" }}>{cat}</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.5rem" }}>
                   {(c.productos as any[]).filter((p: any) => p.categoria === cat).map((p: any) => (
-                    <a key={(c.productos as any[]).indexOf(p)} href={typeof window !== "undefined" && window.location.hostname !== "dms-digital-media-studio.vercel.app" && !window.location.hostname.includes("localhost") ? `/producto/${(c.productos as any[]).indexOf(p)}` : `/demo/${id}/producto/${(c.productos as any[]).indexOf(p)}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
+                    <a key={(c.productos as any[]).indexOf(p)} href={isCustomDomain ? `/producto/${(c.productos as any[]).indexOf(p)}` : `/demo/${id}/producto/${(c.productos as any[]).indexOf(p)}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
                       {p.imagenes?.length > 0 ? (
                         <div style={{ position: "relative", overflow: "hidden" }}>
                           <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
