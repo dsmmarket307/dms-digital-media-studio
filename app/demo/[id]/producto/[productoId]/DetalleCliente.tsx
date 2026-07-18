@@ -15,19 +15,69 @@ function Estrellas({ valor }: { valor: number }) {
   );
 }
 
+const DEPARTAMENTOS: Record<string, string[]> = {
+  "Amazonas": ["Leticia", "Puerto Nariño"],
+  "Antioquia": ["Medellin", "Bello", "Itagui", "Envigado", "Rionegro", "Apartado", "Turbo"],
+  "Arauca": ["Arauca", "Saravena", "Tame"],
+  "Atlantico": ["Barranquilla", "Soledad", "Malambo", "Sabanagrande"],
+  "Bogota D.C.": ["Bogota"],
+  "Bolivar": ["Cartagena", "Magangue", "Mompox"],
+  "Boyaca": ["Tunja", "Duitama", "Sogamoso", "Chiquinquira"],
+  "Caldas": ["Manizales", "Villamaria", "La Dorada", "Chinchina"],
+  "Caqueta": ["Florencia", "San Vicente del Caguan"],
+  "Casanare": ["Yopal", "Aguazul", "Villanueva"],
+  "Cauca": ["Popayan", "Santander de Quilichao", "Puerto Tejada"],
+  "Cesar": ["Valledupar", "Aguachica", "Bosconia"],
+  "Choco": ["Quibdo", "Istmina", "Tado"],
+  "Cordoba": ["Monteria", "Lorica", "Cerethe"],
+  "Cundinamarca": ["Soacha", "Fusagasuga", "Facatativa", "Zipaquira", "Chia", "Mosquera", "Madrid", "Funza"],
+  "Guainia": ["Inirida"],
+  "Guaviare": ["San Jose del Guaviare"],
+  "Huila": ["Neiva", "Pitalito", "Garzon"],
+  "La Guajira": ["Riohacha", "Maicao", "Uribia"],
+  "Magdalena": ["Santa Marta", "Cienaga", "Fundacion"],
+  "Meta": ["Villavicencio", "Acacias", "Granada"],
+  "Narino": ["Pasto", "Tumaco", "Ipiales", "Turbo"],
+  "Norte de Santander": ["Cucuta", "Ocana", "Pamplona", "Villa del Rosario"],
+  "Putumayo": ["Mocoa", "Puerto Asis"],
+  "Quindio": ["Armenia", "Calarca", "Montenegro"],
+  "Risaralda": ["Pereira", "Dosquebradas", "Santa Rosa de Cabal"],
+  "San Andres": ["San Andres", "Providencia"],
+  "Santander": ["Bucaramanga", "Floridablanca", "Giron", "Piedecuesta", "Barrancabermeja"],
+  "Sucre": ["Sincelejo", "Corozal", "Sampues"],
+  "Tolima": ["Ibague", "Espinal", "Melgar", "Honda"],
+  "Valle del Cauca": ["Cali", "Buenaventura", "Palmira", "Tulua", "Buga", "Cartago"],
+  "Vaupes": ["Mitu"],
+  "Vichada": ["Puerto Carreno"],
+};
+
 export default function DetalleCliente({ producto, siteId, primaryColor, vendidos, promedio, totalResenas }: { producto: any; siteId: string; primaryColor: string; vendidos: number; promedio: number; totalResenas: number }) {
   const { agregar } = useCarrito();
   const [tallaSeleccionada, setTallaSeleccionada] = useState("");
   const [colorSeleccionado, setColorSeleccionado] = useState("");
   const [cantidad, setCantidad] = useState(1);
   const [mostrarForm, setMostrarForm] = useState(false);
-  const [form, setForm] = useState({ nombre: "", telefono: "", ciudad: "", barrio: "", direccion: "", notas: "" });
+  const [departamento, setDepartamento] = useState("");
+  const [ciudad, setCiudad] = useState("");
+  const [form, setForm] = useState({ nombre: "", apellido: "", direccion: "", barrio: "", casa: "", telefono: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const tallas = producto.tallas ? producto.tallas.split(",").map((t: string) => t.trim()) : [];
-  const colores = producto.colores ? producto.colores.split(",").map((c: string) => c.trim()) : [];
+  const tallas = producto.tallas ? producto.tallas.split(",").map((t: string) => t.trim()).filter(Boolean) : [];
+  const colores = producto.colores ? producto.colores.split(",").map((c: string) => c.trim()).filter(Boolean) : [];
+
+  const ofertas = [
+    { cantidad: 1, label: "1 unidad", descuento: 0 },
+    { cantidad: 2, label: "2 unidades + 1 GRATIS + envio incluido", descuento: 15 },
+    { cantidad: 3, label: "3 unidades + 2 GRATIS + envio incluido", descuento: 25 },
+    { cantidad: 4, label: "4 unidades + 3 GRATIS + envio incluido", descuento: 35 },
+  ];
+
+  const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9.]/g, "")) || 0;
+  const ofertaActual = ofertas.find(o => o.cantidad === cantidad) ?? ofertas[0];
+  const precioTotal = precioBase * cantidad * (1 - ofertaActual.descuento / 100);
+  const precioOriginal = precioBase * cantidad;
 
   const handleChange = (e: any) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -46,7 +96,12 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
           talla: tallaSeleccionada,
           color: colorSeleccionado,
           cantidad,
-          ...form
+          nombre: `${form.nombre} ${form.apellido}`,
+          telefono: form.telefono,
+          ciudad: `${departamento} - ${ciudad}`,
+          barrio: form.barrio,
+          direccion: `${form.direccion} ${form.casa}`,
+          notas: ""
         })
       });
       const data = await res.json();
@@ -72,6 +127,7 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
 
   return (
     <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <style>{`.desc-producto font[size="1"]{font-size:0.75rem} .desc-producto font[size="2"]{font-size:0.875rem} .desc-producto font[size="3"]{font-size:1rem} .desc-producto font[size="4"]{font-size:1.25rem} .desc-producto font[size="5"]{font-size:1.5rem} .desc-producto font[size="6"]{font-size:2rem} .desc-producto font[size="7"]{font-size:2.5rem}`}</style>
 
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
 
@@ -112,7 +168,7 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
               <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Color</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {colores.map((col: string, j: number) => (
-                  <button key={j} onClick={() => setColorSeleccionado(col)} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${colorSeleccionado === col ? "#111" : "#e5e7eb"}`, background: colorSeleccionado === col ? "#111" : "#fff", color: colorSeleccionado === col ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}>{col}</button>
+                  <button key={j} onClick={() => setColorSeleccionado(col)} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${colorSeleccionado === col ? "#111" : "#e5e7eb"}`, background: colorSeleccionado === col ? "#111" : "#fff", color: colorSeleccionado === col ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}>{col}</button>
                 ))}
               </div>
             </div>
@@ -123,24 +179,39 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
               <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Talla</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {tallas.map((t: string, j: number) => (
-                  <button key={j} onClick={() => setTallaSeleccionada(t)} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${tallaSeleccionada === t ? "#111" : "#e5e7eb"}`, background: tallaSeleccionada === t ? "#111" : "#fff", color: tallaSeleccionada === t ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" }}>{t}</button>
+                  <button key={j} onClick={() => setTallaSeleccionada(t)} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${tallaSeleccionada === t ? "#111" : "#e5e7eb"}`, background: tallaSeleccionada === t ? "#111" : "#fff", color: tallaSeleccionada === t ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}>{t}</button>
                 ))}
               </div>
             </div>
           )}
 
-          <div>
-            <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Cantidad</p>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <button onClick={() => setCantidad(Math.max(1, cantidad - 1))} style={{ width: 36, height: 36, borderRadius: 8, border: "2px solid #e5e7eb", background: "#fff", fontSize: "1.2rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>-</button>
-              <span style={{ fontWeight: 700, fontSize: "1.1rem", minWidth: 30, textAlign: "center" }}>{cantidad}</span>
-              <button onClick={() => setCantidad(cantidad + 1)} style={{ width: 36, height: 36, borderRadius: 8, border: "2px solid #e5e7eb", background: "#fff", fontSize: "1.2rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>+</button>
-            </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", textTransform: "uppercase", letterSpacing: 1 }}>Selecciona tu oferta</p>
+            {ofertas.map((o) => {
+              const precioOferta = precioBase * o.cantidad * (1 - o.descuento / 100);
+              const precioSinDesc = precioBase * o.cantidad;
+              const seleccionado = cantidad === o.cantidad;
+              return (
+                <div key={o.cantidad} onClick={() => setCantidad(o.cantidad)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", border: `2px solid ${seleccionado ? primaryColor : "#e5e7eb"}`, borderRadius: 12, cursor: "pointer", background: seleccionado ? `${primaryColor}08` : "#fff", transition: "all 0.15s" }}>
+                  <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${seleccionado ? primaryColor : "#d1d5db"}`, background: seleccionado ? primaryColor : "#fff", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {seleccionado && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#fff" }} />}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111", margin: 0 }}>{o.label}</p>
+                    {o.descuento > 0 && <span style={{ fontSize: "0.75rem", background: primaryColor, color: "#fff", padding: "1px 8px", borderRadius: 999, fontWeight: 700 }}>Ahorra {o.descuento}%</span>}
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    {o.descuento > 0 && <p style={{ fontSize: "0.8rem", color: "#aaa", textDecoration: "line-through", margin: 0 }}>${precioSinDesc.toLocaleString("es-CO")}</p>}
+                    <p style={{ fontSize: "1rem", fontWeight: 800, color: "#111", margin: 0 }}>${precioOferta.toLocaleString("es-CO")}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
             <button onClick={() => setMostrarForm(true)} style={{ width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${primaryColor}44` }}>
-              Realizar Pedido
+              {producto.boton_texto ?? "Realizar Pedido"}
             </button>
             <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
               Agregar al carrito
@@ -149,7 +220,6 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
 
           {producto.descripcion && (
             <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
-              <style>{`.desc-producto font[size="1"]{font-size:0.75rem} .desc-producto font[size="2"]{font-size:0.875rem} .desc-producto font[size="3"]{font-size:1rem} .desc-producto font[size="4"]{font-size:1.25rem} .desc-producto font[size="5"]{font-size:1.5rem} .desc-producto font[size="6"]{font-size:2rem} .desc-producto font[size="7"]{font-size:2.5rem}`}</style>
               <div className="desc-producto" style={{ color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />
             </div>
           )}
@@ -160,24 +230,103 @@ export default function DetalleCliente({ producto, siteId, primaryColor, vendido
 
       {mostrarForm && (
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111" }}>Datos de entrega</h3>
-          {[
-            { name: "nombre", label: "Nombre completo *", placeholder: "Tu nombre", required: true },
-            { name: "telefono", label: "Telefono / WhatsApp *", placeholder: "300 000 0000", required: true },
-            { name: "ciudad", label: "Ciudad *", placeholder: "Bogota, Medellin...", required: true },
-            { name: "barrio", label: "Barrio", placeholder: "Tu barrio", required: false },
-            { name: "direccion", label: "Direccion completa *", placeholder: "Calle 123 # 45-67", required: true },
-          ].map(f => (
-            <div key={f.name} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>{f.label}</label>
-              <input name={f.name} required={f.required} value={(form as any)[f.name]} onChange={handleChange} placeholder={f.placeholder} style={{ padding: "10px 12px", border: "2px solid #e5e7eb", borderRadius: 10, fontSize: "0.9rem", outline: "none", fontFamily: "inherit" }} />
+          {producto.imagenes?.[0] && (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#f8f9fa", borderRadius: 12, padding: "12px" }}>
+              <img src={producto.imagenes[0]} alt={producto.nombre} style={{ width: 70, height: 70, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} />
+              <div>
+                <p style={{ fontWeight: 700, fontSize: "0.95rem", color: "#111", margin: 0 }}>{producto.nombre}</p>
+                {tallaSeleccionada && <p style={{ fontSize: "0.8rem", color: "#888", margin: 0 }}>Talla: {tallaSeleccionada}</p>}
+                {colorSeleccionado && <p style={{ fontSize: "0.8rem", color: "#888", margin: 0 }}>Color: {colorSeleccionado}</p>}
+                <p style={{ fontSize: "0.85rem", color: "#888", margin: 0 }}>Cantidad: {cantidad}</p>
+                <p style={{ fontSize: "1rem", fontWeight: 800, color: "#111", margin: 0 }}>${precioTotal.toLocaleString("es-CO")}</p>
+              </div>
             </div>
-          ))}
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Notas adicionales</label>
-            <textarea name="notas" value={form.notas} onChange={handleChange} placeholder="Instrucciones especiales..." rows={2} style={{ padding: "10px 12px", border: "2px solid #e5e7eb", borderRadius: 10, fontSize: "0.9rem", outline: "none", fontFamily: "inherit", resize: "vertical" }} />
+          )}
+
+          <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", margin: 0 }}>Datos de entrega</h3>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Nombre *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input name="nombre" required value={form.nombre} onChange={handleChange} placeholder="Nombre" style={{ border: "none", background: "transparent", fontSize: "0.9rem", outline: "none", width: "100%" }} />
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Apellido *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input name="apellido" required value={form.apellido} onChange={handleChange} placeholder="Apellido" style={{ border: "none", background: "transparent", fontSize: "0.9rem", outline: "none", width: "100%" }} />
+              </div>
+            </div>
           </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Direccion *</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input name="direccion" required value={form.direccion} onChange={handleChange} placeholder="Direccion" style={{ border: "none", background: "transparent", fontSize: "0.9rem", outline: "none", width: "100%" }} />
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Departamento *</label>
+            <select required value={departamento} onChange={e => { setDepartamento(e.target.value); setCiudad(""); }} style={{ border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc", fontSize: "0.9rem", outline: "none" }}>
+              <option value="">Departamento</option>
+              {Object.keys(DEPARTAMENTOS).sort().map(d => <option key={d} value={d}>{d}</option>)}
+            </select>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Ciudad *</label>
+            <select required value={ciudad} onChange={e => setCiudad(e.target.value)} style={{ border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc", fontSize: "0.9rem", outline: "none" }}>
+              <option value="">Ciudad</option>
+              {(DEPARTAMENTOS[departamento] ?? []).map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Barrio *</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input name="barrio" required value={form.barrio} onChange={handleChange} placeholder="Barrio" style={{ border: "none", background: "transparent", fontSize: "0.9rem", outline: "none", width: "100%" }} />
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Casa o Apartamento *</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input name="casa" required value={form.casa} onChange={handleChange} placeholder="Casa o Apartamento" style={{ border: "none", background: "transparent", fontSize: "0.9rem", outline: "none", width: "100%" }} />
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Telefono *</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 12px", background: "#f8fafc" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 13.1a19.79 19.79 0 01-3.07-8.67A2 2 0 013.62 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              <input name="telefono" required value={form.telefono} onChange={handleChange} placeholder="Telefono" type="tel" style={{ border: "none", background: "transparent", fontSize: "0.9rem", outline: "none", width: "100%" }} />
+            </div>
+          </div>
+
+          <div style={{ background: "#f8f9fa", borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <span style={{ fontSize: "0.85rem", color: "#555" }}>Subtotal</span>
+              <span style={{ fontSize: "0.85rem", fontWeight: 600 }}>${precioTotal.toLocaleString("es-CO")}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <span style={{ fontSize: "0.85rem", color: "#555" }}>Envio</span>
+              <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#16a34a" }}>GRATIS</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #e5e7eb", paddingTop: 8, marginTop: 4 }}>
+              <span style={{ fontSize: "1rem", fontWeight: 800, color: "#111" }}>Total</span>
+              <span style={{ fontSize: "1rem", fontWeight: 800, color: "#111" }}>${precioTotal.toLocaleString("es-CO")}</span>
+            </div>
+          </div>
+
           {error && <p style={{ color: "#ef4444", fontSize: "0.85rem" }}>{error}</p>}
+
           <div style={{ display: "flex", gap: 8 }}>
             <button type="button" onClick={() => setMostrarForm(false)} style={{ flex: 1, padding: 14, background: "#f3f4f6", border: "none", borderRadius: 12, fontSize: "0.95rem", fontWeight: 600, cursor: "pointer" }}>Atras</button>
             <button type="submit" disabled={loading} style={{ flex: 2, padding: 14, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "0.95rem", fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}>
