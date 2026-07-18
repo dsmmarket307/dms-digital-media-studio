@@ -1,5 +1,5 @@
 ﻿"use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 function Estrellas({ valor, onClick }: { valor: number; onClick?: (v: number) => void }) {
   return (
@@ -19,10 +19,6 @@ export default function Resenas({ siteId, productoIndex }: { siteId: string; pro
   const [form, setForm] = useState({ nombre: "", calificacion: 5, comentario: "", foto: null as File | null });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [current, setCurrent] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const startX = useRef(0);
-  const isDragging = useRef(false);
 
   useEffect(() => {
     fetch(`/api/resenas?site_id=${siteId}&producto_index=${productoIndex}`)
@@ -60,23 +56,6 @@ export default function Resenas({ siteId, productoIndex }: { siteId: string; pro
 
   const promedio = resenas.length > 0 ? (resenas.reduce((a, r) => a + r.calificacion, 0) / resenas.length) : 0;
 
-  function prev() { setCurrent(c => c === 0 ? resenas.length - 1 : c - 1); }
-  function next() { setCurrent(c => c === resenas.length - 1 ? 0 : c + 1); }
-
-  function onTouchStart(e: React.TouchEvent) { startX.current = e.touches[0].clientX; }
-  function onTouchEnd(e: React.TouchEvent) {
-    const diff = startX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
-  }
-
-  function onMouseDown(e: React.MouseEvent) { isDragging.current = true; startX.current = e.clientX; }
-  function onMouseUp(e: React.MouseEvent) {
-    if (!isDragging.current) return;
-    isDragging.current = false;
-    const diff = startX.current - e.clientX;
-    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
-  }
-
   return (
     <div style={{ marginTop: "2rem", borderTop: "1px solid #f0f0f0", paddingTop: "2rem" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem", flexWrap: "wrap", gap: 8 }}>
@@ -106,7 +85,7 @@ export default function Resenas({ siteId, productoIndex }: { siteId: string; pro
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Comentario *</label>
-            <textarea required value={form.comentario} onChange={e => setForm(p => ({...p, comentario: e.target.value}))} placeholder="Cuentanos tu experiencia..." rows={3} style={{ padding: "10px 12px", border: "2px solid #e5e7eb", borderRadius: 10, fontSize: "0.9rem", outline: "none", resize: "vertical" }} />
+            <textarea required value={form.comentario} onChange={e => setForm(p => ({...p, comentario: e.target.value}))} placeholder="Cuéntanos tu experiencia..." rows={3} style={{ padding: "10px 12px", border: "2px solid #e5e7eb", borderRadius: 10, fontSize: "0.9rem", outline: "none", resize: "vertical" }} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#555" }}>Foto (opcional)</label>
@@ -121,43 +100,23 @@ export default function Resenas({ siteId, productoIndex }: { siteId: string; pro
       {resenas.length === 0 ? (
         <p style={{ color: "#aaa", fontSize: "0.9rem" }}>Aun no hay resenas. Se el primero en opinar.</p>
       ) : (
-        <div style={{ position: "relative" }}>
-          <div ref={trackRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onMouseDown} onMouseUp={onMouseUp} style={{ overflow: "hidden", borderRadius: 12, userSelect: "none", cursor: "grab" }}>
-            <div style={{ display: "flex", transition: "transform 0.4s ease", transform: `translateX(-${current * 100}%)` }}>
-              {resenas.map((r: any) => (
-                <div key={r.id} style={{ minWidth: "100%", background: "#f8f9fa", borderRadius: 12, padding: "1.5rem", boxSizing: "border-box" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, color: "#555", fontSize: "1rem" }}>{r.nombre?.charAt(0)?.toUpperCase()}</div>
-                      <div>
-                        <p style={{ fontWeight: 700, fontSize: "0.95rem", color: "#111", margin: 0 }}>{r.nombre}</p>
-                        <Estrellas valor={r.calificacion} />
-                      </div>
-                    </div>
-                    <span style={{ fontSize: "0.75rem", color: "#aaa" }}>{new Date(r.created_at).toLocaleDateString("es-CO")}</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {resenas.map((r: any) => (
+            <div key={r.id} style={{ background: "#f8f9fa", borderRadius: 12, padding: "1.25rem" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, color: "#555", fontSize: "0.9rem" }}>{r.nombre?.charAt(0)?.toUpperCase()}</div>
+                  <div>
+                    <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#111" }}>{r.nombre}</p>
+                    <Estrellas valor={r.calificacion} />
                   </div>
-                  <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.7, margin: 0 }}>{r.comentario}</p>
-                  {r.foto_url && <img src={r.foto_url} alt="resena" style={{ marginTop: 12, width: "100%", maxWidth: 200, borderRadius: 8, objectFit: "cover" }} />}
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {resenas.length > 1 && (
-            <>
-              <button onClick={prev} style={{ position: "absolute", left: -16, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <button onClick={next} style={{ position: "absolute", right: -16, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 16 }}>
-                {resenas.map((_, i) => (
-                  <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 8, height: 8, borderRadius: 999, background: i === current ? "#111" : "#d1d5db", border: "none", cursor: "pointer", transition: "all 0.3s", padding: 0 }} />
-                ))}
+                <span style={{ fontSize: "0.75rem", color: "#aaa" }}>{new Date(r.created_at).toLocaleDateString("es-CO")}</span>
               </div>
-            </>
-          )}
+              <p style={{ fontSize: "0.9rem", color: "#555", lineHeight: 1.6 }}>{r.comentario}</p>
+              {r.foto_url && <img src={r.foto_url} alt="resena" style={{ marginTop: 8, width: "100%", maxWidth: 200, borderRadius: 8, objectFit: "cover" }} />}
+            </div>
+          ))}
         </div>
       )}
     </div>
