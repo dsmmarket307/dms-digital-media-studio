@@ -13,7 +13,7 @@ export default function FaqProducto({ faq, primaryColor }: FaqProductoProps) {
 
   return (
     <div style={{ marginTop: "2rem" }}>
-      <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1rem" }}>Preguntas frecuentes</h3>
+      <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1rem", textAlign: "center" }}>Preguntas frecuentes</h3>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {faq.map((item, i) => (
           <div key={i} style={{ border: "1px solid #e5e7eb", borderRadius: 12, overflow: "hidden" }}>
