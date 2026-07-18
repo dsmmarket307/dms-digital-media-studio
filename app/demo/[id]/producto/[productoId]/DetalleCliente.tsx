@@ -34,6 +34,7 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
   return (
     <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
       <style>{`.desc-producto font[size="1"]{font-size:0.75rem} .desc-producto font[size="2"]{font-size:0.875rem} .desc-producto font[size="3"]{font-size:1rem} .desc-producto font[size="4"]{font-size:1.25rem} .desc-producto font[size="5"]{font-size:1.5rem} .desc-producto font[size="6"]{font-size:2rem} .desc-producto font[size="7"]{font-size:2.5rem}`}</style>
+      <style>{` @keyframes rebotePedido { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } } .btn-rebote { animation: rebotePedido 1.4s ease-in-out infinite; } `}</style>
 
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
 
@@ -90,7 +91,7 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
       )}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
-        <Link href={hrefPedido} style={{ display: "block", textAlign: "center", width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${primaryColor}44`, textDecoration: "none" }}>
+        <Link href={hrefPedido} className="btn-rebote" style={{ display: "block", textAlign: "center", width: "100%", padding: 16, background: primaryColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${primaryColor}44`, textDecoration: "none" }}>
           {producto.boton_texto ?? "Realizar Pedido"}
         </Link>
         <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad: 1 })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
