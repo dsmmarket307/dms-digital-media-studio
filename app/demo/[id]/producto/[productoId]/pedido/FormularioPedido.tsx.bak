@@ -52,12 +52,12 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
 
   const ofertas = [
     { cantidad: 1, label: "1 unidad", descuento: 0 },
-    { cantidad: 2, label: "2 unidades + envio Gratis", descuento: 15 },
-    { cantidad: 3, label: "3 unidades + envio Gratis", descuento: 25 },
-    { cantidad: 4, label: "4 unidades + envio Gratis", descuento: 35 },
+    { cantidad: 2, label: "2 unidades + 1 GRATIS + envio incluido", descuento: 15 },
+    { cantidad: 3, label: "3 unidades + 2 GRATIS + envio incluido", descuento: 25 },
+    { cantidad: 4, label: "4 unidades + 3 GRATIS + envio incluido", descuento: 35 },
   ];
 
-  const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9]/g, "")) || 0;
+  const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9.]/g, "")) || 0;
   const ofertaActual = ofertas.find(o => o.cantidad === cantidad) ?? ofertas[0];
   const precioTotal = precioBase * cantidad * (1 - ofertaActual.descuento / 100);
 
