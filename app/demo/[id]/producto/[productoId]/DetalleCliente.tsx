@@ -116,6 +116,16 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
         )}
       </div>
 
+      {producto.mostrar_resena !== false && producto.resena_texto && (
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 12, background: "#f8f9fa", borderRadius: 12, padding: "14px" }}>
+          {producto.resena_foto && <img src={producto.resena_foto} alt={producto.resena_nombre ?? "cliente"} style={{ width: 44, height: 44, objectFit: "cover", borderRadius: "50%", flexShrink: 0 }} />}
+          <div>
+            <p style={{ fontSize: "0.85rem", color: "#555", fontStyle: "italic", margin: 0, lineHeight: 1.5 }}>"{producto.resena_texto}"</p>
+            {producto.resena_nombre && <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#111", marginTop: 6, marginBottom: 0 }}>{producto.resena_nombre}</p>}
+          </div>
+        </div>
+      )}
+
       {producto.descripcion && (
         <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "1rem", marginTop: "0.5rem" }}>
           <div className="desc-producto" style={{ color: "#555", lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: producto.descripcion ?? "" }} />

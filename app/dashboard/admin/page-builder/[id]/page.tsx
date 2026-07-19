@@ -156,7 +156,14 @@ export default function PageBuilderEditor() {
     const fileName = `img-${imgTarget}-${Date.now()}.${ext}`;
     await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
-    if (imgTarget.startsWith("producto_")) {
+    if (imgTarget.startsWith("resena_")) {
+      const idx = parseInt(imgTarget.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        next.productos[idx].resena_foto = data.publicUrl;
+        return next;
+      });
+    } else if (imgTarget.startsWith("producto_")) {
       const idx = parseInt(imgTarget.split("_")[1]);
       setContent((prev: any) => {
         const next = JSON.parse(JSON.stringify(prev));
@@ -651,6 +658,22 @@ export default function PageBuilderEditor() {
                     <button onClick={() => updateArray("productos", i, "mostrar_carrito", (p.mostrar_carrito === false ? true : false) as any)} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: p.mostrar_carrito === false ? "#d1d5db" : primaryColor, position: "relative", transition: "background 0.2s" }}>
                       <span style={{ position: "absolute", top: 2, left: p.mostrar_carrito === false ? 2 : 20, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
                     </button>
+                  </div>
+                  <div style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Resena destacada</span>
+                      <button onClick={() => updateArray("productos", i, "mostrar_resena", (p.mostrar_resena === false ? true : false) as any)} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: p.mostrar_resena === false ? "#d1d5db" : primaryColor, position: "relative", transition: "background 0.2s" }}>
+                        <span style={{ position: "absolute", top: 2, left: p.mostrar_resena === false ? 2 : 20, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                      </button>
+                    </div>
+                    <Field label="Nombre del cliente" value={p.resena_nombre ?? ""} onChange={(v) => updateArray("productos", i, "resena_nombre", v)} />
+                    <Field label="Texto de la resena" value={p.resena_texto ?? ""} onChange={(v) => updateArray("productos", i, "resena_texto", v)} multiline />
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
+                      {p.resena_foto && <img src={p.resena_foto} alt="resena" style={{ width: 40, height: 40, objectFit: "cover", borderRadius: "50%" }} />}
+                      <button onClick={() => { setImgTarget(`resena_${i}`); setTimeout(() => imgRef.current?.click(), 100); }} style={{ flex: 1, padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                        {uploadingImg === `resena_${i}` ? "Subiendo..." : p.resena_foto ? "Cambiar foto" : "Subir foto"}
+                      </button>
+                    </div>
                   </div>
                   <div style={{ marginBottom: 14 }}>
                     <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 8, letterSpacing: "0.5px" }}>Ofertas por cantidad</label>
