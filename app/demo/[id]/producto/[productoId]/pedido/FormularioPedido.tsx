@@ -53,15 +53,22 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
   const tallaSeleccionada = tallaInicial ?? "";
   const colorSeleccionado = colorInicial ?? "";
 
-  const ofertas = [
-    { cantidad: 1, label: "1 unidad", descuento: 0 },
-    { cantidad: 2, label: "2 unidades + envio Gratis", descuento: 15 },
-    { cantidad: 3, label: "3 unidades + envio Gratis", descuento: 25 },
-    { cantidad: 4, label: "4 unidades + envio Gratis", descuento: 35 },
+  const ofertasConfig = producto.ofertas ?? [
+    { cantidad: 1, descuento: 0, oculta: false },
+    { cantidad: 2, descuento: 15, oculta: false },
+    { cantidad: 3, descuento: 25, oculta: false },
+    { cantidad: 4, descuento: 35, oculta: false },
   ];
+  const ofertas = ofertasConfig
+    .filter((o: any) => !o.oculta)
+    .map((o: any) => ({
+      cantidad: o.cantidad,
+      descuento: o.descuento,
+      label: o.cantidad === 1 ? "1 unidad" : `${o.cantidad} unidades + envio Gratis`,
+    }));
 
   const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9]/g, "")) || 0;
-  const ofertaActual = ofertas.find(o => o.cantidad === cantidad) ?? ofertas[0];
+  const ofertaActual = ofertas.find((o: any) => o.cantidad === cantidad) ?? ofertas[0];
   const precioTotal = precioBase * cantidad * (1 - ofertaActual.descuento / 100);
 
   const handleChange = (e: any) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -126,7 +133,7 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", textTransform: "uppercase", letterSpacing: 1 }}>Selecciona tu oferta</p>
-        {ofertas.map((o) => {
+        {ofertas.map((o: any) => {
           const precioOferta = precioBase * o.cantidad * (1 - o.descuento / 100);
           const precioSinDesc = precioBase * o.cantidad;
           const seleccionado = cantidad === o.cantidad;
