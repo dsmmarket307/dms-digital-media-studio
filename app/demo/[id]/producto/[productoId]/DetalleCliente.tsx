@@ -109,11 +109,11 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
         <Link href={hrefPedido} className="btn-rebote" style={{ display: "block", textAlign: "center", width: "100%", padding: 16, background: botonColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${botonColor}44`, textDecoration: "none" }}>
           {producto.boton_texto ?? "Realizar Pedido"}
         </Link>
-        producto.mostrar_carrito !== false && (
+        {producto.mostrar_carrito !== false && (
           <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad: 1 })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
             Agregar al carrito
           </button>
-        )
+        )}
       </div>
 
       {producto.descripcion && (
