@@ -54,9 +54,18 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", lineHeight: 1.3 }}>{producto.nombre}</h1>
 
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-        <span style={{ fontSize: "1rem" }}>{"⭐".repeat(Math.round(promedio)) || "⭐⭐⭐⭐⭐"}</span>
-        <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111" }}>{promedio > 0 ? promedio.toFixed(1) : "5.0"}</span>
-        <span style={{ fontSize: "0.85rem", color: "#666" }}>({totalResenas} Resena{totalResenas !== 1 ? "s" : ""} verificada{totalResenas !== 1 ? "s" : ""})</span>
+        {(() => {
+          const promedioMostrado = producto.calif_promedio ? parseFloat(producto.calif_promedio) : promedio;
+          const cantidadMostrada = producto.calif_cantidad !== undefined && producto.calif_cantidad !== "" ? parseInt(producto.calif_cantidad) : totalResenas;
+          const textoMostrado = producto.calif_texto || `Resena${cantidadMostrada !== 1 ? "s" : ""} verificada${cantidadMostrada !== 1 ? "s" : ""}`;
+          return (
+            <>
+              <span style={{ fontSize: "1rem" }}>{"⭐".repeat(Math.round(promedioMostrado)) || "⭐⭐⭐⭐⭐"}</span>
+              <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111" }}>{promedioMostrado > 0 ? promedioMostrado.toFixed(1) : "5.0"}</span>
+              <span style={{ fontSize: "0.85rem", color: "#666" }}>({cantidadMostrada} {textoMostrado})</span>
+            </>
+          );
+        })()}
         {vendidos > 0 && <span style={{ fontSize: "0.85rem", color: "#888" }}>· +{vendidos} vendidos</span>}
       </div>
 

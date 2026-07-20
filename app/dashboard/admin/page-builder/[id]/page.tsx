@@ -675,6 +675,23 @@ export default function PageBuilderEditor() {
                       </button>
                     </div>
                   </div>
+                  <div style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px" }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 8 }}>Calificacion mostrada</label>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 4 }}>Promedio (ej: 4.9)</label>
+                        <input type="number" step="0.1" min="0" max="5" value={p.calif_promedio ?? ""} placeholder="4.9" onChange={e => updateArray("productos", i, "calif_promedio", e.target.value as any)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "6px 8px", fontSize: 12 }} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 4 }}>Cantidad resenas</label>
+                        <input type="number" min="0" value={p.calif_cantidad ?? ""} placeholder="2" onChange={e => updateArray("productos", i, "calif_cantidad", e.target.value as any)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "6px 8px", fontSize: 12 }} />
+                      </div>
+                    </div>
+                    <div style={{ marginTop: 8 }}>
+                      <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 4 }}>Texto (ej: Resenas verificadas)</label>
+                      <input value={p.calif_texto ?? ""} placeholder="Resenas verificadas" onChange={e => updateArray("productos", i, "calif_texto", e.target.value)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "6px 8px", fontSize: 12 }} />
+                    </div>
+                  </div>
                   <div style={{ marginBottom: 14 }}>
                     <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 8, letterSpacing: "0.5px" }}>Ofertas por cantidad</label>
                     {[
