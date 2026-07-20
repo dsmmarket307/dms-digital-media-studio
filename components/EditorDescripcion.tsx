@@ -69,6 +69,19 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     }
   }
 
+  function insertBarraAnuncio() {
+    const uid = "banner" + Date.now();
+    const mensaje = "Envio GRATIS a todo Colombia &nbsp;•&nbsp; Garantia 30 dias &nbsp;•&nbsp; Pago contra entrega";
+    const html = '<div style="margin:10px 0;border-radius:8px;overflow:hidden;background:#111111;padding:8px 0;">' +
+      '<style>@keyframes ' + uid + '{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}</style>' +
+      '<div style="display:flex;width:max-content;animation:' + uid + ' 14s linear infinite;">' +
+      '<span style="color:#f5c542;font-size:13px;font-weight:600;white-space:nowrap;padding:0 20px;">' + mensaje + '</span>' +
+      '<span style="color:#f5c542;font-size:13px;font-weight:600;white-space:nowrap;padding:0 20px;">' + mensaje + '</span>' +
+      '</div></div><br/>';
+    document.execCommand("insertHTML", false, html);
+    handleInput();
+  }
+
   function insertTabla() {
     const tablaHtml = '<table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;table-layout:fixed;"><tr><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Caracteristica</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Este producto</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Otros</th></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 1</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 2</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 3</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 4</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 5</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 6</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr></table><br/>';
     document.execCommand("insertHTML", false, tablaHtml);
@@ -186,6 +199,7 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
             {uploading ? "Subiendo..." : "Imagen"}
           </button>
           <button style={btnStyle} onClick={insertTabla}>Tabla</button>
+          <button style={btnStyle} onClick={insertBarraAnuncio}>Barra anuncio</button>
           <button style={{ ...btnStyle, color: antesAfterPaso > 0 ? "#7c3aed" : undefined }} onClick={iniciarAntesDespues}>
             {antesAfterPaso === 1 ? "Sube foto ANTES..." : antesAfterPaso === 2 ? "Sube foto DESPUES..." : "Antes/Despues"}
           </button>
