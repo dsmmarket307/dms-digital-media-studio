@@ -131,12 +131,14 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     }
     if (antesAfterPaso === 2) {
       const uid = "ba" + Date.now();
-      const html = '<div style="position:relative;width:100%;max-width:500px;aspect-ratio:4/3;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.18);margin:12px 0;">' +
-        '<img src="' + data.publicUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />' +
+      const dragScript = "var r=this.getBoundingClientRect();var p=Math.max(0,Math.min(100,((event.clientX-r.left)/r.width)*100));document.getElementById(&quot;" + uid + "img&quot;).style.clipPath=&quot;inset(0 &quot;+(100-p)+&quot;% 0 0)&quot;;document.getElementById(&quot;" + uid + "line&quot;).style.left=p+&quot;%&quot;;document.getElementById(&quot;" + uid + "btn&quot;).style.left=p+&quot;%&quot;;";
+      const html = '<div id="' + uid + 'box" style="position:relative;width:100%;max-width:500px;aspect-ratio:4/3;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.18);margin:12px 0;cursor:ew-resize;user-select:none;touch-action:none;" onpointerdown="this.setPointerCapture(event.pointerId);this.dataset.d=1;' + dragScript + '" onpointermove="if(this.dataset.d==1){' + dragScript + '}" onpointerup="this.dataset.d=0" onpointerleave="this.dataset.d=0">' +
+        '<img src="' + data.publicUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;" />' +
         '<span style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">DESPUES</span>' +
-        '<img id="' + uid + '" src="' + antesAfterTemp + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(0 50% 0 0);" />' +
+        '<img id="' + uid + 'img" src="' + antesAfterTemp + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(0 50% 0 0);pointer-events:none;" />' +
         '<span style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">ANTES</span>' +
-        '<input type="range" min="0" max="100" value="50" oninput="document.getElementById(&quot;' + uid + '&quot;).style.clipPath=&quot;inset(0 &quot;+(100-this.value)+&quot;% 0 0)&quot;" style="position:absolute;bottom:12px;left:8%;width:84%;" />' +
+        '<div id="' + uid + 'line" style="position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;transform:translateX(-50%);box-shadow:0 0 8px rgba(0,0,0,0.4);pointer-events:none;"></div>' +
+        '<div id="' + uid + 'btn" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3);pointer-events:none;font-size:16px;color:#7c3aed;">↔</div>' +
         '</div><br/>';
       document.execCommand("insertHTML", false, html);
       handleInput();
