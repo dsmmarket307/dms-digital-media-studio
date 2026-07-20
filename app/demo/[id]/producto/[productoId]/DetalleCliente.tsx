@@ -36,7 +36,7 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
   ];
   const ofertasBase: any[] = producto.ofertas ?? ofertasDefault;
   const ofertasVisibles = ofertasBase.filter((o: any) => !o.oculta);
-  const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9.]/g, "")) || 0;
+  const precioBase = parseFloat((producto.precio ?? "0").replace(/[^0-9]/g, "")) || 0;
   const ofertaActual = ofertasBase.find((o: any) => o.cantidad === cantidad) ?? ofertasBase[0];
   const precioTotal = precioBase * cantidad * (1 - (ofertaActual?.descuento ?? 0) / 100);
   const paramsPedido = new URLSearchParams();
