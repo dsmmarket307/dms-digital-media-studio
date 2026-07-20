@@ -105,6 +105,31 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
         </div>
       )}
 
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", textTransform: "uppercase", letterSpacing: 1 }}>Selecciona tu oferta</p>
+        {ofertasVisibles.map((o: any) => {
+          const precioOferta = precioBase * o.cantidad * (1 - o.descuento / 100);
+          const precioSinDesc = precioBase * o.cantidad;
+          const seleccionado = cantidad === o.cantidad;
+          const olabel = o.cantidad === 1 ? "1 unidad" : `${o.cantidad} unidades + envio Gratis`;
+          return (
+            <div key={o.cantidad} onClick={() => setCantidad(o.cantidad)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", border: `2px solid ${seleccionado ? primaryColor : "#e5e7eb"}`, borderRadius: 12, cursor: "pointer", background: seleccionado ? `${primaryColor}08` : "#fff", transition: "all 0.15s" }}>
+              <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${seleccionado ? primaryColor : "#d1d5db"}`, background: seleccionado ? primaryColor : "#fff", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {seleccionado && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#fff" }} />}
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111", margin: 0 }}>{olabel}</p>
+                {o.descuento > 0 && <span style={{ fontSize: "0.75rem", background: primaryColor, color: "#fff", padding: "1px 8px", borderRadius: 999, fontWeight: 700 }}>Ahorra {o.descuento}%</span>}
+              </div>
+              <div style={{ textAlign: "right" }}>
+                {o.descuento > 0 && <p style={{ fontSize: "0.8rem", color: "#aaa", textDecoration: "line-through", margin: 0 }}>${precioSinDesc.toLocaleString("es-CO")}</p>}
+                <p style={{ fontSize: "1rem", fontWeight: 800, color: "#111", margin: 0 }}>${precioOferta.toLocaleString("es-CO")}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
         <Link href={hrefPedido} className="btn-rebote" style={{ display: "block", textAlign: "center", width: "100%", padding: 16, background: botonColor, color: "#fff", border: "none", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${botonColor}44`, textDecoration: "none" }}>
           {producto.boton_texto ?? "Realizar Pedido"}
