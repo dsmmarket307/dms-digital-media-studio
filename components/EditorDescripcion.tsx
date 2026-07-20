@@ -67,6 +67,12 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     }
   }
 
+  function insertTabla() {
+    const tablaHtml = '<table style="width:100%;border-collapse:collapse;margin:10px 0;"><tr><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;">Caracteristica</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;">Este producto</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;">Otros</th></tr><tr><td style="border:1px solid #ccc;padding:6px;">Caracteristica 1</td><td style="border:1px solid #ccc;padding:6px;">Si</td><td style="border:1px solid #ccc;padding:6px;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;">Caracteristica 2</td><td style="border:1px solid #ccc;padding:6px;">Si</td><td style="border:1px solid #ccc;padding:6px;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;">Caracteristica 3</td><td style="border:1px solid #ccc;padding:6px;">Si</td><td style="border:1px solid #ccc;padding:6px;">No</td></tr></table><br/>';
+    document.execCommand("insertHTML", false, tablaHtml);
+    handleInput();
+  }
+
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -107,6 +113,7 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
           <button style={{ ...btnStyle, color: uploading ? "#aaa" : "#7c3aed" }} onClick={() => fileRef.current?.click()} disabled={uploading}>
             {uploading ? "Subiendo..." : "Imagen"}
           </button>
+          <button style={btnStyle} onClick={insertTabla}>Tabla</button>
           <button style={btnStyle} onClick={() => execCmd("removeFormat")}>Limpiar</button>
         </div>
 
