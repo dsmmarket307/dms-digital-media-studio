@@ -73,6 +73,44 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     handleInput();
   }
 
+    function agregarFila() {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const tablas = editor.querySelectorAll("table");
+    const tabla = tablas[tablas.length - 1];
+    if (!tabla) return;
+    const filas = tabla.querySelectorAll("tr");
+    const ultimaFila = filas[filas.length - 1];
+    if (!ultimaFila) return;
+    const nuevaFila = ultimaFila.cloneNode(true) as HTMLTableRowElement;
+    nuevaFila.querySelectorAll("td, th").forEach(celda => { celda.textContent = ""; });
+    ultimaFila.after(nuevaFila);
+    handleInput();
+  }
+
+  function eliminarTabla() {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const tablas = editor.querySelectorAll("table");
+    if (tablas.length === 0) return;
+    const sel = window.getSelection();
+    let tablaAEliminar: Element | null = null;
+    if (sel && sel.anchorNode) {
+      let node: Node | null = sel.anchorNode;
+      while (node && node !== editor) {
+        if (node.nodeName === "TABLE") { tablaAEliminar = node as Element; break; }
+        if (node.nodeType === 1 && (node as Element).closest) {
+          const cerca = (node as Element).closest("table");
+          if (cerca) { tablaAEliminar = cerca; break; }
+        }
+        node = node.parentNode;
+      }
+    }
+    if (!tablaAEliminar) tablaAEliminar = tablas[tablas.length - 1];
+    tablaAEliminar.remove();
+    handleInput();
+  }
+
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -114,6 +152,8 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
             {uploading ? "Subiendo..." : "Imagen"}
           </button>
           <button style={btnStyle} onClick={insertTabla}>Tabla</button>
+          <button style={btnStyle} onClick={agregarFila}>+ Fila</button>
+          <button style={btnDanger} onClick={eliminarTabla}>Eliminar tabla</button>
           <button style={btnStyle} onClick={() => execCmd("removeFormat")}>Limpiar</button>
         </div>
 
