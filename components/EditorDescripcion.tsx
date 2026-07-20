@@ -11,6 +11,8 @@ interface EditorDescripcionProps {
 export default function EditorDescripcion({ value, onChange, productoIndex }: EditorDescripcionProps) {
   const supabase = createClient();
   const [uploading, setUploading] = useState(false);
+  const [antesAfterPaso, setAntesAfterPaso] = useState(0);
+  const [antesAfterTemp, setAntesAfterTemp] = useState("");
   const [selectedImg, setSelectedImg] = useState<HTMLImageElement | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -119,9 +121,39 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     const fileName = `desc-${productoIndex}-${Date.now()}.${ext}`;
     await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+
+    if (antesAfterPaso === 1) {
+      setAntesAfterTemp(data.publicUrl);
+      setAntesAfterPaso(2);
+      setUploading(false);
+      setTimeout(() => fileRef.current?.click(), 200);
+      return;
+    }
+    if (antesAfterPaso === 2) {
+      const uid = "ba" + Date.now();
+      const html = '<div style="position:relative;width:100%;max-width:500px;aspect-ratio:4/3;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.18);margin:12px 0;">' +
+        '<img src="' + data.publicUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />' +
+        '<span style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">DESPUES</span>' +
+        '<img id="' + uid + '" src="' + antesAfterTemp + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(0 50% 0 0);" />' +
+        '<span style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">ANTES</span>' +
+        '<input type="range" min="0" max="100" value="50" oninput="document.getElementById(&quot;' + uid + '&quot;).style.clipPath=&quot;inset(0 &quot;+(100-this.value)+&quot;% 0 0)&quot;" style="position:absolute;bottom:12px;left:8%;width:84%;" />' +
+        '</div><br/>';
+      document.execCommand("insertHTML", false, html);
+      handleInput();
+      setAntesAfterPaso(0);
+      setAntesAfterTemp("");
+      setUploading(false);
+      return;
+    }
+
     document.execCommand("insertImage", false, data.publicUrl);
     handleInput();
     setUploading(false);
+  }
+
+  function iniciarAntesDespues() {
+    setAntesAfterPaso(1);
+    fileRef.current?.click();
   }
 
   const btnStyle: React.CSSProperties = { padding: "4px 8px", borderRadius: 4, border: "1px solid #e5e7eb", background: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700 };
@@ -152,6 +184,9 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
             {uploading ? "Subiendo..." : "Imagen"}
           </button>
           <button style={btnStyle} onClick={insertTabla}>Tabla</button>
+          <button style={{ ...btnStyle, color: antesAfterPaso > 0 ? "#7c3aed" : undefined }} onClick={iniciarAntesDespues}>
+            {antesAfterPaso === 1 ? "Sube foto ANTES..." : antesAfterPaso === 2 ? "Sube foto DESPUES..." : "Antes/Despues"}
+          </button>
           <button style={btnStyle} onClick={agregarFila}>+ Fila</button>
           <button style={btnDanger} onClick={eliminarTabla}>Eliminar tabla</button>
           <button style={btnStyle} onClick={() => execCmd("removeFormat")}>Limpiar</button>
