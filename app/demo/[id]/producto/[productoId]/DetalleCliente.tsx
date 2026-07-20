@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useCarrito } from "../../context/CarritoContext";
 import CarritoDrawer from "./CarritoDrawer";
+import BeforeAfterSlider from "./BeforeAfterSlider";
 
 function Estrellas({ valor }: { valor: number }) {
   return (
@@ -158,6 +159,17 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
             <p style={{ fontSize: "0.85rem", color: "#555", fontStyle: "italic", margin: 0, lineHeight: 1.5 }}>"{producto.resena_texto}"</p>
             {producto.resena_nombre && <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#111", marginTop: 6, marginBottom: 0 }}>{producto.resena_nombre}</p>}
           </div>
+        </div>
+      )}
+
+      {producto.mostrar_antes_despues !== false && producto.antes_after_antes && producto.antes_after_despues && (
+        <div style={{ marginTop: 4 }}>
+          <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>Antes y Despues</p>
+          <BeforeAfterSlider
+            antesUrl={producto.antes_after_antes}
+            despuesUrl={producto.antes_after_despues}
+            primaryColor={primaryColor}
+          />
         </div>
       )}
 

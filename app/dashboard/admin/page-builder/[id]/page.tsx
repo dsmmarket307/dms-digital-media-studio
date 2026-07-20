@@ -156,7 +156,21 @@ export default function PageBuilderEditor() {
     const fileName = `img-${imgTarget}-${Date.now()}.${ext}`;
     await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
-    if (imgTarget.startsWith("resena_")) {
+    if (imgTarget.startsWith("antesfoto_")) {
+      const idx = parseInt(imgTarget.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        next.productos[idx].antes_after_antes = data.publicUrl;
+        return next;
+      });
+    } else if (imgTarget.startsWith("despuesfoto_")) {
+      const idx = parseInt(imgTarget.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        next.productos[idx].antes_after_despues = data.publicUrl;
+        return next;
+      });
+    } else if (imgTarget.startsWith("resena_")) {
       const idx = parseInt(imgTarget.split("_")[1]);
       setContent((prev: any) => {
         const next = JSON.parse(JSON.stringify(prev));
@@ -673,6 +687,30 @@ export default function PageBuilderEditor() {
                       <button onClick={() => { setImgTarget(`resena_${i}`); setTimeout(() => imgRef.current?.click(), 100); }} style={{ flex: 1, padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
                         {uploadingImg === `resena_${i}` ? "Subiendo..." : p.resena_foto ? "Cambiar foto" : "Subir foto"}
                       </button>
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Comparador Antes / Despues</span>
+                      <button onClick={() => updateArray("productos", i, "mostrar_antes_despues", (p.mostrar_antes_despues === false ? true : false) as any)} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: p.mostrar_antes_despues === false ? "#d1d5db" : primaryColor, position: "relative", transition: "background 0.2s" }}>
+                        <span style={{ position: "absolute", top: 2, left: p.mostrar_antes_despues === false ? 2 : 20, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                      </button>
+                    </div>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 4 }}>Foto Antes</label>
+                        {p.antes_after_antes && <img src={p.antes_after_antes} alt="antes" style={{ width: "100%", height: 60, objectFit: "cover", borderRadius: 6, marginBottom: 4 }} />}
+                        <button onClick={() => { setImgTarget(`antesfoto_${i}`); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                          {uploadingImg === `antesfoto_${i}` ? "Subiendo..." : p.antes_after_antes ? "Cambiar" : "Subir foto"}
+                        </button>
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 4 }}>Foto Despues</label>
+                        {p.antes_after_despues && <img src={p.antes_after_despues} alt="despues" style={{ width: "100%", height: 60, objectFit: "cover", borderRadius: 6, marginBottom: 4 }} />}
+                        <button onClick={() => { setImgTarget(`despuesfoto_${i}`); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                          {uploadingImg === `despuesfoto_${i}` ? "Subiendo..." : p.antes_after_despues ? "Cambiar" : "Subir foto"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div style={{ marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px" }}>
