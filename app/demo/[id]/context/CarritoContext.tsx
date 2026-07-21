@@ -38,6 +38,14 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
       return [...prev, item];
     });
     setAbierto(true);
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      const num = parseFloat(item.precio.replace(/[^0-9.]/g, ""));
+      (window as any).fbq("track", "AddToCart", {
+        content_name: item.nombre,
+        value: isNaN(num) ? 0 : num * item.cantidad,
+        currency: "COP",
+      });
+    }
   };
 
   const quitar = (index: number) => setItems(prev => prev.filter((_, i) => i !== index));

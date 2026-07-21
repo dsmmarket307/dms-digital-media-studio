@@ -99,6 +99,13 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error al enviar pedido");
       setSuccess(true);
+      if (typeof window !== "undefined" && (window as any).fbq) {
+        (window as any).fbq("track", "Purchase", {
+          content_name: producto.nombre,
+          value: precioTotal,
+          currency: "COP",
+        });
+      }
     } catch (e: any) {
       setError(e.message);
     } finally {

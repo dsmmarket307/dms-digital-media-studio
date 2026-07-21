@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -9,8 +9,8 @@ import Image from "next/image";
 const PLAN_ACCESO: Record<string, string[]> = {
   trial:       ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/crm", "/dashboard/client/agente-ia", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
   basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
+  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
+  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
 };
 
 const icons: Record<string, React.ReactElement> = {
@@ -29,6 +29,7 @@ const icons: Record<string, React.ReactElement> = {
   suscrip:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
   ayuda:    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17"/></svg>,
   soporte:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+  meta:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
 };
 
 
@@ -42,6 +43,8 @@ const MENU_EMPRESARIAL: any[] = [
   { href: "/dashboard/client/sitio", label: "Mi Sitio Web", icon: "sitio" },
   { href: "/dashboard/client/galeria", label: "Galeria", icon: "galeria" },
   { href: "/dashboard/client/dominios", label: "Dominios", icon: "dominio" },
+  { section: "Marketing" },
+  { href: "/dashboard/client/meta", label: "Meta Pixel", icon: "meta" },
   { section: "Clientes y Ventas" },
   { href: "/dashboard/client/leads", label: "Leads", icon: "leads" },
   { href: "/dashboard/client/reservas", label: "Reservas", icon: "reservas" },

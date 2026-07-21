@@ -7,6 +7,7 @@ import DetalleCliente from "./DetalleCliente";
 import Resenas from "./Resenas";
 import FaqProducto from "./FaqProducto";
 import { CarritoProvider } from "../../context/CarritoContext";
+import Script from "next/script";
 type Props = { params: Promise<{ id: string; productoId: string }> };
 export async function generateMetadata({ params }: Props) {
   const { id, productoId } = await params;
@@ -39,6 +40,13 @@ export default async function ProductoDetallePage({ params }: Props) {
   return (
     <CarritoProvider>
     <div style={{ minHeight: "100vh", background: "#f8f9fa", fontFamily: font }}>
+      {site.meta_pixel_id && (
+        <Script id="fbq-viewcontent" strategy="afterInteractive">
+          {
+            "if(window.fbq){fbq(" + String.fromCharCode(39) + "track" + String.fromCharCode(39) + "," + String.fromCharCode(39) + "ViewContent" + String.fromCharCode(39) + ",{content_name:" + String.fromCharCode(39) + (p.nombre ?? "").replace(/[\x27\x22]/g, "") + String.fromCharCode(39) + "});}"
+          }
+        </Script>
+      )}
       <style>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }`}</style>
       {site?.generated_content?.barraAnuncio?.activo && site?.generated_content?.barraAnuncio?.items?.length > 0 && (
         <div style={{ background: site.generated_content.barraAnuncio.colorFondo || "#111111", overflow: "hidden", padding: "8px 0" }}>

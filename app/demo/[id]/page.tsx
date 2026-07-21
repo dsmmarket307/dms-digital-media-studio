@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 import EstrellasProducto from "./EstrellasProducto";
-import Script from "next/script";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional",
@@ -170,29 +169,6 @@ export default async function DemoPage({ params }: Props) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
-      {site.meta_pixel_id && (
-        <>
-          <Script id="meta-pixel-base" strategy="afterInteractive">
-            {
-              "!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=true;n.version=" +
-              String.fromCharCode(39) + "2.0" + String.fromCharCode(39) + ";n.queue=[];t=b.createElement(e);t.async=true;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document," +
-              String.fromCharCode(39) + "script" + String.fromCharCode(39) + "," +
-              String.fromCharCode(39) + "https://connect.facebook.net/en_US/fbevents.js" + String.fromCharCode(39) + ");" +
-              "fbq(" + String.fromCharCode(39) + "init" + String.fromCharCode(39) + "," + String.fromCharCode(39) + site.meta_pixel_id + String.fromCharCode(39) + ");" +
-              "fbq(" + String.fromCharCode(39) + "track" + String.fromCharCode(39) + "," + String.fromCharCode(39) + "PageView" + String.fromCharCode(39) + ");"
-            }
-          </Script>
-          <noscript>
-            <img
-              height="1"
-              width="1"
-              style={{ display: "none" }}
-              src={"https://www.facebook.com/tr?id=" + site.meta_pixel_id + "&ev=PageView&noscript=1"}
-              alt=""
-            />
-          </noscript>
-        </>
-      )}
       {trialActivo && (
         <div style={{ background: "#7c3aed", color: "#fff", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, position: "sticky", top: 0, zIndex: 999 }}>
           <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa — Activa un plan para publicar tu sitio con tu dominio personalizado</span>

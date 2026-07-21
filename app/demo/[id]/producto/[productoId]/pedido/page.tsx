@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 import NavbarProducto from "../NavbarProducto";
 import FormularioPedido from "./FormularioPedido";
+import Script from "next/script";
 
 type Props = { params: Promise<{ id: string; productoId: string }>; searchParams: Promise<{ talla?: string; color?: string }> };
 
@@ -35,6 +36,13 @@ export default async function PedidoPage({ params, searchParams }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", background: "#f8f9fa", fontFamily: font }}>
+      {site.meta_pixel_id && (
+        <Script id="fbq-checkout" strategy="afterInteractive">
+          {
+            "if(window.fbq){fbq(" + String.fromCharCode(39) + "track" + String.fromCharCode(39) + "," + String.fromCharCode(39) + "InitiateCheckout" + String.fromCharCode(39) + ",{content_name:" + String.fromCharCode(39) + (p.nombre ?? "").replace(/[\x27\x22]/g, "") + String.fromCharCode(39) + "});}"
+          }
+        </Script>
+      )}
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "2rem 1rem" }}>
         <NavbarProducto id={id} logoUrl={site.logo_url} primaryColor={pr} />
         <div style={{ background: "#fff", borderRadius: 20, padding: "1.5rem", marginTop: "1.5rem", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
