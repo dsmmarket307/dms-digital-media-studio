@@ -43,7 +43,7 @@ export default async function ProductoDetallePage({ params }: Props) {
       {site.meta_pixel_id && (
         <Script id="fbq-viewcontent" strategy="afterInteractive">
           {
-            "if(window.fbq){fbq(" + String.fromCharCode(39) + "track" + String.fromCharCode(39) + "," + String.fromCharCode(39) + "ViewContent" + String.fromCharCode(39) + ",{content_name:" + String.fromCharCode(39) + (p.nombre ?? "").replace(/[\x27\x22]/g, "") + String.fromCharCode(39) + "});}"
+            "window.dmsPixelQueue = window.dmsPixelQueue || []; window.fbTrack = window.fbTrack || function(ev, params){ if (window.fbq) { window.fbq(" + String.fromCharCode(39) + "track" + String.fromCharCode(39) + ", ev, params || {}); } else { window.dmsPixelQueue.push([ev, params]); } }; window.fbTrack(" + String.fromCharCode(39) + "ViewContent" + String.fromCharCode(39) + ", {content_name:" + String.fromCharCode(39) + (p.nombre ?? "").replace(/[\x27\x22]/g, "") + String.fromCharCode(39) + "});"
           }
         </Script>
       )}

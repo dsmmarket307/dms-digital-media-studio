@@ -38,13 +38,13 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
       return [...prev, item];
     });
     setAbierto(true);
-    if (typeof window !== "undefined" && (window as any).fbq) {
+    if (typeof window !== "undefined") {
       const num = parseFloat(item.precio.replace(/[^0-9.]/g, ""));
-      (window as any).fbq("track", "AddToCart", {
-        content_name: item.nombre,
-        value: isNaN(num) ? 0 : num * item.cantidad,
-        currency: "COP",
-      });
+      const params = { content_name: item.nombre, value: isNaN(num) ? 0 : num * item.cantidad, currency: "COP" };
+      const w = window as any;
+      if (w.fbTrack) { w.fbTrack("AddToCart", params); }
+      else if (w.fbq) { w.fbq("track", "AddToCart", params); }
+      else { w.dmsPixelQueue = w.dmsPixelQueue || []; w.dmsPixelQueue.push(["AddToCart", params]); }
     }
   };
 

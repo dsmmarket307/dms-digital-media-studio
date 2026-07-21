@@ -99,12 +99,12 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error al enviar pedido");
       setSuccess(true);
-      if (typeof window !== "undefined" && (window as any).fbq) {
-        (window as any).fbq("track", "Purchase", {
-          content_name: producto.nombre,
-          value: precioTotal,
-          currency: "COP",
-        });
+      if (typeof window !== "undefined") {
+        const params = { content_name: producto.nombre, value: precioTotal, currency: "COP" };
+        const w = window as any;
+        if (w.fbTrack) { w.fbTrack("Purchase", params); }
+        else if (w.fbq) { w.fbq("track", "Purchase", params); }
+        else { w.dmsPixelQueue = w.dmsPixelQueue || []; w.dmsPixelQueue.push(["Purchase", params]); }
       }
     } catch (e: any) {
       setError(e.message);
