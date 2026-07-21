@@ -82,6 +82,29 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     handleInput();
   }
 
+  function insertAcordeon() {
+    const uid = "ac" + Date.now();
+    const itemsData = [
+      { p: "Envios y entregas", r: "Realizamos envios a todo el pais. El tiempo de entrega es de 2 a 5 dias habiles." },
+      { p: "Garantia", r: "Todos los productos cuentan con garantia de 30 dias por defectos de fabricacion." },
+      { p: "Cambios y devoluciones", r: "Aceptamos cambios dentro de los primeros 15 dias despues de recibido el producto." },
+    ];
+    const toggleJs = 'var b=this;var it=b.parentElement;var grp=it.parentElement;var open=it.getAttribute(&quot;data-open&quot;)===&quot;1&quot;;grp.querySelectorAll(&quot;[data-ac-item]&quot;).forEach(function(x){x.setAttribute(&quot;data-open&quot;,&quot;0&quot;);x.querySelector(&quot;[data-ac-body]&quot;).style.gridTemplateRows=&quot;0fr&quot;;x.querySelector(&quot;[data-ac-icon]&quot;).textContent=&quot;+&quot;;});if(!open){it.setAttribute(&quot;data-open&quot;,&quot;1&quot;);it.querySelector(&quot;[data-ac-body]&quot;).style.gridTemplateRows=&quot;1fr&quot;;it.querySelector(&quot;[data-ac-icon]&quot;).textContent=&quot;\u2212&quot;;}';
+    let itemsHtml = "";
+    itemsData.forEach((item, i) => {
+      itemsHtml += '<div data-ac-item data-open="0" style="background:#ffffff;border:1px solid #ececec;border-radius:12px;overflow:hidden;margin-bottom:12px;transition:box-shadow 300ms ease;" onmouseover="this.style.boxShadow=&quot;0 4px 14px rgba(0,0,0,0.05)&quot;" onmouseout="this.style.boxShadow=&quot;none&quot;">' +
+        '<div onclick="' + toggleJs + '" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;cursor:pointer;font-size:15px;font-weight:600;color:#111111;">' +
+        '<span>' + item.p + '</span>' +
+        '<span data-ac-icon style="flex-shrink:0;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#666666;">+</span>' +
+        '</div>' +
+        '<div data-ac-body style="display:grid;grid-template-rows:0fr;transition:grid-template-rows 300ms ease;">' +
+        '<div style="overflow:hidden;"><div style="padding:0 18px 16px 18px;font-size:14px;line-height:1.6;color:#555555;">' + item.r + '</div></div>' +
+        '</div></div>';
+    });
+    const html = '<div data-ac-group style="max-width:100%;margin:14px 0;">' + itemsHtml + '</div><br/>';
+    document.execCommand("insertHTML", false, html);
+    handleInput();
+  }
   function insertTabla() {
     const tablaHtml = '<table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;table-layout:fixed;"><tr><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Caracteristica</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Este producto</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Otros</th></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 1</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 2</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 3</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 4</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 5</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 6</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr></table><br/>';
     document.execCommand("insertHTML", false, tablaHtml);
@@ -200,6 +223,7 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
           </button>
           <button style={btnStyle} onClick={insertTabla}>Tabla</button>
           <button style={btnStyle} onClick={insertBarraAnuncio}>Barra anuncio</button>
+          <button style={btnStyle} onClick={insertAcordeon}>Acordeon</button>
           <button style={{ ...btnStyle, color: antesAfterPaso > 0 ? "#7c3aed" : undefined }} onClick={iniciarAntesDespues}>
             {antesAfterPaso === 1 ? "Sube foto ANTES..." : antesAfterPaso === 2 ? "Sube foto DESPUES..." : "Antes/Despues"}
           </button>
