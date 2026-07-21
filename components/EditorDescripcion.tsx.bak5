@@ -11,8 +11,6 @@ interface EditorDescripcionProps {
 export default function EditorDescripcion({ value, onChange, productoIndex }: EditorDescripcionProps) {
   const supabase = createClient();
   const [uploading, setUploading] = useState(false);
-  const [antesAfterPaso, setAntesAfterPaso] = useState(0);
-  const [antesAfterTemp, setAntesAfterTemp] = useState("");
   const [selectedImg, setSelectedImg] = useState<HTMLImageElement | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -69,19 +67,6 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     }
   }
 
-  function insertBarraAnuncio() {
-    const uid = "banner" + Date.now();
-    const mensaje = "Envio GRATIS a todo Colombia &nbsp;•&nbsp; Garantia 30 dias &nbsp;•&nbsp; Pago contra entrega";
-    const html = '<div style="margin:10px 0;border-radius:8px;overflow:hidden;background:#111111;padding:8px 0;">' +
-      '<style>@keyframes ' + uid + '{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}</style>' +
-      '<div style="display:flex;width:max-content;animation:' + uid + ' 14s linear infinite;">' +
-      '<span style="color:#f5c542;font-size:13px;font-weight:600;white-space:nowrap;padding:0 20px;">' + mensaje + '</span>' +
-      '<span style="color:#f5c542;font-size:13px;font-weight:600;white-space:nowrap;padding:0 20px;">' + mensaje + '</span>' +
-      '</div></div><br/>';
-    document.execCommand("insertHTML", false, html);
-    handleInput();
-  }
-
   function insertTabla() {
     const tablaHtml = '<table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;table-layout:fixed;"><tr><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Caracteristica</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Este producto</th><th style="border:1px solid #ccc;padding:6px;background:#f3f4f6;text-align:left;font-size:13px;font-weight:700;">Otros</th></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 1</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 2</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 3</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 4</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 5</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr><tr><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Caracteristica 6</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">Si</td><td style="border:1px solid #ccc;padding:6px;font-size:13px;font-weight:400;">No</td></tr></table><br/>';
     document.execCommand("insertHTML", false, tablaHtml);
@@ -134,41 +119,9 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     const fileName = `desc-${productoIndex}-${Date.now()}.${ext}`;
     await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
-
-    if (antesAfterPaso === 1) {
-      setAntesAfterTemp(data.publicUrl);
-      setAntesAfterPaso(2);
-      setUploading(false);
-      setTimeout(() => fileRef.current?.click(), 200);
-      return;
-    }
-    if (antesAfterPaso === 2) {
-      const uid = "ba" + Date.now();
-      const dragScript = "var r=this.getBoundingClientRect();var p=Math.max(0,Math.min(100,((event.clientX-r.left)/r.width)*100));document.getElementById(&quot;" + uid + "img&quot;).style.clipPath=&quot;inset(0 &quot;+(100-p)+&quot;% 0 0)&quot;;document.getElementById(&quot;" + uid + "line&quot;).style.left=p+&quot;%&quot;;document.getElementById(&quot;" + uid + "btn&quot;).style.left=p+&quot;%&quot;;";
-      const html = '<div id="' + uid + 'box" style="position:relative;width:100%;max-width:500px;aspect-ratio:4/3;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.18);margin:12px 0;cursor:ew-resize;user-select:none;touch-action:none;" onpointerdown="this.setPointerCapture(event.pointerId);this.dataset.d=1;' + dragScript + '" onpointermove="if(this.dataset.d==1){' + dragScript + '}" onpointerup="this.dataset.d=0" onpointerleave="this.dataset.d=0">' +
-        '<img src="' + data.publicUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;" />' +
-        '<span style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">DESPUES</span>' +
-        '<img id="' + uid + 'img" src="' + antesAfterTemp + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(0 50% 0 0);pointer-events:none;" />' +
-        '<span style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">ANTES</span>' +
-        '<div id="' + uid + 'line" style="position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;transform:translateX(-50%);box-shadow:0 0 8px rgba(0,0,0,0.4);pointer-events:none;"></div>' +
-        '<div id="' + uid + 'btn" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3);pointer-events:none;font-size:16px;color:#7c3aed;">↔</div>' +
-        '</div><br/>';
-      document.execCommand("insertHTML", false, html);
-      handleInput();
-      setAntesAfterPaso(0);
-      setAntesAfterTemp("");
-      setUploading(false);
-      return;
-    }
-
     document.execCommand("insertImage", false, data.publicUrl);
     handleInput();
     setUploading(false);
-  }
-
-  function iniciarAntesDespues() {
-    setAntesAfterPaso(1);
-    fileRef.current?.click();
   }
 
   const btnStyle: React.CSSProperties = { padding: "4px 8px", borderRadius: 4, border: "1px solid #e5e7eb", background: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700 };
@@ -199,14 +152,9 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
             {uploading ? "Subiendo..." : "Imagen"}
           </button>
           <button style={btnStyle} onClick={insertTabla}>Tabla</button>
-          <button style={btnStyle} onClick={insertBarraAnuncio}>Barra anuncio</button>
-          <button style={{ ...btnStyle, color: antesAfterPaso > 0 ? "#7c3aed" : undefined }} onClick={iniciarAntesDespues}>
-            {antesAfterPaso === 1 ? "Sube foto ANTES..." : antesAfterPaso === 2 ? "Sube foto DESPUES..." : "Antes/Despues"}
-          </button>
           <button style={btnStyle} onClick={agregarFila}>+ Fila</button>
           <button style={btnDanger} onClick={eliminarTabla}>Eliminar tabla</button>
           <button style={btnStyle} onClick={() => execCmd("removeFormat")}>Limpiar</button>
-          <button style={{ ...btnStyle, color: "#7c3aed", borderColor: "#c4b5fd" }} onClick={() => { const id = "ac" + Date.now(); const html = "<div data-acordeon=" + id + " style="margin:12px 0;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;"><div style="border-bottom:1px solid #e5e7eb;"><div onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.ac-icon').textContent=b.style.display==='none'?'+':'-'" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#f8f9fa;cursor:pointer;font-weight:700;font-size:14px;"><span contenteditable="true" style="outline:none;font-weight:700">Materiales y cuidados</span><span class="ac-icon" style="font-size:20px;color:#7c3aed">-</span></div><div style="padding:14px 16px;font-size:14px;color:#555;line-height:1.7;" contenteditable="true">100% algodon premium. Lavar en agua fria.</div></div><div><div onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.ac-icon').textContent=b.style.display==='none'?'+':'-'" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#f8f9fa;cursor:pointer;font-weight:700;font-size:14px;"><span contenteditable="true" style="outline:none;font-weight:700">Envio y entregas</span><span class="ac-icon" style="font-size:20px;color:#7c3aed">-</span></div><div style="padding:14px 16px;font-size:14px;color:#555;line-height:1.7;" contenteditable="true">Envio gratis a todo Colombia. Entrega 3-5 dias.</div></div></div><br/>"; document.execCommand("insertHTML", false, html); handleInput(); }}>Acordeon</button>
         </div>
 
         {selectedImg && (
