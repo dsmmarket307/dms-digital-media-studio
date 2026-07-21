@@ -88,6 +88,8 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
       { p: "Envios y entregas", r: "Realizamos envios a todo el pais. El tiempo de entrega es de 2 a 5 dias habiles." },
       { p: "Garantia", r: "Todos los productos cuentan con garantia de 30 dias por defectos de fabricacion." },
       { p: "Cambios y devoluciones", r: "Aceptamos cambios dentro de los primeros 15 dias despues de recibido el producto." },
+      { p: "Metodos de pago", r: "Aceptamos pago contra entrega, tarjeta de credito, debito y transferencia bancaria." },
+      { p: "Preguntas frecuentes", r: "Si tienes alguna duda adicional, contactanos y con gusto te ayudamos." },
     ];
     const toggleJs = 'var b=this;var it=b.parentElement;var grp=it.parentElement;var open=it.getAttribute(&quot;data-open&quot;)===&quot;1&quot;;grp.querySelectorAll(&quot;[data-ac-item]&quot;).forEach(function(x){x.setAttribute(&quot;data-open&quot;,&quot;0&quot;);x.querySelector(&quot;[data-ac-body]&quot;).style.gridTemplateRows=&quot;0fr&quot;;x.querySelector(&quot;[data-ac-icon]&quot;).textContent=&quot;+&quot;;});if(!open){it.setAttribute(&quot;data-open&quot;,&quot;1&quot;);it.querySelector(&quot;[data-ac-body]&quot;).style.gridTemplateRows=&quot;1fr&quot;;it.querySelector(&quot;[data-ac-icon]&quot;).textContent=&quot;\u2212&quot;;}';
     let itemsHtml = "";
@@ -146,6 +148,32 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
     }
     if (!tablaAEliminar) tablaAEliminar = tablas[tablas.length - 1];
     tablaAEliminar.remove();
+    handleInput();
+  }
+
+  function eliminarAcordeon() {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const grupos = editor.querySelectorAll("[data-ac-group]");
+    if (grupos.length === 0) return;
+    const sel = window.getSelection();
+    let grupoAEliminar: Element | null = null;
+    if (sel && sel.anchorNode) {
+      let node: Node | null = sel.anchorNode;
+      while (node && node !== editor) {
+        if (node.nodeType === 1 && (node as Element).hasAttribute && (node as Element).hasAttribute("data-ac-group")) {
+          grupoAEliminar = node as Element;
+          break;
+        }
+        if (node.nodeType === 1 && (node as Element).closest) {
+          const cerca = (node as Element).closest("[data-ac-group]");
+          if (cerca) { grupoAEliminar = cerca; break; }
+        }
+        node = node.parentNode;
+      }
+    }
+    if (!grupoAEliminar) grupoAEliminar = grupos[grupos.length - 1];
+    grupoAEliminar.remove();
     handleInput();
   }
 
@@ -224,6 +252,7 @@ export default function EditorDescripcion({ value, onChange, productoIndex }: Ed
           <button style={btnStyle} onClick={insertTabla}>Tabla</button>
           <button style={btnStyle} onClick={insertBarraAnuncio}>Barra anuncio</button>
           <button style={btnStyle} onClick={insertAcordeon}>Acordeon</button>
+          <button style={btnDanger} onClick={eliminarAcordeon}>Eliminar acordeon</button>
           <button style={{ ...btnStyle, color: antesAfterPaso > 0 ? "#7c3aed" : undefined }} onClick={iniciarAntesDespues}>
             {antesAfterPaso === 1 ? "Sube foto ANTES..." : antesAfterPaso === 2 ? "Sube foto DESPUES..." : "Antes/Despues"}
           </button>
