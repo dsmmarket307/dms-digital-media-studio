@@ -23,7 +23,7 @@ const UMBRAL_ACTIVA_MS = 45000;
 
 function latLonAXY(lat: number, lon: number) {
   const x = ((lon + 180) / 360) * 100;
-  const y = ((90 - lat) / 180) * 100;
+  const y = ((90 - lat) / 180) * 50;
   return { x, y };
 }
 
@@ -164,7 +164,7 @@ export default function VisitasEnVivo() {
                   </span>
                 </div>
                 <div style={{ fontSize: "0.8rem", color: "#666" }}>
-                  {ubicacion(s)} â€¢ Activo hace {tiempoActivo(s.ultima_actividad)}
+                  {ubicacion(s)} Ã¢â‚¬Â¢ Activo hace {tiempoActivo(s.ultima_actividad)}
                 </div>
               </div>
               <div style={{ fontSize: "0.75rem", color: "#aaa", textAlign: "right" }}>
@@ -191,7 +191,7 @@ export default function VisitasEnVivo() {
                 </span>
               </div>
               <div style={{ fontSize: "0.75rem", color: "#aaa" }}>
-                {ubicacion(s)} â€¢ {new Date(s.ultima_actividad).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                {ubicacion(s)} Ã¢â‚¬Â¢ {new Date(s.ultima_actividad).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
               </div>
             </div>
           ))}
