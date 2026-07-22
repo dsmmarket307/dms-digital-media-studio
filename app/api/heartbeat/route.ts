@@ -63,6 +63,8 @@ export async function POST(req: NextRequest) {
         dispositivo,
       });
       if (errInsert) console.error("Heartbeat insert error:", errInsert);
+      const { error: errHistorial } = await supabase.from("visitas_historial").insert({ site_id, session_id, pagina, producto_nombre: producto_nombre ?? null, ciudad: geo.ciudad, region: geo.region, pais: geo.pais, dispositivo });
+      if (errHistorial) console.error("Historial insert error:", errHistorial);
     }
 
     return NextResponse.json({ ok: true });

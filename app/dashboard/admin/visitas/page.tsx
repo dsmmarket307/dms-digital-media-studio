@@ -39,6 +39,8 @@ export default function VisitasEnVivo() {
   const [sesiones, setSesiones] = useState<Sesion[]>([]);
   const [loading, setLoading] = useState(true);
   const [ahora, setAhora] = useState(Date.now());
+  const [statsPorSitio, setStatsPorSitio] = useState<any[]>([]);
+  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     async function cargar() {
@@ -72,6 +74,43 @@ export default function VisitasEnVivo() {
     return () => clearInterval(tick);
   }, []);
 
+  useEffect(() => {
+    async function cargarStats() {
+      const inicioAnio = new Date();
+      inicioAnio.setFullYear(inicioAnio.getFullYear() - 1);
+      const { data } = await supabase
+        .from("visitas_historial")
+        .select("site_id, creado_en, generated_websites(project_name)")
+        .gte("creado_en", inicioAnio.toISOString());
+
+      const ahoraFecha = new Date();
+      const inicioHoy = new Date(ahoraFecha.getFullYear(), ahoraFecha.getMonth(), ahoraFecha.getDate());
+      const inicioSemana = new Date(inicioHoy);
+      inicioSemana.setDate(inicioSemana.getDate() - 7);
+      const inicioMes = new Date(inicioHoy);
+      inicioMes.setDate(inicioMes.getDate() - 30);
+      const inicioAnioCorte = new Date(inicioHoy);
+      inicioAnioCorte.setDate(inicioAnioCorte.getDate() - 365);
+
+      const grupos: Record<string, { nombre: string; hoy: number; semana: number; mes: number; anio: number }> = {};
+      (data ?? []).forEach((row: any) => {
+        const fecha = new Date(row.creado_en);
+        const nombre = row.generated_websites?.project_name ?? "Sitio sin nombre";
+        if (!grupos[row.site_id]) grupos[row.site_id] = { nombre, hoy: 0, semana: 0, mes: 0, anio: 0 };
+        if (fecha >= inicioHoy) grupos[row.site_id].hoy++;
+        if (fecha >= inicioSemana) grupos[row.site_id].semana++;
+        if (fecha >= inicioMes) grupos[row.site_id].mes++;
+        if (fecha >= inicioAnioCorte) grupos[row.site_id].anio++;
+      });
+
+      const lista = Object.entries(grupos).map(([site_id, v]) => ({ site_id, ...v }));
+      lista.sort((a, b) => b.mes - a.mes);
+      setStatsPorSitio(lista);
+      setLoadingStats(false);
+    }
+    cargarStats();
+  }, []);
+
   const sesionesActivas = sesiones.filter(s => ahora - new Date(s.ultima_actividad).getTime() < UMBRAL_ACTIVA_MS);
   const sesionesRecientes = sesiones.filter(s => ahora - new Date(s.ultima_actividad).getTime() >= UMBRAL_ACTIVA_MS).slice(0, 20);
 
@@ -100,6 +139,38 @@ export default function VisitasEnVivo() {
       <div style={{ marginBottom: "1.5rem" }}>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111" }}>Visitas en vivo</h1>
         <p style={{ color: "#666", fontSize: "0.9rem", marginTop: 4 }}>Personas navegando tus tiendas ahora mismo</p>
+      </div>
+
+      <div style={{ background: "#fff", borderRadius: 16, padding: "1.25rem", marginBottom: 24, boxShadow: "0 2px 16px rgba(0,0,0,0.06)", overflowX: "auto" }}>
+        <h2 style={{ fontSize: "1rem", fontWeight: 700, color: "#333", marginBottom: 14, marginTop: 0 }}>Visitas por landing</h2>
+        {loadingStats ? (
+          <p style={{ color: "#aaa", fontSize: 13 }}>Cargando estadisticas...</p>
+        ) : statsPorSitio.length === 0 ? (
+          <p style={{ color: "#aaa", fontSize: 13 }}>Aun no hay datos de visitas registrados.</p>
+        ) : (
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: "2px solid #f0f0f0" }}>
+                <th style={{ textAlign: "left", padding: "8px 10px", color: "#888", fontWeight: 700 }}>Sitio</th>
+                <th style={{ textAlign: "right", padding: "8px 10px", color: "#888", fontWeight: 700 }}>Hoy</th>
+                <th style={{ textAlign: "right", padding: "8px 10px", color: "#888", fontWeight: 700 }}>Semana</th>
+                <th style={{ textAlign: "right", padding: "8px 10px", color: "#888", fontWeight: 700 }}>Mes</th>
+                <th style={{ textAlign: "right", padding: "8px 10px", color: "#888", fontWeight: 700 }}>Anio</th>
+              </tr>
+            </thead>
+            <tbody>
+              {statsPorSitio.map(s => (
+                <tr key={s.site_id} style={{ borderBottom: "1px solid #f5f5f5" }}>
+                  <td style={{ padding: "8px 10px", fontWeight: 600, color: "#111" }}>{s.nombre}</td>
+                  <td style={{ padding: "8px 10px", textAlign: "right", color: "#555" }}>{s.hoy}</td>
+                  <td style={{ padding: "8px 10px", textAlign: "right", color: "#555" }}>{s.semana}</td>
+                  <td style={{ padding: "8px 10px", textAlign: "right", color: "#555" }}>{s.mes}</td>
+                  <td style={{ padding: "8px 10px", textAlign: "right", color: "#555" }}>{s.anio}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
