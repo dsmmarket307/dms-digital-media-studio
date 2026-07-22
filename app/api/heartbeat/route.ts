@@ -32,14 +32,15 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (existente) {
-      await supabase.from("sesiones_activas").update({
+      const { error: errUpdate } = await supabase.from("sesiones_activas").update({
         pagina,
         producto_nombre: producto_nombre ?? null,
         ultima_actividad: new Date().toISOString(),
       }).eq("session_id", session_id);
+      if (errUpdate) console.error("Heartbeat update error:", errUpdate);
     } else {
       const geo = await geolocalizar(ip);
-      await supabase.from("sesiones_activas").insert({
+      const { error: errInsert } = await supabase.from("sesiones_activas").insert({
         site_id,
         session_id,
         pagina,
@@ -49,6 +50,7 @@ export async function POST(req: NextRequest) {
         region: geo.region,
         pais: geo.pais,
       });
+      if (errInsert) console.error("Heartbeat insert error:", errInsert);
     }
 
     return NextResponse.json({ ok: true });
