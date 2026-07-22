@@ -164,7 +164,7 @@ export default function VisitasEnVivo() {
                   </span>
                 </div>
                 <div style={{ fontSize: "0.8rem", color: "#666" }}>
-                  {ubicacion(s)} Ã¢â‚¬Â¢ Activo hace {tiempoActivo(s.ultima_actividad)}
+                  {ubicacion(s)} • Activo hace {tiempoActivo(s.ultima_actividad)}
                 </div>
               </div>
               <div style={{ fontSize: "0.75rem", color: "#aaa", textAlign: "right" }}>
@@ -191,7 +191,7 @@ export default function VisitasEnVivo() {
                 </span>
               </div>
               <div style={{ fontSize: "0.75rem", color: "#aaa" }}>
-                {ubicacion(s)} Ã¢â‚¬Â¢ {new Date(s.ultima_actividad).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                {ubicacion(s)} • {new Date(s.ultima_actividad).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
               </div>
             </div>
           ))}
