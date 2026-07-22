@@ -3,15 +3,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
+function detectarDispositivo(userAgent: string): string {
+  const ua = userAgent.toLowerCase();
+  if (/ipad|tablet|kindle|playbook/.test(ua)) return "Tablet";
+  if (/mobile|iphone|android.*mobile|windows phone/.test(ua)) return "Celular";
+  return "Computador";
+}
+
 async function geolocalizar(ip: string) {
   try {
-    if (!ip || ip === "127.0.0.1" || ip.startsWith("::1")) return { ciudad: "Local", region: "", pais: "" };
-    const res = await fetch("http://ip-api.com/json/" + ip + "?fields=city,regionName,country,status");
+    if (!ip || ip === "127.0.0.1" || ip.startsWith("::1")) return { ciudad: "Local", region: "", pais: "", lat: null, lon: null };
+    const res = await fetch("http://ip-api.com/json/" + ip + "?fields=city,regionName,country,status,lat,lon");
     const data = await res.json();
-    if (data.status !== "success") return { ciudad: "", region: "", pais: "" };
-    return { ciudad: data.city ?? "", region: data.regionName ?? "", pais: data.country ?? "" };
+    if (data.status !== "success") return { ciudad: "", region: "", pais: "", lat: null, lon: null };
+    return { ciudad: data.city ?? "", region: data.regionName ?? "", pais: data.country ?? "", lat: data.lat ?? null, lon: data.lon ?? null };
   } catch {
-    return { ciudad: "", region: "", pais: "" };
+    return { ciudad: "", region: "", pais: "", lat: null, lon: null };
   }
 }
 
@@ -24,6 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? req.headers.get("x-real-ip") ?? "";
+    const dispositivo = detectarDispositivo(req.headers.get("user-agent") ?? "");
 
     const { data: existente } = await supabase
       .from("sesiones_activas")
@@ -35,6 +43,7 @@ export async function POST(req: NextRequest) {
       const { error: errUpdate } = await supabase.from("sesiones_activas").update({
         pagina,
         producto_nombre: producto_nombre ?? null,
+        dispositivo,
         ultima_actividad: new Date().toISOString(),
       }).eq("session_id", session_id);
       if (errUpdate) console.error("Heartbeat update error:", errUpdate);
@@ -49,6 +58,9 @@ export async function POST(req: NextRequest) {
         ciudad: geo.ciudad,
         region: geo.region,
         pais: geo.pais,
+        latitud: geo.lat,
+        longitud: geo.lon,
+        dispositivo,
       });
       if (errInsert) console.error("Heartbeat insert error:", errInsert);
     }

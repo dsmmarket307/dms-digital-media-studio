@@ -11,12 +11,28 @@ interface Sesion {
   ciudad: string | null;
   region: string | null;
   pais: string | null;
+  dispositivo: string | null;
+  latitud: number | null;
+  longitud: number | null;
   primera_actividad: string;
   ultima_actividad: string;
   generated_websites?: { project_name: string };
 }
 
 const UMBRAL_ACTIVA_MS = 45000;
+
+function latLonAXY(lat: number, lon: number) {
+  const x = ((lon + 180) / 360) * 100;
+  const y = ((90 - lat) / 180) * 100;
+  return { x, y };
+}
+
+function IconoDispositivo({ tipo }: { tipo: string | null }) {
+  const s = { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none" as const, stroke: "currentColor", strokeWidth: 2 };
+  if (tipo === "Celular") return <svg {...s}><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>;
+  if (tipo === "Tablet") return <svg {...s}><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>;
+  return <svg {...s}><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>;
+}
 
 export default function VisitasEnVivo() {
   const supabase = createClient();
@@ -68,7 +84,7 @@ export default function VisitasEnVivo() {
   }
 
   function ubicacion(s: Sesion) {
-    const partes = [s.ciudad, s.region, s.pais].filter(Boolean);
+    const partes = [s.ciudad, s.pais].filter(Boolean);
     return partes.length > 0 ? partes.join(", ") : "Ubicacion desconocida";
   }
 
@@ -81,11 +97,9 @@ export default function VisitasEnVivo() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "'Segoe UI', sans-serif", background: "#f8f9fa", minHeight: "100vh" }}>
-      <div style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 10 }}>
-        <div>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111" }}>Visitas en vivo</h1>
-          <p style={{ color: "#666", fontSize: "0.9rem", marginTop: 4 }}>Personas navegando tus tiendas ahora mismo</p>
-        </div>
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111" }}>Visitas en vivo</h1>
+        <p style={{ color: "#666", fontSize: "0.9rem", marginTop: 4 }}>Personas navegando tus tiendas ahora mismo</p>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
@@ -93,6 +107,39 @@ export default function VisitasEnVivo() {
         <span style={{ fontSize: 22, fontWeight: 800, color: "#111" }}>{sesionesActivas.length}</span>
         <span style={{ fontSize: 13, color: "#666" }}>{sesionesActivas.length === 1 ? "persona activa ahora" : "personas activas ahora"}</span>
         <style>{`@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
+      </div>
+
+      <div style={{ background: "#0f172a", borderRadius: 16, padding: "1rem", marginBottom: 24, boxShadow: "0 2px 16px rgba(0,0,0,0.1)", position: "relative", overflow: "hidden" }}>
+        <svg viewBox="0 0 100 50" style={{ width: "100%", height: "auto", display: "block" }}>
+          <rect x="0" y="0" width="100" height="50" fill="#0f172a" />
+          {Array.from({ length: 9 }).map((_, i) => (
+            <line key={"h" + i} x1="0" y1={i * 6.25} x2="100" y2={i * 6.25} stroke="#1e293b" strokeWidth="0.15" />
+          ))}
+          {Array.from({ length: 17 }).map((_, i) => (
+            <line key={"v" + i} x1={i * 6.25} y1="0" x2={i * 6.25} y2="50" stroke="#1e293b" strokeWidth="0.15" />
+          ))}
+          <rect x="10" y="8" width="25" height="20" fill="#1e293b" rx="1" />
+          <rect x="45" y="6" width="20" height="24" fill="#1e293b" rx="1" />
+          <rect x="68" y="10" width="24" height="22" fill="#1e293b" rx="1" />
+
+          {sesionesActivas.filter(s => s.latitud != null && s.longitud != null).map(s => {
+            const { x, y } = latLonAXY(s.latitud!, s.longitud!);
+            return (
+              <g key={s.session_id}>
+                <circle cx={x} cy={y} r="1.6" fill="#16a34a" opacity="0.3">
+                  <animate attributeName="r" values="1.6;3.5;1.6" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx={x} cy={y} r="1" fill="#22c55e" stroke="#fff" strokeWidth="0.3" />
+              </g>
+            );
+          })}
+        </svg>
+        {sesionesActivas.filter(s => s.latitud != null).length === 0 && (
+          <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", color: "#64748b", fontSize: 12, margin: 0 }}>
+            Esperando ubicaciones...
+          </p>
+        )}
       </div>
 
       {sesionesActivas.length === 0 ? (
@@ -110,6 +157,10 @@ export default function VisitasEnVivo() {
                   </span>
                   <span style={{ fontSize: 11, padding: "2px 10px", borderRadius: 20, background: "#dcfce7", color: "#16a34a", fontWeight: 700 }}>
                     En vivo
+                  </span>
+                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, color: "#888" }}>
+                    <IconoDispositivo tipo={s.dispositivo} />
+                    {s.dispositivo ?? "Desconocido"}
                   </span>
                   <span style={{ fontSize: 11, color: "#888" }}>
                     {s.pagina === "producto" ? "Viendo: " + (s.producto_nombre ?? "producto") : "En el inicio"}
