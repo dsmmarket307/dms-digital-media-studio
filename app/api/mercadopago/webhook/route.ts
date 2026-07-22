@@ -2,6 +2,7 @@
 import { MercadoPagoConfig, Payment, MerchantOrder } from "mercadopago";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
+import { sendTelegramMessage } from "@/lib/telegram";
 
 const mp = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN! });
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
@@ -33,6 +34,9 @@ async function procesarPago(paymentId: string) {
     const periodEnd = new Date();
     periodEnd.setDate(periodEnd.getDate() + 30);
 
+    const { data: existente } = await supabase.from("subscriptions").select("id").eq("user_id", user_id).maybeSingle();
+    const esRenovacion = !!existente;
+
     await supabase.from("subscriptions").upsert({
       user_id,
       site_id,
@@ -50,6 +54,13 @@ async function procesarPago(paymentId: string) {
     if (site_id) {
       await supabase.from("generated_websites").update({ status: "published" }).eq("id", site_id);
     }
+
+    sendTelegramMessage(
+      "<b>" + (esRenovacion ? "Renovacion de plan" : "Nueva suscripcion") + "</b>\n" +
+      "Plan: " + plan + "\n" +
+      "Email: " + payer_email + "\n" +
+      "Vence: " + periodEnd.toLocaleDateString("es-CO")
+    );
 
     if (payer_email) {
       await resend.emails.send({

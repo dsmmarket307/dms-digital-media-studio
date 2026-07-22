@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { rateLimit } from "@/lib/ratelimit";
+import { sendTelegramMessage } from "@/lib/telegram";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -30,6 +31,15 @@ export async function POST(req: NextRequest) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+    sendTelegramMessage(
+      "<b>Nuevo pedido</b>\n" +
+      "Producto: " + producto_nombre + "\n" +
+      "Precio: " + producto_precio + "\n" +
+      "Cliente: " + nombre + "\n" +
+      "Telefono: " + telefono + "\n" +
+      "Ciudad: " + ciudad + (barrio ? ", " + barrio : "") + "\n" +
+      "Direccion: " + direccion
+    );
     return NextResponse.json({ ok: true });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
