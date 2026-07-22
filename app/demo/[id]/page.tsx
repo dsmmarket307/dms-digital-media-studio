@@ -1,8 +1,9 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 import EstrellasProducto from "./EstrellasProducto";
+import VisitaTracker from "@/components/VisitaTracker";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional",
@@ -479,6 +480,7 @@ export default async function DemoPage({ params }: Props) {
           </div>
         </div>
       </footer>
+      <VisitaTracker siteId={id} pagina="home" />
       {agente && <AgenteChat agente={agente} color={site.primary_color ?? "#7c3aed"} />}
     </>
   );

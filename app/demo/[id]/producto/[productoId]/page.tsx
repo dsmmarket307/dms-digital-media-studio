@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Carrusel from "./Carrusel";
 import CarritoDrawer from "./CarritoDrawer";
@@ -7,6 +7,7 @@ import DetalleCliente from "./DetalleCliente";
 import Resenas from "./Resenas";
 import FaqProducto from "./FaqProducto";
 import { CarritoProvider } from "../../context/CarritoContext";
+import VisitaTracker from "@/components/VisitaTracker";
 import Script from "next/script";
 type Props = { params: Promise<{ id: string; productoId: string }> };
 export async function generateMetadata({ params }: Props) {
@@ -40,6 +41,7 @@ export default async function ProductoDetallePage({ params }: Props) {
   return (
     <CarritoProvider>
     <div style={{ minHeight: "100vh", background: "#f8f9fa", fontFamily: font }}>
+      <VisitaTracker siteId={id} pagina="producto" productoNombre={p.nombre} />
       {site.meta_pixel_id && (
         <Script id="fbq-viewcontent" strategy="afterInteractive">
           {

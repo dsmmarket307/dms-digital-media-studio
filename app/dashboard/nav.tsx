@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -20,6 +20,7 @@ function Icon({ type }: { type: string }) {
     pedidos:     <svg {...s}><path d="M5 8h14M5 8a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v0a2 2 0 01-2 2M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8"/></svg>,
     ayuda:       <svg {...s}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
     metapixel:   <svg {...s}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
+    visitas:     <svg {...s}><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>,
   }
   return icons[type] ?? icons.home
 }
@@ -37,6 +38,7 @@ const navItems = [
   { href: "/dashboard/admin/page-builder", label: "Page Builder", icon: "aibuilder" },
   { href: "/dashboard/admin/pedidos", label: "Pedidos", icon: "pedidos" },
   { href: "/dashboard/admin/meta", label: "Meta Pixel", icon: "metapixel" },
+  { href: "/dashboard/admin/visitas", label: "Visitas en vivo", icon: "visitas" },
 ]
 
 export default function DashboardNav({ name, email }: { name: string; email: string }) {
