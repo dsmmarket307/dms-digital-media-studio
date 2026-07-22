@@ -112,15 +112,12 @@ export default function VisitasEnVivo() {
       <div style={{ background: "#0f172a", borderRadius: 16, padding: "1rem", marginBottom: 24, boxShadow: "0 2px 16px rgba(0,0,0,0.1)", position: "relative", overflow: "hidden" }}>
         <svg viewBox="0 0 100 50" style={{ width: "100%", height: "auto", display: "block" }}>
           <rect x="0" y="0" width="100" height="50" fill="#0f172a" />
-          {Array.from({ length: 9 }).map((_, i) => (
-            <line key={"h" + i} x1="0" y1={i * 6.25} x2="100" y2={i * 6.25} stroke="#1e293b" strokeWidth="0.15" />
-          ))}
-          {Array.from({ length: 17 }).map((_, i) => (
-            <line key={"v" + i} x1={i * 6.25} y1="0" x2={i * 6.25} y2="50" stroke="#1e293b" strokeWidth="0.15" />
-          ))}
-          <rect x="10" y="8" width="25" height="20" fill="#1e293b" rx="1" />
-          <rect x="45" y="6" width="20" height="24" fill="#1e293b" rx="1" />
-          <rect x="68" y="10" width="24" height="22" fill="#1e293b" rx="1" />
+          <image
+            href="https://commons.wikimedia.org/wiki/Special:FilePath/BlankMap-Equirectangular.svg"
+            x="0" y="0" width="100" height="50"
+            preserveAspectRatio="none"
+            style={{ filter: "invert(1) grayscale(1) brightness(0.55) contrast(1.4)", opacity: 0.85 }}
+          />
 
           {sesionesActivas.filter(s => s.latitud != null && s.longitud != null).map(s => {
             const { x, y } = latLonAXY(s.latitud!, s.longitud!);
@@ -167,7 +164,7 @@ export default function VisitasEnVivo() {
                   </span>
                 </div>
                 <div style={{ fontSize: "0.8rem", color: "#666" }}>
-                  {ubicacion(s)} • Activo hace {tiempoActivo(s.ultima_actividad)}
+                  {ubicacion(s)} â€¢ Activo hace {tiempoActivo(s.ultima_actividad)}
                 </div>
               </div>
               <div style={{ fontSize: "0.75rem", color: "#aaa", textAlign: "right" }}>
@@ -194,7 +191,7 @@ export default function VisitasEnVivo() {
                 </span>
               </div>
               <div style={{ fontSize: "0.75rem", color: "#aaa" }}>
-                {ubicacion(s)} • {new Date(s.ultima_actividad).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                {ubicacion(s)} â€¢ {new Date(s.ultima_actividad).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
               </div>
             </div>
           ))}
