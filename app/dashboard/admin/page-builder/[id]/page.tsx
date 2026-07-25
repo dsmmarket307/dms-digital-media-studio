@@ -472,133 +472,23 @@ export default function PageBuilderEditor() {
           </div>
         </div>
 
-        {/* PANEL CENTRAL - PREVIEW CON SCROLL */}
-        <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
+        {/* PANEL CENTRAL - PREVIEW IFRAME */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8, overflow: "hidden" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 8, padding: "6px 12px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", flexShrink: 0, alignSelf: "flex-start" }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span style={{ fontSize: 11, color: "#888", fontWeight: 600 }}>Vista previa</span>
+            <span style={{ fontSize: 11, color: "#888", fontWeight: 600 }}>Vista previa en tiempo real</span>
             <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
             <span style={{ fontSize: 11, color: "#555", fontWeight: 600 }}>{view === "desktop" ? "Escritorio" : view === "tablet" ? "Tableta" : "Movil"}</span>
           </div>
-          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize, overflow: "hidden" }}>
-
-            {content?.barraAnuncio?.activo && content?.barraAnuncio?.items?.length > 0 && (
-              <div style={{ background: content.barraAnuncio.colorFondo || "#111111", overflow: "hidden", padding: "8px 0" }}>
-                <div style={{ display: "flex", width: "max-content", animation: "marquee 20s linear infinite" }}>
-                  {[...content.barraAnuncio.items, ...content.barraAnuncio.items].map((txt: string, i: number) => (
-                    <span key={i} style={{ color: content.barraAnuncio.colorTexto || "#f5c542", fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: 20 }}>
-                      {txt}
-                      <span style={{ opacity: 0.6 }}>•</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 36, objectFit: "contain" }} />}
-                <span style={{ fontWeight: 700, fontSize: 14, color: pr }}>{content?.footer?.nombre_empresa ?? site.project_name}</span>
-              </div>
-              <span style={{ background: pr, color: "#fff", padding: "5px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600 }}>{content?.hero?.cta_principal ?? "Contactar"}</span>
-            </div>
-
-            <div style={{ position: "relative", minHeight: 280, background: `linear-gradient(135deg,${pr},${sc || "#1a1a1a"})`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-              {images.hero && <img src={images.hero} alt="hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
-              <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "2rem", color: "#fff", background: "transparent", width: "100%" }}>
-                {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 50, objectFit: "contain", margin: "0 auto 1rem", display: "block", filter: "brightness(0) invert(1)" }} />}
-                <h1 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "0.75rem" }}>{content?.hero?.titulo}</h1>
-                <p style={{ opacity: 0.9, marginBottom: "1.25rem", fontSize: "0.9rem" }}>{content?.hero?.subtitulo}</p>
-                <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-                  <span style={{ background: "#fff", color: pr, padding: "8px 18px", borderRadius: 8, fontWeight: 700, fontSize: 13 }}>{content?.hero?.cta_principal}</span>
-                  <span style={{ border: "2px solid rgba(255,255,255,0.7)", color: "#fff", padding: "8px 18px", borderRadius: 8, fontWeight: 700, fontSize: 13 }}>{content?.hero?.cta_secundario}</span>
-                </div>
-              </div>
-            </div>
-
-            {content?.nosotros && (
-              <div style={{ padding: "2rem", background: "#fff" }}>
-                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>{content.nosotros.titulo}</h2>
-                {images.nosotros && <img src={images.nosotros} alt="nosotros" style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 12, marginBottom: 12 }} />}
-                <p style={{ fontSize: 13, color: "#555", lineHeight: 1.7, textAlign: "center" }}>{content.nosotros.descripcion}</p>
-              </div>
-            )}
-
-            {content?.servicios && (
-              <div style={{ padding: "2rem", background: "#f8f9fa" }}>
-                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Lo que ofrecemos</h2>
-                {images.servicios && <img src={images.servicios} alt="servicios" style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 12, marginBottom: 12 }} />}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
-                  {content.servicios.slice(0, 3).map((s: any, i: number) => (
-                    <div key={i} style={{ background: "#fff", borderRadius: 10, padding: "1rem", border: "1px solid #f0f0f0" }}>
-                      <p style={{ fontWeight: 700, fontSize: 11, marginBottom: 4, color: "#111" }}>{s.titulo}</p>
-                      <p style={{ fontSize: 10, color: "#888", lineHeight: 1.5 }}>{s.descripcion}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {content?.productos?.length > 0 && (
-              <div style={{ padding: "2rem", background: "#f8f9fa" }}>
-                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Nuestros Productos</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
-                  {content.productos.slice(0, 6).map((p: any, i: number) => (
-                    <div key={i} style={{ background: "#fff", borderRadius: 10, overflow: "hidden", border: "1px solid #f0f0f0", textAlign: "center" }}>
-                      {p.imagenes && p.imagenes.length > 0 ? <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 80, objectFit: "cover" }} /> : <div style={{ width: "100%", height: 80, background: `${pr}18`, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={pr} strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>}
-                      <div style={{ padding: "0.75rem" }}>
-                        <p style={{ fontWeight: 700, fontSize: 11, color: "#111", marginBottom: 4 }}>{p.nombre}</p>
-                        <p style={{ fontSize: 12, fontWeight: 800, color: pr, marginBottom: 4 }}>{p.precio}</p>
-                        {p.tallas && <p style={{ fontSize: 9, color: "#888" }}>Tallas: {p.tallas}</p>}
-                        {p.colores && <p style={{ fontSize: 9, color: "#888" }}>Colores: {p.colores}</p>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {content?.estadisticas?.items?.length > 0 && (
-              <div style={{ padding: "2rem", background: pr, display: "flex", justifyContent: "center", gap: "2rem", flexWrap: "wrap" }}>
-                {content.estadisticas.items.map((e: any, i: number) => (
-                  <div key={i} style={{ textAlign: "center", color: "#fff" }}>
-                    <p style={{ fontSize: "2rem", fontWeight: 800 }}>{e.numero}</p>
-                    <p style={{ fontSize: 12, opacity: 0.8 }}>{e.label}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {content?.testimonios && (
-              <div style={{ padding: "2rem" }}>
-                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Clientes satisfechos</h2>
-                {images.testimonios && <img src={images.testimonios} alt="testimonios" style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 12, marginBottom: 12 }} />}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
-                  {content.testimonios.slice(0, 2).map((t: any, i: number) => (
-                    <div key={i} style={{ background: "#f8f9fa", borderRadius: 10, padding: "1rem" }}>
-                      <p style={{ fontSize: 11, color: "#555", fontStyle: "italic", marginBottom: 8 }}>"{t.texto}"</p>
-                      <p style={{ fontSize: 11, fontWeight: 700, color: "#111" }}>{t.nombre}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {content?.contacto && (
-              <div style={{ padding: "2rem", background: `linear-gradient(135deg,${pr},${sc || "#1a1a1a"})`, color: "#fff", textAlign: "center" }}>
-                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, marginBottom: 8 }}>{content.contacto.titulo}</h2>
-                <p style={{ opacity: 0.85, fontSize: 12, marginBottom: 12 }}>{content.contacto.descripcion}</p>
-                {content.contacto.whatsapp && <span style={{ background: "#25D366", color: "#fff", padding: "8px 20px", borderRadius: 10, fontWeight: 700, fontSize: 13, display: "inline-block" }}>WhatsApp</span>}
-              </div>
-            )}
-
-            <div style={{ padding: "1.5rem", background: sc || "#111", textAlign: "center" }}>
-              {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 36, objectFit: "contain", margin: "0 auto 8px", display: "block", filter: "brightness(0) invert(1)" }} />}
-              <p style={{ color: pr, fontWeight: 700, fontSize: 13 }}>{content?.footer?.nombre_empresa}</p>
-              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, marginTop: 4 }}>{content?.footer?.copyright}</p>
-            </div>
+          <div style={{ width: view === "desktop" ? "100%" : view === "tablet" ? "768px" : "375px", maxWidth: "100%", flex: 1, borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", overflow: "hidden", background: "#fff" }}>
+            <iframe
+              key={saved ? "saved" : "editing"}
+              src={`/demo/${id}`}
+              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+              title="Vista previa"
+            />
           </div>
         </div>
-
         {/* PANEL DERECHO */}
         <div style={{ width: 290, background: "#fff", borderLeft: "1px solid #e5e7eb", overflow: "auto", flexShrink: 0 }}>
           <div style={{ padding: "14px 16px 8px", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, background: "#fff", zIndex: 5 }}>
