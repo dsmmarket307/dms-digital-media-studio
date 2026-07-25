@@ -488,7 +488,7 @@ export default function PageBuilderEditor() {
                   {[...content.barraAnuncio.items, ...content.barraAnuncio.items].map((txt: string, i: number) => (
                     <span key={i} style={{ color: content.barraAnuncio.colorTexto || "#f5c542", fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: 20 }}>
                       {txt}
-                      <span style={{ opacity: 0.6 }}>â€¢</span>
+                      <span style={{ opacity: 0.6 }}>•</span>
                     </span>
                   ))}
                 </div>
