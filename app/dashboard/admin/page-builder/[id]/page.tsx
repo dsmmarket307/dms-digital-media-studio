@@ -488,7 +488,7 @@ export default function PageBuilderEditor() {
                   {[...content.barraAnuncio.items, ...content.barraAnuncio.items].map((txt: string, i: number) => (
                     <span key={i} style={{ color: content.barraAnuncio.colorTexto || "#f5c542", fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: 20 }}>
                       {txt}
-                      <span style={{ opacity: 0.6 }}>•</span>
+                      <span style={{ opacity: 0.6 }}>â€¢</span>
                     </span>
                   ))}
                 </div>
@@ -568,6 +568,60 @@ export default function PageBuilderEditor() {
               </div>
             )}
 
+            {content?.beneficios && (
+              <div style={{ padding: "2rem" }}>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Nuestras ventajas</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
+                  {content.beneficios.map((b: any, i: number) => (
+                    <div key={i} style={{ background: "#f8f9fa", borderRadius: 10, padding: "1rem", borderLeft: "3px solid " + pr }}>
+                      <p style={{ fontWeight: 700, fontSize: 11, marginBottom: 4, color: "#111" }}>{b.titulo}</p>
+                      <p style={{ fontSize: 10, color: "#888", lineHeight: 1.5 }}>{b.descripcion}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {content?.galeria?.items?.length > 0 && (
+              <div style={{ padding: "2rem", background: "#f8f9fa" }}>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>{content.galeria.titulo}</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 8 }}>
+                  {content.galeria.items.map((img: string, i: number) => (
+                    <img key={i} src={img} alt={"g" + i} style={{ width: "100%", height: 80, objectFit: "cover", borderRadius: 8 }} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {content?.equipo?.miembros?.length > 0 && (
+              <div style={{ padding: "2rem" }}>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>{content.equipo.titulo}</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
+                  {content.equipo.miembros.map((m: any, i: number) => (
+                    <div key={i} style={{ background: "#f8f9fa", borderRadius: 10, padding: "1rem", textAlign: "center" }}>
+                      <p style={{ fontWeight: 700, fontSize: 11, color: "#111" }}>{m.nombre}</p>
+                      <p style={{ fontSize: 10, color: pr, fontWeight: 600, marginTop: 2 }}>{m.cargo}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {content?.planes?.items?.length > 0 && (
+              <div style={{ padding: "2rem", background: "#f8f9fa" }}>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>{content.planes.titulo}</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
+                  {content.planes.items.map((p: any, i: number) => (
+                    <div key={i} style={{ background: "#fff", borderRadius: 10, padding: "1rem", border: "1px solid #f0f0f0", textAlign: "center" }}>
+                      <p style={{ fontWeight: 700, fontSize: 11, color: "#111" }}>{p.nombre}</p>
+                      <p style={{ fontSize: 16, fontWeight: 800, color: pr, marginTop: 4 }}>{p.precio}</p>
+                      <p style={{ fontSize: 9, color: "#888" }}>/{p.periodo}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {content?.testimonios && (
               <div style={{ padding: "2rem" }}>
                 <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Clientes satisfechos</h2>
@@ -580,6 +634,18 @@ export default function PageBuilderEditor() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {content?.faq && content.faq.length > 0 && (
+              <div style={{ padding: "2rem" }}>
+                <h2 style={{ fontSize: "1.2rem", fontWeight: 800, textAlign: "center", marginBottom: "1rem", color: "#111" }}>Preguntas frecuentes</h2>
+                {content.faq.map((f: any, i: number) => (
+                  <div key={i} style={{ background: "#f8f9fa", borderRadius: 10, padding: "0.75rem 1rem", marginBottom: 8 }}>
+                    <p style={{ fontWeight: 700, fontSize: 11, color: "#111", marginBottom: 4 }}>{f.pregunta}</p>
+                    <p style={{ fontSize: 10, color: "#888" }}>{f.respuesta}</p>
+                  </div>
+                ))}
               </div>
             )}
 
