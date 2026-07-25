@@ -135,7 +135,7 @@ export default async function DemoPage({ params }: Props) {
     .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
     .nav-links a:hover{color:${pr}}
     .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden}
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,${pr}77,${sc}44)}
+    .hero-overlay{position:absolute;inset:0;background:transparent}
     .hero-body{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:4rem 2rem;text-align:center;color:#fff}
     .btn-w{background:#fff;color:${pr};padding:.875rem 2rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.95rem}
     .btn-o{background:transparent;color:#fff;padding:.875rem 2rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.95rem;border:2px solid rgba(255,255,255,.7)}
