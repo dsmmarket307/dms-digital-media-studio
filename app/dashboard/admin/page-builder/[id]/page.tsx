@@ -505,7 +505,7 @@ export default function PageBuilderEditor() {
 
             <div style={{ position: "relative", minHeight: 280, background: `linear-gradient(135deg,${pr},${sc || "#1a1a1a"})`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
               {images.hero && <img src={images.hero} alt="hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
-              <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "2rem", color: "#fff", background: "rgba(0,0,0,0.45)", width: "100%" }}>
+              <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "2rem", color: "#fff", background: "transparent", width: "100%" }}>
                 {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 50, objectFit: "contain", margin: "0 auto 1rem", display: "block", filter: "brightness(0) invert(1)" }} />}
                 <h1 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "0.75rem" }}>{content?.hero?.titulo}</h1>
                 <p style={{ opacity: 0.9, marginBottom: "1.25rem", fontSize: "0.9rem" }}>{content?.hero?.subtitulo}</p>
