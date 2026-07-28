@@ -306,7 +306,7 @@ export default function PageBuilderEditor() {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
       if (!next.paginas_extra[pIndex].items) next.paginas_extra[pIndex].items = [];
-      next.paginas_extra[pIndex].items.push({ nombre: "Nuevo item", descripcion: "", precio: "", imagen: "", btn_label: "", btn_url: "" });
+      next.paginas_extra[pIndex].items.push({ nombre: "Nuevo item", descripcion: "", precio: "", imagen: "", btn_label: "", btn_url: "", fecha: "", etiqueta: "" });
       return next;
     });
   }
@@ -1072,6 +1072,8 @@ export default function PageBuilderEditor() {
                         <Field label="Imagen (url)" value={it.imagen} onChange={(v) => updatePaginaItem(pi, ii, "imagen", v)} />
                         <Field label="Boton texto" value={it.btn_label} onChange={(v) => updatePaginaItem(pi, ii, "btn_label", v)} />
                         <Field label="Boton url" value={it.btn_url} onChange={(v) => updatePaginaItem(pi, ii, "btn_url", v)} />
+                        <Field label="Fecha" value={it.fecha} onChange={(v) => updatePaginaItem(pi, ii, "fecha", v)} />
+                        <Field label="Etiqueta" value={it.etiqueta} onChange={(v) => updatePaginaItem(pi, ii, "etiqueta", v)} />
                       </div>
                     ))}
                     <button onClick={() => addPaginaItem(pi)} style={{ width: "100%", marginTop: 8, padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>+ Agregar item</button>

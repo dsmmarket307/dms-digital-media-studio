@@ -201,6 +201,7 @@ export default async function DemoPage({ params }: Props) {
           {c?.testimonios && !navHidden.includes("testimonios") && <li><a href="#testimonios">Testimonios</a></li>}
           {c?.faq && !navHidden.includes("faq") && <li><a href="#faq">FAQ</a></li>}
           {c?.contacto && !navHidden.includes("contacto") && <li><a href="#contacto">Contacto</a></li>}
+          {(c?.paginas_extra || []).map((p: any, pi: number) => (<li key={pi}><a href={`/demo/${id}/${p.slug}`}>{p.titulo}</a></li>))}
         </ul>
         {!c?.productos?.length && <a href="#contacto" style={{ background: pr, color: "#fff", padding: "0.5rem 1.25rem", borderRadius: 8, textDecoration: "none", fontSize: "0.875rem", fontWeight: 700 }}>{c?.hero?.cta_principal ?? "Contactar"}</a>}
 
