@@ -533,6 +533,7 @@ export default function Home() {
             © 2026 DMS Digital Media Studio. Todos los derechos reservados.
           </div>
         </div>
+      <ChatbotDMS />
       </footer>
 
     </main>
