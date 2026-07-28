@@ -272,11 +272,31 @@ export default function PageBuilderEditor() {
       return next;
     });
   }
+  function slugify(text: string): string {
+    return text
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
   function updatePagina(index: number, field: string, value: any) {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
       if (!next.paginas_extra) next.paginas_extra = [];
-      next.paginas_extra[index][field] = value;
+      const pagina = next.paginas_extra[index];
+      const slugManual = pagina.slugManual;
+      pagina[field] = value;
+      if (field === "titulo" && !slugManual) {
+        pagina.slug = slugify(value);
+      }
+      if (field === "slug") {
+        pagina.slugManual = true;
+      }
       return next;
     });
   }
