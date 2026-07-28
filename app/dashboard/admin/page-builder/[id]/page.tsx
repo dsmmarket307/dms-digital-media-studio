@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import EditorDescripcion from "@/components/EditorDescripcion";
@@ -19,6 +19,7 @@ const SECTION_LABELS: Record<string, string> = {
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
   estadisticas: "Estadisticas", planes: "Planes", testimonios: "Testimonios",
   faq: "Preguntas Frecuentes", contacto: "Contacto", footer: "Footer",
+  paginas: "Subpaginas",
 };
 
 async function fetchPexels(query: string): Promise<string> {
@@ -271,7 +272,51 @@ export default function PageBuilderEditor() {
       return next;
     });
   }
-
+  function updatePagina(index: number, field: string, value: any) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      if (!next.paginas_extra) next.paginas_extra = [];
+      next.paginas_extra[index][field] = value;
+      return next;
+    });
+  }
+  function addPagina() {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      if (!next.paginas_extra) next.paginas_extra = [];
+      next.paginas_extra.push({ slug: "nueva-pagina", titulo: "Nueva pagina", descripcion: "", items: [] });
+      return next;
+    });
+  }
+  function removePagina(index: number) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      next.paginas_extra.splice(index, 1);
+      return next;
+    });
+  }
+  function updatePaginaItem(pIndex: number, iIndex: number, field: string, value: any) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      next.paginas_extra[pIndex].items[iIndex][field] = value;
+      return next;
+    });
+  }
+  function addPaginaItem(pIndex: number) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      if (!next.paginas_extra[pIndex].items) next.paginas_extra[pIndex].items = [];
+      next.paginas_extra[pIndex].items.push({ nombre: "Nuevo item", descripcion: "", precio: "", imagen: "", btn_label: "", btn_url: "" });
+      return next;
+    });
+  }
+  function removePaginaItem(pIndex: number, iIndex: number) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      next.paginas_extra[pIndex].items.splice(iIndex, 1);
+      return next;
+    });
+  }
   function updateBarraItem(index: number, value: string) {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
@@ -1003,7 +1048,38 @@ export default function PageBuilderEditor() {
               <Field label="Descripcion" value={content?.footer?.descripcion} onChange={(v) => updateText(["footer", "descripcion"], v)} multiline />
               <Field label="Copyright" value={content?.footer?.copyright} onChange={(v) => updateText(["footer", "copyright"], v)} />
             </>)}
-          </div>
+            {selectedSection === "paginas" && (<>
+              {(content?.paginas_extra || []).map((p: any, pi: number) => (
+                <div key={pi} style={{ marginBottom: 16, background: "#f8f9fa", borderRadius: 10, padding: "12px", border: "1px solid #e5e5e5" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Subpagina {pi + 1}</span>
+                    <button onClick={() => removePagina(pi)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                  </div>
+                  <Field label="Slug (url)" value={p.slug} onChange={(v) => updatePagina(pi, "slug", v)} />
+                  <Field label="Titulo" value={p.titulo} onChange={(v) => updatePagina(pi, "titulo", v)} />
+                  <Field label="Descripcion" value={p.descripcion} onChange={(v) => updatePagina(pi, "descripcion", v)} multiline />
+                  <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #ddd" }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: "#aaa" }}>ITEMS DE LA SUBPAGINA</span>
+                    {(p.items || []).map((it: any, ii: number) => (
+                      <div key={ii} style={{ marginTop: 8, background: "#fff", borderRadius: 8, padding: "10px", border: "1px solid #eee" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: "#999" }}>Item {ii + 1}</span>
+                          <button onClick={() => removePaginaItem(pi, ii)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "2px 6px", fontSize: 10, cursor: "pointer" }}>Eliminar</button>
+                        </div>
+                        <Field label="Nombre" value={it.nombre} onChange={(v) => updatePaginaItem(pi, ii, "nombre", v)} />
+                        <Field label="Descripcion" value={it.descripcion} onChange={(v) => updatePaginaItem(pi, ii, "descripcion", v)} multiline />
+                        <Field label="Precio" value={it.precio} onChange={(v) => updatePaginaItem(pi, ii, "precio", v)} />
+                        <Field label="Imagen (url)" value={it.imagen} onChange={(v) => updatePaginaItem(pi, ii, "imagen", v)} />
+                        <Field label="Boton texto" value={it.btn_label} onChange={(v) => updatePaginaItem(pi, ii, "btn_label", v)} />
+                        <Field label="Boton url" value={it.btn_url} onChange={(v) => updatePaginaItem(pi, ii, "btn_url", v)} />
+                      </div>
+                    ))}
+                    <button onClick={() => addPaginaItem(pi)} style={{ width: "100%", marginTop: 8, padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>+ Agregar item</button>
+                  </div>
+                </div>
+              ))}
+              <button onClick={() => addPagina()} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar subpagina</button>
+            </>)}          </div>
         </div>
       </div>
     </div>
