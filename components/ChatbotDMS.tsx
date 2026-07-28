@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useRef, useEffect } from "react";
 
 const PLANES = [
@@ -20,13 +20,38 @@ type Step = "ask_name" | "ask_celular" | "ask_email" | "menu" | "show_planes" | 
 
 export default function ChatbotDMS() {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [chatHistory, setChatHistory] = useState<ChatMsg[]>([]);
+  const [msgs, setMsgs] = useState<Msg[]>(() => {
+    if (typeof window === "undefined") return [];
+    try { const s = localStorage.getItem("dms_chat_msgs"); return s ? JSON.parse(s) : []; } catch { return []; }
+  });
+  const [chatHistory, setChatHistory] = useState<ChatMsg[]>(() => {
+    if (typeof window === "undefined") return [];
+    try { const s = localStorage.getItem("dms_chat_history"); return s ? JSON.parse(s) : []; } catch { return []; }
+  });
   const [input, setInput] = useState("");
-  const [step, setStep] = useState<Step>("ask_name");
+  const [step, setStep] = useState<Step>(() => {
+    if (typeof window === "undefined") return "ask_name";
+    try { return (localStorage.getItem("dms_chat_step") as Step) ?? "ask_name"; } catch { return "ask_name"; }
+  });
   const [loading, setLoading] = useState(false);
-  const [lead, setLead] = useState({ nombre: "", celular: "", email: "" });
+  const [lead, setLead] = useState<{ nombre: string; celular: string; email: string }>(() => {
+    if (typeof window === "undefined") return { nombre: "", celular: "", email: "" };
+    try { const s = localStorage.getItem("dms_chat_lead"); return s ? JSON.parse(s) : { nombre: "", celular: "", email: "" }; } catch { return { nombre: "", celular: "", email: "" }; }
+  });
   const [unread, setUnread] = useState(0);
+
+  useEffect(() => {
+    try { localStorage.setItem("dms_chat_msgs", JSON.stringify(msgs)); } catch {}
+  }, [msgs]);
+  useEffect(() => {
+    try { localStorage.setItem("dms_chat_history", JSON.stringify(chatHistory)); } catch {}
+  }, [chatHistory]);
+  useEffect(() => {
+    try { localStorage.setItem("dms_chat_step", step); } catch {}
+  }, [step]);
+  useEffect(() => {
+    try { localStorage.setItem("dms_chat_lead", JSON.stringify(lead)); } catch {}
+  }, [lead]);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
