@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 import EstrellasProducto from "./EstrellasProducto";
+import LandingCarrusel from "./LandingCarrusel";
 import VisitaTracker from "@/components/VisitaTracker";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -253,6 +254,10 @@ export default async function DemoPage({ params }: Props) {
             </div>
           </div>
         </section>
+      )}
+
+      {c?.carrusel?.activo && ci.carrusel_imgs?.length > 0 && (
+        <LandingCarrusel imagenes={ci.carrusel_imgs} />
       )}
 
       {c?.servicios && !navHidden.includes("servicios") && (

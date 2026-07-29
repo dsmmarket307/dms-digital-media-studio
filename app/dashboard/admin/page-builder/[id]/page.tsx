@@ -14,6 +14,7 @@ const FONTS = [
 
 const SECTION_LABELS: Record<string, string> = {
   barraAnuncio: "Barra de Anuncios",
+  carrusel: "Carrusel de Imagenes",
   productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
@@ -191,6 +192,11 @@ export default function PageBuilderEditor() {
       setImages(prev => ({
         ...prev,
         galeria_imgs: [...((prev.galeria_imgs as string[]) ?? []), data.publicUrl],
+      }));
+    } else if (imgTarget === "carrusel_new") {
+      setImages(prev => ({
+        ...prev,
+        carrusel_imgs: [...((prev.carrusel_imgs as string[]) ?? []), data.publicUrl],
       }));
     } else {
       setImages(prev => ({ ...prev, [imgTarget]: data.publicUrl }));
@@ -971,6 +977,24 @@ export default function PageBuilderEditor() {
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                   <img src={img} alt={`g${i}`} style={{ width: 60, height: 40, objectFit: "cover", borderRadius: 6 }} />
                   <button onClick={() => removeNestedItem("galeria", "items", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                </div>
+              ))}
+            </>)}
+            {selectedSection === "carrusel" && (<>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar carrusel</span>
+                <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.carrusel) next.carrusel = {}; next.carrusel.activo = !next.carrusel.activo; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content?.carrusel?.activo ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                  <span style={{ position: "absolute", top: 2, left: content?.carrusel?.activo ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                </button>
+              </div>
+              <button onClick={() => { setImgTarget("carrusel_new"); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                {uploadingImg === "carrusel_new" ? "Subiendo..." : "Agregar imagen"}
+              </button>
+              {(images.carrusel_imgs ?? []).map((img: string, i: number) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                  <img src={img} alt={`carrusel-${i}`} style={{ width: 60, height: 40, objectFit: "cover", borderRadius: 6 }} />
+                  <button onClick={() => setImages((prev: any) => ({ ...prev, carrusel_imgs: (prev.carrusel_imgs ?? []).filter((_: string, j: number) => j !== i) }))} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
                 </div>
               ))}
             </>)}
