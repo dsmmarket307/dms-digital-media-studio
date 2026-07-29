@@ -363,7 +363,7 @@ export default async function DemoPage({ params }: Props) {
       {c?.estadisticas?.items?.length > 0 && (
         <section style={{ background: "#f8f9fa" }}>
           <div className="wrap">
-            <div className="g4" style={{ textAlign: "center" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "1.5rem", textAlign: "center" }}>
               {c.estadisticas.items.map((e: any, i: number) => (
                 <div key={i}>
                   <div style={{ fontSize: "2.5rem", fontWeight: 800, color: pr }}>{e.numero}</div>
