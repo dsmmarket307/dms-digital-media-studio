@@ -58,6 +58,7 @@ export default function PageBuilderEditor() {
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<string>("hero");
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [zoom, setZoom] = useState<number>(100);
   const [font, setFont] = useState(FONTS[0].value);
   const [fontSize, setFontSize] = useState("16px");
   const [primaryColor, setPrimaryColor] = useState("#7c3aed");
@@ -544,8 +545,10 @@ export default function PageBuilderEditor() {
             <span style={{ fontSize: 11, color: "#888", fontWeight: 600 }}>Vista previa</span>
             <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
             <span style={{ fontSize: 11, color: "#555", fontWeight: 600 }}>{view === "desktop" ? "Escritorio" : view === "tablet" ? "Tableta" : "Movil"}</span>
+            <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
+            {[100, 75, 50].map((z) => (<button key={z} onClick={() => setZoom(z)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 6, border: "none", cursor: "pointer", background: zoom === z ? "#111" : "#f0f0f0", color: zoom === z ? "#fff" : "#555" }}>{z}%</button>))}
           </div>
-          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize, overflow: "hidden" }}>
+          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize, overflow: "hidden", zoom: `${zoom}%` } as any}>
 
             {content?.barraAnuncio?.activo && content?.barraAnuncio?.items?.length > 0 && (
               <div style={{ background: content.barraAnuncio.colorFondo || "#111111", overflow: "hidden", padding: "8px 0" }}>
