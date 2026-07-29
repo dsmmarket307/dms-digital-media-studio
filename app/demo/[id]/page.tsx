@@ -360,6 +360,21 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
+      {c?.estadisticas?.items?.length > 0 && (
+        <section style={{ background: "#f8f9fa" }}>
+          <div className="wrap">
+            <div className="g4" style={{ textAlign: "center" }}>
+              {c.estadisticas.items.map((e: any, i: number) => (
+                <div key={i}>
+                  <div style={{ fontSize: "2.5rem", fontWeight: 800, color: pr }}>{e.numero}</div>
+                  <div style={{ fontSize: ".95rem", color: "#666", marginTop: 4 }}>{e.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {c?.beneficios && (
         <section>
           <div className="wrap">
