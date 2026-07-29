@@ -538,7 +538,7 @@ export default function PageBuilderEditor() {
         </div>
 
         {/* PANEL CENTRAL - PREVIEW CON SCROLL */}
-        <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
+        <div style={{ flex: view === "desktop" ? 1 : "0 0 auto", width: view === "desktop" ? "auto" : `calc(${previewWidth} + 64px)`, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 8, padding: "6px 12px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", flexShrink: 0, alignSelf: "flex-start" }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <span style={{ fontSize: 11, color: "#888", fontWeight: 600 }}>Vista previa</span>
@@ -731,7 +731,7 @@ export default function PageBuilderEditor() {
         </div>
 
         {/* PANEL DERECHO */}
-        <div style={{ width: view === "desktop" ? 400 : 480, background: "#fff", borderLeft: "1px solid #e5e7eb", overflow: "auto", flexShrink: 0 }}>
+        <div style={{ width: view === "desktop" ? 400 : "auto", flex: view === "desktop" ? "0 0 auto" : 1, background: "#fff", borderLeft: "1px solid #e5e7eb", overflow: "auto", flexShrink: 0 }}>
           <div style={{ padding: "14px 16px 8px", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, background: "#fff", zIndex: 5 }}>
             <p style={{ fontSize: 13, fontWeight: 800, color: "#111", margin: 0 }}>{SECTION_LABELS[selectedSection]}</p>
           </div>
