@@ -223,7 +223,7 @@ export default async function DemoPage({ params }: Props) {
       </nav>
 
       <div className="hero">
-        {img0 && <img src={img0} alt="hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
+        {c?.carrusel?.activo && ci.carrusel_imgs?.length > 0 ? (<LandingCarrusel imagenes={ci.carrusel_imgs} />) : (img0 && <img src={img0} alt="hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />)}
         <div className="hero-overlay" />
         <div className="hero-body">
           {logo && <img src={logo} alt="logo" style={{ height: 80, objectFit: "contain", margin: "0 auto 1.5rem", display: "block", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))" }} />}
@@ -254,10 +254,6 @@ export default async function DemoPage({ params }: Props) {
             </div>
           </div>
         </section>
-      )}
-
-      {c?.carrusel?.activo && ci.carrusel_imgs?.length > 0 && (
-        <LandingCarrusel imagenes={ci.carrusel_imgs} />
       )}
 
       {c?.servicios && !navHidden.includes("servicios") && (
