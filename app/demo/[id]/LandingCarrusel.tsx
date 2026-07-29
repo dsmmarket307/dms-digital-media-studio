@@ -15,7 +15,7 @@ export default function LandingCarrusel({ imagenes }: { imagenes: string[] }) {
   if (!imagenes || imagenes.length === 0) return null;
 
   return (
-    <div style={{ position: "relative", width: "100%", height: 420, overflow: "hidden", background: "#f3f4f6" }}>
+    <>
       {imagenes.map((img, i) => (
         <img
           key={i}
@@ -33,7 +33,7 @@ export default function LandingCarrusel({ imagenes }: { imagenes: string[] }) {
         />
       ))}
       {imagenes.length > 1 && (
-        <div style={{ position: "absolute", bottom: 16, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 8 }}>
+        <div style={{ position: "absolute", bottom: 16, left: 0, right: 0, zIndex: 2, display: "flex", justifyContent: "center", gap: 8 }}>
           {imagenes.map((_, i) => (
             <button
               key={i}
@@ -52,6 +52,6 @@ export default function LandingCarrusel({ imagenes }: { imagenes: string[] }) {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
