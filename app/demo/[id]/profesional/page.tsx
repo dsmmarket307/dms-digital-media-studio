@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -92,7 +92,7 @@ export default async function DemoProfesional({ params }: Props) {
   const { data: site } = await supabase.from("generated_websites").select("*").eq("id", id).single();
   if (!site) notFound();
 
-  const c = site.professional_content ?? site.generated_content;
+  const c = site.generated_content;
   const pr = site.primary_color ?? "#7c3aed";
   const sc = site.secondary_color ?? "#0f172a";
   const logo = site.logo_url ?? "";
