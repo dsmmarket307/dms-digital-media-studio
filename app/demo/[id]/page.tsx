@@ -135,6 +135,12 @@ export default async function DemoPage({ params }: Props) {
     .nav-links{display:flex;gap:2rem;list-style:none}
     .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
     .nav-links a:hover{color:${pr}}
+    .nav-item-parent{position:relative}
+    .nav-submenu{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:180px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:0.5rem 0;list-style:none;z-index:200}
+    .nav-item-parent:hover .nav-submenu{display:block}
+    .nav-submenu li{width:100%}
+    .nav-submenu a{display:block;padding:0.5rem 1rem;white-space:nowrap}
+    .nav-submenu a:hover{background:#f8f8f8}
     .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden}
     .hero-overlay{position:absolute;inset:0;background:transparent}
     .hero-body{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:4rem 2rem;text-align:center;color:#fff}
@@ -202,7 +208,19 @@ export default async function DemoPage({ params }: Props) {
           {c?.testimonios && !navHidden.includes("testimonios") && <li><a href="#testimonios">Testimonios</a></li>}
           {c?.faq && !navHidden.includes("faq") && <li><a href="#faq">FAQ</a></li>}
           {c?.contacto && !navHidden.includes("contacto") && <li><a href="#contacto">Contacto</a></li>}
-          {(c?.paginas_extra || []).map((p: any, pi: number) => (<li key={pi}><a href={`/demo/${id}/${p.slug}`}>{p.titulo}</a></li>))}
+          {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
+            const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
+            return hijos.length > 0 ? (
+              <li key={pi} className="nav-item-parent">
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
+                <ul className="nav-submenu">
+                  {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
+                </ul>
+              </li>
+            ) : (
+              <li key={pi}><a href={`/demo/${id}/${p.slug}`}>{p.titulo}</a></li>
+            );
+          })}
         </ul>
         {!c?.productos?.length && <a href="#contacto" style={{ background: pr, color: "#fff", padding: "0.5rem 1.25rem", borderRadius: 8, textDecoration: "none", fontSize: "0.875rem", fontWeight: 700 }}>{c?.hero?.cta_principal ?? "Contactar"}</a>}
 

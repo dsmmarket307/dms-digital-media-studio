@@ -1161,6 +1161,11 @@ export default function PageBuilderEditor() {
                   <Field label="Slug (url)" value={p.slug} onChange={(v) => updatePagina(pi, "slug", v)} />
                   <Field label="Titulo" value={p.titulo} onChange={(v) => updatePagina(pi, "titulo", v)} />
                   <Field label="Descripcion" value={p.descripcion} onChange={(v) => updatePagina(pi, "descripcion", v)} multiline />
+                  <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, marginBottom: 6, marginTop: 10 }}>Depende de (opcional)</label>
+                  <select value={p.padre || ""} onChange={(e) => updatePagina(pi, "padre", e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13, marginBottom: 8, background: "#fff" }}>
+                    <option value="">Ninguna (menu principal)</option>
+                    {(content?.paginas_extra || []).map((op: any, oi: number) => (oi !== pi && <option key={oi} value={op.slug}>{op.titulo}</option>))}
+                  </select>
                   <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #ddd" }}>
                     <span style={{ fontSize: 10, fontWeight: 700, color: "#aaa" }}>ITEMS DE LA SUBPAGINA</span>
                     {(p.items || []).map((it: any, ii: number) => (

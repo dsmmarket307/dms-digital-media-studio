@@ -24,6 +24,15 @@ export default async function SubPage({ params }: Props) {
         body{font-family:'Segoe UI',sans-serif;color:#111}
         nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
         .wrap{max-width:1100px;margin:0 auto;padding:0 1rem}
+        .nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+        .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
+        .nav-links a:hover{color:${pr}}
+        .nav-item-parent{position:relative}
+        .nav-submenu{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:180px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:0.5rem 0;list-style:none;z-index:200}
+        .nav-item-parent:hover .nav-submenu{display:block}
+        .nav-submenu li{width:100%}
+        .nav-submenu a{display:block;padding:0.5rem 1rem;white-space:nowrap}
+        .nav-submenu a:hover{background:#f8f8f8}
         .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
         .card{background:#fff;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #f0f0f0}
         @media(max-width:768px){nav{padding:1rem}.g3{grid-template-columns:1fr}}
@@ -34,6 +43,21 @@ export default async function SubPage({ params }: Props) {
           {logo && <img src={logo} alt="logo" style={{ height:44, objectFit:"contain" }} />}
           <span style={{ fontWeight:700, fontSize:"1.1rem", color:pr }}>{c?.footer?.nombre_empresa ?? site.project_name}</span>
         </div>
+        <ul className="nav-links">
+          {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
+            const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
+            return hijos.length > 0 ? (
+              <li key={pi} className="nav-item-parent">
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
+                <ul className="nav-submenu">
+                  {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
+                </ul>
+              </li>
+            ) : (
+              <li key={pi}><a href={`/demo/${id}/${p.slug}`}>{p.titulo}</a></li>
+            );
+          })}
+        </ul>
         <a href={`/demo/${id}`} style={{ background:pr, color:"#fff", padding:"0.5rem 1.25rem", borderRadius:8, textDecoration:"none", fontSize:"0.875rem", fontWeight:700 }}>Volver</a>
       </nav>
 
