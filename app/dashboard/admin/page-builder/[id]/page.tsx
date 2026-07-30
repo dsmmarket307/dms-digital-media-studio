@@ -60,6 +60,7 @@ export default function PageBuilderEditor() {
   const [selectedSection, setSelectedSection] = useState<string>("hero");
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [zoom, setZoom] = useState<number>(100);
+  const [draggedItem, setDraggedItem] = useState<{ p: number; i: number } | null>(null);
   const [font, setFont] = useState(FONTS[0].value);
   const [fontSize, setFontSize] = useState("16px");
   const [primaryColor, setPrimaryColor] = useState("#7c3aed");
@@ -333,7 +334,7 @@ export default function PageBuilderEditor() {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
       if (!next.paginas_extra[pIndex].items) next.paginas_extra[pIndex].items = [];
-      next.paginas_extra[pIndex].items.push({ nombre: "Nuevo item", descripcion: "", precio: "", imagen: "", btn_label: "", btn_url: "", fecha: "", etiqueta: "" });
+      next.paginas_extra[pIndex].items.push({ nombre: "Nuevo item", descripcion: "", precio: "", imagen: "", btn_label: "", btn_url: "", fecha: "", etiqueta: "", imagen_tamano: "mediana", imagen_posicion: "arriba" });
       return next;
     });
   }
@@ -341,6 +342,15 @@ export default function PageBuilderEditor() {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
       next.paginas_extra[pIndex].items.splice(iIndex, 1);
+      return next;
+    });
+  }
+  function reorderPaginaItems(pIndex: number, fromIndex: number, toIndex: number) {
+    setContent((prev: any) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      const arr = next.paginas_extra[pIndex].items;
+      const [moved] = arr.splice(fromIndex, 1);
+      arr.splice(toIndex, 0, moved);
       return next;
     });
   }
@@ -1179,9 +1189,21 @@ export default function PageBuilderEditor() {
                   <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #ddd" }}>
                     <span style={{ fontSize: 10, fontWeight: 700, color: "#aaa" }}>ITEMS DE LA SUBPAGINA</span>
                     {(p.items || []).map((it: any, ii: number) => (
-                      <div key={ii} style={{ marginTop: 8, background: "#fff", borderRadius: 8, padding: "10px", border: "1px solid #eee" }}>
+                      <div
+                        key={ii}
+                        draggable
+                        onDragStart={() => setDraggedItem({ p: pi, i: ii })}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (draggedItem && draggedItem.p === pi && draggedItem.i !== ii) reorderPaginaItems(pi, draggedItem.i, ii);
+                          setDraggedItem(null);
+                        }}
+                        onDragEnd={() => setDraggedItem(null)}
+                        style={{ marginTop: 8, background: "#fff", borderRadius: 8, padding: "10px", border: "1px solid #eee", opacity: draggedItem?.p === pi && draggedItem?.i === ii ? 0.4 : 1, cursor: "grab" }}
+                      >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                          <span style={{ fontSize: 10, fontWeight: 700, color: "#999" }}>Item {ii + 1}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: "#999", display: "flex", alignItems: "center", gap: 4 }}>⠿ Item {ii + 1}</span>
                           <button onClick={() => removePaginaItem(pi, ii)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "2px 6px", fontSize: 10, cursor: "pointer" }}>Eliminar</button>
                         </div>
                         <Field label="Nombre" value={it.nombre} onChange={(v) => updatePaginaItem(pi, ii, "nombre", v)} />
