@@ -1,5 +1,6 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
+import EstrellasProducto from "../EstrellasProducto";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -96,11 +97,12 @@ export default async function DemoProfesional({ params }: Props) {
   const pr = site.primary_color ?? "#7c3aed";
   const sc = site.secondary_color ?? "#0f172a";
   const logo = site.logo_url ?? "";
+  const ci = site.custom_images ?? {};
 
   // Usar keywords de la IA si existen (para "Otro" o cualquier tipo)
   const customKeywords = c?.meta?.pexels_keywords;
   const imagenes = await getPexelsImages(site.website_type, 6, customKeywords);
-  const slides = imagenes.slice(0, 4);
+  const slides: string[] = (c?.carrusel?.activo && ci.carrusel_imgs?.length > 0) ? ci.carrusel_imgs : imagenes.slice(0, 4);
 
   const css = `
     *{box-sizing:border-box;margin:0;padding:0}
@@ -260,6 +262,7 @@ export default async function DemoProfesional({ params }: Props) {
           {logo && <img src={logo} alt="logo" />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
         </div>
         <ul className="nav-links">
+          {c?.productos?.length > 0 && <li><a href="#productos">Productos</a></li>}
           <li><a href="#nosotros">Nosotros</a></li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="#galeria">Galeria</a></li>
@@ -293,6 +296,36 @@ export default async function DemoProfesional({ params }: Props) {
           ))}
         </div>
       </div>
+
+      {c?.productos?.length > 0 && (
+        <section id="productos">
+          <div className="wrap">
+            <p className="label">Productos</p>
+            <h2 className="st">{c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo"}</h2>
+            <div className="g4">
+              {c.productos.map((p: any, i: number) => (
+                <a key={i} href={`/demo/${id}/producto/${i}`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden" }}>
+                  {p.imagenes?.length > 0 ? (
+                    <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 220, objectFit: "cover" }} />
+                  ) : (
+                    <div style={{ width: "100%", height: 220, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </div>
+                  )}
+                  <div style={{ padding: "1.5rem" }}>
+                    <h3>{p.nombre}</h3>
+                    <EstrellasProducto siteId={id} productoIndex={i} />
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+                      <p style={{ fontSize: "1.25rem", fontWeight: 800, color: pr }}>{p.precio}</p>
+                      {p.precio_anterior && <p style={{ fontSize: "0.95rem", color: "#aaa", textDecoration: "line-through" }}>{p.precio_anterior}</p>}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {c?.nosotros && (
         <section id="nosotros">
@@ -339,6 +372,28 @@ export default async function DemoProfesional({ params }: Props) {
                   <p>{s.descripcion}</p>
                   {s.detalle && <div className="srv-detalle">{s.detalle}</div>}
                   {s.precio_desde && <div className="srv-precio">Desde: {s.precio_desde}</div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {c?.beneficios && (
+        <section>
+          <div className="wrap">
+            <p className="label">Ventajas</p>
+            <h2 className="st">Por que elegirnos</h2>
+            <div className="g4">
+              {c.beneficios.map((b: any, i: number) => (
+                <div key={i} className="srv-card">
+                  <div className="srv-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={pr} strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                  <h3>{b.titulo}</h3>
+                  <p>{b.descripcion}</p>
                 </div>
               ))}
             </div>
@@ -524,7 +579,8 @@ export default async function DemoProfesional({ params }: Props) {
             <div className="footer-col">
               <h4>Navegacion</h4>
               <ul>
-                <li><a href="#nosotros">Nosotros</a></li>
+                {c?.productos?.length > 0 && <li><a href="#productos">Productos</a></li>}
+          <li><a href="#nosotros">Nosotros</a></li>
                 <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#galeria">Galeria</a></li>
                 <li><a href="#testimonios">Testimonios</a></li>
