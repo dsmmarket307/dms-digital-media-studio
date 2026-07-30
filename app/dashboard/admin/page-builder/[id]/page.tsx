@@ -1164,7 +1164,17 @@ export default function PageBuilderEditor() {
                   <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, marginBottom: 6, marginTop: 10 }}>Depende de (opcional)</label>
                   <select value={p.padre || ""} onChange={(e) => updatePagina(pi, "padre", e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13, marginBottom: 8, background: "#fff" }}>
                     <option value="">Ninguna (menu principal)</option>
-                    {(content?.paginas_extra || []).map((op: any, oi: number) => (oi !== pi && <option key={oi} value={op.slug}>{op.titulo}</option>))}
+                    <optgroup label="Secciones fijas">
+                      <option value="productos">Productos</option>
+                      <option value="nosotros">Nosotros</option>
+                      <option value="servicios">Servicios</option>
+                      <option value="testimonios">Testimonios</option>
+                      <option value="faq">Preguntas Frecuentes</option>
+                      <option value="contacto">Contacto</option>
+                    </optgroup>
+                    <optgroup label="Subpaginas">
+                      {(content?.paginas_extra || []).map((op: any, oi: number) => (oi !== pi && <option key={oi} value={op.slug}>{op.titulo}</option>))}
+                    </optgroup>
                   </select>
                   <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #ddd" }}>
                     <span style={{ fontSize: 10, fontWeight: 700, color: "#aaa" }}>ITEMS DE LA SUBPAGINA</span>
