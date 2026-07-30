@@ -493,7 +493,7 @@ export default async function DemoPage({ params }: Props) {
 
       <footer>
         <div className="wrap">
-          {logo && <img src={logo} alt="logo" style={{ height: 60, objectFit: "contain", margin: "0 auto 1rem", display: "block", filter: "brightness(0) invert(1)" }} />}
+          {logo && <img src={logo} alt="logo" style={{ height: 60, objectFit: "contain", margin: "0 auto 1rem", display: "block" }} />}
           <h3 style={{ color: pr, fontWeight: 700, fontSize: "1.2rem", marginBottom: ".5rem" }}>{c?.footer?.nombre_empresa}</h3>
           <p style={{ fontSize: ".85rem", color: "rgba(255,255,255,.5)" }}>{c?.footer?.descripcion}</p>
           <div className="social-icons">

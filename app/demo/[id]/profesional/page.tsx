@@ -125,7 +125,7 @@ export default async function DemoProfesional({ params }: Props) {
     .hero-slide img{width:100%;height:100%;object-fit:cover}
     .hero-body{position:relative;z-index:1;max-width:750px;margin:0 auto;padding:2rem;text-align:center;color:#fff}
     .hero-badge{display:inline-block;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.4);padding:0.4rem 1rem;border-radius:999px;font-size:0.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem}
-    .hero-body img.logo{height:120px;object-fit:contain;margin:0 auto 1.5rem;display:block;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.5))}
+    .hero-body img.logo{height:120px;object-fit:contain;margin:0 auto 1.5rem;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))}
     .hero-body h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:900;line-height:1.05;margin-bottom:1.5rem;text-shadow:0 2px 16px rgba(0,0,0,0.6)}
     .hero-body p{font-size:1.2rem;opacity:.95;margin-bottom:2.5rem;line-height:1.7;text-shadow:0 1px 8px rgba(0,0,0,0.5)}
     .btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
@@ -194,7 +194,7 @@ export default async function DemoProfesional({ params }: Props) {
     .wa-btn:hover{opacity:0.9}
     footer{background:#0f172a;color:#fff;padding:4rem 3rem 2rem}
     .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
-    .footer-brand img{height:60px;object-fit:contain;margin-bottom:1rem;filter:brightness(0) invert(1)}
+    .footer-brand img{height:60px;object-fit:contain;margin-bottom:1rem}
     .footer-brand h3{font-size:1.1rem;font-weight:700;color:${pr};margin-bottom:0.75rem}
     .footer-brand p{font-size:0.875rem;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:1.25rem}
     .social-icons{display:flex;gap:0.75rem;margin-top:0.5rem;flex-wrap:wrap}
