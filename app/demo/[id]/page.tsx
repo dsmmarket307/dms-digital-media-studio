@@ -259,6 +259,7 @@ export default async function DemoPage({ params }: Props) {
           <div className="wrap">
             <p className="label">Nosotros</p>
             <h2 className="st">{c.nosotros.titulo}</h2>
+            {ci.nosotros && <img src={ci.nosotros} alt="nosotros" className="sec-img" />}
             <p style={{ textAlign: "center", color: "#555", lineHeight: 1.8, maxWidth: 700, margin: "0 auto 1.5rem" }}>{c.nosotros.descripcion}</p>
             <div className="g2" style={{ marginTop: "2rem" }}>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>

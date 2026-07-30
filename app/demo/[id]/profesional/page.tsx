@@ -331,7 +331,7 @@ export default async function DemoProfesional({ params }: Props) {
         <section id="nosotros">
           <div className="wrap">
             <div className="nosotros-grid">
-              <div>{imagenes[1] && <img src={imagenes[1]} alt="nosotros" className="nosotros-img" />}</div>
+              <div>{(ci.nosotros || imagenes[1]) && <img src={ci.nosotros || imagenes[1]} alt="nosotros" className="nosotros-img" />}</div>
               <div className="nosotros-content">
                 <p className="label" style={{ textAlign: "left" }}>Quienes somos</p>
                 <h2>{c.nosotros.titulo}</h2>
@@ -422,7 +422,7 @@ export default async function DemoProfesional({ params }: Props) {
           <h2 className="st">{c?.galeria?.titulo ?? "Nuestro trabajo"}</h2>
           <p className="st-sub">{c?.galeria?.subtitulo ?? "Conoce algunos de nuestros proyectos"}</p>
           <div className="galeria-grid">
-            {imagenes.slice(0, 5).map((img, i) => (
+            {(ci.galeria_imgs?.length > 0 ? ci.galeria_imgs : imagenes.slice(0, 5)).map((img: string, i: number) => (
               <img key={i} src={img} alt={`galeria ${i}`} className={`gal-img${i === 0 ? " tall" : ""}`} />
             ))}
           </div>
