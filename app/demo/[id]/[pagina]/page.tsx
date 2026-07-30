@@ -73,15 +73,25 @@ export default async function SubPage({ params }: Props) {
             <div className="g3">
               {page.items.map((item: any, i: number) => (
                 <div key={i} className="card">
-                  {item.imagen && <img src={item.imagen} alt={item.nombre} style={{ width:"100%", height:180, objectFit:"cover", borderRadius:10, marginBottom:"1rem" }} />}
-                  {item.etiqueta && <span style={{ display:"inline-block", background:`${pr}15`, color:pr, fontSize:".7rem", fontWeight:700, padding:"3px 10px", borderRadius:20, marginBottom:".5rem" }}>{item.etiqueta}</span>}
-                  <h3 style={{ fontWeight:700, fontSize:"1rem", color:"#111", marginBottom:".25rem" }}>{item.nombre}</h3>
-                  {item.fecha && <p style={{ fontSize:".75rem", color:"#999", marginBottom:".5rem" }}>{item.fecha}</p>}
-                  {item.descripcion && <p style={{ fontSize:".875rem", color:"#666", lineHeight:1.6, marginBottom:".75rem" }}>{item.descripcion}</p>}
-                  {item.precio && <p style={{ fontSize:"1.1rem", fontWeight:800, color:pr }}>{item.precio}</p>}
-                  {item.btn_label && item.btn_url && (
-                    <a href={item.btn_url} target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", marginTop:".75rem", background:pr, color:"#fff", padding:"8px 20px", borderRadius:8, textDecoration:"none", fontSize:".875rem", fontWeight:700 }}>{item.btn_label}</a>
-                  )}
+                  {(() => {
+                    const alturaImg = item.imagen_tamano === "pequena" ? 100 : item.imagen_tamano === "grande" ? 280 : 180;
+                    const imagenBlock = item.imagen && (
+                      <img src={item.imagen} alt={item.nombre} style={{ width:"100%", height:alturaImg, objectFit:"contain", background:"#f5f5f5", borderRadius:10, marginBottom:"1rem" }} />
+                    );
+                    const textoBlock = (
+                      <>
+                        {item.etiqueta && <span style={{ display:"inline-block", background:`${pr}15`, color:pr, fontSize:".7rem", fontWeight:700, padding:"3px 10px", borderRadius:20, marginBottom:".5rem" }}>{item.etiqueta}</span>}
+                        <h3 style={{ fontWeight:700, fontSize:"1rem", color:"#111", marginBottom:".25rem" }}>{item.nombre}</h3>
+                        {item.fecha && <p style={{ fontSize:".75rem", color:"#999", marginBottom:".5rem" }}>{item.fecha}</p>}
+                        {item.descripcion && <p style={{ fontSize:".875rem", color:"#666", lineHeight:1.6, marginBottom:".75rem" }}>{item.descripcion}</p>}
+                        {item.precio && <p style={{ fontSize:"1.1rem", fontWeight:800, color:pr }}>{item.precio}</p>}
+                        {item.btn_label && item.btn_url && (
+                          <a href={item.btn_url} target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", marginTop:".75rem", background:pr, color:"#fff", padding:"8px 20px", borderRadius:8, textDecoration:"none", fontSize:".875rem", fontWeight:700 }}>{item.btn_label}</a>
+                        )}
+                      </>
+                    );
+                    return item.imagen_posicion === "abajo" ? (<>{textoBlock}{imagenBlock}</>) : (<>{imagenBlock}{textoBlock}</>);
+                  })()}
                 </div>
               ))}
             </div>
