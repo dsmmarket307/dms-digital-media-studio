@@ -409,7 +409,63 @@ export default function PageBuilderEditor() {
     );
   }
 
-  if (loading) return (
+    function ItemImgDrop({ pIndex, iIndex, value }: { pIndex: number; iIndex: number; value: string }) {
+    const [dragOver, setDragOver] = useState(false);
+    const [busy, setBusy] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    async function handleFile(file: File) {
+      if (!file || !file.type.startsWith("image/")) return;
+      setBusy(true);
+      const ext = file.name.split(".").pop();
+      const fileName = `img-pagina-${pIndex}-${iIndex}-${Date.now()}.${ext}`;
+      await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+      const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+      updatePaginaItem(pIndex, iIndex, "imagen", data.publicUrl);
+      setBusy(false);
+    }
+
+    return (
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ display: "block", fontSize: 10, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, marginBottom: 4 }}>Imagen</label>
+        <div
+          onClick={() => inputRef.current?.click()}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            const file = e.dataTransfer.files?.[0];
+            if (file) handleFile(file);
+          }}
+          onPaste={(e) => {
+            const item = Array.from(e.clipboardData.items).find((i) => i.type.startsWith("image/"));
+            const file = item?.getAsFile();
+            if (file) handleFile(file);
+          }}
+          tabIndex={0}
+          style={{
+            border: `2px dashed ${dragOver ? primaryColor : "#ddd"}`,
+            borderRadius: 8,
+            padding: value ? 0 : "16px",
+            textAlign: "center" as const,
+            cursor: "pointer",
+            background: dragOver ? `${primaryColor}10` : "#fafafa",
+            overflow: "hidden",
+            position: "relative" as const,
+          }}
+        >
+          <input ref={inputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+          {value ? (
+            <img src={value} alt="preview" style={{ width: "100%", height: 100, objectFit: "cover", display: "block" }} />
+          ) : (
+            <span style={{ fontSize: 11, color: "#999" }}>{busy ? "Subiendo..." : "Arrastra, pega (Ctrl+V) o haz clic"}</span>
+          )}
+          {busy && value && <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>Subiendo...</div>}
+        </div>
+      </div>
+    );
+  }if (loading) return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ width: 40, height: 40, border: "3px solid #e9d5ff", borderTopColor: "#7c3aed", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -1116,7 +1172,7 @@ export default function PageBuilderEditor() {
                         <Field label="Nombre" value={it.nombre} onChange={(v) => updatePaginaItem(pi, ii, "nombre", v)} />
                         <Field label="Descripcion" value={it.descripcion} onChange={(v) => updatePaginaItem(pi, ii, "descripcion", v)} multiline />
                         <Field label="Precio" value={it.precio} onChange={(v) => updatePaginaItem(pi, ii, "precio", v)} />
-                        <Field label="Imagen (url)" value={it.imagen} onChange={(v) => updatePaginaItem(pi, ii, "imagen", v)} />
+                        <ItemImgDrop pIndex={pi} iIndex={ii} value={it.imagen} />
                         <Field label="Boton texto" value={it.btn_label} onChange={(v) => updatePaginaItem(pi, ii, "btn_label", v)} />
                         <Field label="Boton url" value={it.btn_url} onChange={(v) => updatePaginaItem(pi, ii, "btn_url", v)} />
                         <Field label="Fecha" value={it.fecha} onChange={(v) => updatePaginaItem(pi, ii, "fecha", v)} />
