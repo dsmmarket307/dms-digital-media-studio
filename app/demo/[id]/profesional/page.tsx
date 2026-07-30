@@ -304,7 +304,7 @@ export default async function DemoProfesional({ params }: Props) {
             <h2 className="st">{c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo"}</h2>
             <div className="g4">
               {c.productos.map((p: any, i: number) => (
-                <a key={i} href={`/demo/${id}/producto/${i}`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden" }}>
+                <a key={i} href={`/demo/${id}/producto/${i}?from=profesional`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden" }}>
                   {p.imagenes?.length > 0 ? (
                     <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 220, objectFit: "cover" }} />
                   ) : (
@@ -315,9 +315,9 @@ export default async function DemoProfesional({ params }: Props) {
                   <div style={{ padding: "1.5rem" }}>
                     <h3>{p.nombre}</h3>
                     <EstrellasProducto siteId={id} productoIndex={i} />
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
-                      <p style={{ fontSize: "1.25rem", fontWeight: 800, color: pr }}>{p.precio}</p>
-                      {p.precio_anterior && <p style={{ fontSize: "0.95rem", color: "#aaa", textDecoration: "line-through" }}>{p.precio_anterior}</p>}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+                      <p style={{ fontSize: "1.25rem", fontWeight: 800, color: pr, whiteSpace: "nowrap" }}>{p.precio}</p>
+                      {p.precio_anterior && <p style={{ fontSize: "0.95rem", color: "#aaa", textDecoration: "line-through", whiteSpace: "nowrap" }}>{p.precio_anterior}</p>}
                     </div>
                   </div>
                 </a>
@@ -505,36 +505,6 @@ export default async function DemoProfesional({ params }: Props) {
           </div>
         </section>
       )}
-
-      <section className="comparador">
-        <h2>Elige tu plan</h2>
-        <p>Compara ambas versiones y elige la que mejor se adapta a tu negocio</p>
-        <div className="compare-cards">
-          <div className="compare-card">
-            <h3>Plan Basico</h3>
-            <div className="compare-price" style={{ color: "#fff" }}>$499.000</div>
-            <p style={{ fontSize: "0.8rem", opacity: 0.7, marginBottom: "1rem" }}>COP</p>
-            <ul className="compare-list">
-              {["Landing page", "Diseno responsive", "Boton WhatsApp", "1 revision"].map(i => (
-                <li key={i}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>{i}</li>
-              ))}
-            </ul>
-            <a href={`/demo/${id}`} className="compare-btn" style={{ background: "rgba(255,255,255,0.2)", color: "#fff", border: "1px solid rgba(255,255,255,0.3)" }}>Ver version basica</a>
-          </div>
-          <div className="compare-card featured">
-            <div style={{ fontSize: "0.7rem", fontWeight: 700, color: pr, textTransform: "uppercase", letterSpacing: "2px", marginBottom: "0.5rem" }}>Recomendado</div>
-            <h3 style={{ color: "#111" }}>Plan Profesional</h3>
-            <div className="compare-price">$999.000</div>
-            <p style={{ fontSize: "0.8rem", color: "#999", marginBottom: "1rem" }}>COP</p>
-            <ul className="compare-list">
-              {["Sitio web completo", "Multiples secciones", "SEO basico", "Carrusel profesional", "Galeria", "Testimonios", "FAQ", "3 revisiones"].map(i => (
-                <li key={i}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={pr} strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>{i}</li>
-              ))}
-            </ul>
-            <a href="/planes/negocio" className="compare-btn" style={{ background: pr, color: "#fff" }}>Comprar ahora</a>
-          </div>
-        </div>
-      </section>
 
       <footer>
         <div className="wrap">

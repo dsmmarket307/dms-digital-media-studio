@@ -1,6 +1,6 @@
 ﻿"use client";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 interface NavbarProductoProps {
   id: string;
   logoUrl?: string;
@@ -9,10 +9,13 @@ interface NavbarProductoProps {
 export default function NavbarProducto({ id, logoUrl, primaryColor }: NavbarProductoProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const desdeProfesional = searchParams.get("from") === "profesional";
   const base = pathname.startsWith(`/demo/${id}`) ? `/demo/${id}` : "";
-  const hrefInicio = base || "/";
-  const hrefCatalogo = base ? `${base}#productos` : "/#productos";
-  const hrefContacto = base ? `${base}#contacto` : "/#contacto";
+  const baseConVersion = desdeProfesional && base ? `${base}/profesional` : base;
+  const hrefInicio = baseConVersion || "/";
+  const hrefCatalogo = baseConVersion ? `${baseConVersion}#productos` : "/#productos";
+  const hrefContacto = baseConVersion ? `${baseConVersion}#contacto` : "/#contacto";
   return (
     <>
       <style>{`
