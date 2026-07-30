@@ -1210,6 +1210,23 @@ export default function PageBuilderEditor() {
                         <Field label="Descripcion" value={it.descripcion} onChange={(v) => updatePaginaItem(pi, ii, "descripcion", v)} multiline />
                         <Field label="Precio" value={it.precio} onChange={(v) => updatePaginaItem(pi, ii, "precio", v)} />
                         <ItemImgDrop pIndex={pi} iIndex={ii} value={it.imagen} />
+                        <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+                          <div style={{ flex: 1 }}>
+                            <label style={{ display: "block", fontSize: 9, fontWeight: 700, color: "#aaa", marginBottom: 3 }}>TAMANO</label>
+                            <select value={it.imagen_tamano || "mediana"} onChange={(e) => updatePaginaItem(pi, ii, "imagen_tamano", e.target.value)} style={{ width: "100%", padding: "5px", borderRadius: 6, border: "1px solid #ddd", fontSize: 11 }}>
+                              <option value="pequena">Pequena</option>
+                              <option value="mediana">Mediana</option>
+                              <option value="grande">Grande</option>
+                            </select>
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <label style={{ display: "block", fontSize: 9, fontWeight: 700, color: "#aaa", marginBottom: 3 }}>POSICION</label>
+                            <select value={it.imagen_posicion || "arriba"} onChange={(e) => updatePaginaItem(pi, ii, "imagen_posicion", e.target.value)} style={{ width: "100%", padding: "5px", borderRadius: 6, border: "1px solid #ddd", fontSize: 11 }}>
+                              <option value="arriba">Imagen arriba</option>
+                              <option value="abajo">Imagen abajo</option>
+                            </select>
+                          </div>
+                        </div>
                         <Field label="Boton texto" value={it.btn_label} onChange={(v) => updatePaginaItem(pi, ii, "btn_label", v)} />
                         <Field label="Boton url" value={it.btn_url} onChange={(v) => updatePaginaItem(pi, ii, "btn_url", v)} />
                         <Field label="Fecha" value={it.fecha} onChange={(v) => updatePaginaItem(pi, ii, "fecha", v)} />
