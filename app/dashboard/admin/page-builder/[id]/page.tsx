@@ -1155,6 +1155,18 @@ export default function PageBuilderEditor() {
               <Field label="WhatsApp" value={content?.contacto?.whatsapp} onChange={(v) => updateText(["contacto", "whatsapp"], v)} />
               <Field label="Email" value={content?.contacto?.email} onChange={(v) => updateText(["contacto", "email"], v)} />
               <Field label="Direccion" value={content?.contacto?.direccion} onChange={(v) => updateText(["contacto", "direccion"], v)} />
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar formulario (profesional)</span>
+                <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.contacto) next.contacto = {}; next.contacto.mostrar_formulario = next.contacto.mostrar_formulario === false ? true : false; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content?.contacto?.mostrar_formulario !== false ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                  <span style={{ position: "absolute", top: 2, left: content?.contacto?.mostrar_formulario !== false ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                </button>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 10, marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>WhatsApp flotante</span>
+                <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.contacto) next.contacto = {}; next.contacto.whatsapp_flotante = !next.contacto.whatsapp_flotante; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content?.contacto?.whatsapp_flotante ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                  <span style={{ position: "absolute", top: 2, left: content?.contacto?.whatsapp_flotante ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                </button>
+              </div>
             </>)}
             {selectedSection === "footer" && (<>
               <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={(v) => updateText(["footer", "nombre_empresa"], v)} />
