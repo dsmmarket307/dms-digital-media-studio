@@ -113,6 +113,17 @@ export default async function DemoProfesional({ params }: Props) {
   const logo = site.logo_url ?? "";
   const ci = site.custom_images ?? {};
 
+  let mapCoords: { lat: number; lon: number } | null = null;
+  if (c?.contacto?.mostrar_mapa && c?.contacto?.direccion) {
+    try {
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(c.contacto.direccion)}`, { headers: { "User-Agent": "DMS-Digital-Media-Studio/1.0" } });
+      const geoData = await geoRes.json();
+      if (geoData?.[0]) {
+        mapCoords = { lat: parseFloat(geoData[0].lat), lon: parseFloat(geoData[0].lon) };
+      }
+    } catch {}
+  }
+
   // Usar keywords de la IA si existen (para "Otro" o cualquier tipo)
   const customKeywords = c?.meta?.pexels_keywords;
   const imagenes = await getPexelsImages(site.website_type, 6, customKeywords);
@@ -540,10 +551,10 @@ export default async function DemoProfesional({ params }: Props) {
         </section>
       )}
 
-      {c?.contacto?.mostrar_mapa && c?.contacto?.direccion && (
-        <div style={{ width: "100%", height: 350 }}>
+      {mapCoords && (
+        <div style={{ maxWidth: 500, aspectRatio: "1 / 1", margin: "0 auto", overflow: "hidden" }}>
           <iframe
-            src={`https://www.google.com/maps?q=${encodeURIComponent(c.contacto.direccion)}&output=embed`}
+            src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
             style={{ width: "100%", height: "100%", border: 0 }}
             loading="lazy"
             title="Ubicacion"

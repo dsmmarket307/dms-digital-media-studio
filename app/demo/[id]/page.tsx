@@ -114,6 +114,18 @@ export default async function DemoPage({ params }: Props) {
   const img2 = ci.testimonios || imagenes[4] || "";
 
   const c = site.generated_content;
+
+  let mapCoords: { lat: number; lon: number } | null = null;
+  if (c?.contacto?.mostrar_mapa && c?.contacto?.direccion) {
+    try {
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(c.contacto.direccion)}`, { headers: { "User-Agent": "DMS-Digital-Media-Studio/1.0" } });
+      const geoData = await geoRes.json();
+      if (geoData?.[0]) {
+        mapCoords = { lat: parseFloat(geoData[0].lat), lon: parseFloat(geoData[0].lon) };
+      }
+    } catch {}
+  }
+
   const { data: todasResenas } = await supabase.from("resenas").select("producto_index, calificacion").eq("site_id", id);
   const promediosPorProducto = (todasResenas ?? []).reduce((acc: any, r: any) => {
     if (!acc[r.producto_index]) acc[r.producto_index] = { suma: 0, total: 0 };
@@ -489,10 +501,10 @@ export default async function DemoPage({ params }: Props) {
         </section>
       )}
 
-      {c?.contacto?.mostrar_mapa && c?.contacto?.direccion && (
-        <div style={{ width: "100%", height: 350 }}>
+      {mapCoords && (
+        <div style={{ maxWidth: 500, aspectRatio: "1 / 1", margin: "0 auto", overflow: "hidden" }}>
           <iframe
-            src={`https://www.google.com/maps?q=${encodeURIComponent(c.contacto.direccion)}&output=embed`}
+            src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
             style={{ width: "100%", height: "100%", border: 0 }}
             loading="lazy"
             title="Ubicacion"
