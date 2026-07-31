@@ -480,9 +480,6 @@ export default async function DemoPage({ params }: Props) {
             <p className="label" style={{ color: "rgba(255,255,255,0.7)" }}>Contacto</p>
             <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "1rem" }}>{c.contacto.titulo}</h2>
             <p style={{ opacity: 0.85, fontSize: "1.1rem" }}>{c.contacto.descripcion}</p>
-            {c.contacto.whatsapp && (
-              <a href={`https://wa.me/${c.contacto.whatsapp.replace(/\D/g,"")}`} className="wa">WhatsApp</a>
-            )}
             <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center", marginTop: "2rem" }}>
               {c.contacto.telefono && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.telefono}</span>}
               {c.contacto.email && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.email}</span>}
@@ -490,6 +487,17 @@ export default async function DemoPage({ params }: Props) {
             </div>
           </div>
         </section>
+      )}
+
+      {c?.contacto?.mostrar_mapa && c?.contacto?.direccion && (
+        <div style={{ width: "100%", height: 350 }}>
+          <iframe
+            src={`https://www.google.com/maps?q=${encodeURIComponent(c.contacto.direccion)}&output=embed`}
+            style={{ width: "100%", height: "100%", border: 0 }}
+            loading="lazy"
+            title="Ubicacion"
+          />
+        </div>
       )}
 
       <footer>
