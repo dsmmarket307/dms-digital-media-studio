@@ -502,14 +502,20 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {mapCoords && (
-        <div style={{ maxWidth: 500, aspectRatio: "1 / 1", margin: "0 auto", overflow: "hidden" }}>
-          <iframe
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
-            style={{ width: "100%", height: "100%", border: 0 }}
-            loading="lazy"
-            title="Ubicacion"
-          />
-        </div>
+        <section style={{ background: "#f8f9fa", padding: "5rem 2rem" }}>
+          <div className="wrap">
+            <p className="label">Ubicacion</p>
+            <h2 className="st">Encuentranos</h2>
+            <div style={{ maxWidth: 500, aspectRatio: "1 / 1", margin: "0 auto", overflow: "hidden", borderRadius: 16, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
+              <iframe
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
+                style={{ width: "100%", height: "100%", border: 0 }}
+                loading="lazy"
+                title="Ubicacion"
+              />
+            </div>
+          </div>
+        </section>
       )}
 
       <footer>
