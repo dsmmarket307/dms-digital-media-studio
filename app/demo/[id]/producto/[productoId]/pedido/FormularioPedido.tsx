@@ -39,7 +39,7 @@ const DEPARTAMENTOS: Record<string, string[]> = {
   "Vichada": ["Puerto Carreno"],
 };
 
-export default function FormularioPedido({ producto, siteId, productoId, primaryColor, tallaInicial, colorInicial }: { producto: any; siteId: string; productoId: string; primaryColor: string; tallaInicial?: string; colorInicial?: string }) {
+export default function FormularioPedido({ producto, siteId, productoId, primaryColor, tallaInicial, colorInicial, atributosTexto }: { producto: any; siteId: string; productoId: string; primaryColor: string; tallaInicial?: string; colorInicial?: string; atributosTexto?: string }) {
   const pathname = usePathname();
   const hrefVolver = pathname.replace(/\/pedido$/, "");
   const [cantidad, setCantidad] = useState(1);
@@ -93,7 +93,7 @@ export default function FormularioPedido({ producto, siteId, productoId, primary
           ciudad: `${departamento} - ${ciudad}`,
           barrio: form.barrio,
           direccion: `${form.direccion} ${form.casa}`,
-          notas: ""
+          notas: atributosTexto ?? ""
         })
       });
       const data = await res.json();

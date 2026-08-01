@@ -4,7 +4,7 @@ import NavbarProducto from "../NavbarProducto";
 import FormularioPedido from "./FormularioPedido";
 import Script from "next/script";
 
-type Props = { params: Promise<{ id: string; productoId: string }>; searchParams: Promise<{ talla?: string; color?: string }> };
+type Props = { params: Promise<{ id: string; productoId: string }>; searchParams: Promise<Record<string, string | undefined>> };
 
 export async function generateMetadata({ params }: Props) {
   const { id, productoId } = await params;
@@ -23,7 +23,10 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function PedidoPage({ params, searchParams }: Props) {
   const { id, productoId } = await params;
-  const { talla, color } = await searchParams;
+  const spData = await searchParams;
+  const talla = spData.talla;
+  const color = spData.color;
+  const atributosTexto = Object.keys(spData).filter(k => k.startsWith("atrib_") && spData[k]).map(k => `${k.replace("atrib_", "")}: ${spData[k]}`).join(", ");
   const supabase = await createClient();
   const { data: site } = await supabase.from("generated_websites").select("*").eq("id", id).maybeSingle();
   if (!site) return notFound();
@@ -46,7 +49,7 @@ export default async function PedidoPage({ params, searchParams }: Props) {
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "2rem 1rem" }}>
         <NavbarProducto id={id} logoUrl={site.logo_url} primaryColor={pr} />
         <div style={{ background: "#fff", borderRadius: 20, padding: "1.5rem", marginTop: "1.5rem", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
-          <FormularioPedido producto={p} siteId={id} productoId={productoId} primaryColor={pr} tallaInicial={talla ?? ""} colorInicial={color ?? ""} />
+          <FormularioPedido producto={p} siteId={id} productoId={productoId} primaryColor={pr} tallaInicial={talla ?? ""} colorInicial={color ?? ""} atributosTexto={atributosTexto} />
         </div>
       </div>
     </div>
