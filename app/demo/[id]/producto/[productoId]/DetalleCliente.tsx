@@ -18,10 +18,19 @@ function Estrellas({ valor }: { valor: number }) {
   );
 }
 
-export default function DetalleCliente({ producto, siteId, productoId, primaryColor, vendidos, promedio, totalResenas }: { producto: any; siteId: string; productoId: string; primaryColor: string; vendidos: number; promedio: number; totalResenas: number }) {
+export default function DetalleCliente({ producto, siteId, productoId, primaryColor, vendidos, promedio, totalResenas, confianza }: { producto: any; siteId: string; productoId: string; primaryColor: string; vendidos: number; promedio: number; totalResenas: number; confianza?: { icono: string; texto: string }[] }) {
+  const confianzaDefault = [
+    { icono: "🚚", texto: "Envio GRATIS" },
+    { icono: "💵", texto: "Pago Contra Entrega" },
+    { icono: "🔒", texto: "Compra 100% Segura" },
+    { icono: "⭐", texto: "Calidad Garantizada" },
+  ];
+  const confianzaItems = confianza && confianza.length > 0 ? confianza : confianzaDefault;
   const { agregar } = useCarrito();
   const [tallaSeleccionada, setTallaSeleccionada] = useState("");
   const [colorSeleccionado, setColorSeleccionado] = useState("");
+  const [atributosSeleccionados, setAtributosSeleccionados] = useState<Record<string, string>>({});
+  const atributosExtra = producto.atributos_extra ?? [];
 
   const tallas = producto.tallas ? producto.tallas.split(",").map((t: string) => t.trim()).filter(Boolean) : [];
   const colores = producto.colores ? producto.colores.split(",").map((c: string) => c.trim()).filter(Boolean) : [];
@@ -43,6 +52,7 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
   const paramsPedido = new URLSearchParams();
   if (tallaSeleccionada) paramsPedido.set("talla", tallaSeleccionada);
   if (colorSeleccionado) paramsPedido.set("color", colorSeleccionado);
+  Object.entries(atributosSeleccionados).forEach(([nombreAtr, valorAtr]) => { if (valorAtr) paramsPedido.set(`atrib_${nombreAtr}`, valorAtr); });
   paramsPedido.set("cantidad", cantidad.toString());
   paramsPedido.set("precio_total", precioTotal.toString());
   const hrefPedido = `${pathname}/pedido${paramsPedido.toString() ? `?${paramsPedido.toString()}` : ""}`;
@@ -81,15 +91,10 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: "10px 0", borderTop: "1px solid #f0f0f0", borderBottom: "1px solid #f0f0f0" }}>
-        {[
-          { icon: "🚚", text: "Envio GRATIS" },
-          { icon: "💵", text: "Pago Contra Entrega" },
-          { icon: "🔒", text: "Compra 100% Segura" },
-          { icon: "⭐", text: "Calidad Garantizada" },
-        ].map((item, i) => (
+        {confianzaItems.map((item, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-            <span style={{ fontSize: "0.85rem", color: "#555", fontWeight: 500 }}>{item.text}</span>
+            <span style={{ fontSize: "1rem" }}>{item.icono}</span>
+            <span style={{ fontSize: "0.85rem", color: "#555", fontWeight: 500 }}>{item.texto}</span>
           </div>
         ))}
       </div>
@@ -115,6 +120,21 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
           </div>
         </div>
       )}
+
+      {atributosExtra.map((atr: any, ai: number) => {
+        const valores = (atr.valores ?? "").split(",").map((v: string) => v.trim()).filter(Boolean);
+        if (valores.length === 0) return null;
+        return (
+          <div key={ai}>
+            <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>{atr.nombre}</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {valores.map((v: string, j: number) => (
+                <button key={j} onClick={() => setAtributosSeleccionados(prev => ({ ...prev, [atr.nombre]: v }))} style={{ padding: "8px 18px", borderRadius: 8, border: `2px solid ${atributosSeleccionados[atr.nombre] === v ? "#111" : "#e5e7eb"}`, background: atributosSeleccionados[atr.nombre] === v ? "#111" : "#fff", color: atributosSeleccionados[atr.nombre] === v ? "#fff" : "#111", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}>{v}</button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#111", textTransform: "uppercase", letterSpacing: 1 }}>Selecciona tu oferta</p>
@@ -146,7 +166,7 @@ export default function DetalleCliente({ producto, siteId, productoId, primaryCo
           {producto.boton_texto ?? "Realizar Pedido"}
         </Link>
         {producto.mostrar_carrito !== false && (
-          <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, cantidad: 1 })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={() => agregar({ productoIndex: 0, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagenes?.[0] ?? "", talla: tallaSeleccionada, color: colorSeleccionado, atributos: atributosSeleccionados, cantidad: 1 })} style={{ width: "100%", padding: 16, background: "#fff", color: "#111", border: "2px solid #111", borderRadius: 12, fontSize: "1rem", fontWeight: 700, cursor: "pointer" }}>
             Agregar al carrito
           </button>
         )}

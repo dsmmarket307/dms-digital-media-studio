@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Carrusel from "./Carrusel";
 import CarritoDrawer from "./CarritoDrawer";
@@ -67,7 +67,7 @@ export default async function ProductoDetallePage({ params }: Props) {
 
         <div style={{ background: "#fff", borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
           <Carrusel imagenes={p.imagenes ?? []} nombre={p.nombre} />
-          <DetalleCliente producto={p} siteId={id} productoId={productoId} primaryColor={pr} vendidos={vendidos ?? 0} promedio={promedio} totalResenas={resenaData?.length ?? 0} />
+          <DetalleCliente producto={p} siteId={id} productoId={productoId} primaryColor={pr} vendidos={vendidos ?? 0} promedio={promedio} totalResenas={resenaData?.length ?? 0} confianza={c?.confianza} />
         </div>
         <div style={{ background: "#fff", borderRadius: 20, padding: "2rem", marginTop: "2rem", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>          <Resenas siteId={id} productoIndex={parseInt(productoId)} />
           {c?.faq && c.faq.length > 0 && (

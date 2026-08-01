@@ -15,6 +15,7 @@ const FONTS = [
 const SECTION_LABELS: Record<string, string> = {
   barraAnuncio: "Barra de Anuncios",
   carrusel: "Carrusel de Imagenes",
+  confianza: "Mensajes de Confianza",
   productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
@@ -987,6 +988,30 @@ export default function PageBuilderEditor() {
                     </div>
                   </div>
                   <div style={{ marginBottom: 8 }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 6 }}>Atributos personalizados</label>
+                    {(p.atributos_extra ?? []).map((atr: any, gi: number) => (
+                      <div key={gi} style={{ background: "#f8f9fa", borderRadius: 8, padding: "10px", marginBottom: 8 }}>
+                        <div style={{ display: "flex", gap: 6, marginBottom: 6, alignItems: "center" }}>
+                          <input value={atr.nombre} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); next.productos[i].atributos_extra[gi].nombre = e.target.value; return next; }); }} placeholder="Nombre (ej: Topping)" style={{ flex: 1, padding: "6px 8px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 11, fontWeight: 700, outline: "none" }} />
+                          <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); next.productos[i].atributos_extra.splice(gi, 1); return next; }); }} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                        </div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 6 }}>
+                          {(atr.valores ?? "").split(",").filter(Boolean).map((v: string, vi: number) => (
+                            <span key={vi} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", background: "#fff", borderRadius: 6, fontSize: 11, fontWeight: 600, border: "1px solid #e5e7eb" }}>
+                              {v.trim()}
+                              <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); const arr = (next.productos[i].atributos_extra[gi].valores ?? "").split(",").filter(Boolean).map((x: string) => x.trim()).filter((_: string, k: number) => k !== vi); next.productos[i].atributos_extra[gi].valores = arr.join(", "); return next; }); }} style={{ background: "none", border: "none", cursor: "pointer", color: "#ef4444", fontWeight: 800, fontSize: 12, padding: 0 }}>x</button>
+                            </span>
+                          ))}
+                        </div>
+                        <div style={{ display: "flex", gap: 4 }}>
+                          <input id={`atrib-input-${i}-${gi}`} placeholder="Ej: Chocolate, Avena..." style={{ flex: 1, padding: "6px 8px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 11, outline: "none" }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); const val = (e.target as HTMLInputElement).value.trim(); if (val) { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); const arr = (next.productos[i].atributos_extra[gi].valores ?? "").split(",").filter(Boolean).map((x: string) => x.trim()); arr.push(val); next.productos[i].atributos_extra[gi].valores = arr.join(", "); return next; }); (e.target as HTMLInputElement).value = ""; } } }} />
+                          <button onClick={() => { const input = document.getElementById(`atrib-input-${i}-${gi}`) as HTMLInputElement; const val = input?.value.trim(); if (val) { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); const arr = (next.productos[i].atributos_extra[gi].valores ?? "").split(",").filter(Boolean).map((x: string) => x.trim()); arr.push(val); next.productos[i].atributos_extra[gi].valores = arr.join(", "); return next; }); input.value = ""; } }} style={{ padding: "6px 10px", background: "#111", color: "#fff", border: "none", borderRadius: 6, fontSize: 11, cursor: "pointer", fontWeight: 700 }}>+</button>
+                        </div>
+                      </div>
+                    ))}
+                    <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.productos[i].atributos_extra) next.productos[i].atributos_extra = []; next.productos[i].atributos_extra.push({ nombre: "Nuevo atributo", valores: "" }); return next; }); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar atributo personalizado</button>
+                  </div>
+                  <div style={{ marginBottom: 8 }}>
                     <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 6 }}>Imagenes del producto (max 5)</label>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6, marginBottom: 6 }}>
                       {(p.imagenes ?? []).map((img: string, j: number) => (
@@ -1179,6 +1204,22 @@ export default function PageBuilderEditor() {
                   <span style={{ position: "absolute", top: 2, left: content?.contacto?.mostrar_mapa ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
                 </button>
               </div>
+            </>)}
+            {selectedSection === "confianza" && (<>
+              <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Estos mensajes aparecen en la pagina de cada producto, arriba del boton de comprar.</p>
+              {(content?.confianza ?? [
+                { icono: "🚚", texto: "Envio GRATIS" },
+                { icono: "💵", texto: "Pago Contra Entrega" },
+                { icono: "🔒", texto: "Compra 100% Segura" },
+                { icono: "⭐", texto: "Calidad Garantizada" },
+              ]).map((item: any, ci: number) => (
+                <div key={ci} style={{ display: "flex", gap: 6, marginBottom: 8, alignItems: "center" }}>
+                  <input value={item.icono} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza[ci].icono = e.target.value; return next; }); }} style={{ width: 44, padding: "6px 4px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 14, textAlign: "center", outline: "none" }} />
+                  <input value={item.texto} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza[ci].texto = e.target.value; return next; }); }} placeholder="Texto" style={{ flex: 1, padding: "6px 8px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 11, outline: "none" }} />
+                  <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza.splice(ci, 1); return next; }); }} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "6px 8px", fontSize: 11, cursor: "pointer" }}>x</button>
+                </div>
+              ))}
+              <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza.push({ icono: "✅", texto: "Nuevo mensaje" }); return next; }); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>+ Agregar mensaje</button>
             </>)}
             {selectedSection === "footer" && (<>
               <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={(v) => updateText(["footer", "nombre_empresa"], v)} />

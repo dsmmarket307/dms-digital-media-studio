@@ -8,6 +8,7 @@ export type ItemCarrito = {
   imagen: string;
   talla: string;
   color: string;
+  atributos?: Record<string, string>;
   cantidad: number;
 };
 
@@ -29,7 +30,7 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
 
   const agregar = (item: ItemCarrito) => {
     setItems(prev => {
-      const idx = prev.findIndex(i => i.productoIndex === item.productoIndex && i.talla === item.talla && i.color === item.color);
+      const idx = prev.findIndex(i => i.productoIndex === item.productoIndex && i.talla === item.talla && i.color === item.color && JSON.stringify(i.atributos ?? {}) === JSON.stringify(item.atributos ?? {}));
       if (idx >= 0) {
         const next = [...prev];
         next[idx].cantidad += item.cantidad;
