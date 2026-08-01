@@ -1,6 +1,7 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
+import ContactoForm from "./ContactoForm";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -546,15 +547,8 @@ export default async function DemoProfesional({ params }: Props) {
                   </div>
                 )}
               </div>
-              {c?.contacto?.mostrar_formulario !== false && (
-                <div className="form">
-                <h3 style={{ fontWeight: 800, fontSize: "1.25rem", marginBottom: "1.5rem", color: "#111" }}>Enviar mensaje</h3>
-                <div className="form-group"><label>Nombre completo</label><input type="text" placeholder="Tu nombre" /></div>
-                <div className="form-group"><label>Correo electronico</label><input type="email" placeholder="tu@correo.com" /></div>
-                <div className="form-group"><label>Telefono</label><input type="text" placeholder="+57 300 000 0000" /></div>
-                <div className="form-group"><label>Mensaje</label><textarea rows={4} placeholder="Cuentanos sobre tu proyecto..." style={{ resize: "none" }}></textarea></div>
-                <button className="form-btn">Enviar mensaje</button>
-              </div>
+              {c?.contacto?.mostrar_formulario !== false && c?.contacto?.email && (
+                <ContactoForm siteId={id} userId={site.user_id} destinoEmail={c.contacto.email} nombreNegocio={c?.footer?.nombre_empresa ?? site.project_name} />
               )}
             </div>
           </div>
