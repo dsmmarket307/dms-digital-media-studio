@@ -496,27 +496,21 @@ export default async function DemoPage({ params }: Props) {
               {c.contacto.telefono && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.telefono}</span>}
               {c.contacto.email && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.email}</span>}
               {c.contacto.direccion && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.direccion}</span>}
+            {mapCoords && (
+              <div style={{ marginTop: 24, width: "100%", maxWidth: 400, aspectRatio: "1 / 1", margin: "24px auto 0", borderRadius: 12, overflow: "hidden", border: "2px solid rgba(255,255,255,0.3)" }}>
+                <iframe
+                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
+                  style={{ width: "100%", height: "100%", border: 0 }}
+                  loading="lazy"
+                  title="Ubicacion"
+                />
+              </div>
+            )}
             </div>
           </div>
         </section>
       )}
 
-      {mapCoords && (
-        <section style={{ background: "#f8f9fa", padding: "5rem 2rem" }}>
-          <div className="wrap">
-            <p className="label">Ubicacion</p>
-            <h2 className="st">Encuentranos</h2>
-            <div style={{ maxWidth: 500, aspectRatio: "1 / 1", margin: "0 auto", overflow: "hidden", borderRadius: 16, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
-              <iframe
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
-                style={{ width: "100%", height: "100%", border: 0 }}
-                loading="lazy"
-                title="Ubicacion"
-              />
-            </div>
-          </div>
-        </section>
-      )}
 
       <footer>
         <div className="wrap">

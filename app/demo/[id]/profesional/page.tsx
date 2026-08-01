@@ -535,6 +535,16 @@ export default async function DemoProfesional({ params }: Props) {
                 {c.contacto.email && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>{c.contacto.email}</div>}
                 {c.contacto.direccion && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>{c.contacto.direccion}</div>}
                 {c.contacto.horario && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>{c.contacto.horario}</div>}
+                {mapCoords && (
+                  <div style={{ marginTop: 16, width: "100%", aspectRatio: "1 / 1", maxWidth: 260, borderRadius: 12, overflow: "hidden", border: "2px solid rgba(255,255,255,0.3)" }}>
+                    <iframe
+                      src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
+                      style={{ width: "100%", height: "100%", border: 0 }}
+                      loading="lazy"
+                      title="Ubicacion"
+                    />
+                  </div>
+                )}
               </div>
               {c?.contacto?.mostrar_formulario !== false && (
                 <div className="form">
@@ -551,22 +561,6 @@ export default async function DemoProfesional({ params }: Props) {
         </section>
       )}
 
-      {mapCoords && (
-        <section className="bg-l">
-          <div className="wrap">
-            <p className="label">Ubicacion</p>
-            <h2 className="st">Encuentranos</h2>
-            <div style={{ maxWidth: 500, aspectRatio: "1 / 1", margin: "0 auto", overflow: "hidden", borderRadius: 16, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
-              <iframe
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
-                style={{ width: "100%", height: "100%", border: 0 }}
-                loading="lazy"
-                title="Ubicacion"
-              />
-            </div>
-          </div>
-        </section>
-      )}
 
       <footer>
         <div className="wrap">
