@@ -491,7 +491,7 @@ export default async function DemoPage({ params }: Props) {
       {c?.contacto && !navHidden.includes("contacto") && (
         <section id="contacto" style={{ padding: "5rem 2rem", background: `linear-gradient(135deg,${pr},${sc||"#1a1a1a"})` }}>
           <div className="wrap contact-s">
-            <p className="label" style={{ color: "rgba(255,255,255,0.7)" }}>Contacto</p>
+            <p className="label" style={{ color: "rgba(255,255,255,0.7)" }}>Escribenos</p>
             <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "1rem" }}>{c.contacto.titulo}</h2>
             <p style={{ opacity: 0.85, fontSize: "1.1rem" }}>{c.contacto.descripcion}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center", marginTop: "2rem" }}>
