@@ -147,6 +147,8 @@ export default async function DemoPage({ params }: Props) {
     body{font-family:${font};font-size:${fontSize};color:#111;scroll-behavior:smooth}
     nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
     .nav-links{display:flex;gap:2rem;list-style:none}
+    .mobile-toggle{display:none}
+    .hamburger-label{display:none;cursor:pointer;padding:6px}
     .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
     .nav-links a:hover{color:${pr}}
     .nav-item-parent{position:relative}
@@ -185,7 +187,7 @@ export default async function DemoPage({ params }: Props) {
     .social-icons{display:flex;justify-content:center;gap:1rem;margin:1.5rem 0}
     .social-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,0.15)}
     .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);margin-top:2rem;padding-top:1.5rem}
-    @media(max-width:768px){nav{padding:1rem}.nav-links{display:none}section{padding:3rem 1rem}.sec-img{height:220px}.hero{min-height:70vh}}
+    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}section{padding:3rem 1rem}.sec-img{height:220px}.hero{min-height:70vh}}
   `;
 
   return (
@@ -215,6 +217,10 @@ export default async function DemoPage({ params }: Props) {
           {logo && <img src={logo} alt="logo" style={{ height: 50, objectFit: "contain" }} />}
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: pr }}>{c?.footer?.nombre_empresa ?? site.project_name}</span>
         </div>
+        <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
+        <label htmlFor="mobile-toggle-check" className="hamburger-label">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </label>
         <ul className="nav-links">
           {c?.productos?.length > 0 && !navHidden.includes("productos") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
           {c?.nosotros && !navHidden.includes("nosotros") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}

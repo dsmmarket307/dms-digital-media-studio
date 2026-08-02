@@ -151,6 +151,8 @@ export default async function DemoProfesional({ params }: Props) {
     .nav-submenu a{display:block;padding:0.5rem 1rem;white-space:nowrap;color:#555}
     .nav-submenu a:hover{background:#f8f8f8}
     .nav-cta{background:${pr};color:#fff;padding:0.625rem 1.5rem;border-radius:8px;text-decoration:none;font-size:0.875rem;font-weight:700;transition:opacity 0.2s}
+    .mobile-toggle{display:none}
+    .hamburger-label{display:none;cursor:pointer;padding:6px}
     .nav-cta:hover{opacity:0.9}
     .hero{position:relative;height:100vh;display:flex;align-items:center;overflow:hidden}
     .hero-slides{position:absolute;inset:0}
@@ -254,7 +256,7 @@ export default async function DemoProfesional({ params }: Props) {
     .compare-card.featured .compare-list li{opacity:1;color:#374151}
     .compare-btn{display:block;text-align:center;padding:1rem;border-radius:12px;font-weight:700;text-decoration:none;margin-top:1.5rem;transition:opacity 0.2s}
     .compare-btn:hover{opacity:0.9}
-    @media(max-width:768px){nav{padding:1rem}.nav-links{display:none}.hero-body h1{font-size:2.25rem}section{padding:4rem 1.5rem}.nosotros-grid,.contact-grid,.compare-cards,.footer-grid{grid-template-columns:1fr}.galeria-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr}}
+    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}.hero-body h1{font-size:2.25rem}section{padding:4rem 1.5rem}.nosotros-grid,.contact-grid,.compare-cards,.footer-grid{grid-template-columns:1fr}.galeria-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr}}
   `;
 
   const script = `
@@ -295,6 +297,10 @@ export default async function DemoProfesional({ params }: Props) {
         <div className="brand">
           {logo && <img src={logo} alt="logo" />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
         </div>
+        <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
+        <label htmlFor="mobile-toggle-check" className="hamburger-label">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </label>
         <ul className="nav-links">
           {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
           {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
