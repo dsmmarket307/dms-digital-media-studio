@@ -18,6 +18,7 @@ const SECTION_LABELS: Record<string, string> = {
   confianza: "Mensajes de Confianza",
   demo_bar: "Barra de Venta (Demo)",
   cookies: "Aviso de Cookies",
+  popup_promo: "Popup Promocional",
   productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
@@ -1249,6 +1250,20 @@ export default function PageBuilderEditor() {
               </div>
               <Field label="Texto del aviso" value={content?.cookies?.texto} onChange={(v) => updateText(["cookies", "texto"], v)} multiline />
               <Field label="Link a politica de cookies (opcional)" value={content?.cookies?.link_politica} onChange={(v) => updateText(["cookies", "link_politica"], v)} />
+            </>)}
+            {selectedSection === "popup_promo" && (<>
+              <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Popup promocional que aparece al cargar la pagina. Ideal para promociones o anuncios destacados.</p>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar popup promocional</span>
+                <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.popup_promo) next.popup_promo = {}; next.popup_promo.activo = !next.popup_promo.activo; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content?.popup_promo?.activo ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                  <span style={{ position: "absolute", top: 2, left: content?.popup_promo?.activo ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                </button>
+              </div>
+              {images.popup_promo && <img src={images.popup_promo} alt="popup" style={{ width: "100%", maxWidth: 200, borderRadius: 8, marginBottom: 8 }} />}
+              <button onClick={() => { setImgTarget("popup_promo"); setTimeout(() => imgRef.current?.click(), 100); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginBottom: 14 }}>
+                {uploadingImg === "popup_promo" ? "Subiendo..." : images.popup_promo ? "Cambiar imagen" : "Subir imagen"}
+              </button>
+              <Field label="Link al hacer click (opcional)" value={content?.popup_promo?.link} onChange={(v) => updateText(["popup_promo", "link"], v)} />
             </>)}
             {selectedSection === "footer" && (<>
               <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={(v) => updateText(["footer", "nombre_empresa"], v)} />
