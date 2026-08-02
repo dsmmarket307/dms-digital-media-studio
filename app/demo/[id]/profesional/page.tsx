@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
+import CookieBanner from "../CookieBanner";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -638,6 +639,7 @@ export default async function DemoProfesional({ params }: Props) {
         </a>
       )}
 
+      {(c?.cookies?.activo ?? true) && <CookieBanner texto={c?.cookies?.texto ?? "Este sitio web utiliza cookies propias y de terceros para mejorar tu experiencia de navegacion y analizar el trafico. Al continuar navegando, aceptas su uso."} linkPolitica={c?.cookies?.link_politica} primaryColor={pr} />}
       <script dangerouslySetInnerHTML={{ __html: script }} />
     </>
   );
