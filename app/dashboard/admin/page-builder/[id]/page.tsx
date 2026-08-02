@@ -1180,6 +1180,10 @@ export default function PageBuilderEditor() {
               <Field label="WhatsApp" value={content?.contacto?.whatsapp} onChange={(v) => updateText(["contacto", "whatsapp"], v)} />
               <Field label="Email" value={content?.contacto?.email} onChange={(v) => updateText(["contacto", "email"], v)} />
               <Field label="Direccion" value={content?.contacto?.direccion} onChange={(v) => updateText(["contacto", "direccion"], v)} />
+              <Field label="Facebook (url o usuario)" value={content?.contacto?.facebook} onChange={(v) => updateText(["contacto", "facebook"], v)} />
+              <Field label="Instagram (url o usuario)" value={content?.contacto?.instagram} onChange={(v) => updateText(["contacto", "instagram"], v)} />
+              <Field label="TikTok (url o usuario)" value={content?.contacto?.tiktok} onChange={(v) => updateText(["contacto", "tiktok"], v)} />
+              <Field label="YouTube (url o usuario)" value={content?.contacto?.youtube} onChange={(v) => updateText(["contacto", "youtube"], v)} />
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar formulario (profesional)</span>
                 <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.contacto) next.contacto = {}; next.contacto.mostrar_formulario = next.contacto.mostrar_formulario === false ? true : false; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content?.contacto?.mostrar_formulario !== false ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
