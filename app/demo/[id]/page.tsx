@@ -187,7 +187,7 @@ export default async function DemoPage({ params }: Props) {
     .social-icons{display:flex;justify-content:center;gap:1rem;margin:1.5rem 0}
     .social-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,0.15)}
     .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);margin-top:2rem;padding-top:1.5rem}
-    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}section{padding:3rem 1rem}.sec-img{height:220px}.hero{min-height:70vh}}
+    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.hamburger-label{order:-2}.mobile-brand{order:-1;flex:1;justify-content:center}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}section{padding:3rem 1rem}.sec-img{height:220px}.hero{min-height:70vh}}
   `;
 
   return (
@@ -213,13 +213,13 @@ export default async function DemoPage({ params }: Props) {
         </div>
       )}
       <nav>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div className="mobile-brand" style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {logo && <img src={logo} alt="logo" style={{ height: 50, objectFit: "contain" }} />}
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: pr }}>{c?.footer?.nombre_empresa ?? site.project_name}</span>
         </div>
         <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
         <label htmlFor="mobile-toggle-check" className="hamburger-label">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </label>
         <ul className="nav-links">
           {c?.productos?.length > 0 && !navHidden.includes("productos") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
