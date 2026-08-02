@@ -16,6 +16,7 @@ const SECTION_LABELS: Record<string, string> = {
   barraAnuncio: "Barra de Anuncios",
   carrusel: "Carrusel de Imagenes",
   confianza: "Mensajes de Confianza",
+  demo_bar: "Barra de Venta (Demo)",
   productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
@@ -1224,6 +1225,18 @@ export default function PageBuilderEditor() {
                 </div>
               ))}
               <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza.push({ icono: "✅", texto: "Nuevo mensaje" }); return next; }); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>+ Agregar mensaje</button>
+            </>)}
+            {selectedSection === "demo_bar" && (<>
+              <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Esta barra aparece arriba del todo en la version profesional, util para vender el sitio. Apagala cuando le muestres la propuesta final a tu cliente.</p>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar barra</span>
+                <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.demo_bar) next.demo_bar = {}; next.demo_bar.activo = next.demo_bar.activo === false ? true : false; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: (content?.demo_bar?.activo ?? true) ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                  <span style={{ position: "absolute", top: 2, left: (content?.demo_bar?.activo ?? true) ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                </button>
+              </div>
+              <Field label="Texto del mensaje" value={content?.demo_bar?.texto} onChange={(v) => updateText(["demo_bar", "texto"], v)} />
+              <Field label="Texto del boton" value={content?.demo_bar?.texto_boton} onChange={(v) => updateText(["demo_bar", "texto_boton"], v)} />
+              <Field label="Link del boton" value={content?.demo_bar?.url_boton} onChange={(v) => updateText(["demo_bar", "url_boton"], v)} />
             </>)}
             {selectedSection === "footer" && (<>
               <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={(v) => updateText(["footer", "nombre_empresa"], v)} />

@@ -288,10 +288,12 @@ export default async function DemoProfesional({ params }: Props) {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
-      <div className="demo-bar">
-        Version Profesional â€” DMS Digital Media Studio
-        <a href="https://dms-digital-media-studio.vercel.app/planes/negocio">Quiero este sitio â€” $999.000</a>
-      </div>
+      {(c?.demo_bar?.activo ?? true) && (
+        <div className="demo-bar">
+          {c?.demo_bar?.texto ?? "Version Profesional \u2014 DMS Digital Media Studio"}
+          <a href={c?.demo_bar?.url_boton || "https://dms-digital-media-studio.vercel.app/planes/negocio"}>{c?.demo_bar?.texto_boton ?? "Quiero este sitio \u2014 $999.000"}</a>
+        </div>
+      )}
 
       <nav>
         <div className="brand">
