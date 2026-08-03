@@ -10,6 +10,16 @@ const FONTS = [
   { label: "Elegante", value: "'Palatino', serif" },
   { label: "Minimalista", value: "'Arial', sans-serif" },
   { label: "Tecnica", value: "'Courier New', monospace" },
+  { label: "Arial", value: "Arial, sans-serif" },
+  { label: "Helvetica", value: "'Helvetica Neue', Helvetica, Arial, sans-serif" },
+  { label: "Verdana", value: "Verdana, sans-serif" },
+  { label: "Tahoma", value: "Tahoma, sans-serif" },
+  { label: "Trebuchet", value: "'Trebuchet MS', sans-serif" },
+  { label: "Times", value: "'Times New Roman', serif" },
+  { label: "Garamond", value: "Garamond, serif" },
+  { label: "Century Gothic", value: "'Century Gothic', sans-serif" },
+  { label: "Futura", value: "Futura, sans-serif" },
+  { label: "Impact (negrita)", value: "Impact, sans-serif" },
 ];
 
 const SECTION_LABELS: Record<string, string> = {
