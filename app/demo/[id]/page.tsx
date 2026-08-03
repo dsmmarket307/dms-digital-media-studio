@@ -140,18 +140,20 @@ export default async function DemoPage({ params }: Props) {
   const logo = site.logo_url ?? "";
   const font = site.font_family ?? "'Segoe UI', sans-serif";
   const fontSize = site.font_size ?? "16px";
+  const tipografiaGeneral = c?.tipografia?.general ?? "16px";
+  const tipografiaMenu = c?.tipografia?.menu ?? "14px";
   const navHidden: string[] = site.navbar_hidden ?? c?.footer?.navbar_hidden ?? [];
 
   const css = `
     @keyframes wa-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
     .wa-bounce-anim{animation:wa-bounce 1.4s ease-in-out infinite}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:${font};font-size:${fontSize};color:#111;scroll-behavior:smooth}
+    html{font-size:${tipografiaGeneral}}body{font-family:${font};color:#111;scroll-behavior:smooth}
     nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
     .nav-links{display:flex;gap:2rem;list-style:none}
     .mobile-toggle{display:none}
     .hamburger-label{display:none;cursor:pointer;padding:6px}
-    .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
+    .nav-links a{text-decoration:none;color:#555;font-size:${tipografiaMenu};font-weight:500;transition:color 0.2s}
     .nav-links a:hover{color:${pr}}
     .nav-item-parent{position:relative}
     .nav-submenu{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:180px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:0.5rem 0;list-style:none;z-index:200}

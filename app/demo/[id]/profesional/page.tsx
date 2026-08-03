@@ -115,6 +115,9 @@ export default async function DemoProfesional({ params }: Props) {
   const sc = site.secondary_color ?? "#0f172a";
   const logo = site.logo_url ?? "";
   const ci = site.custom_images ?? {};
+  const font = site.font_family ?? "'Segoe UI', sans-serif";
+  const tipografiaGeneral = c?.tipografia?.general ?? "16px";
+  const tipografiaMenu = c?.tipografia?.menu ?? "14px";
 
   let mapCoords: { lat: number; lon: number } | null = null;
   if (c?.contacto?.mostrar_mapa && c?.contacto?.direccion) {
@@ -136,7 +139,7 @@ export default async function DemoProfesional({ params }: Props) {
     @keyframes wa-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
     .wa-bounce-anim{animation:wa-bounce 1.4s ease-in-out infinite}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Segoe UI',system-ui,sans-serif;color:#111;scroll-behavior:smooth}
+    html{font-size:${tipografiaGeneral}}body{font-family:${font};color:#111;scroll-behavior:smooth}
     .demo-bar{background:linear-gradient(90deg,${pr},${sc});color:#fff;text-align:center;padding:0.6rem;font-size:0.8rem;font-weight:600}
     .demo-bar a{color:#fff;text-decoration:underline;margin-left:8px;font-weight:700}
     nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.08)}
@@ -144,7 +147,7 @@ export default async function DemoProfesional({ params }: Props) {
     .brand h1{font-size:1.1rem;font-weight:800;color:${pr}}
     .brand img{height:70px;object-fit:contain}
     .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
+    .nav-links a{text-decoration:none;color:#555;font-size:${tipografiaMenu};font-weight:500;transition:color 0.2s}
     .nav-links a:hover{color:${pr}}
     .nav-item-parent{position:relative}
     .nav-submenu{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:180px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:0.5rem 0;list-style:none;z-index:200}

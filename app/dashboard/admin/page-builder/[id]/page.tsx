@@ -602,14 +602,16 @@ export default function PageBuilderEditor() {
               </select>
             </div>
             <div>
-              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 6 }}>Tamano de letra</label>
-              <div style={{ display: "flex", gap: 4 }}>
-                {[{ label: "S", size: "14px", title: "Pequeno" }, { label: "M", size: "16px", title: "Mediano" }, { label: "L", size: "20px", title: "Grande" }].map(({ label, size, title }) => (
-                  <button key={size} onClick={() => setFontSize(size)} title={title} style={{ flex: 1, padding: "6px 4px", borderRadius: 6, border: `1px solid ${fontSize === size ? pr : "#e5e7eb"}`, background: fontSize === size ? `${pr}15` : "#fff", color: fontSize === size ? pr : "#777", fontSize: label === "S" ? 10 : label === "M" ? 13 : 16, fontWeight: 700, cursor: "pointer" }}>
-                    {label}
-                  </button>
-                ))}
-              </div>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 6 }}>Tamano del menu</label>
+              <select value={content?.tipografia?.menu ?? "14px"} onChange={(e) => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.tipografia) next.tipografia = {}; next.tipografia.menu = e.target.value; return next; })} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "5px 6px", fontSize: 11 }}>
+                {["8px","10px","12px","14px","16px","18px","20px","22px","24px"].map(s => (<option key={s} value={s}>{s}</option>))}
+              </select>
+            </div>
+            <div style={{ marginTop: 10 }}>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 6 }}>Tamano general de texto</label>
+              <select value={content?.tipografia?.general ?? "16px"} onChange={(e) => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.tipografia) next.tipografia = {}; next.tipografia.general = e.target.value; return next; })} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "5px 6px", fontSize: 11 }}>
+                {["8px","10px","12px","14px","16px","18px","20px","22px","24px"].map(s => (<option key={s} value={s}>{s}</option>))}
+              </select>
             </div>
           </div>
         </div>
