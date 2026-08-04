@@ -415,7 +415,7 @@ export default async function DemoProfesional({ params }: Props) {
             <div className="nosotros-grid">
               <div>{(ci.nosotros || imagenes[1]) && <img src={ci.nosotros || imagenes[1]} alt="nosotros" className="nosotros-img" />}</div>
               <div className="nosotros-content">
-                <p className="label" style={{ textAlign: "left" }}>Sobre nosotros</p>
+                
                 <h2>{c.nosotros.titulo}</h2>
                 <p>{c.nosotros.historia}</p>
                 <p>{c.nosotros.propuesta_valor}</p>
@@ -427,8 +427,8 @@ export default async function DemoProfesional({ params }: Props) {
                   </div>
                 )}
                 <div className="mv-grid">
-                  <div className="mv-card"><h4>Mision</h4><p>{c.nosotros.mision}</p></div>
-                  <div className="mv-card"><h4>Vision</h4><p>{c.nosotros.vision}</p></div>
+                  <div className="mv-card"><h4>Misión</h4><p>{c.nosotros.mision}</p></div>
+                  <div className="mv-card"><h4>Visión</h4><p>{c.nosotros.vision}</p></div>
                 </div>
               </div>
             </div>
@@ -441,7 +441,7 @@ export default async function DemoProfesional({ params }: Props) {
           <div className="wrap">
             <p className="label">Servicios</p>
             <h2 className="st">Lo que ofrecemos</h2>
-            <p className="st-sub">Soluciones profesionales adaptadas a las necesidades de tu negocio</p>
+            
             <div className="g4">
               {c.servicios.map((s: any, i: number) => (
                 <div key={i} className="srv-card">
@@ -566,7 +566,7 @@ export default async function DemoProfesional({ params }: Props) {
           <div className="wrap">
             <div className="contact-grid">
               <div className="contact-info">
-                <p className="label" style={{ color: "rgba(255,255,255,0.7)", textAlign: "left" }}>Escribenos</p>
+                
                 <h2>{c.contacto.titulo}</h2>
                 <p>{c.contacto.descripcion}</p>
                 {c.contacto.telefono && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>{c.contacto.telefono}</div>}
