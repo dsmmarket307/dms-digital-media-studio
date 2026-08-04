@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
@@ -165,7 +165,7 @@ export default async function DemoProfesional({ params }: Props) {
     .demo-bar{background:linear-gradient(90deg,${pr},${sc});color:#fff;text-align:center;padding:0.6rem;font-size:0.8rem;font-weight:600}
     .demo-bar a{color:#fff;text-decoration:underline;margin-left:8px;font-weight:700}
     nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.08)}
-    .brand{display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0;overflow:hidden}
     .brand h1{font-size:1.1rem;font-weight:800;color:${pr}}
     .brand img{height:70px;object-fit:contain}
     .nav-links{display:flex;gap:2rem;list-style:none}
@@ -324,7 +324,7 @@ export default async function DemoProfesional({ params }: Props) {
 
       <nav>
         <div className="brand">
-          {logo && <img src={logo} alt="logo" />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
+          {logo && <img src={logo} alt="logo" style={{ height: 42, maxWidth: 160, objectFit: "contain" }} />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
         </div>
         <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
         <label htmlFor="mobile-toggle-check" className="hamburger-label">
