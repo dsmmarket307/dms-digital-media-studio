@@ -440,6 +440,7 @@ export default async function DemoProfesional({ params }: Props) {
           <div className="wrap">
             <p className="label">Servicios</p>
             <h2 className="st">Lo que ofrecemos</h2>
+            {(ci.servicios || imagenes[2]) && <img src={ci.servicios || imagenes[2]} alt="servicios" style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 20, marginBottom: "2rem", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }} />}
             
             <div className="g4">
               {c.servicios.map((s: any, i: number) => (
@@ -516,6 +517,7 @@ export default async function DemoProfesional({ params }: Props) {
             <p className="label">Testimonios</p>
             <h2 className="st">Lo que dicen nuestros clientes</h2>
             <p className="st-sub">La satisfaccion de nuestros clientes es nuestra mayor recompensa</p>
+            {(ci.testimonios || imagenes[4]) && <img src={ci.testimonios || imagenes[4]} alt="testimonios" style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 20, marginBottom: "2rem", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }} />}
             <div className="test-grid">
               {c.testimonios.map((t: any, i: number) => (
                 <div key={i} className="test-card">
