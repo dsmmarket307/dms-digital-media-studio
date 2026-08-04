@@ -417,8 +417,7 @@ export default async function DemoProfesional({ params }: Props) {
               <div className="nosotros-content">
                 
                 <h2>{c.nosotros.titulo}</h2>
-                <p>{c.nosotros.historia}</p>
-                <p>{c.nosotros.propuesta_valor}</p>
+                <p>{c.nosotros.descripcion}</p>
                 {(c.nosotros.anos_experiencia || c.nosotros.clientes_atendidos) && (
                   <div className="stats" style={{ marginTop: "2rem", marginBottom: 0 }}>
                     {c.nosotros.anos_experiencia && <div><div className="stat-num">+{c.nosotros.anos_experiencia}</div><div className="stat-label">Anos de experiencia</div></div>}
