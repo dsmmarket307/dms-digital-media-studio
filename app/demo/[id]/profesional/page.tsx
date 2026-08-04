@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
@@ -95,11 +95,33 @@ export async function generateMetadata({ params }: Props) {
   const { createClient } = await import("@/lib/supabase/server");
   const supabase = await createClient();
   const { data: site } = await supabase.from("generated_websites").select("project_name, generated_content, logo_url").eq("id", id).single();
-  const nombre = site?.generated_content?.footer?.nombre_empresa ?? site?.project_name ?? "DMS Digital Media Studio";
+  const gc = site?.generated_content as any;
+  const nombre = gc?.footer?.nombre_empresa ?? site?.project_name ?? "Sitio web";
   const logo = site?.logo_url ?? null;
   const faviconUrl = logo ? `/api/favicon?id=${id}` : undefined;
+
+  const rubro = gc?.meta?.tipo ?? "";
+  const direccion = gc?.contacto?.direccion ?? "";
+  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
+  const ciudad = ciudadMatch ? ciudadMatch[1] : "";
+
+  let description: string =
+    (gc?.footer?.descripcion?.trim()) ||
+    (gc?.nosotros?.descripcion?.trim()) ||
+    (gc?.contacto?.descripcion?.trim()) ||
+    "";
+
+  if (!description) {
+    description = `${nombre}${rubro ? ` - ${rubro}` : ""}${ciudad ? ` en ${ciudad}` : ""}.`;
+  }
+
+  if (description.length > 160) {
+    description = description.slice(0, 157).trimEnd() + "...";
+  }
+
   return {
     title: nombre,
+    description,
     icons: faviconUrl ? { icon: faviconUrl, apple: faviconUrl } : undefined,
   };
 }
