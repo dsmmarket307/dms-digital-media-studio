@@ -279,7 +279,7 @@ export default async function DemoPage({ params }: Props) {
       </div>
 
       {c?.nosotros && !navHidden.includes("nosotros") && (
-        <section id="nosotros">
+        <section id="nosotros" style={{ background: c?.esquemas?.nosotros === "gris" ? "#f4f4f6" : c?.esquemas?.nosotros === "tinte" ? `${pr}12` : "#fff" }}>
           <div className="wrap">
             <p className="label">Nosotros</p>
             <h2 className="st">{c.nosotros.titulo}</h2>
@@ -300,7 +300,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {c?.servicios && !navHidden.includes("servicios") && (
-        <section id="servicios" className="bg-l">
+        <section id="servicios" style={{ background: c?.esquemas?.servicios === "gris" ? "#f4f4f6" : c?.esquemas?.servicios === "tinte" ? `${pr}12` : c?.esquemas?.servicios === "blanco" ? "#fff" : "#f8f9fa" }}>
           <div className="wrap">
             <p className="label">Servicios</p>
             <h2 className="st">Lo que ofrecemos</h2>
@@ -321,7 +321,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
             {c?.productos?.length > 0 && !navHidden.includes("productos") && (
-        <section id="productos" style={{ padding: "5rem 2rem", background: "#fff" }}>
+        <section id="productos" style={{ padding: "5rem 2rem", background: c?.esquemas?.productos === "gris" ? "#f4f4f6" : c?.esquemas?.productos === "tinte" ? `${pr}12` : "#fff" }}>
           <div className="wrap">
             <p className="label">Productos</p>
             <h2 className="st">{c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo"}</h2>
@@ -405,7 +405,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {c?.estadisticas?.items?.length > 0 && (
-        <section style={{ background: "#f8f9fa" }}>
+        <section style={{ background: c?.esquemas?.estadisticas === "blanco" ? "#fff" : c?.esquemas?.estadisticas === "tinte" ? `${pr}12` : "#f8f9fa" }}>
           <div className="wrap">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "1.5rem", textAlign: "center" }}>
               {c.estadisticas.items.map((e: any, i: number) => (
@@ -420,7 +420,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {c?.beneficios && (
-        <section>
+        <section style={{ background: c?.esquemas?.beneficios === "gris" ? "#f4f4f6" : c?.esquemas?.beneficios === "tinte" ? `${pr}12` : "#fff" }}>
           <div className="wrap">
             <p className="label">Por que elegirnos</p>
             <h2 className="st">Nuestras ventajas</h2>
@@ -442,7 +442,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {c?.galeria && !navHidden.includes("galeria") && (
-        <section id="galeria" className="bg-l">
+        <section id="galeria" style={{ background: c?.esquemas?.galeria === "blanco" ? "#fff" : c?.esquemas?.galeria === "tinte" ? `${pr}12` : "#f8f9fa" }}>
           <div className="wrap">
             <p className="label">Galeria</p>
             <h2 className="st">{c.galeria.titulo}</h2>
@@ -460,7 +460,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {c?.testimonios && !navHidden.includes("testimonios") && (
-        <section id="testimonios" className="bg-l">
+        <section id="testimonios" style={{ background: c?.esquemas?.testimonios === "blanco" ? "#fff" : c?.esquemas?.testimonios === "tinte" ? `${pr}12` : "#f8f9fa" }}>
           <div className="wrap">
             <p className="label">Testimonios</p>
             <h2 className="st">Lo que dicen nuestros clientes</h2>
@@ -484,7 +484,7 @@ export default async function DemoPage({ params }: Props) {
       )}
 
       {c?.faq && !navHidden.includes("faq") && (
-        <section id="faq">
+        <section id="faq" style={{ background: c?.esquemas?.faq === "gris" ? "#f4f4f6" : c?.esquemas?.faq === "tinte" ? `${pr}12` : "#fff" }}>
           <div className="wrap" style={{ maxWidth: 700 }}>
             <p className="label">FAQ</p>
             <h2 className="st">Preguntas frecuentes</h2>

@@ -29,6 +29,7 @@ const SECTION_LABELS: Record<string, string> = {
   demo_bar: "Barra de Venta (Demo)",
   cookies: "Aviso de Cookies",
   popup_promo: "Popup Promocional",
+  esquemas: "Colores por Seccion",
   productos: "Productos",
   hero: "Hero Principal", nosotros: "Nosotros", servicios: "Servicios",
   galeria: "Galeria", equipo: "Equipo", beneficios: "Beneficios",
@@ -1276,6 +1277,32 @@ export default function PageBuilderEditor() {
                 {uploadingImg === "popup_promo" ? "Subiendo..." : images.popup_promo ? "Cambiar imagen" : "Subir imagen"}
               </button>
               <Field label="Link al hacer click (opcional)" value={content?.popup_promo?.link} onChange={(v) => updateText(["popup_promo", "link"], v)} />
+            </>)}
+            {selectedSection === "esquemas" && (<>
+              <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Elige el tono de fondo de cada seccion para dar variedad visual a tu sitio.</p>
+              {[
+                { key: "nosotros", label: "Nosotros" },
+                { key: "servicios", label: "Servicios" },
+                { key: "productos", label: "Productos" },
+                { key: "beneficios", label: "Beneficios" },
+                { key: "galeria", label: "Galeria" },
+                { key: "testimonios", label: "Testimonios" },
+                { key: "faq", label: "Preguntas Frecuentes" },
+                { key: "estadisticas", label: "Estadisticas" },
+              ].map(({ key, label }) => (
+                <div key={key} style={{ marginBottom: 14 }}>
+                  <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 6 }}>{label}</label>
+                  <div style={{ display: "flex", gap: 4 }}>
+                    {[
+                      { id: "blanco", nombre: "Blanco", color: "#ffffff" },
+                      { id: "gris", nombre: "Gris", color: "#f4f4f6" },
+                      { id: "tinte", nombre: "Tinte", color: `${pr}12` },
+                    ].map((op) => (
+                      <button key={op.id} onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.esquemas) next.esquemas = {}; next.esquemas[key] = op.id; return next; })} title={op.nombre} style={{ flex: 1, height: 32, borderRadius: 6, border: (content?.esquemas?.[key] ?? "blanco") === op.id ? `2px solid ${pr}` : "1px solid #e5e7eb", background: op.color, cursor: "pointer" }} />
+                    ))}
+                  </div>
+                </div>
+              ))}
             </>)}
             {selectedSection === "footer" && (<>
               <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={(v) => updateText(["footer", "nombre_empresa"], v)} />
