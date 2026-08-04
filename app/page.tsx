@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import ChatbotDMS from "@/components/ChatbotDMS";
@@ -515,8 +515,8 @@ export default function Home() {
             <div>
               <h3 style={{ fontWeight: 700, fontSize: 15, marginBottom: 16, color: "#fff" }}>Contacto</h3>
               <ul style={{ display: "flex", flexDirection: "column", gap: 10, color: "#aaa", fontSize: 13 }}>
-                <li>dms.digitalstudio@outlook.com</li>
-                <li>+57 300 000 0000</li>
+                <li>contacto@dmsdigitalstudio.com</li>
+                <li>+57 315 565 4948</li>
                 <li>Pereira, Colombia</li>
               </ul>
             </div>
