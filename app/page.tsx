@@ -544,8 +544,23 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginTop: 48, paddingTop: 24, textAlign: "center", color: "#666", fontSize: 13 }}>
-            © 2026 DMS Digital Media Studio. Todos los derechos reservados.
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginTop: 48, paddingTop: 32, display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", height: 32, background: "#fff", padding: "6px 14px", borderRadius: 8 }}>
+                <img src="/logos-pago/visa.png" alt="Visa" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", height: 32, background: "#fff", padding: "6px 14px", borderRadius: 8 }}>
+                <img src="/logos-pago/mastercard.png" alt="Mastercard" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", height: 32, background: "#fff", padding: "6px 14px", borderRadius: 8 }}>
+                <img src="/logos-pago/mercadopago.png" alt="Mercado Pago" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
+              </div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#4ade80", background: "rgba(74,222,128,0.1)", padding: "6px 14px", borderRadius: 20, border: "1px solid rgba(74,222,128,0.25)" }}>🔒 Sitio Seguro SSL</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#c4b5fd", background: "rgba(124,58,237,0.12)", padding: "6px 14px", borderRadius: 20, border: "1px solid rgba(124,58,237,0.25)" }}>Garantia 7 dias</span>
+            </div>
+            <div style={{ textAlign: "center", color: "#666", fontSize: 13 }}>
+              © 2026 DMS Digital Media Studio. Todos los derechos reservados.
+            </div>
           </div>
         </div>
       <ChatbotDMS />
