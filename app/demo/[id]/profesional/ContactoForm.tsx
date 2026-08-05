@@ -64,19 +64,19 @@ export default function ContactoForm({ siteId, userId, destinoEmail, nombreNegoc
       <h3 style={{ fontWeight: 800, fontSize: "1.25rem", marginBottom: "1.5rem", color: "#111" }}>Enviar mensaje</h3>
       <div className="form-group">
         <label>Nombre completo</label>
-        <input type="text" placeholder="Tu nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+        <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
       </div>
       <div className="form-group">
         <label>Correo electronico</label>
-        <input type="email" placeholder="tu@correo.com" value={correo} onChange={(e) => setCorreo(e.target.value)} />
+        <input type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} />
       </div>
       <div className="form-group">
         <label>Telefono</label>
-        <input type="text" placeholder="+57 300 000 0000" value={telefono} onChange={(e) => setTelefono(e.target.value)} />
+        <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} />
       </div>
       <div className="form-group">
         <label>Mensaje</label>
-        <textarea rows={4} placeholder="Cuentanos sobre tu proyecto..." style={{ resize: "none" }} value={mensaje} onChange={(e) => setMensaje(e.target.value)} required></textarea>
+        <textarea rows={4} style={{ resize: "none" }} value={mensaje} onChange={(e) => setMensaje(e.target.value)} required></textarea>
       </div>
       {error && <p style={{ color: "#ef4444", fontSize: "0.85rem", marginBottom: "0.75rem" }}>{error}</p>}
       <button type="submit" className="form-btn" disabled={enviando}>{enviando ? "Enviando..." : "Enviar mensaje"}</button>

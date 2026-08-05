@@ -283,7 +283,7 @@ export default async function DemoProfesional({ params }: Props) {
     .compare-card.featured .compare-list li{opacity:1;color:#374151}
     .compare-btn{display:block;text-align:center;padding:1rem;border-radius:12px;font-weight:700;text-decoration:none;margin-top:1.5rem;transition:opacity 0.2s}
     .compare-btn:hover{opacity:0.9}
-    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.hamburger-label{order:-2}.brand{order:-1;flex:1;justify-content:center}.nav-cta{order:0;padding:0.4rem 0.7rem;font-size:0.68rem;flex-shrink:0;white-space:nowrap}.brand{flex-shrink:1;min-width:0}.brand img{max-width:60px}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}.hero-body h1{font-size:2.25rem}section{padding:4rem 1.5rem}.nosotros-grid,.contact-grid,.compare-cards,.footer-grid{grid-template-columns:1fr}.galeria-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr}}
+    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.hamburger-label{order:-2}.brand{order:-1;flex:1;justify-content:center}.nav-cta{order:0;padding:0.4rem 0.7rem;font-size:0.68rem;flex-shrink:0;white-space:nowrap}.brand{flex-shrink:1;min-width:0}.brand img{max-width:100px;height:auto}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}.hero-body h1{font-size:2.25rem}section{padding:4rem 1.5rem}.nosotros-grid,.contact-grid,.compare-cards,.footer-grid{grid-template-columns:1fr}.galeria-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr}}
   `;
 
   const script = `
@@ -324,7 +324,7 @@ export default async function DemoProfesional({ params }: Props) {
 
       <nav>
         <div className="brand">
-          {logo && <img src={logo} alt="logo" style={{ height: 42, maxWidth: 160, objectFit: "contain" }} />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
+          {logo && <img src={logo} alt="logo" style={{ height: 56, maxWidth: 200, objectFit: "contain" }} />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
         </div>
         <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
         <label htmlFor="mobile-toggle-check" className="hamburger-label">
