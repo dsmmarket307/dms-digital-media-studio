@@ -160,23 +160,33 @@ export default function Home() {
   const [testiPaused, setTestiPaused] = useState(false);
   const testiViewportRef = useRef<HTMLDivElement>(null);
   const [testiIndex, setTestiIndex] = useState(0);
+  const [testiAnim, setTestiAnim] = useState(true);
   const TESTI_TOTAL = 6;
   useEffect(() => {
     if (testiPaused) return;
     const interval = setInterval(() => {
-      setTestiIndex(i => (i + 1) % TESTI_TOTAL);
+      setTestiIndex(i => i + 1);
     }, 4000);
     return () => clearInterval(interval);
   }, [testiPaused]);
   useEffect(() => {
     const el = testiViewportRef.current;
     if (!el) return;
+    const track = el.querySelector<HTMLDivElement>(".dms-testi-track");
     const card = el.querySelector<HTMLDivElement>(".dms-testi-card");
-    if (!card) return;
+    if (!track || !card) return;
     const cardWidth = card.offsetWidth + 24;
-    el.style.transition = "transform 0.6s ease";
-    el.style.transform = `translateX(-${testiIndex * cardWidth}px)`;
-  }, [testiIndex]);
+    track.style.transition = testiAnim ? "transform 0.6s ease" : "none";
+    track.style.transform = `translateX(-${testiIndex * cardWidth}px)`;
+    if (testiIndex === TESTI_TOTAL) {
+      const t = setTimeout(() => { setTestiAnim(false); setTestiIndex(0); }, 620);
+      return () => clearTimeout(t);
+    }
+    if (!testiAnim) {
+      const r = requestAnimationFrame(() => setTestiAnim(true));
+      return () => cancelAnimationFrame(r);
+    }
+  }, [testiIndex, testiAnim]);
 
   const clientes = useCountUp(100, 2000, statsVisible);
   const paises = useCountUp(3, 1500, statsVisible);
