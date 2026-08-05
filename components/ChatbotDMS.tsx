@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 const PLANES = [
   { name: "Basico", price: "$49.000/mes", slug: "basico", items: ["1 Landing Page activa","Editor Basico","Diseno Responsive","Boton WhatsApp","Subdominio DMS","Soporte basico"] },
   { name: "Profesional", price: "$99.000/mes", slug: "profesional", items: ["1 Sitio profesional","Editor Profesional","Galeria de imagenes","SEO basico","Formulario de contacto","Reservas","Dominio personalizado","Leads integrados"], popular: true },
-  { name: "Empresarial", price: "$199.000/mes", slug: "empresarial", items: ["Sitios ilimitados","Editor Avanzado","SEO Avanzado","CRM integrado","Automatizaciones IA","Agente IA","Estadisticas","Dominios personalizados","Soporte prioritario"] },
+  { name: "Empresarial", price: "$199.000/mes", slug: "empresarial", items: ["Sitios ilimitados","Editor Avanzado","SEO Avanzado","CRM integrado","Automatizaciones IA","Nova, tu Agente IA","Estadisticas","Dominios personalizados","Soporte prioritario"] },
 ];
 
 const MENU = [
@@ -150,7 +150,7 @@ export default function ChatbotDMS() {
       setTimeout(() => addBot("Con DMS tu sitio web se genera con IA en minutos. Te muestro los planes.", "planes"), 800);
       setStep("show_planes");
     } else if (id === "ia") {
-      setTimeout(() => addBot("Tenemos chatbots, CRM, automatizaciones y agente IA. Te muestro los planes.", "planes"), 800);
+      setTimeout(() => addBot("Tenemos chatbots, CRM, automatizaciones y Nova, nuestro agente IA. Te muestro los planes.", "planes"), 800);
       setStep("show_planes");
     } else {
       setTimeout(() => {
@@ -177,6 +177,7 @@ export default function ChatbotDMS() {
   return (
     <>
       <button
+        className="dms-chat-fab"
         onClick={() => setOpen(o => !o)}
         style={{ position:"fixed",bottom:24,right:24,zIndex:9999,width:62,height:62,borderRadius:"50%",background:"linear-gradient(135deg,#7c3aed,#4f46e5)",border:"none",cursor:"pointer",boxShadow:"0 4px 28px rgba(124,58,237,0.55)",display:"flex",alignItems:"center",justifyContent:"center",transition:"transform 0.2s" }}
         onMouseEnter={e=>(e.currentTarget.style.transform="scale(1.1)")}
@@ -195,7 +196,7 @@ export default function ChatbotDMS() {
       </button>
 
       {open && (
-        <div style={{ position:"fixed",bottom:98,right:24,zIndex:9998,width:370,maxHeight:580,borderRadius:20,background:"#fff",boxShadow:"0 8px 48px rgba(0,0,0,0.18)",display:"flex",flexDirection:"column",overflow:"hidden",fontFamily:"'Segoe UI',sans-serif" }}>
+        <div className="dms-chat-win" style={{ position:"fixed",bottom:98,right:24,zIndex:9998,width:370,maxHeight:580,borderRadius:20,background:"#fff",boxShadow:"0 8px 48px rgba(0,0,0,0.18)",display:"flex",flexDirection:"column",overflow:"hidden",fontFamily:"'Segoe UI',sans-serif" }}>
           <div style={{background:"linear-gradient(135deg,#7c3aed,#4f46e5)",padding:"14px 18px",display:"flex",alignItems:"center",gap:12}}>
             <div style={{width:42,height:42,borderRadius:"50%",background:"rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -311,7 +312,13 @@ export default function ChatbotDMS() {
           )}
         </div>
       )}
-      <style>{`@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}`}</style>
+      <style>{`@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        .dms-chat-fab{ bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important; }
+        @media (max-width: 480px){
+          .dms-chat-fab{ width:54px !important; height:54px !important; right:16px !important; }
+          .dms-chat-win{ right:10px !important; left:10px !important; width:auto !important; bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; max-height:70vh !important; }
+        }
+      `}</style>
     </>
   );
 }
