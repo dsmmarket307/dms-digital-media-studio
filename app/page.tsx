@@ -159,21 +159,24 @@ export default function Home() {
 
   const [testiPaused, setTestiPaused] = useState(false);
   const testiViewportRef = useRef<HTMLDivElement>(null);
+  const [testiIndex, setTestiIndex] = useState(0);
+  const TESTI_TOTAL = 6;
+  useEffect(() => {
+    if (testiPaused) return;
+    const interval = setInterval(() => {
+      setTestiIndex(i => (i + 1) % TESTI_TOTAL);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [testiPaused]);
   useEffect(() => {
     const el = testiViewportRef.current;
     if (!el) return;
-    let raf: number;
-    const step = () => {
-      if (!testiPaused && el) {
-        el.scrollLeft += 0.6;
-        const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [testiPaused]);
+    const card = el.querySelector<HTMLDivElement>(".dms-testi-card");
+    if (!card) return;
+    const cardWidth = card.offsetWidth + 24;
+    el.style.transition = "transform 0.6s ease";
+    el.style.transform = `translateX(-${testiIndex * cardWidth}px)`;
+  }, [testiIndex]);
 
   const clientes = useCountUp(100, 2000, statsVisible);
   const paises = useCountUp(3, 1500, statsVisible);
@@ -464,7 +467,7 @@ export default function Home() {
           onMouseLeave={() => setTestiPaused(false)}
           style={{ overflow: "hidden", maxWidth: 1200, margin: "0 auto" }}
         >
-          <div className="dms-testi-track" style={{ display: "flex", gap: 24 }}>
+          <div className="dms-testi-track" style={{ display: "flex", gap: 24, transition: "transform 0.6s ease" }}>
           {(() => {
             const items = [
               { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "Cree mi sitio web en minutos con la IA de DMS. En 30 dias ya tenia reservas online todos los dias.", inicial: "C", color: "linear-gradient(135deg,#7c3aed,#4f46e5)" },
