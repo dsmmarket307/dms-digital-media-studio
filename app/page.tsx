@@ -610,6 +610,12 @@ export default function Home() {
               <div style={{ display: "flex", alignItems: "center", height: 32, background: "#fff", padding: "6px 14px", borderRadius: 8 }}>
                 <img src="/logos-pago/paypal.png" alt="PayPal" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
               </div>
+              <div style={{ display: "flex", alignItems: "center", height: 32, background: "#fff", padding: "6px 14px", borderRadius: 8 }}>
+                <img src="/logos-pago/ssl.png" alt="Sitio Seguro SSL" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", height: 32, background: "#fff", padding: "6px 14px", borderRadius: 8 }}>
+                <img src="/logos-pago/garantia.png" alt="Garantia 7 dias" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
+              </div>
             </div>
             <div style={{ textAlign: "center", color: "#666", fontSize: 13 }}>
               © 2026 DMS Digital Media Studio. Todos los derechos reservados.
