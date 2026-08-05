@@ -4,7 +4,6 @@ import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
 import CookieBanner from "../CookieBanner";
 import PopupPromo from "../PopupPromo";
-import Script from "next/script";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -325,7 +324,7 @@ export default async function DemoProfesional({ params }: Props) {
       {(c?.demo_bar?.activo ?? true) && (
         <div className="demo-bar">
           {c?.demo_bar?.texto ?? "Version Profesional \u2014 DMS Digital Media Studio"}
-          <div style={{ marginTop: 8 }}><div id="paypal-container-GXNM85WZHXXQG"></div><Script src="https://www.paypal.com/sdk/js?client-id=BAAqWOfQgjnoPbqO0BjEbvbi8ZU8gEhzg7cs9W3N5IX7TzjwXGd3zTafqS7Mo4nZRMAq9VK-LKIOnIVHFU&components=hosted-buttons&disable-funding=venmo&currency=USD" strategy="afterInteractive" /><Script id="paypal-render-button" strategy="afterInteractive">{`paypal.HostedButtons({hostedButtonId: "GXNM85WZHXXQG"}).render("#paypal-container-GXNM85WZHXXQG")`}</Script></div>
+          <a href={c?.demo_bar?.url_boton || "https://dms-digital-media-studio.vercel.app/planes/negocio"}>{c?.demo_bar?.texto_boton ?? "Quiero este sitio \u2014 $999.000"}</a>
         </div>
       )}
 
