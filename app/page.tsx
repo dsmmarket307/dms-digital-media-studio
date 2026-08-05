@@ -281,12 +281,14 @@ export default function Home() {
           </Link>
         </div>
         <div style={{ marginTop: 56, width: "100%", maxWidth: 880, borderRadius: 20, overflow: "hidden", boxShadow: "0 20px 60px rgba(124,58,237,0.18)", border: "1px solid rgba(0,0,0,0.06)" }}>
-          {/* TODO: reemplazar este bloque por <video autoPlay muted loop playsInline> con el clip real de 10-15s mostrando la IA generando un sitio */}
-          <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", background: "linear-gradient(135deg,#7c3aed,#4f46e5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-            </div>
-          </div>
+          <video
+            src="/sitio-demo.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
+          />
         </div>
       </section>
 
