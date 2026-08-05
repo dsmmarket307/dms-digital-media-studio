@@ -157,6 +157,7 @@ export default function Home() {
   const [statsVisible, setStatsVisible] = useState(false);
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
 
+  const [testiPaused, setTestiPaused] = useState(false);
   const clientes = useCountUp(100, 2000, statsVisible);
   const paises = useCountUp(3, 1500, statsVisible);
   const anos = useCountUp(2, 1200, statsVisible);
@@ -294,8 +295,13 @@ export default function Home() {
 
       {/* SERVICIOS */}
       <section id="servicios" className="px-6 md:px-10 py-20 bg-gray-50">
+        <div style={{ textAlign: "center", marginBottom: 16 }}>
+          <span style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", fontSize: 13, fontWeight: 700, padding: "6px 16px", borderRadius: 20, letterSpacing: "0.05em" }}>
+            SOPORTE LOCAL EN PEREIRA, COLOMBIA
+          </span>
+        </div>
         <h2 className="text-3xl font-bold text-center mb-4">Todo lo que necesitas para crecer online</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma.</p>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma, con atencion cercana y en espanol de nuestro equipo colombiano.</p>
         <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {SERVICIOS.map((s) => (
             <div key={s.slug} className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col items-start gap-3">
@@ -434,16 +440,25 @@ export default function Home() {
       <section className="px-6 md:px-10 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">Lo que dicen nuestros clientes</h2>
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Resultados reales de negocios que confiaron en nosotros.</p>
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[
-            { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "Cree mi sitio web en minutos con la IA de DMS. En 30 dias ya tenia reservas online todos los dias.", inicial: "C" },
-            { nombre: "Maria Gonzalez", cargo: "Directora, Clinica Estetica Cali", texto: "El agente IA atiende a mis clientes las 24 horas. Ya no pierdo consultas por no responder rapido.", inicial: "M" },
-            { nombre: "Andres Torres", cargo: "Gerente, Inmobiliaria El Dorado", texto: "El CRM me ayuda a hacer seguimiento a cada cliente. Cerre 15 negocios en 2 meses desde que use DMS.", inicial: "A" },
-            { nombre: "Laura Ospina", cargo: "Emprendedora, Boutique Moda", texto: "En menos de 10 minutos tenia mi landing page lista. Mis clientes me dicen que se ve muy profesional.", inicial: "L" },
-            { nombre: "Ricardo Mejia", cargo: "Abogado, Firma Mejia y Asociados", texto: "Mi sitio aparece en Google y los clientes me encuentran solos. DMS cambio mi negocio completamente.", inicial: "R" },
-            { nombre: "Sandra Perez", cargo: "Gerente, Spa Zen Bogota", texto: "El formulario de reservas y la galeria de fotos hicieron que mis ventas subieran un 40% el primer mes.", inicial: "S" },
-          ].map((t) => (
-            <div key={t.nombre} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div
+          className="dms-testi-viewport"
+          onMouseEnter={() => setTestiPaused(true)}
+          onMouseLeave={() => setTestiPaused(false)}
+          style={{ overflow: "hidden", maxWidth: 1200, margin: "0 auto" }}
+        >
+          <div className="dms-testi-track" style={{ display: "flex", gap: 24, animationPlayState: testiPaused ? "paused" : "running" }}>
+          {(() => {
+            const items = [
+              { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "Cree mi sitio web en minutos con la IA de DMS. En 30 dias ya tenia reservas online todos los dias.", inicial: "C", color: "linear-gradient(135deg,#7c3aed,#4f46e5)" },
+              { nombre: "Maria Gonzalez", cargo: "Directora, Clinica Estetica Cali", texto: "El agente IA atiende a mis clientes las 24 horas. Ya no pierdo consultas por no responder rapido.", inicial: "M", color: "linear-gradient(135deg,#ec4899,#db2777)" },
+              { nombre: "Andres Torres", cargo: "Gerente, Inmobiliaria El Dorado", texto: "El CRM me ayuda a hacer seguimiento a cada cliente. Cerre 15 negocios en 2 meses desde que use DMS.", inicial: "A", color: "linear-gradient(135deg,#0ea5e9,#0284c7)" },
+              { nombre: "Laura Ospina", cargo: "Emprendedora, Boutique Moda", texto: "En menos de 10 minutos tenia mi landing page lista. Mis clientes me dicen que se ve muy profesional.", inicial: "L", color: "linear-gradient(135deg,#f59e0b,#d97706)" },
+              { nombre: "Ricardo Mejia", cargo: "Abogado, Firma Mejia y Asociados", texto: "Mi sitio aparece en Google y los clientes me encuentran solos. DMS cambio mi negocio completamente.", inicial: "R", color: "linear-gradient(135deg,#10b981,#059669)" },
+              { nombre: "Sandra Perez", cargo: "Gerente, Spa Zen Bogota", texto: "El formulario de reservas y la galeria de fotos hicieron que mis ventas subieran un 40% el primer mes.", inicial: "S", color: "linear-gradient(135deg,#8b5cf6,#6d28d9)" },
+            ];
+            return [...items, ...items];
+          })().map((t, i) => (
+            <div key={t.nombre + "-" + i} className="dms-testi-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex mb-4">
                 {[1,2,3,4,5].map(s => (
                   <svg key={s} width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1">
@@ -453,7 +468,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.texto}"</p>
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full text-white flex items-center justify-center font-bold text-sm" style={{ background: "linear-gradient(135deg,#7c3aed,#4f46e5)", boxShadow: "0 0 0 3px rgba(124,58,237,0.15)" }}>{t.inicial}</div>
+                <div className="w-11 h-11 rounded-full text-white flex items-center justify-center font-bold text-sm" style={{ background: t.color, boxShadow: "0 0 0 3px rgba(124,58,237,0.15)" }}>{t.inicial}</div>
                 <div>
                   <p className="font-bold text-gray-900 text-sm">{t.nombre}</p>
                   <p className="text-xs text-gray-400">{t.cargo}</p>
@@ -461,7 +476,14 @@ export default function Home() {
               </div>
             </div>
           ))}
+          </div>
         </div>
+        <style>{`
+          .dms-testi-track { width: max-content; animation: dms-testi-scroll 34s linear infinite; }
+          .dms-testi-card { flex: 0 0 320px; }
+          @keyframes dms-testi-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+          @media (max-width: 640px) { .dms-testi-card { flex: 0 0 82vw; } }
+        `}</style>
       </section>
 
       {/* FAQ */}
