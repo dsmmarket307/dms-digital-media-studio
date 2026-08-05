@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import ChatbotDMS from "@/components/ChatbotDMS";
@@ -270,7 +270,7 @@ export default function Home() {
           <span className="text-purple-600"> minutos</span>
         </h1>
         <p className="text-gray-500 mt-6 max-w-2xl">
-          Crea tu pagina web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma.
+          Crea tu pagina web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma, con soporte real de nuestro equipo en Colombia.
         </p>
         <div className="flex flex-col md:flex-row gap-4 mt-10">
           <Link href="#contacto" className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
@@ -279,6 +279,14 @@ export default function Home() {
           <Link href="/servicios" className="border border-gray-300 px-8 py-3 rounded-lg hover:border-purple-600 hover:text-purple-600 transition-colors">
             Ver como funciona
           </Link>
+        </div>
+        <div style={{ marginTop: 56, width: "100%", maxWidth: 880, borderRadius: 20, overflow: "hidden", boxShadow: "0 20px 60px rgba(124,58,237,0.18)", border: "1px solid rgba(0,0,0,0.06)" }}>
+          {/* TODO: reemplazar este bloque por <video autoPlay muted loop playsInline> con el clip real de 10-15s mostrando la IA generando un sitio */}
+          <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", background: "linear-gradient(135deg,#7c3aed,#4f46e5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -292,7 +300,7 @@ export default function Home() {
               <div className="p-3 bg-purple-50 rounded-xl">{s.icon}</div>
               <h3 className="font-semibold text-gray-900">{s.title}</h3>
               <p className="text-sm text-gray-500 flex-1">{s.desc}</p>
-              <Link href={`/servicios/${s.slug}`} className="w-full block text-center bg-purple-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-purple-700 transition-colors mt-2">
+              <Link href={`/servicios/${s.slug}`} className="w-full block text-center border-2 border-purple-600 text-purple-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-purple-50 transition-colors mt-2">
                 Ver mas
               </Link>
             </div>
@@ -383,7 +391,12 @@ export default function Home() {
       {/* PLANES */}
       <section id="planes" className="px-6 md:px-10 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">Planes para tu negocio</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.</p>
+        <p className="text-center text-gray-500 mb-4 max-w-xl mx-auto">Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.</p>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginBottom: 40 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#166534", background: "#dcfce7", padding: "6px 14px", borderRadius: 20 }}>Garantia los primeros 7 dias</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#3730a3", background: "#e0e7ff", padding: "6px 14px", borderRadius: 20 }}>Pago seguro con Mercado Pago</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#374151", background: "#f3f4f6", padding: "6px 14px", borderRadius: 20 }}>Visa - Mastercard</span>
+        </div>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {[
             { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", popular: false, items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"] },
@@ -438,7 +451,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.texto}"</p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-sm">{t.inicial}</div>
+                <div className="w-11 h-11 rounded-full text-white flex items-center justify-center font-bold text-sm" style={{ background: "linear-gradient(135deg,#7c3aed,#4f46e5)", boxShadow: "0 0 0 3px rgba(124,58,237,0.15)" }}>{t.inicial}</div>
                 <div>
                   <p className="font-bold text-gray-900 text-sm">{t.nombre}</p>
                   <p className="text-xs text-gray-400">{t.cargo}</p>
