@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ChatbotDMS from "@/components/ChatbotDMS";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
@@ -158,6 +158,23 @@ export default function Home() {
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
 
   const [testiPaused, setTestiPaused] = useState(false);
+  const testiViewportRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = testiViewportRef.current;
+    if (!el) return;
+    let raf: number;
+    const step = () => {
+      if (!testiPaused && el) {
+        el.scrollLeft += 0.6;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [testiPaused]);
+
   const clientes = useCountUp(100, 2000, statsVisible);
   const paises = useCountUp(3, 1500, statsVisible);
   const anos = useCountUp(2, 1200, statsVisible);
@@ -441,12 +458,13 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-4">Lo que dicen nuestros clientes</h2>
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Resultados reales de negocios que confiaron en nosotros.</p>
         <div
+          ref={testiViewportRef}
           className="dms-testi-viewport"
           onMouseEnter={() => setTestiPaused(true)}
           onMouseLeave={() => setTestiPaused(false)}
           style={{ overflow: "hidden", maxWidth: 1200, margin: "0 auto" }}
         >
-          <div className="dms-testi-track" style={{ display: "flex", gap: 24, animationPlayState: testiPaused ? "paused" : "running" }}>
+          <div className="dms-testi-track" style={{ display: "flex", gap: 24 }}>
           {(() => {
             const items = [
               { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "Cree mi sitio web en minutos con la IA de DMS. En 30 dias ya tenia reservas online todos los dias.", inicial: "C", color: "linear-gradient(135deg,#7c3aed,#4f46e5)" },
@@ -479,9 +497,8 @@ export default function Home() {
           </div>
         </div>
         <style>{`
-          .dms-testi-track { width: max-content; animation: dms-testi-scroll 34s linear infinite; }
+          .dms-testi-track { width: max-content; will-change: scroll-position; }
           .dms-testi-card { flex: 0 0 320px; }
-          @keyframes dms-testi-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
           @media (max-width: 640px) { .dms-testi-card { flex: 0 0 82vw; } }
         `}</style>
       </section>
