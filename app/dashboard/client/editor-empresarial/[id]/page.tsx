@@ -76,7 +76,7 @@ export default function PageBuilderEditor() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
       const { data: sub } = await supabase.from("subscriptions").select("plan,status").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
-      if (sub?.plan !== "empresarial" || sub?.status !== "active") { router.push("/dashboard/client"); return; }
+      if ((sub?.plan !== "profesional" && sub?.plan !== "empresarial") || (sub?.status !== "active" && sub?.status !== "trial")) { router.push("/dashboard/client"); return; }
       const { data } = await supabase.from("generated_websites").select("*").eq("id", id).eq("user_id", user.id).single();
       if (!data) { router.push("/dashboard/client/builder"); return; }
       setSite(data);
