@@ -4,7 +4,7 @@ import ClientSidebar from "@/components/ClientSidebar";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isEditor = pathname === "/dashboard/client/builder";
+  const isEditor = pathname === "/dashboard/client/builder" || pathname.startsWith("/dashboard/client/editor-empresarial/");
 
   return (
     <div style={{ minHeight: "100vh", background: "#f8f9fa" }}>
