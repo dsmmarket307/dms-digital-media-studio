@@ -95,9 +95,15 @@ export default function PageBuilderEditor() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
       const { data: prof } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-      if (prof?.role !== "admin") { router.push("/dashboard/client"); return; }
+      let autorizado = prof?.role === "admin";
+      if (!autorizado) {
+        const { data: sub } = await supabase.from("subscriptions").select("plan,status").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+        autorizado = sub?.plan === "empresarial" && (sub?.status === "trial" || sub?.status === "active");
+      }
+      if (!autorizado) { router.push("/dashboard/client"); return; }
       const { data } = await supabase.from("generated_websites").select("*").eq("id", id).single();
-      if (!data) { router.push("/dashboard/admin/page-builder"); return; }
+      if (!data) { router.push("/dashboard/client"); return; }
+      if (prof?.role !== "admin" && data.user_id !== user.id) { router.push("/dashboard/client"); return; }
       setSite(data);
       const c = data.generated_content ?? {};
       if (!c.nosotros) c.nosotros = { titulo: "Quienes somos", descripcion: "Descripcion de la empresa", mision: "Nuestra mision", vision: "Nuestra vision" };

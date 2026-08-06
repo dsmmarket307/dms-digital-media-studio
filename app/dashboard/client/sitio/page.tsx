@@ -100,8 +100,8 @@ export default function MiSitio() {
                         Ver demo
                       </Link>
                     )}
-                    {puedeEditar && plan !== "basico" ? (
-                      <Link href={`/dashboard/admin/page-builder/${s.id}`} style={{ background: "#7c3aed", color: "#fff", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
+                    {puedeEditar ? (
+                      <Link href={plan === "basico" ? `/dashboard/client/editor/${s.id}` : plan === "profesional" ? `/dashboard/client/editor-empresarial/${s.id}` : `/dashboard/admin/page-builder/${s.id}`} style={{ background: "#7c3aed", color: "#fff", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
                         Editar
                       </Link>
                     ) : (
