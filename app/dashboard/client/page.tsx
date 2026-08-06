@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -57,9 +57,9 @@ export default function ClientDashboard() {
       if (prof?.role === "admin") { router.push("/dashboard/admin"); return; }
       setProfile(prof);
       const [{ data: proy }, { data: pags }, { data: l }, { data: r }, { data: sub }] = await Promise.all([
-        supabase.from("proyectos").select("*").eq("client_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("generated_websites").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("pagos").select("*").eq("client_id", user.id).order("created_at", { ascending: false }),
-        supabase.from("leads").select("*").eq("email", prof?.email).order("created_at", { ascending: false }),
+        supabase.from("leads").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("reservas").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("subscriptions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       ]);
@@ -108,7 +108,7 @@ export default function ClientDashboard() {
           { label: "Proyectos",    value: proyectos.length,                          color: "#7c3aed" },
           { label: "Reservas",     value: reservas.length,                           color: "#3B82F6" },
           { label: "Leads",        value: leads.length,                              color: "#F59E0B" },
-          { label: "Total pagado", value: `$${totalPagado.toLocaleString("es-CO")}`, color: "#10B981" },
+          { label: (suscripcion?.status === "trial" ? `Se cobrara $${(PLANES_PRECIOS[suscripcion.plan] ?? 0).toLocaleString("es-CO")} el ${suscripcion.trial_end ? new Date(suscripcion.trial_end).toLocaleDateString("es-CO") : "--"}` : "Total pagado"), value: (suscripcion?.status === "trial" ? "Prueba gratis" : `$${totalPagado.toLocaleString("es-CO")}`), color: "#10B981" },
         ].map(s => (
           <div key={s.label} style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "16px", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
             <p style={{ fontSize: "1.4rem", fontWeight: 800, color: s.color, margin: 0 }}>{s.value}</p>
@@ -160,13 +160,13 @@ export default function ClientDashboard() {
       </div>
 
       {suscripcion?.status === "trial" && (
-        <div style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: 16, padding: "1.25rem 1.5rem", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ background: Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000)) <= 3 ? "linear-gradient(135deg, #ef4444, #b91c1c)" : "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: 16, padding: "1.25rem 1.5rem", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div>
             <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase" as const, letterSpacing: 2, margin: "0 0 4px" }}>Prueba Gratuita</p>
             <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>{Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000))} dias restantes</h3>
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", margin: 0 }}>Estas disfrutando de acceso completo durante tu prueba gratuita. Explora todas las herramientas de DMS y elige tu plan cuando estes listo.</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", margin: 0 }}>{Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000)) <= 3 ? "Tu prueba gratuita esta por terminar. Confirma tu metodo de pago para no perder acceso a tu sitio." : "Estas disfrutando de acceso completo durante tu prueba gratuita. Explora todas las herramientas de DMS y elige tu plan cuando estes listo."}</p>
           </div>
-          <Link href="/dashboard/client/suscripcion" style={{ background: "#fff", color: "#d97706", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 800, textDecoration: "none", flexShrink: 0 }}>Activar Plan</Link>
+          <Link href="/dashboard/client/suscripcion" style={{ background: "#fff", color: Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000)) <= 3 ? "#b91c1c" : "#d97706", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 800, textDecoration: "none", flexShrink: 0 }}>{Math.max(0, Math.ceil((new Date(suscripcion.trial_end).getTime() - Date.now()) / 86400000)) <= 3 ? "Confirmar metodo de pago" : "Activar Plan"}</Link>
         </div>
       )}
       {planActivo === "basico" && (

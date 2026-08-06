@@ -46,6 +46,15 @@ export async function POST(req: NextRequest) {
         estado: "pendiente",
         user_id,
       });
+      await supabase.from("leads").insert({
+        nombre,
+        email: correo ?? null,
+        telefono: celular,
+        mensaje: fechaISO && horaISO ? `Reserva: ${fechaISO} a las ${horaISO}` : "Reserva desde el sitio web",
+        estado: "nuevo",
+        fuente: "reserva",
+        user_id,
+      });
     } else {
       const mensajeFinal = tipo === "cita" && fecha && hora
         ? `${mensaje ?? ""} | Cita: ${parseFecha(fecha)} a las ${parseHora(hora)}`
