@@ -5,6 +5,7 @@ import { Resend } from "resend";
 import { sendTelegramMessage } from "@/lib/telegram";
 
 const mp = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN! });
+const PLANES_PRECIOS: Record<string, number> = { basico: 49000, profesional: 99000, empresarial: 199000 };
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -54,6 +55,15 @@ async function procesarPago(paymentId: string) {
     if (site_id) {
       await supabase.from("generated_websites").update({ status: "published" }).eq("id", site_id);
     }
+
+    await supabase.from("pagos").insert({
+      client_id: user_id,
+      proyecto_id: site_id,
+      monto: PLANES_PRECIOS[plan] ?? 0,
+      estado: "pagado",
+      metodo: "mercadopago",
+      referencia: String(paymentId),
+    });
 
     sendTelegramMessage(
       "<b>" + (esRenovacion ? "Renovacion de plan" : "Nueva suscripcion") + "</b>\n" +
