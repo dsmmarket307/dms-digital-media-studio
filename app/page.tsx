@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import ChatbotDMS from "@/components/ChatbotDMS";
+import CookieBanner from "./demo/[id]/CookieBanner";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Link from "next/link";
@@ -623,6 +624,11 @@ export default function Home() {
           </div>
         </div>
       <ChatbotDMS />
+      <CookieBanner
+        texto="Este sitio web utiliza cookies propias y de terceros para mejorar tu experiencia de navegacion y analizar el trafico. Al continuar navegando, aceptas su uso."
+        linkPolitica="/politica-de-privacidad"
+        primaryColor="#7c3aed"
+      />
       </footer>
 
     </main>
