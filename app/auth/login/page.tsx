@@ -44,7 +44,7 @@ export default function Login() {
 
       <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
-      <div style={{ position: "absolute", top: 28, left: 32, zIndex: 2 }}>
+      <div style={{ position: "absolute", top: 28, right: 32, zIndex: 2 }}>
         <Image src="/logo-dms-white.png" alt="DMS Digital Media Studio" width={130} height={42} style={{ height: 36, width: "auto", objectFit: "contain" }} />
       </div>
 
