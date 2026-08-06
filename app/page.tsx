@@ -559,7 +559,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-14">
           <div className="grid md:grid-cols-4 gap-10">
             <div>
-              <Image src="/logo-dms-white.png" alt="DMS Digital Media Studio" width={140} height={45} style={{ marginBottom: 16 }} />
+              <Image src="/logo-dms-white.png" alt="DMS Digital Media Studio" width={140} height={45} style={{ marginBottom: 16, height: 45, width: "auto", maxWidth: 140, objectFit: "contain" }} />
               <p style={{ color: "#aaa", fontSize: 13, lineHeight: 1.7 }}>Desarrollo web, marketing digital, automatizacion e inteligencia artificial para empresas y emprendedores.</p>
               <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
                 {REDES.map(r => (
