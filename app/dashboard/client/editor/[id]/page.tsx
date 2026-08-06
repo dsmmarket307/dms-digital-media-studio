@@ -353,7 +353,7 @@ export default function EditorProfesional() {
           </div>
         </div>
 
-        <div style={{ flex: view === "desktop" ? 1 : "0 0 auto", width: view === "desktop" ? "auto" : `calc(${previewWidth} + 64px)`, minHeight: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
+        <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
           <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
