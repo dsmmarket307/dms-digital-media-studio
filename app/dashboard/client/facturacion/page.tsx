@@ -21,7 +21,7 @@ export default function Facturacion() {
       const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       const { data: sub } = await supabase.from("subscriptions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
       setSuscripcion(sub ?? null);
-      const { data } = await supabase.from("package_orders").select("*").eq("customer_email", prof?.email).order("created_at", { ascending: false });
+      const { data } = await supabase.from("pagos").select("*").eq("client_id", user.id).order("created_at", { ascending: false });
       setOrders(data ?? []);
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export default function Facturacion() {
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
           <thead>
             <tr style={{ background: "#f8f9fa", borderBottom: "1px solid #e5e7eb" }}>
-              {["Paquete", "Valor", "Estado", "ID Pago", "Fecha"].map(h => (
+              {["Metodo", "Valor", "Estado", "Referencia", "Fecha"].map(h => (
                 <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const }}>{h}</th>
               ))}
             </tr>
@@ -100,14 +100,14 @@ export default function Facturacion() {
           <tbody>
             {orders.map(o => (
               <tr key={o.id} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                <td style={{ padding: "10px 16px", fontWeight: 700, color: "#111" }}>{o.package_name}</td>
-                <td style={{ padding: "10px 16px", color: "#555" }}>${Number(o.price).toLocaleString("es-CO")}</td>
+                <td style={{ padding: "10px 16px", fontWeight: 700, color: "#111", textTransform: "capitalize" as const }}>{o.metodo ?? "---"}</td>
+                <td style={{ padding: "10px 16px", color: "#555" }}>${Number(o.monto).toLocaleString("es-CO")}</td>
                 <td style={{ padding: "10px 16px" }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: o.status === "approved" ? "#d1fae5" : "#fef3c7", color: o.status === "approved" ? "#10B981" : "#F59E0B" }}>
-                    {o.status === "approved" ? "Aprobado" : o.status}
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: o.estado === "pagado" ? "#d1fae5" : "#fef3c7", color: o.estado === "pagado" ? "#10B981" : "#F59E0B" }}>
+                    {o.estado === "pagado" ? "Pagado" : o.estado}
                   </span>
                 </td>
-                <td style={{ padding: "10px 16px", color: "#aaa", fontSize: 12 }}>{o.mercadopago_payment_id ?? "---"}</td>
+                <td style={{ padding: "10px 16px", color: "#aaa", fontSize: 12 }}>{o.referencia ?? "---"}</td>
                 <td style={{ padding: "10px 16px", color: "#888" }}>{new Date(o.created_at).toLocaleDateString("es-CO")}</td>
               </tr>
             ))}
