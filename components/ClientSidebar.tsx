@@ -68,6 +68,7 @@ export default function ClientSidebar() {
   const [profile, setProfile] = useState<any>(null);
   const [plan, setPlan] = useState<string>("");
   const [rutasPermitidas, setRutasPermitidas] = useState<string[]>(["/dashboard/client", "/dashboard/client/suscripcion"]);
+  const [cargandoPlan, setCargandoPlan] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md");
   const fontSizeMap = { sm: 11, md: 13, lg: 15 };
@@ -83,6 +84,7 @@ export default function ClientSidebar() {
       const planActivo = sub?.status === "active" ? sub.plan : sub?.status === "trial" ? "trial" : null;
       setPlan(planActivo ?? "");
       setRutasPermitidas(planActivo ? PLAN_ACCESO[planActivo] ?? [] : ["/dashboard/client", "/dashboard/client/suscripcion"]);
+      setCargandoPlan(false);
     }
     load();
   }, []);
@@ -103,7 +105,7 @@ export default function ClientSidebar() {
               <p key={idx} style={{ fontSize: 9, fontWeight: 800, color: "#aaa", textTransform: "uppercase" as const, letterSpacing: 2, padding: "14px 12px 4px", margin: 0 }}>{item.section}</p>
             );
           }
-          const permitido = rutasPermitidas.includes(item.href) || item.href === "/dashboard/client/centro-ayuda";
+          const permitido = cargandoPlan || rutasPermitidas.includes(item.href) || item.href === "/dashboard/client/centro-ayuda";
           const activo = pathname === item.href;
           if (permitido) {
             return (
