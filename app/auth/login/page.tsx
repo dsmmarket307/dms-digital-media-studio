@@ -25,6 +25,14 @@ export default function Login() {
     if (prof?.role === "admin") { router.push("/dashboard/admin"); } else { router.push("/dashboard/client"); }
   }
 
+  async function handleGoogleLogin() {
+    await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/auth/callback` } });
+  }
+
+  async function handleFacebookLogin() {
+    await supabase.auth.signInWithOAuth({ provider: "facebook", options: { redirectTo: `${window.location.origin}/auth/callback` } });
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 50%, #6d28d9 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", position: "relative", overflow: "hidden" }}>
       <style>{`
@@ -47,6 +55,23 @@ export default function Login() {
         <div style={{ background: "#fff", borderRadius: 24, padding: "2rem", boxShadow: "0 20px 60px rgba(0,0,0,0.25)" }}>
           <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#111", textAlign: "center", margin: 0, marginBottom: 6 }}>Bienvenido de nuevo</h2>
           <p style={{ fontSize: 13, color: "#64748b", textAlign: "center", marginBottom: 24, marginTop: 0 }}>Ingresa tus datos para iniciar sesion</p>
+
+          <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+            <button onClick={handleGoogleLogin} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "11px", borderRadius: 12, border: "1.5px solid #e2e8f0", background: "#fff", cursor: "pointer", fontSize: 14, fontWeight: 600, color: "#111" }}>
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.63h6.48c-.28 1.48-1.13 2.74-2.4 3.58v2.98h3.88c2.27-2.09 3.56-5.17 3.56-8.74z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.96-2.9l-3.88-2.98c-1.08.72-2.46 1.16-4.08 1.16-3.14 0-5.8-2.12-6.75-4.97H1.24v3.07C3.22 21.3 7.28 24 12 24z"/><path fill="#FBBC05" d="M5.25 14.31A7.16 7.16 0 0 1 4.86 12c0-.8.14-1.58.39-2.31V6.62H1.24A11.97 11.97 0 0 0 0 12c0 1.93.46 3.76 1.24 5.38l4.01-3.07z"/><path fill="#EA4335" d="M12 4.77c1.76 0 3.34.61 4.58 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0 7.28 0 3.22 2.7 1.24 6.62l4.01 3.07C6.2 6.84 8.86 4.77 12 4.77z"/></svg>
+              Google
+            </button>
+            <button onClick={handleFacebookLogin} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "11px", borderRadius: 12, border: "none", background: "#1877F2", cursor: "pointer", fontSize: 14, fontWeight: 600, color: "#fff" }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>
+              Facebook
+            </button>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+            <div style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
+            <span style={{ fontSize: 13, color: "#94a3b8" }}>o</span>
+            <div style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
+          </div>
 
           {error && <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#ef4444", marginBottom: 16 }}>{error}</div>}
 
