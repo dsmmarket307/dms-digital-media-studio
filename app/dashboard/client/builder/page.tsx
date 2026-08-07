@@ -158,7 +158,7 @@ export default function ClientBuilder() {
   }, []);
 
   const planActivo = suscripcion?.status === "active" ? (suscripcion.plan ?? "basico") : suscripcion?.status === "trial" ? "empresarial" : "basico";
-  const puedePublicar = suscripcion?.status === "active";
+  const puedePublicar = suscripcion?.status === "active" || suscripcion?.status === "trial";
   const rutasPermitidas = PLAN_ACCESO[planActivo] ?? ["/dashboard/client", "/dashboard/client/suscripcion"];
   const sections = planActivo === "empresarial" ? SECTIONS_EMPRESARIAL : planActivo === "profesional" ? SECTIONS_PROFESIONAL : SECTIONS_BASICO;
   const canAddRemove = planActivo === "profesional" || planActivo === "empresarial";
