@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useParams } from "next/navigation";
@@ -356,6 +356,13 @@ export default function EditorProfesional() {
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 8, padding: "6px 12px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", flexShrink: 0, alignSelf: "flex-start" }}>
+            <span style={{ fontSize: 11, color: "#888", fontWeight: 600 }}>Vista previa</span>
+            <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
+            <span style={{ fontSize: 11, color: "#555", fontWeight: 600 }}>{view === "desktop" ? "Escritorio" : view === "tablet" ? "Tableta" : "Movil"}</span>
+            <span style={{ fontSize: 11, color: "#aaa" }}>|</span>
+            {[100, 75, 50].map((z) => (<button key={z} onClick={() => setZoom(z)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 6, border: "none", cursor: "pointer", background: zoom === z ? "#111" : "#f0f0f0", color: zoom === z ? "#fff" : "#555" }}>{z}%</button>))}
+          </div>
           <div style={{ width: previewWidth, maxWidth: "100%", flexShrink: 0, background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize, zoom: `${zoom}%` } as any}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
