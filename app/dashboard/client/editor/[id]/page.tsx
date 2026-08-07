@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useParams } from "next/navigation";
@@ -256,6 +256,7 @@ export default function EditorProfesional() {
   const pr = primaryColor;
   const sc = secondaryColor;
   const previewWidth = view === "desktop" ? "100%" : view === "tablet" ? "768px" : "375px";
+  const [zoom, setZoom] = useState<number>(100);
   const sections = Object.keys(SECTION_LABELS);
   const categoria = site.website_type ?? "negocio";
 
@@ -288,6 +289,7 @@ export default function EditorProfesional() {
               </button>
             </div>
           )}
+          <div style={{ display: "flex", gap: 4 }}>{[100, 75, 50].map((z) => (<button key={z} onClick={() => setZoom(z)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 6, border: "none", cursor: "pointer", background: zoom === z ? "#111" : "#f0f0f0", color: zoom === z ? "#fff" : "#555" }}>{z}%</button>))}</div>
           <a href={`/demo/${id}/profesional`} target="_blank" style={{ background: "#f3f4f6", color: "#555", padding: "7px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Ver sitio</a>
           <button onClick={() => handleSave(false)} disabled={saving} style={{ background: saved ? "#10b981" : "#f3f4f6", color: saved ? "#fff" : "#555", border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
             {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
@@ -354,7 +356,7 @@ export default function EditorProfesional() {
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", background: "#e0e0e0", gap: 8 }}>
-          <div style={{ width: previewWidth, maxWidth: "100%", background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize }}>
+          <div style={{ width: previewWidth, maxWidth: "100%", flexShrink: 0, background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", transition: "width 0.3s", fontFamily: font, fontSize, zoom: `${zoom}%` } as any}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 {logoUrl && <img src={logoUrl} alt="logo" style={{ height: 36, objectFit: "contain" }} />}
