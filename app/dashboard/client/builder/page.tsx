@@ -133,7 +133,7 @@ export default function ClientBuilder() {
       setUserId(user.id);
       setUserEmail(user.email ?? "");
       const [{ data: sitio }, { data: sub }] = await Promise.all([
-        sitioIdParam ? supabase.from("generated_websites").select("*").eq("id", sitioIdParam).eq("user_id", user.id).maybeSingle() : supabase.from("generated_websites").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+        sitioIdParam ? supabase.from("generated_websites").select("*").eq("id", sitioIdParam).eq("user_id", user.id).maybeSingle() : Promise.resolve({ data: null }),
         supabase.from("subscriptions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       ]);
       if (sitio) {
