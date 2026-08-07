@@ -182,7 +182,7 @@ export default function SuscripcionPage() {
 
             {planActual && (
               <div style={{ background: "#fff", borderRadius: 16, padding: 24, border: "1px solid #e8e8e8", marginBottom: 16 }}>
-                <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 16 }}>Tu plan incluye</h2>
+                <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 16 }}>{suscripcion?.status === "trial" ? "Durante tu prueba gratuita tienes acceso a:" : "Tu plan incluye"}</h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {planActual.items.map(item => (
                     <div key={item} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "#555" }}>
