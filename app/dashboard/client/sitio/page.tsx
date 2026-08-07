@@ -43,6 +43,7 @@ export default function MiSitio() {
 
   const plan = suscripcion?.status === "trial" ? "empresarial" : (suscripcion?.plan ?? "basico");
   const puedeEditar = suscripcion?.status === "trial" || suscripcion?.status === "active";
+  const maxSitios = plan === "empresarial" ? 3 : 1;
 
   const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
     draft:     { label: "Borrador",   color: "#888",    bg: "#f3f4f6" },
@@ -58,9 +59,11 @@ export default function MiSitio() {
           <h1 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111", margin: 0 }}>Mi Sitio Web</h1>
           <p style={{ color: "#888", fontSize: 12, margin: "4px 0 0" }}>Administra tus sitios web generados</p>
         </div>
+        {sitios.length < maxSitios && (
         <Link href="/dashboard/client/builder" style={{ background: "#7c3aed", color: "#fff", padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
           + Crear nuevo sitio
         </Link>
+        )}
       </header>
 
       <div style={{ padding: "24px 16px", maxWidth: 1000, margin: "0 auto" }}>
@@ -90,7 +93,7 @@ export default function MiSitio() {
                 <div style={{ padding: 16 }}>
                   <p style={{ fontWeight: 800, fontSize: 14, color: "#111", marginBottom: 4 }}>{s.project_name}</p>
                   <p style={{ fontSize: 11, color: "#aaa", marginBottom: 14 }}>{s.website_type} — {new Date(s.created_at).toLocaleDateString("es-CO")}</p>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     {puedeEditar ? (
                       <Link href={`/demo/${s.id}`} target="_blank" style={{ background: "#f3f4f6", color: "#555", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
                         Ver demo
@@ -109,7 +112,10 @@ export default function MiSitio() {
                         Editar (PRO)
                       </Link>
                     )}
-                    <button onClick={() => handleEliminar(s.id)} style={{ gridColumn: "span 2", background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                    <Link href={`/dashboard/client/builder?id=${s.id}`} style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
+                      Editar con IA
+                    </Link>
+                    <button onClick={() => handleEliminar(s.id)} style={{ gridColumn: "span 3", background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                       Eliminar
                     </button>
                   </div>

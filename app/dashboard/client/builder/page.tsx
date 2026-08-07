@@ -1,7 +1,7 @@
 ﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -88,6 +88,8 @@ async function fetchPexels(query: string): Promise<string> {
 
 export default function ClientBuilder() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sitioIdParam = searchParams.get("id");
   const supabase = createClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
@@ -101,6 +103,7 @@ export default function ClientBuilder() {
   const [uploadingImg, setUploadingImg] = useState<string | null>(null);
   const [content, setContent] = useState<any>(null);
   const [miSitio, setMiSitio] = useState<any>(null);
+  const [misSitios, setMisSitios] = useState<any[]>([]);
   const [suscripcion, setSuscripcion] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState("");
@@ -130,7 +133,7 @@ export default function ClientBuilder() {
       setUserId(user.id);
       setUserEmail(user.email ?? "");
       const [{ data: sitio }, { data: sub }] = await Promise.all([
-        supabase.from("generated_websites").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+        sitioIdParam ? supabase.from("generated_websites").select("*").eq("id", sitioIdParam).eq("user_id", user.id).maybeSingle() : supabase.from("generated_websites").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
         supabase.from("subscriptions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       ]);
       if (sitio) {
@@ -152,6 +155,8 @@ export default function ClientBuilder() {
       setSuscripcion(sub ?? null);
       const { data: archivos } = await supabase.from("archivos").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
       setImagenes(archivos ?? []);
+      const { data: sitios } = await supabase.from("generated_websites").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
+      setMisSitios(sitios ?? []);
       setLoading(false);
     }
     check();
@@ -163,6 +168,8 @@ export default function ClientBuilder() {
   const sections = planActivo === "empresarial" ? SECTIONS_EMPRESARIAL : planActivo === "profesional" ? SECTIONS_PROFESIONAL : SECTIONS_BASICO;
   const canAddRemove = planActivo === "profesional" || planActivo === "empresarial";
   const canChangeTipo = planActivo === "basico" || planActivo === "profesional" || planActivo === "empresarial";
+  const maxSitios = planActivo === "empresarial" ? 3 : 1;
+  const limiteAlcanzado = misSitios.length >= maxSitios;
   const pr = primaryColor;
   const previewWidth = view === "desktop" ? "100%" : view === "tablet" ? "768px" : "375px";
   const [zoom, setZoom] = useState<number>(100);
@@ -439,10 +446,17 @@ export default function ClientBuilder() {
               <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e5e7eb", padding:20 }}>
                 <h2 style={{ fontSize:14, fontWeight:800, color:"#111", marginBottom:6 }}>Describe tu negocio</h2>
                 <p style={{ fontSize:12, color:"#aaa", marginBottom:12 }}>Cuentanos sobre tus servicios, productos y lo que te hace especial.</p>
+                {limiteAlcanzado ? (
+                  <div style={{ background:"#fef2f2", border:"1px solid #fecaca", borderRadius:10, padding:16, textAlign:"center" }}>
+                    <p style={{ fontSize:13, fontWeight:700, color:"#991b1b", margin:"0 0 4px" }}>Ya alcanzaste el limite de {maxSitios} sitio{maxSitios > 1 ? "s" : ""} de tu plan</p>
+                    <p style={{ fontSize:12, color:"#b91c1c", margin:0 }}>Elimina un sitio existente o actualiza tu plan para crear mas.</p>
+                  </div>
+                ) : (<>
                 <textarea value={form.prompt} onChange={e => setForm({ ...form, prompt: e.target.value })} rows={6} placeholder="Ej: Tengo un restaurante de comida italiana en Pereira. Ofrecemos pizza, pasta y postres. Horario: lunes a domingo 12pm-10pm. WhatsApp: 3001234567" style={{ width:"100%", border:"1px solid #e5e7eb", borderRadius:8, padding:"10px 12px", fontSize:13, outline:"none", resize:"none", boxSizing:"border-box" as const }} />
                 <button onClick={handleGenerate} disabled={generating || !form.prompt || !form.project_name} style={{ width:"100%", marginTop:12, padding:"12px", borderRadius:10, background:pr, color:"#fff", fontSize:13, fontWeight:700, border:"none", cursor:"pointer", opacity: generating || !form.prompt || !form.project_name ? 0.5 : 1 }}>
                   {generating ? "Generando tu sitio..." : "Generar Mi Sitio con IA"}
                 </button>
+                </>)}
               </div>
             </div>
 
