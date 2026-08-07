@@ -376,7 +376,13 @@ export default function ClientBuilder() {
               <h1 style={{ fontSize:"1.1rem", fontWeight:800, color:"#111", margin:0 }}>Generar Mi Sitio Web</h1>
               <p style={{ color:"#888", fontSize:12, margin:"2px 0 0" }}>Describe tu negocio y la IA crea tu sitio profesional</p>
             </div>
-            {editando && <button onClick={() => setEditando(false)} style={{ fontSize:12, color:"#888", border:"1px solid #e5e7eb", background:"#fff", padding:"6px 14px", borderRadius:8, cursor:"pointer" }}>Cancelar</button>}
+            <div style={{ display:"flex", gap:8 }}>
+              <Link href="/dashboard/client/sitio" style={{ fontSize:12, color:"#555", border:"1px solid #e5e7eb", background:"#fff", padding:"6px 14px", borderRadius:8, cursor:"pointer", textDecoration:"none", display:"flex", alignItems:"center", gap:6 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Volver
+              </Link>
+              {editando && <button onClick={() => setEditando(false)} style={{ fontSize:12, color:"#888", border:"1px solid #e5e7eb", background:"#fff", padding:"6px 14px", borderRadius:8, cursor:"pointer" }}>Cancelar</button>}
+            </div>
           </header>
 
           <main style={{ flex:1, padding:"24px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:24, maxWidth:1100, margin:"0 auto", width:"100%" }}>
