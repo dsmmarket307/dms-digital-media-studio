@@ -113,7 +113,7 @@ export default function MiSitio() {
                       </Link>
                     )}
                     <Link href={`/dashboard/client/builder?id=${s.id}`} style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
-                      Editar con IA
+                      Regenerar
                     </Link>
                     <button onClick={() => handleEliminar(s.id)} style={{ gridColumn: "span 3", background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                       Eliminar
