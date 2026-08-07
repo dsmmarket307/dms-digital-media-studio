@@ -225,12 +225,12 @@ export default function SuscripcionPage() {
                   <p style={{ fontWeight: 800, fontSize: 15, color: "#111", marginBottom: 4 }}>{p.name}</p>
                   <p style={{ fontSize: 20, fontWeight: 800, color: "#7c3aed", marginBottom: 4 }}>${p.price.toLocaleString("es-CO")}</p>
                   <p style={{ fontSize: 11, color: "#888", marginBottom: 14 }}>COP / mes</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16, flex: 1 }}>
                     {p.items.map(item => (
                       <p key={item} style={{ fontSize: 12, color: "#555", margin: 0 }}>— {item}</p>
                     ))}
                   </div>
-                  <button onClick={() => handleSuscribir(p.slug)} disabled={suscribiendo === p.slug} style={{ display: "block", width: "100%", textAlign: "center", background: p.slug === "profesional" ? "#7c3aed" : "#111", color: "#fff", padding: "9px", borderRadius: 9, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", opacity: suscribiendo === p.slug ? 0.6 : 1 }}>
+                  <button onClick={() => handleSuscribir(p.slug)} disabled={suscribiendo === p.slug} style={{ display: "block", width: "100%", textAlign: "center", background: p.slug === "profesional" ? "#7c3aed" : "#111", color: "#fff", padding: "9px", borderRadius: 9, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", opacity: suscribiendo === p.slug ? 0.6 : 1, marginTop: "auto" }}>
                     {suscribiendo === p.slug ? "Redirigiendo..." : "Suscribirme"}
                   </button>
                 </div>
