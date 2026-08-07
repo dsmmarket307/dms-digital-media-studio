@@ -48,8 +48,8 @@ export default function Automatizaciones() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
       const { data: prof } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-      const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
-      if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
+      const { data: sub } = await supabase.from("subscriptions").select("plan, status").eq("user_id", user.id).maybeSingle();
+      if (sub?.plan !== "empresarial" && sub?.status !== "trial") { router.push("/dashboard/client"); return; }
       const { data } = await supabase.from("automatizaciones").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
       setAutomatizaciones(data ?? []);
       setLoading(false);

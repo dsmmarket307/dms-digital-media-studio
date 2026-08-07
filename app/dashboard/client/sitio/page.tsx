@@ -41,7 +41,7 @@ export default function MiSitio() {
     </div>
   );
 
-  const plan = suscripcion?.plan ?? "basico";
+  const plan = suscripcion?.status === "trial" ? "empresarial" : (suscripcion?.plan ?? "basico");
   const puedeEditar = suscripcion?.status === "trial" || suscripcion?.status === "active";
 
   const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {

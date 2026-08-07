@@ -89,8 +89,8 @@ export default function CRMCliente() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
-      const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
-      if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
+      const { data: sub } = await supabase.from("subscriptions").select("plan, status").eq("user_id", user.id).maybeSingle();
+      if (sub?.plan !== "empresarial" && sub?.status !== "trial") { router.push("/dashboard/client"); return; }
       const { data: l } = await supabase.from("leads").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
       const { data: p } = await supabase.from("crm_pipeline").select("*").eq("user_id", user.id);
       const pipelineMap: Record<number, string> = {};

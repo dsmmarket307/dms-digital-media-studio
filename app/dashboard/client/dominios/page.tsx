@@ -59,8 +59,8 @@ export default function Dominios() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/auth/login"); return; }
       setUserId(user.id);
-      const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
-      setPlan(sub?.plan ?? "basico");
+      const { data: sub } = await supabase.from("subscriptions").select("plan, status").eq("user_id", user.id).maybeSingle();
+      setPlan(sub?.status === "trial" ? "empresarial" : (sub?.plan ?? "basico"));
       const { data: s } = await supabase.from("generated_websites").select("id, project_name").eq("user_id", user.id);
       setSites(s ?? []);
       const { data: d } = await supabase.from("domains").select("*, generated_websites(project_name)").eq("user_id", user.id).order("created_at", { ascending: false });
