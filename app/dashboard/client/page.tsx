@@ -137,6 +137,7 @@ export default function ClientDashboard() {
               <p style={{ fontSize: 11, color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 4 }}>Plan</p>
               <p style={{ fontSize: 15, fontWeight: 800, color: "#111", textTransform: "capitalize" }}>{suscripcion.plan}</p>
               <p style={{ fontSize: 12, color: "#888" }}>${(PLANES_PRECIOS[suscripcion.plan] ?? 0).toLocaleString("es-CO")}/mes</p>
+              {suscripcion?.status === "trial" && (<p style={{ fontSize: 11, color: "#7c3aed", marginTop: 2 }}>Precio al finalizar tu prueba gratuita</p>)}
             </div>
             <div>
               <p style={{ fontSize: 11, color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 4 }}>Estado</p>
