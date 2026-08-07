@@ -30,6 +30,16 @@ export default function Register() {
     if (err) { setError(err.message); setLoading(false); return; }
     if (data.user) {
       await supabase.from("profiles").upsert({ id: data.user.id, name: `${nombre} ${apellido}`, email, phone: telefono, role: "client" });
+      const trialEnd = new Date();
+      trialEnd.setDate(trialEnd.getDate() + 7);
+      await supabase.from("subscriptions").upsert({
+        user_id: data.user.id,
+        plan: "empresarial",
+        status: "trial",
+        trial_end: trialEnd.toISOString(),
+        current_period_start: new Date().toISOString(),
+        current_period_end: trialEnd.toISOString(),
+      }, { onConflict: "user_id" });
     }
     router.push("/dashboard/client");
   }
