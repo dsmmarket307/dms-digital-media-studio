@@ -644,7 +644,7 @@ export default function ClientBuilder() {
           </div>
         </div>
 
-        <div style={{ width:290, background:"#fff", borderLeft:"1px solid #e5e7eb", overflow:"auto", flexShrink:0 }}>
+        <div style={{ width: view === "desktop" ? 400 : "auto", flex: view === "desktop" ? "0 0 auto" : 1, background:"#fff", borderLeft:"1px solid #e5e7eb", overflow:"auto", flexShrink:0 }}>
           <div style={{ padding:"12px 14px 8px", borderBottom:"1px solid #f0f0f0", position:"sticky", top:0, background:"#fff", zIndex:5 }}>
             <p style={{ fontSize:13, fontWeight:800, color:"#111", margin:0 }}>{SECTION_LABELS[selectedSection]}</p>
           </div>
