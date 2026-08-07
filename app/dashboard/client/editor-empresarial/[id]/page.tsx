@@ -542,7 +542,7 @@ export default function PageBuilderEditor() {
         </div>
 
         {/* PANEL DERECHO */}
-        <div style={{ width: 290, background: "#fff", borderLeft: "1px solid #e5e7eb", overflow: "auto", flexShrink: 0 }}>
+        <div style={{ width: view === "desktop" ? 290 : 420, background: "#fff", borderLeft: "1px solid #e5e7eb", overflow: "auto", flexShrink: 0, transition: "width 0.3s" }}>
           <div style={{ padding: "14px 16px 8px", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, background: "#fff", zIndex: 5 }}>
             <p style={{ fontSize: 13, fontWeight: 800, color: "#111", margin: 0 }}>{SECTION_LABELS[selectedSection]}</p>
           </div>
