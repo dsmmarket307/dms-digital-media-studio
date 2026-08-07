@@ -91,7 +91,7 @@ export default function CRMCliente() {
       if (!user) { router.push("/auth/login"); return; }
       const { data: sub } = await supabase.from("subscriptions").select("plan").eq("user_id", user.id).maybeSingle();
       if (sub?.plan !== "empresarial") { router.push("/dashboard/client"); return; }
-      const { data: l } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
+      const { data: l } = await supabase.from("leads").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
       const { data: p } = await supabase.from("crm_pipeline").select("*").eq("user_id", user.id);
       const pipelineMap: Record<number, string> = {};
       (p ?? []).forEach((item: any) => { pipelineMap[item.lead_id] = item.columna; });
@@ -121,7 +121,7 @@ export default function CRMCliente() {
     setAddingLead(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const { data } = await supabase.from("leads").insert({ nombre: newLead.nombre, email: newLead.email, telefono: newLead.telefono, empresa: newLead.empresa, mensaje: newLead.mensaje, estado: "nuevo", fuente: "manual" }).select().single();
+    const { data } = await supabase.from("leads").insert({ nombre: newLead.nombre, email: newLead.email, telefono: newLead.telefono, empresa: newLead.empresa, mensaje: newLead.mensaje, estado: "nuevo", fuente: "manual", user_id: user.id }).select().single();
     if (data) { setLeads(prev => [data, ...prev]); setPipeline(prev => ({ ...prev, [data.id]: "nuevo" })); }
     setNewLead({ nombre: "", email: "", telefono: "", empresa: "", valor: "", mensaje: "" });
     setShowModal(false);
