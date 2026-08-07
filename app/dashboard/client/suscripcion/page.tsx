@@ -154,6 +154,7 @@ export default function SuscripcionPage() {
                   <p style={{ fontSize: 11, color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 6 }}>Plan</p>
                   <p style={{ fontSize: 16, fontWeight: 800, color: "#111", textTransform: "capitalize" }}>{suscripcion.plan}</p>
                   <p style={{ fontSize: 12, color: "#888" }}>${(planActual?.price ?? 0).toLocaleString("es-CO")}/mes</p>
+                  {suscripcion?.status === "trial" && (<p style={{ fontSize: 11, color: "#7c3aed", marginTop: 2 }}>Precio al finalizar tu prueba gratuita</p>)}
                 </div>
                 {suscripcion.current_period_end && (
                   <div style={{ background: "#f8f8f8", borderRadius: 12, padding: 16 }}>
@@ -218,7 +219,7 @@ export default function SuscripcionPage() {
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", marginBottom: 16 }}>Planes disponibles</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14, maxWidth: 700 }}>
               {PLANES.filter(p => { if (suscripcion?.status === "active" && suscripcion?.plan === "basico") return p.slug !== "basico"; if (suscripcion?.status === "active" && suscripcion?.plan === "profesional") return p.slug === "empresarial"; return true; }).map(p => (
-                <div key={p.slug} style={{ background: "#fff", borderRadius: 16, padding: 20, border: p.slug === "profesional" ? "2px solid #7c3aed" : "1px solid #e8e8e8", position: "relative" }}>
+                <div key={p.slug} style={{ background: "#fff", borderRadius: 16, padding: 20, border: p.slug === "profesional" ? "2px solid #7c3aed" : "1px solid #e8e8e8", position: "relative", display: "flex", flexDirection: "column", height: "100%" }}>
                   {p.slug === "profesional" && (
                     <span style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#7c3aed", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 10px", borderRadius: 999 }}>MAS POPULAR</span>
                   )}
