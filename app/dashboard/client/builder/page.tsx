@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -448,7 +448,7 @@ export default function ClientBuilder() {
 
             <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e5e7eb", overflow:"hidden", position:"sticky", top:20, maxHeight:"calc(100vh - 120px)", display:"flex", flexDirection:"column" }}>
               <div style={{ padding:"12px 16px", borderBottom:"1px solid #f0f0f0", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                <div style={{ display:"flex", alignItems:"center", gap:10 }}><h2 style={{ fontSize:12, fontWeight:800, color:"#555", margin:0 }}>Vista previa</h2><div style={{ display:"flex", gap:4 }}>{[100, 75, 50].map((z) => (<button key={z} onClick={() => setZoom(z)} style={{ fontSize:11, fontWeight:600, padding:"3px 8px", borderRadius:6, border:"none", cursor:"pointer", background: zoom === z ? "#111" : "#f0f0f0", color: zoom === z ? "#fff" : "#555" }}>{z}%</button>))}</div></div>
+                <h2 style={{ fontSize:12, fontWeight:800, color:"#555", margin:0 }}>Vista previa</h2>
                 {content && <button onClick={() => handleSave(false)} disabled={saving} style={{ fontSize:12, padding:"6px 14px", borderRadius:8, background:saved ? "#10b981" : pr, color:"#fff", border:"none", cursor:"pointer", fontWeight:700 }}>{saving ? "Guardando..." : saved ? "Guardado" : "Guardar sitio"}</button>}
               </div>
               {!content && !generating && (
@@ -575,6 +575,12 @@ export default function ClientBuilder() {
         </div>
 
         <div style={{ flex:1, overflowY:"auto", display:"flex", flexDirection:"column", alignItems:"center", padding:"16px", background:"#e0e0e0", gap:8 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:8, background:"#fff", borderRadius:8, padding:"6px 12px", boxShadow:"0 1px 4px rgba(0,0,0,0.08)", flexShrink:0, alignSelf:"flex-start" }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span style={{ fontSize:11, color:"#888", fontWeight:600 }}>Vista previa</span>
+            <span style={{ fontSize:11, color:"#aaa" }}>|</span>
+            {[100, 75, 50].map((z) => (<button key={z} onClick={() => setZoom(z)} style={{ fontSize:11, fontWeight:600, padding:"3px 8px", borderRadius:6, border:"none", cursor:"pointer", background: zoom === z ? "#111" : "#f0f0f0", color: zoom === z ? "#fff" : "#555" }}>{z}%</button>))}
+          </div>
           <div style={{ width:previewWidth, maxWidth:"100%", background:"#fff", borderRadius:12, boxShadow:"0 4px 24px rgba(0,0,0,0.12)", transition:"width 0.3s", zoom:`${zoom}%` } as any}>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 18px", background:"#fff", borderBottom:"1px solid #f0f0f0" }}>
               <div style={{ display:"flex", alignItems:"center", gap:8 }}>
