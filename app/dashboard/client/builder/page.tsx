@@ -90,6 +90,7 @@ export default function ClientBuilder() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sitioIdParam = searchParams.get("id");
+  const forzarRegenerar = searchParams.get("regenerar") === "1";
   const supabase = createClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
@@ -361,7 +362,7 @@ export default function ClientBuilder() {
     </div>
   );
 
-  if (!miSitio || editando) {
+  if (!miSitio || editando || forzarRegenerar) {
     return (
       <div style={{ minHeight:"100vh", background:"#f8f9fa", display:"flex" }}>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
