@@ -24,7 +24,7 @@ function TutorialCard({ t, onClick }: { t: any; onClick: () => void }) {
       <div style={{ padding:"12px 14px" }}>
         <span style={{ fontSize:10, fontWeight:700, color:"#7c3aed", background:"rgba(124,58,237,0.08)", padding:"2px 8px", borderRadius:999 }}>{t.categoria}</span>
         <p style={{ fontWeight:700, color:"#111", fontSize:13, margin:"8px 0 4px" }}>{t.titulo}</p>
-        <p style={{ fontSize:12, color:"#888", margin:0, overflow:"hidden", textOverflow:"ellipsis", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" as const }}>{t.descripcion}</p>
+        <p style={{ fontSize:12, color:"#888", margin:0, overflow:"hidden", textOverflow:"ellipsis", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" as const, whiteSpace:"pre-line" as const }}>{t.descripcion}</p>
       </div>
     </div>
   );
@@ -72,7 +72,7 @@ export default function CentroAyuda() {
           <span style={{ fontSize:11, fontWeight:700, color:"#7c3aed", background:"rgba(124,58,237,0.08)", padding:"3px 10px", borderRadius:999 }}>{selected.categoria}</span>
         </div>
         <h1 style={{ fontSize:"1.4rem", fontWeight:800, color:"#111", margin:"10px 0 6px" }}>{selected.titulo}</h1>
-        <p style={{ color:"#888", fontSize:13, marginBottom:16 }}>{selected.descripcion}</p>
+        <p style={{ color:"#888", fontSize:13, marginBottom:16, whiteSpace:"pre-line" as const, lineHeight:1.6 }}>{selected.descripcion}</p>
         {selected.video_url && (
           <div style={{ position:"relative", paddingBottom:"56.25%", borderRadius:12, overflow:"hidden", marginBottom:20, background:"#000" }}>
             <iframe src={getYoutubeEmbed(selected.video_url)} style={{ position:"absolute", inset:0, width:"100%", height:"100%", border:"none" }} allowFullScreen />
