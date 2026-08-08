@@ -730,13 +730,51 @@ export default function Home() {
             <button onClick={() => setPopupVisible(false)} style={{ position: "absolute", top: -12, right: -12, width: 32, height: 32, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            {lc.popup_promo?.imagen && (
-              lc.popup_promo?.link ? (
-                <a href={lc.popup_promo.link} target="_blank" rel="noopener noreferrer">
-                  <img src={lc.popup_promo.imagen} alt="Promocion" style={{ width: "100%", borderRadius: 10, display: "block" }} />
+            {lc.popup_promo?.tipo === "estructurado" ? (
+              <div style={{ textAlign: "center", padding: "8px 4px" }}>
+                {lc.popup_promo?.badge && (
+                  <span style={{ display: "inline-block", background: "#fef3c7", color: "#d97706", fontSize: 11, fontWeight: 800, padding: "5px 14px", borderRadius: 999, marginBottom: 14 }}>{lc.popup_promo.badge}</span>
+                )}
+                {lc.popup_promo?.plan_nombre && (
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#7c3aed", margin: "0 0 6px", textTransform: "uppercase" as const, letterSpacing: 1 }}>{lc.popup_promo.plan_nombre}</p>
+                )}
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 10, marginBottom: 4 }}>
+                  {lc.popup_promo?.precio_original && (
+                    <span style={{ fontSize: 16, color: "#aaa", textDecoration: "line-through" }}>{lc.popup_promo.precio_original}</span>
+                  )}
+                  {lc.popup_promo?.precio_oferta && (
+                    <span style={{ fontSize: 32, fontWeight: 900, color: "#111" }}>{lc.popup_promo.precio_oferta}</span>
+                  )}
+                </div>
+                {lc.popup_promo?.precio_periodo && (
+                  <p style={{ fontSize: 12, color: "#888", margin: "0 0 18px" }}>{lc.popup_promo.precio_periodo}</p>
+                )}
+                {(lc.popup_promo?.beneficios ?? []).filter((b: string) => b).length > 0 && (
+                  <div style={{ textAlign: "left", background: "#f8f9fa", borderRadius: 10, padding: "12px 16px", marginBottom: 18 }}>
+                    {(lc.popup_promo?.beneficios ?? []).filter((b: string) => b).map((b: string, i: number) => (
+                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="3" style={{ flexShrink: 0 }}><polyline points="20 6 9 17 4 12"/></svg>
+                        <span style={{ fontSize: 13, color: "#333" }}>{b}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <a href={lc.popup_promo?.link || "/planes"} style={{ display: "block", background: "#7c3aed", color: "#fff", padding: "13px", borderRadius: 10, fontWeight: 800, fontSize: 14, textDecoration: "none", marginBottom: 10 }}>
+                  {lc.popup_promo?.boton_texto || "Activar oferta ahora"}
                 </a>
-              ) : (
-                <img src={lc.popup_promo.imagen} alt="Promocion" style={{ width: "100%", borderRadius: 10, display: "block" }} />
+                {lc.popup_promo?.vigencia && (
+                  <p style={{ fontSize: 11, color: "#aaa", margin: 0 }}>{lc.popup_promo.vigencia}</p>
+                )}
+              </div>
+            ) : (
+              lc.popup_promo?.imagen && (
+                lc.popup_promo?.link ? (
+                  <a href={lc.popup_promo.link} target="_blank" rel="noopener noreferrer">
+                    <img src={lc.popup_promo.imagen} alt="Promocion" style={{ width: "100%", borderRadius: 10, display: "block" }} />
+                  </a>
+                ) : (
+                  <img src={lc.popup_promo.imagen} alt="Promocion" style={{ width: "100%", borderRadius: 10, display: "block" }} />
+                )
               )
             )}
           </div>
