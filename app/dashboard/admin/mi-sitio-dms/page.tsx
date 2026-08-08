@@ -15,6 +15,7 @@ const SECTION_LABELS: Record<string, string> = {
   faq: "FAQ",
   contacto: "Contacto",
   footer: "Footer",
+  popup_promo: "Popup Promocional",
 };
 
 const SECTIONS = Object.keys(SECTION_LABELS);
@@ -106,6 +107,7 @@ const DEFAULT_LANDING: any = {
     telefono: "+57 315 565 4948",
     ciudad: "Pereira, Colombia",
   },
+  popup_promo: { activo: false, imagen: "", link: "" },
 };
 
 function Field({ label, value, onChange, multiline = false }: { label: string; value: string; onChange: (v: string) => void; multiline?: boolean }) {
@@ -494,6 +496,23 @@ export default function MiSitioDMS() {
               </div>
             )}
 
+            {selectedSection === "popup_promo" && (
+              <div style={{ padding: "36px 20px", textAlign: "center", background: "#fafafa" }}>
+                <p style={{ fontSize: 11, color: "#888", marginBottom: 16 }}>Vista previa del popup (solo referencia, no aparece asi en el flujo normal):</p>
+                {lc.popup_promo?.activo ? (
+                  <div style={{ display: "inline-block", background: "#fff", borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.2)", padding: 16, maxWidth: 260 }}>
+                    {lc.popup_promo?.imagen ? (
+                      <img src={lc.popup_promo.imagen} alt="popup" style={{ width: "100%", borderRadius: 8 }} />
+                    ) : (
+                      <div style={{ width: "100%", height: 140, background: "#eee", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa", fontSize: 12 }}>Sin imagen</div>
+                    )}
+                  </div>
+                ) : (
+                  <p style={{ color: "#aaa", fontSize: 13 }}>Popup desactivado</p>
+                )}
+              </div>
+            )}
+
           </div>
         </div>
 
@@ -607,6 +626,31 @@ export default function MiSitioDMS() {
             <Field label="Email" value={lc.footer.email} onChange={v => updateField("footer", "email", v)} />
             <Field label="Telefono" value={lc.footer.telefono} onChange={v => updateField("footer", "telefono", v)} />
             <Field label="Ciudad" value={lc.footer.ciudad} onChange={v => updateField("footer", "ciudad", v)} />
+          </>)}
+
+          {selectedSection === "popup_promo" && (<>
+            <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Popup promocional que aparece al cargar la pagina. Ideal para promociones o anuncios destacados.</p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Mostrar popup promocional</span>
+              <button onClick={() => updateField("popup_promo", "activo", !lc.popup_promo?.activo)} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: lc.popup_promo?.activo ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                <span style={{ position: "absolute", top: 2, left: lc.popup_promo?.activo ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+              </button>
+            </div>
+            {lc.popup_promo?.imagen && <img src={lc.popup_promo.imagen} alt="popup" style={{ width: "100%", maxWidth: 200, borderRadius: 8, marginBottom: 8 }} />}
+            <label style={{ display: "block", width: "100%", textAlign: "center", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginBottom: 14 }}>
+              {uploadingIdx === -99 ? "Subiendo..." : lc.popup_promo?.imagen ? "Cambiar imagen" : "Subir imagen"}
+              <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+                const f = e.target.files?.[0]; if (!f) return;
+                setUploadingIdx(-99);
+                const ext = f.name.split(".").pop();
+                const fileName = `popup-${Date.now()}.${ext}`;
+                await supabase.storage.from("logos").upload(fileName, f, { upsert: true });
+                const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+                updateField("popup_promo", "imagen", data.publicUrl);
+                setUploadingIdx(null);
+              }} />
+            </label>
+            <Field label="Link al hacer click (opcional)" value={lc.popup_promo?.link ?? ""} onChange={v => updateField("popup_promo", "link", v)} />
           </>)}
         </div>
       </div>
