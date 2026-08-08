@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -36,6 +36,7 @@ const navItems = [
   { href: "/dashboard/admin/finanzas",     label: "Finanzas",            icon: "finanzas"     },
   { href: "/dashboard/admin/inteligencia", label: "Centro Inteligencia", icon: "inteligencia" },
   { href: "/dashboard/admin/page-builder", label: "Page Builder", icon: "aibuilder" },
+  { href: "/dashboard/admin/mi-sitio-dms", label: "Mi Sitio DMS", icon: "aibuilder" },
   { href: "/dashboard/admin/pedidos", label: "Pedidos", icon: "pedidos" },
   { href: "/dashboard/admin/meta", label: "Meta Pixel", icon: "metapixel" },
   { href: "/dashboard/admin/visitas", label: "Visitas en vivo", icon: "visitas" },
@@ -45,7 +46,7 @@ export default function DashboardNav({ name, email }: { name: string; email: str
   const [open, setOpen] = useState(false)
   const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md")
   const pathname = usePathname()
-  if (pathname.includes("page-builder")) return null
+  if (pathname.includes("page-builder") || pathname.includes("mi-sitio-dms")) return null
   const router = useRouter()
   const supabase = createClient()
 

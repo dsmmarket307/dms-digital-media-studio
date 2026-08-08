@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   const email = user.email ?? ''
   const headersList = await headers()
   const pathname = headersList.get('x-pathname') ?? headersList.get('referer') ?? ''
-  const isPageBuilder = pathname.includes('page-builder')
+  const isPageBuilder = pathname.includes('page-builder') || pathname.includes('mi-sitio-dms')
 
   if (isAdmin) {
     if (isPageBuilder) {
