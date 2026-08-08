@@ -103,6 +103,60 @@ const STAT_ICONS = [
   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
 ];
 
+const DEFAULT_LANDING = {
+  carrusel: { imagenes: ["/carousel-1.png", "/carousel-2.png", "/carousel-3.png", "/carousel-4.png"] },
+  hero: {
+    titulo: "Tu negocio digital completo en",
+    titulo_resaltado: "minutos",
+    subtitulo: "Crea tu pagina web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma, con soporte real de nuestro equipo en Colombia.",
+    boton_principal: "Crear mi negocio digital",
+    boton_secundario: "Ver como funciona",
+    video_url: "/sitio-demo.mp4",
+  },
+  servicios: {
+    badge: "SOPORTE LOCAL EN PEREIRA, COLOMBIA",
+    titulo: "Todo lo que necesitas para crecer online",
+    subtitulo: "Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma, con atencion cercana y en espanol de nuestro equipo colombiano.",
+  },
+  como_funciona: {
+    titulo: "Como funciona DMS",
+    subtitulo: "Pon tu negocio online y comienza a captar clientes en pocos pasos.",
+    boton: "Comenzar ahora",
+  },
+  estadisticas: {
+    titulo: "Resultados que hablan por nosotros",
+    subtitulo: "Empresas y emprendedores que ya confian en DMS Digital Media Studio",
+  },
+  portafolio: {
+    badge: "GENERADO CON IA",
+    titulo: "Sitios web generados con IA",
+    subtitulo: "Explora ejemplos de sitios creados con IA y listos para impulsar negocios reales.",
+    boton: "Ver portafolio completo",
+  },
+  planes: {
+    titulo: "Planes para tu negocio",
+    subtitulo: "Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.",
+  },
+  testimonios: {
+    titulo: "Lo que dicen nuestros clientes",
+    subtitulo: "Resultados reales de negocios que confiaron en nosotros.",
+  },
+  faq: {
+    titulo: "Preguntas frecuentes",
+    subtitulo: "Todo lo que necesitas saber antes de empezar.",
+  },
+  contacto: {
+    titulo: "Tienes dudas? Hablemos",
+    subtitulo: "Escribenos y te ayudamos a elegir el plan ideal para tu negocio en menos de 24 horas.",
+  },
+  footer: {
+    descripcion: "Desarrollo web, marketing digital, automatizacion e inteligencia artificial para empresas y emprendedores.",
+    email: "contacto@dmsdigitalstudio.com",
+    telefono: "+57 315 565 4948",
+    ciudad: "Pereira, Colombia",
+  },
+};
+
 function useCountUp(target: number, duration: number, start: boolean) {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -157,6 +211,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [statsVisible, setStatsVisible] = useState(false);
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
+  const [lc, setLc] = useState<any>(DEFAULT_LANDING);
 
   const [testiPaused, setTestiPaused] = useState(false);
   const testiViewportRef = useRef<HTMLDivElement>(null);
@@ -196,7 +251,7 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+      setCurrent((prev) => (prev + 1) % (lc.carrusel?.imagenes ?? CAROUSEL_IMAGES).length);
     }, 3500);
     return () => clearInterval(interval);
   }, []);
@@ -209,6 +264,16 @@ export default function Home() {
     const el = document.getElementById("estadisticas");
     if (el) observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    async function loadLanding() {
+      const { data } = await supabase.from("dms_landing_config").select("content").eq("id", 1).maybeSingle();
+      if (data?.content && Object.keys(data.content).length > 0) {
+        setLc((prev: any) => ({ ...prev, ...data.content }));
+      }
+    }
+    loadLanding();
   }, []);
 
   async function enviarFormulario(e: React.FormEvent) {
@@ -287,9 +352,9 @@ export default function Home() {
 
       {/* CARRUSEL */}
       <div className="w-full overflow-hidden">
-        <img src={CAROUSEL_IMAGES[current]} alt="Banner" style={{ width: "100%", height: "auto", display: "block" }} />
+        <img src={(lc.carrusel?.imagenes ?? CAROUSEL_IMAGES)[current]} alt="Banner" style={{ width: "100%", height: "auto", display: "block" }} />
         <div style={{ display: "flex", justifyContent: "center", gap: "8px", padding: "12px", background: "#fff" }}>
-          {CAROUSEL_IMAGES.map((_, i) => (
+          {(lc.carrusel?.imagenes ?? CAROUSEL_IMAGES).map((_: string, i: number) => (
             <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? "28px" : "8px", height: "8px", borderRadius: "4px", background: i === current ? "#7c3aed" : "rgba(0,0,0,0.2)", border: "none", cursor: "pointer", transition: "all 0.3s" }} />
           ))}
         </div>
@@ -298,23 +363,23 @@ export default function Home() {
       {/* HERO */}
       <section id="inicio" className="flex flex-col items-center text-center px-6 py-24">
         <h1 className="text-4xl md:text-6xl font-bold max-w-4xl">
-          Tu negocio digital completo en
-          <span className="text-purple-600"> minutos</span>
+          {lc.hero.titulo}
+          <span className="text-purple-600"> {lc.hero.titulo_resaltado}</span>
         </h1>
         <p className="text-gray-500 mt-6 max-w-2xl">
-          Crea tu pagina web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma, con soporte real de nuestro equipo en Colombia.
+          {lc.hero.subtitulo}
         </p>
         <div className="flex flex-col md:flex-row gap-4 mt-10">
           <Link href="#contacto" className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
-            Crear mi negocio digital
+            {lc.hero.boton_principal}
           </Link>
           <Link href="/servicios" className="border border-gray-300 px-8 py-3 rounded-lg hover:border-purple-600 hover:text-purple-600 transition-colors">
-            Ver como funciona
+            {lc.hero.boton_secundario}
           </Link>
         </div>
         <div style={{ marginTop: 56, width: "100%", maxWidth: 880, borderRadius: 20, overflow: "hidden", boxShadow: "0 20px 60px rgba(124,58,237,0.18)", border: "1px solid rgba(0,0,0,0.06)" }}>
           <video
-            src="/sitio-demo.mp4"
+            src={lc.hero.video_url}
             autoPlay
             muted
             loop
@@ -328,11 +393,11 @@ export default function Home() {
       <section id="servicios" className="px-6 md:px-10 py-20 bg-gray-50">
         <div style={{ textAlign: "center", marginBottom: 16 }}>
           <span style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", fontSize: 13, fontWeight: 700, padding: "6px 16px", borderRadius: 20, letterSpacing: "0.05em" }}>
-            SOPORTE LOCAL EN PEREIRA, COLOMBIA
+            {lc.servicios.badge}
           </span>
         </div>
-        <h2 className="text-3xl font-bold text-center mb-4">Todo lo que necesitas para crecer online</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma, con atencion cercana y en espanol de nuestro equipo colombiano.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">{lc.servicios.titulo}</h2>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{lc.servicios.subtitulo}</p>
         <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {SERVICIOS.map((s) => (
             <div key={s.slug} className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col items-start gap-3">
@@ -349,8 +414,8 @@ export default function Home() {
 
       {/* Como funciona DMS */}
       <section className="px-6 md:px-10 py-20">
-        <h2 className="text-3xl font-bold text-center mb-4">Como funciona DMS</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Pon tu negocio online y comienza a captar clientes en pocos pasos.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">{lc.como_funciona.titulo}</h2>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{lc.como_funciona.subtitulo}</p>
         <div className="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
           {[
             { num: "01", title: "Elige un plan", desc: "Selecciona la solucion ideal para tu negocio." },
@@ -367,7 +432,7 @@ export default function Home() {
         </div>
         <div className="text-center mt-12">
           <Link href="/planes" className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
-            Comenzar ahora
+            {lc.como_funciona.boton}
           </Link>
         </div>
       </section>
@@ -376,10 +441,10 @@ export default function Home() {
       <section id="estadisticas" style={{ background: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)", padding: "72px 24px" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <h2 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(24px,4vw,36px)", textAlign: "center", marginBottom: 8 }}>
-            Resultados que hablan por nosotros
+            {lc.estadisticas.titulo}
           </h2>
           <p style={{ color: "rgba(255,255,255,0.75)", textAlign: "center", fontSize: 16, marginBottom: 56 }}>
-            Empresas y emprendedores que ya confian en DMS Digital Media Studio
+            {lc.estadisticas.subtitulo}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32 }}>
             {[
@@ -405,14 +470,14 @@ export default function Home() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 16 }}>
             <span style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", fontSize: 13, fontWeight: 700, padding: "6px 16px", borderRadius: 20, letterSpacing: "0.05em" }}>
-              GENERADO CON IA
+              {lc.portafolio.badge}
             </span>
           </div>
           <h2 style={{ fontWeight: 800, fontSize: "clamp(24px,4vw,36px)", textAlign: "center", marginBottom: 12, color: "#111" }}>
-            Sitios web generados con IA
+            {lc.portafolio.titulo}
           </h2>
           <p style={{ textAlign: "center", color: "#666", fontSize: 16, marginBottom: 52, maxWidth: 560, margin: "0 auto 52px" }}>
-            Explora ejemplos de sitios creados con IA y listos para impulsar negocios reales.
+            {lc.portafolio.subtitulo}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
             {SITIOS_IA.map((sitio, i) => (
@@ -421,7 +486,7 @@ export default function Home() {
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <Link href="/portafolio" style={{ background: "#7c3aed", color: "#fff", padding: "13px 36px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", display: "inline-block" }}>
-              Ver portafolio completo
+              {lc.portafolio.boton}
             </Link>
           </div>
         </div>
@@ -429,8 +494,8 @@ export default function Home() {
 
       {/* PLANES */}
       <section id="planes" className="px-6 md:px-10 py-20 bg-gray-50">
-        <h2 className="text-3xl font-bold text-center mb-4">Planes para tu negocio</h2>
-        <p className="text-center text-gray-500 mb-4 max-w-xl mx-auto">Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">{lc.planes.titulo}</h2>
+        <p className="text-center text-gray-500 mb-4 max-w-xl mx-auto">{lc.planes.subtitulo}</p>
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginBottom: 40 }}>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#166534", background: "#dcfce7", padding: "6px 14px", borderRadius: 20 }}>Garantia los primeros 7 dias</span>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#3730a3", background: "#e0e7ff", padding: "6px 14px", borderRadius: 20 }}>Pago seguro con Mercado Pago</span>
@@ -469,8 +534,8 @@ export default function Home() {
 
       {/* TESTIMONIOS */}
       <section className="px-6 md:px-10 py-20 bg-gray-50">
-        <h2 className="text-3xl font-bold text-center mb-4">Lo que dicen nuestros clientes</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Resultados reales de negocios que confiaron en nosotros.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">{lc.testimonios.titulo}</h2>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{lc.testimonios.subtitulo}</p>
         <div
           ref={testiViewportRef}
           className="dms-testi-viewport"
@@ -519,8 +584,8 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="px-6 md:px-10 py-20">
-        <h2 className="text-3xl font-bold text-center mb-4">Preguntas frecuentes</h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">Todo lo que necesitas saber antes de empezar.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">{lc.faq.titulo}</h2>
+        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{lc.faq.subtitulo}</p>
         <div className="max-w-3xl mx-auto space-y-4">
           {[
             { q: "Cuanto cuesta usar DMS?", a: "Los planes van desde $49.000/mes. Todos incluyen 7 dias de prueba gratis sin necesidad de tarjeta de credito." },
@@ -541,8 +606,8 @@ export default function Home() {
       {/* CONTACTO */}
       <section id="contacto" className="px-6 md:px-10 py-20">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">Tienes dudas? Hablemos</h2>
-          <p className="text-center text-gray-500 mb-10">Escribenos y te ayudamos a elegir el plan ideal para tu negocio en menos de 24 horas.</p>
+          <h2 className="text-3xl font-bold text-center mb-4">{lc.contacto.titulo}</h2>
+          <p className="text-center text-gray-500 mb-10">{lc.contacto.subtitulo}</p>
           <form onSubmit={enviarFormulario} className="space-y-4">
             <input type="text" placeholder="Nombre" required value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-purple-600" />
             <input type="email" placeholder="Correo electronico" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-purple-600" />
@@ -561,7 +626,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-10">
             <div>
               <Image src="/logo-dms-white.png" alt="DMS Digital Media Studio" width={140} height={45} style={{ marginBottom: 16, height: 45, width: "auto", maxWidth: 140, objectFit: "contain" }} />
-              <p style={{ color: "#aaa", fontSize: 13, lineHeight: 1.7 }}>Desarrollo web, marketing digital, automatizacion e inteligencia artificial para empresas y emprendedores.</p>
+              <p style={{ color: "#aaa", fontSize: 13, lineHeight: 1.7 }}>{lc.footer.descripcion}</p>
               <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
                 {REDES.map(r => (
                   <a key={r.label} href={r.href} target="_blank" rel="noopener noreferrer" title={r.label} style={{ width: 42, height: 42, borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", transition: "all .2s" }}
@@ -583,9 +648,9 @@ export default function Home() {
             <div>
               <h3 style={{ fontWeight: 700, fontSize: 15, marginBottom: 16, color: "#fff" }}>Contacto</h3>
               <ul style={{ display: "flex", flexDirection: "column", gap: 10, color: "#aaa", fontSize: 13 }}>
-                <li>contacto@dmsdigitalstudio.com</li>
-                <li>+57 315 565 4948</li>
-                <li>Pereira, Colombia</li>
+                <li>{lc.footer.email}</li>
+                <li>{lc.footer.telefono}</li>
+                <li>{lc.footer.ciudad}</li>
               </ul>
             </div>
             <div>
