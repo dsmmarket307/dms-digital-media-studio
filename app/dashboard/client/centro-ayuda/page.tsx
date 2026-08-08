@@ -135,7 +135,7 @@ export default function CentroAyuda() {
               </div>
             </div>
           )}
-          {masVistos.length > 0 && (
+          {masVistos.length > 0 && tutoriales.length > 4 && (
             <div style={{ marginBottom: 28 }}>
               <h2 style={{ fontSize:14, fontWeight:800, color:"#111", marginBottom:12 }}>Tutoriales mas vistos</h2>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:12 }}>
@@ -143,7 +143,7 @@ export default function CentroAyuda() {
               </div>
             </div>
           )}
-          {novedades.length > 0 && (
+          {novedades.length > 0 && tutoriales.length > 4 && (
             <div style={{ marginBottom: 28 }}>
               <h2 style={{ fontSize:14, fontWeight:800, color:"#111", marginBottom:12 }}>Novedades de la plataforma</h2>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:12 }}>
