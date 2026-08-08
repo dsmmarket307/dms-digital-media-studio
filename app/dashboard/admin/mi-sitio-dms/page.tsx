@@ -266,7 +266,7 @@ export default function MiSitioDMS() {
 
   async function handleSave() {
     setSaving(true);
-    await supabase.from("dms_landing_config").update({ content: lc, updated_at: new Date().toISOString() }).eq("id", 1);
+    const { error } = await supabase.from("dms_landing_config").upsert({ id: 1, content: lc, updated_at: new Date().toISOString() }); if (error) alert("ERROR: " + error.message);
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);

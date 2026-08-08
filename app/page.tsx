@@ -244,10 +244,11 @@ export default function Home() {
     }
   }, [testiIndex, testiAnim]);
 
-  const clientes = useCountUp(100, 2000, statsVisible);
-  const paises = useCountUp(3, 1500, statsVisible);
-  const anos = useCountUp(2, 1200, statsVisible);
-  const sitios = useCountUp(150, 2200, statsVisible);
+  const statItems = lc.estadisticas?.items ?? [];
+  const clientes = useCountUp(Number(statItems[0]?.valor ?? 100), 2000, statsVisible);
+  const paises = useCountUp(Number(statItems[1]?.valor ?? 3), 1500, statsVisible);
+  const anos = useCountUp(Number(statItems[2]?.valor ?? 2), 1200, statsVisible);
+  const sitios = useCountUp(Number(statItems[3]?.valor ?? 150), 2200, statsVisible);
 
   useEffect(() => {
     const interval = setInterval(() => {
