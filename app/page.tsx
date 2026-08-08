@@ -212,6 +212,33 @@ export default function Home() {
   const [statsVisible, setStatsVisible] = useState(false);
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
   const [lc, setLc] = useState<any>(DEFAULT_LANDING);
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  useEffect(() => {
+    let shown = false;
+    const isMobile = window.innerWidth < 768;
+
+    function trigger() {
+      if (shown) return;
+      shown = true;
+      setPopupVisible(true);
+    }
+
+    if (isMobile) {
+      const onScroll = () => {
+        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent >= 50) trigger();
+      };
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    } else {
+      const onExitIntent = (e: MouseEvent) => {
+        if (e.clientY <= 0) trigger();
+      };
+      document.addEventListener("mouseleave", onExitIntent);
+      return () => document.removeEventListener("mouseleave", onExitIntent);
+    }
+  }, []);
 
   const [testiPaused, setTestiPaused] = useState(false);
   const testiViewportRef = useRef<HTMLDivElement>(null);
@@ -696,6 +723,25 @@ export default function Home() {
         primaryColor="#7c3aed"
       />
       </footer>
+
+      {popupVisible && lc.popup_promo?.activo && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }} onClick={() => setPopupVisible(false)}>
+          <div style={{ position: "relative", background: "#fff", borderRadius: 16, padding: 16, maxWidth: 380, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setPopupVisible(false)} style={{ position: "absolute", top: -12, right: -12, width: 32, height: 32, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            {lc.popup_promo?.imagen && (
+              lc.popup_promo?.link ? (
+                <a href={lc.popup_promo.link} target="_blank" rel="noopener noreferrer">
+                  <img src={lc.popup_promo.imagen} alt="Promocion" style={{ width: "100%", borderRadius: 10, display: "block" }} />
+                </a>
+              ) : (
+                <img src={lc.popup_promo.imagen} alt="Promocion" style={{ width: "100%", borderRadius: 10, display: "block" }} />
+              )
+            )}
+          </div>
+        </div>
+      )}
 
     </main>
   );
