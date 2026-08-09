@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AgenteIA() {
   const router = useRouter();
@@ -12,6 +13,10 @@ export default function AgenteIA() {
   const [saved, setSaved] = useState(false);
   const [userId, setUserId] = useState("");
   const [sites, setSites] = useState<any[]>([]);
+  const [waSettings, setWaSettings] = useState<any>(null);
+  const [waForm, setWaForm] = useState({ phone_number_id: "", access_token: "" });
+  const [savingWa, setSavingWa] = useState(false);
+  const [savedWa, setSavedWa] = useState(false);
   const [form, setForm] = useState({
     nombre: "", descripcion: "", servicios: "", faq: "",
     horario: "", whatsapp: "", correo: "", direccion: "", site_id: "",
@@ -28,6 +33,8 @@ export default function AgenteIA() {
       setUserId(user.id);
       const { data: a } = await supabase.from("ai_agents").select("*").eq("user_id", user.id).maybeSingle();
       if (a) { setAgente(a); setForm({ nombre: a.nombre, descripcion: a.descripcion ?? "", servicios: a.servicios ?? "", faq: a.faq ?? "", horario: a.horario ?? "", whatsapp: a.whatsapp ?? "", correo: a.correo ?? "", direccion: a.direccion ?? "", site_id: a.site_id ?? "" }); }
+      const { data: wa } = await supabase.from("whatsapp_settings").select("*").eq("user_id", user.id).maybeSingle();
+      if (wa) { setWaSettings(wa); setWaForm({ phone_number_id: wa.phone_number_id ?? "", access_token: wa.access_token ?? "" }); }
       setLoading(false);
     }
     load();
@@ -44,6 +51,24 @@ export default function AgenteIA() {
     setSaved(true);
     setSaving(false);
     setTimeout(() => setSaved(false), 3000);
+  }
+
+  async function guardarWhatsapp() {
+    if (!waForm.phone_number_id || !waForm.access_token) return;
+    setSavingWa(true);
+    const businessInfo = `Negocio: ${form.nombre || "Sin nombre"}. ${form.descripcion || ""} Servicios: ${form.servicios || "No especificado"}. Preguntas frecuentes: ${form.faq || "Ninguna"}. Horario: ${form.horario || "No especificado"}. Direccion: ${form.direccion || "No especificada"}.`;
+    await supabase.from("whatsapp_settings").upsert({
+      user_id: userId,
+      phone_number_id: waForm.phone_number_id,
+      access_token: waForm.access_token,
+      agent_name: form.nombre || "Asistente",
+      business_info: businessInfo,
+      active: true,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "user_id" });
+    setSavedWa(true);
+    setSavingWa(false);
+    setTimeout(() => setSavedWa(false), 3000);
   }
 
   function Field({ label, field, multiline = false }: { label: string; field: string; multiline?: boolean }) {
@@ -94,6 +119,33 @@ export default function AgenteIA() {
         <button onClick={guardar} disabled={saving} style={{ background: saved ? "#10b981" : "#7c3aed", color: "#fff", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer", marginTop: 8 }}>
           {saving ? "Guardando..." : saved ? "Guardado" : agente ? "Actualizar Agente" : "Crear Agente"}
         </button>
+      </div>
+
+      <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e7eb", padding: "1.5rem", marginTop: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", margin: 0 }}>Conectar WhatsApp</h2>
+          {waSettings?.active && (
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#10b981", background: "rgba(16,185,129,0.1)", padding: "3px 10px", borderRadius: 999 }}>Conectado</span>
+          )}
+        </div>
+        <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Conecta el numero de WhatsApp Business de tu negocio para que tu agente responda solo.</p>
+        <div style={{ marginBottom: 14 }}>
+          <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 6 }}>Phone Number ID</label>
+          <input value={waForm.phone_number_id} onChange={e => setWaForm(prev => ({ ...prev, phone_number_id: e.target.value }))} placeholder="Ej: 123456789012345" style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 6 }}>Access Token</label>
+          <input type="password" value={waForm.access_token} onChange={e => setWaForm(prev => ({ ...prev, access_token: e.target.value }))} placeholder="Token permanente de tu app de Meta" style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />
+        </div>
+        <p style={{ fontSize: 11, color: "#aaa", marginBottom: 14 }}>Estos datos los obtienes en tu app de Meta for Developers, seccion WhatsApp {'>'}  API Setup.</p>
+        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" as const }}>
+          <button onClick={guardarWhatsapp} disabled={savingWa} style={{ background: savedWa ? "#10b981" : "#7c3aed", color: "#fff", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            {savingWa ? "Guardando..." : savedWa ? "Conectado" : "Guardar conexion"}
+          </button>
+          {waSettings?.active && (
+            <a href="/dashboard/client/agente-ia/conversaciones" style={{ fontSize: 13, color: "#7c3aed", fontWeight: 700, textDecoration: "none" }}>Ver conversaciones →</a>
+          )}
+        </div>
       </div>
     </div>
   );
