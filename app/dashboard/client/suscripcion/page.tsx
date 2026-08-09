@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import PayPalSubscribeButton from "@/components/PayPalSubscribeButton";
 
 const PLANES = [
   { slug: "basico",      name: "Basico",      price: 49000,  items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"] },
@@ -28,6 +29,7 @@ export default function SuscripcionPage() {
   const [suscribiendo, setSuscribiendo] = useState("");
   const [pagoExitoso, setPagoExitoso] = useState(false);
   const [activando, setActivando] = useState(false);
+  const [metodoPagoPlan, setMetodoPagoPlan] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -232,8 +234,22 @@ export default function SuscripcionPage() {
                     ))}
                   </div>
                   <button onClick={() => handleSuscribir(p.slug)} disabled={suscribiendo === p.slug} style={{ display: "block", width: "100%", textAlign: "center", background: p.slug === "profesional" ? "#7c3aed" : "#111", color: "#fff", padding: "9px", borderRadius: 9, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", opacity: suscribiendo === p.slug ? 0.6 : 1, marginTop: "auto" }}>
-                    {suscribiendo === p.slug ? "Redirigiendo..." : "Suscribirme"}
+                    {suscribiendo === p.slug ? "Redirigiendo..." : "Suscribirme con Mercado Pago"}
                   </button>
+                  {metodoPagoPlan === p.slug ? (
+                    <div style={{ marginTop: 10 }}>
+                      <PayPalSubscribeButton
+                        planSlug={p.slug}
+                        userId={profile?.id}
+                        onSuccess={() => { setPagoExitoso(true); setMetodoPagoPlan(null); window.location.reload(); }}
+                      />
+                      <button onClick={() => setMetodoPagoPlan(null)} style={{ width: "100%", background: "none", border: "none", color: "#888", fontSize: 11, cursor: "pointer", marginTop: 6, textAlign: "center" }}>Cancelar</button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setMetodoPagoPlan(p.slug)} style={{ display: "block", width: "100%", textAlign: "center", background: "#fff", color: "#555", padding: "8px", borderRadius: 9, fontSize: 12, fontWeight: 700, border: "1px solid #e5e7eb", cursor: "pointer", marginTop: 8 }}>
+                      O paga con PayPal (USD)
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
