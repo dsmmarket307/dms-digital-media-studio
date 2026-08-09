@@ -295,69 +295,99 @@ export default function FacturasPage() {
       {facturaVer && (
         <div className="no-print" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 14, width: "100%", maxWidth: 620, maxHeight: "90vh", overflowY: "auto" }}>
-            <div className="print-area" style={{ padding: 32 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+            <div className="print-area" style={{ padding: 0 }}>
+              <div style={{ background: "#1d4ed8", color: "#fff", padding: "20px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                  {negocio.logo_url && <img src={negocio.logo_url} alt="logo" style={{ height: 40, marginBottom: 8, objectFit: "contain" }} />}
-                  <p style={{ fontWeight: 800, fontSize: 15, color: "#111", margin: 0 }}>{negocio.nombre}</p>
+                  {negocio.logo_url ? (
+                    <img src={negocio.logo_url} alt="logo" style={{ height: 40, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                  ) : (
+                    <p style={{ fontWeight: 800, fontSize: 18, margin: 0 }}>{negocio.nombre}</p>
+                  )}
+                </div>
+                <p style={{ fontSize: 26, fontWeight: 900, margin: 0, letterSpacing: 1 }}>FACTURA</p>
+              </div>
+
+              <div style={{ padding: "24px 32px" }}>
+                <div style={{ marginBottom: 20 }}>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: "#111", margin: 0 }}>{negocio.nombre}</p>
                   <p style={{ fontSize: 11, color: "#888", margin: "2px 0 0" }}>{[negocio.nit && `NIT ${negocio.nit}`, negocio.direccion].filter(Boolean).join(" · ")}</p>
                   <p style={{ fontSize: 11, color: "#888", margin: 0 }}>{[negocio.telefono, negocio.email].filter(Boolean).join(" · ")}</p>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <p style={{ fontWeight: 800, fontSize: 18, color: "#7c3aed", margin: 0 }}>FACTURA N° {facturaVer.numero}</p>
-                  <p style={{ fontSize: 12, color: "#888", margin: "4px 0 0" }}>Fecha: {new Date(facturaVer.fecha).toLocaleDateString("es-CO")}</p>
-                  {facturaVer.fecha_vencimiento && <p style={{ fontSize: 12, color: "#888", margin: 0 }}>Vence: {new Date(facturaVer.fecha_vencimiento).toLocaleDateString("es-CO")}</p>}
-                  <span style={{ display: "inline-block", marginTop: 6, fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: ESTADOS[facturaVer.estado]?.bg, color: ESTADOS[facturaVer.estado]?.color }}>{ESTADOS[facturaVer.estado]?.label}</span>
-                </div>
-              </div>
 
-              <div style={{ marginBottom: 20 }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 4 }}>Cliente</p>
-                <p style={{ fontWeight: 700, fontSize: 13, color: "#111", margin: 0 }}>{facturaVer.cliente_nombre}</p>
-                <p style={{ fontSize: 12, color: "#888", margin: "2px 0 0" }}>{[facturaVer.cliente_email, facturaVer.cliente_telefono, facturaVer.cliente_direccion].filter(Boolean).join(" · ")}</p>
-              </div>
-
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, marginBottom: 16 }}>
-                <thead>
-                  <tr style={{ borderBottom: "2px solid #111" }}>
-                    <th style={{ textAlign: "left", padding: "6px 4px", fontSize: 11, color: "#888" }}>Concepto</th>
-                    <th style={{ textAlign: "center", padding: "6px 4px", fontSize: 11, color: "#888" }}>Cant.</th>
-                    <th style={{ textAlign: "right", padding: "6px 4px", fontSize: 11, color: "#888" }}>Valor unit.</th>
-                    <th style={{ textAlign: "right", padding: "6px 4px", fontSize: 11, color: "#888" }}>Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(facturaVer.items ?? []).map((it: Item, i: number) => (
-                    <tr key={i} style={{ borderBottom: "1px solid #f3f4f6" }}>
-                      <td style={{ padding: "6px 4px" }}>{it.concepto}</td>
-                      <td style={{ padding: "6px 4px", textAlign: "center" }}>{it.cantidad}</td>
-                      <td style={{ padding: "6px 4px", textAlign: "right" }}>{formatCOP(it.valor)}</td>
-                      <td style={{ padding: "6px 4px", textAlign: "right" }}>{formatCOP(it.cantidad * it.valor)}</td>
+                <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>N.° DE FACTURA</th>
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>FECHA</th>
+                      {facturaVer.fecha_vencimiento && <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>VENCE</th>}
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>ESTADO</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: "1px solid #e5e7eb" }}>
+                      <td style={{ padding: "8px 12px", fontSize: 13, fontWeight: 700 }}>{facturaVer.numero}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 13 }}>{new Date(facturaVer.fecha).toLocaleDateString("es-CO")}</td>
+                      {facturaVer.fecha_vencimiento && <td style={{ padding: "8px 12px", fontSize: 13 }}>{new Date(facturaVer.fecha_vencimiento).toLocaleDateString("es-CO")}</td>}
+                      <td style={{ padding: "8px 12px" }}>
+                        <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: ESTADOS[facturaVer.estado]?.bg, color: ESTADOS[facturaVer.estado]?.color }}>{ESTADOS[facturaVer.estado]?.label}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <div style={{ width: 220 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#888", marginBottom: 4 }}>
-                    <span>Subtotal</span><span>{formatCOP(Number(facturaVer.subtotal))}</span>
+                <div style={{ marginBottom: 20 }}>
+                  <p style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", margin: "0 0 6px" }}>FACTURAR A:</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: "#111", margin: 0 }}>{facturaVer.cliente_nombre}</p>
+                  <p style={{ fontSize: 12, color: "#888", margin: "2px 0 0" }}>{[facturaVer.cliente_email, facturaVer.cliente_telefono, facturaVer.cliente_direccion].filter(Boolean).join(" · ")}</p>
+                </div>
+
+                <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 16 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>DESCRIPCIÓN</th>
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "center" }}>CANT.</th>
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "right" }}>VALOR UNIT.</th>
+                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "right" }}>MONTO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(facturaVer.items ?? []).map((it: Item, i: number) => (
+                      <tr key={i} style={{ borderBottom: "1px solid #e5e7eb" }}>
+                        <td style={{ padding: "8px 12px", fontSize: 13 }}>{it.concepto}</td>
+                        <td style={{ padding: "8px 12px", fontSize: 13, textAlign: "center" }}>{it.cantidad}</td>
+                        <td style={{ padding: "8px 12px", fontSize: 13, textAlign: "right" }}>{formatCOP(it.valor)}</td>
+                        <td style={{ padding: "8px 12px", fontSize: 13, textAlign: "right" }}>{formatCOP(it.cantidad * it.valor)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
+                  <div style={{ width: 260 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 12px", background: "#eff6ff", fontSize: 13 }}>
+                      <span style={{ color: "#555" }}>SUBTOTAL</span><span>{formatCOP(Number(facturaVer.subtotal))}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 12px", fontSize: 13 }}>
+                      <span style={{ color: "#555" }}>DESCUENTO</span><span>-{formatCOP(Number(facturaVer.descuento))}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 12px", background: "#1d4ed8", color: "#fff", fontSize: 15, fontWeight: 800 }}>
+                      <span>TOTAL</span><span>{formatCOP(Number(facturaVer.total))}</span>
+                    </div>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#888", marginBottom: 4 }}>
-                    <span>Descuento</span><span>-{formatCOP(Number(facturaVer.descuento))}</span>
+                </div>
+
+                {facturaVer.notas && (
+                  <div style={{ marginBottom: 20 }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 4 }}>Observaciones</p>
+                    <p style={{ fontSize: 12, color: "#555", margin: 0 }}>{facturaVer.notas}</p>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: "#111", borderTop: "1px solid #eee", paddingTop: 6, marginTop: 4 }}>
-                    <span>Total</span><span>{formatCOP(Number(facturaVer.total))}</span>
-                  </div>
+                )}
+
+                <div style={{ textAlign: "center", borderTop: "1px solid #e5e7eb", paddingTop: 16 }}>
+                  <p style={{ color: "#1d4ed8", fontWeight: 800, fontSize: 16, margin: "0 0 6px" }}>GRACIAS</p>
+                  <p style={{ fontSize: 11, color: "#888", margin: 0 }}>{[negocio.telefono, negocio.email].filter(Boolean).join(" · ")}</p>
                 </div>
               </div>
-
-              {facturaVer.notas && (
-                <div style={{ marginTop: 20, paddingTop: 12, borderTop: "1px solid #eee" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 4 }}>Notas</p>
-                  <p style={{ fontSize: 12, color: "#555", margin: 0 }}>{facturaVer.notas}</p>
-                </div>
-              )}
             </div>
 
             <div className="no-print" style={{ display: "flex", gap: 8, padding: "16px 32px", borderTop: "1px solid #eee" }}>
