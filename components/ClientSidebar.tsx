@@ -7,10 +7,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 const PLAN_ACCESO: Record<string, string[]> = {
-  trial:       ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
-  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion"],
+  trial:       ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
+  basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
+  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
+  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
 };
 
 const icons: Record<string, React.ReactElement> = {
@@ -30,6 +30,8 @@ const icons: Record<string, React.ReactElement> = {
   ayuda:    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17"/></svg>,
   soporte:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
   meta:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
+  dinero:   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M15 9.5c0-1.5-1.5-2.5-3-2.5s-3 1-3 2.5 1.5 2 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5"/></svg>,
+  recibo:   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>,
 };
 
 
@@ -54,6 +56,9 @@ const MENU_EMPRESARIAL: any[] = [
   { href: "/dashboard/client/automatizaciones", label: "Automatizaciones", icon: "auto" },
   { section: "Analitica" },
   { href: "/dashboard/client/estadisticas", label: "Estadisticas", icon: "stats" },
+  { section: "Contabilidad" },
+  { href: "/dashboard/client/finanzas", label: "Finanzas", icon: "dinero" },
+  { href: "/dashboard/client/facturas", label: "Facturas", icon: "recibo" },
   { section: "Cuenta" },
   { href: "/dashboard/client/facturacion", label: "Facturacion", icon: "factura" },
   { href: "/dashboard/client/suscripcion", label: "Mi Suscripcion", icon: "suscrip" },
