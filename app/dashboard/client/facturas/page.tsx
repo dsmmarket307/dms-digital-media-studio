@@ -109,8 +109,26 @@ export default function FacturasPage() {
   }
 
   async function cambiarEstado(id: string, estado: string) {
+    const factura = facturas.find(f => f.id === id);
+    const estadoAnterior = factura?.estado;
+
     await supabase.from("facturas").update({ estado, updated_at: new Date().toISOString() }).eq("id", id);
     setFacturas(prev => prev.map(f => f.id === id ? { ...f, estado } : f));
+
+    if (estado === "pagada" && estadoAnterior !== "pagada" && factura) {
+      await supabase.from("movimientos_manuales").insert({
+        user_id: userId,
+        tipo: "ingreso",
+        concepto: `Factura #${factura.numero} - ${factura.cliente_nombre}`,
+        categoria: "Facturas",
+        monto: Number(factura.total),
+        fecha: new Date().toISOString().slice(0, 10),
+        notas: null,
+        factura_id: id,
+      });
+    } else if (estadoAnterior === "pagada" && estado !== "pagada") {
+      await supabase.from("movimientos_manuales").delete().eq("factura_id", id);
+    }
   }
 
   async function eliminarFactura(id: string) {
@@ -293,7 +311,7 @@ export default function FacturasPage() {
       )}
 
       {facturaVer && (
-        <div className="no-print" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 14, width: "100%", maxWidth: 620, maxHeight: "90vh", overflowY: "auto" }}>
             <div className="print-area" style={{ padding: 0 }}>
               <div style={{ background: "#1d4ed8", color: "#fff", padding: "20px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
