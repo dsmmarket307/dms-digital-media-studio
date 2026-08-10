@@ -223,7 +223,7 @@ export default function InventarioPage() {
                       <td style={{ padding: "10px 16px", textAlign: "right", color: "#111", fontWeight: 700 }}>{formatCOP(p.precio_venta)}</td>
                       <td style={{ padding: "10px 16px", textAlign: "right", color: margen >= 30 ? "#059669" : margen >= 10 ? "#d97706" : "#dc2626", fontWeight: 700 }}>{margen}%</td>
                       <td style={{ padding: "10px 16px", textAlign: "center" }}>
-                        <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: bajo ? "#fee2e2" : "#d1fae5", color: bajo ? "#dc2626" : "#059669" }}>{p.stock}</span>
+                        <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: bajo ? "#fee2e2" : "#d1fae5", color: bajo ? "#dc2626" : "#059669", display: "inline-flex", alignItems: "center", gap: 4 }}>{bajo && "🔔"}{p.stock}</span>
                       </td>
                       <td style={{ padding: "10px 16px", textAlign: "right" }}>
                         <button onClick={() => abrirEditar(p)} style={{ fontSize: 11, fontWeight: 700, color: "#7c3aed", background: "none", border: "none", cursor: "pointer", marginRight: 12 }}>Editar</button>
