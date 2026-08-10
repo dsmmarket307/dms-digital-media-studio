@@ -25,6 +25,7 @@ export default function FacturasPage() {
   const [facturas, setFacturas] = useState<any[]>([]);
   const [negocio, setNegocio] = useState({ nombre: "", nit: "", direccion: "", telefono: "", email: "", logo_url: "", color: "#1d4ed8" });
   const [editandoNegocio, setEditandoNegocio] = useState(false);
+  const [subiendoLogo, setSubiendoLogo] = useState(false);
   const [guardandoNegocio, setGuardandoNegocio] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -65,6 +66,19 @@ export default function FacturasPage() {
     }
     load();
   }, []);
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !userId) return;
+    setSubiendoLogo(true);
+    const ext = file.name.split(".").pop();
+    const fileName = `logo-factura-${userId}-${Date.now()}.${ext}`;
+    await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+    setNegocio(prev => ({ ...prev, logo_url: data.publicUrl }));
+    await supabase.from("profiles").update({ logo_url: data.publicUrl }).eq("id", userId);
+    setSubiendoLogo(false);
+  }
 
   async function guardarDatosNegocio() {
     setGuardandoNegocio(true);
@@ -201,6 +215,14 @@ export default function FacturasPage() {
             <input value={negocio.telefono} onChange={e => setNegocio({ ...negocio, telefono: e.target.value })} placeholder="Telefono" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12 }} />
             <input value={negocio.email} onChange={e => setNegocio({ ...negocio, email: e.target.value })} placeholder="Email" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12, gridColumn: "span 2" }} />
             <div style={{ gridColumn: "span 2" }}>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Logo de tu negocio</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                {negocio.logo_url && <img src={negocio.logo_url} alt="logo" style={{ height: 36, objectFit: "contain", borderRadius: 6, border: "1px solid #e5e7eb", padding: 4 }} />}
+                <label style={{ fontSize: 12, fontWeight: 700, color: "#7c3aed", background: "rgba(124,58,237,0.08)", padding: "7px 14px", borderRadius: 8, cursor: "pointer" }}>
+                  {subiendoLogo ? "Subiendo..." : negocio.logo_url ? "Cambiar logo" : "Subir logo"}
+                  <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoUpload} />
+                </label>
+              </div>
               <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Color de la factura</label>
               <div style={{ display: "flex", gap: 8 }}>
                 {["#1d4ed8", "#7c3aed", "#059669", "#dc2626", "#ea580c", "#0f172a"].map(c => (
