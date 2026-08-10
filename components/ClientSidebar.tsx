@@ -7,10 +7,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 const PLAN_ACCESO: Record<string, string[]> = {
-  trial:       ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
-  basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
-  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
-  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas"],
+  trial:       ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas", "/dashboard/client/inventario"],
+  basico:      ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas", "/dashboard/client/inventario"],
+  profesional: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas", "/dashboard/client/inventario"],
+  empresarial: ["/dashboard/client", "/dashboard/client/builder", "/dashboard/client/sitio", "/dashboard/client/galeria", "/dashboard/client/leads", "/dashboard/client/reservas", "/dashboard/client/dominios", "/dashboard/client/meta", "/dashboard/client/crm", "/dashboard/client/automatizaciones", "/dashboard/client/agente-ia", "/dashboard/client/estadisticas", "/dashboard/client/facturacion", "/dashboard/client/soporte", "/dashboard/client/suscripcion", "/dashboard/client/finanzas", "/dashboard/client/facturas", "/dashboard/client/inventario"],
 };
 
 const icons: Record<string, React.ReactElement> = {
@@ -59,6 +59,7 @@ const MENU_EMPRESARIAL: any[] = [
   { section: "Contabilidad" },
   { href: "/dashboard/client/finanzas", label: "Finanzas", icon: "dinero" },
   { href: "/dashboard/client/facturas", label: "Facturas", icon: "recibo" },
+  { href: "/dashboard/client/inventario", label: "Inventario", icon: "caja" },
   { section: "Cuenta" },
   { href: "/dashboard/client/facturacion", label: "Facturacion", icon: "factura" },
   { href: "/dashboard/client/suscripcion", label: "Mi Suscripcion", icon: "suscrip" },

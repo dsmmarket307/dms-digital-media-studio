@@ -15,7 +15,7 @@ function formatCOP(n: number) {
   return "$" + Math.round(n).toLocaleString("es-CO");
 }
 
-type Item = { concepto: string; cantidad: number; valor: number };
+type Item = { concepto: string; cantidad: number; valor: number; producto_id?: string | null };
 
 export default function FacturasPage() {
   const router = useRouter();
@@ -33,7 +33,8 @@ export default function FacturasPage() {
     cliente_nombre: "", cliente_email: "", cliente_telefono: "", cliente_direccion: "",
     descuento: "0", fecha: new Date().toISOString().slice(0, 10), fecha_vencimiento: "", notas: "",
   });
-  const [items, setItems] = useState<Item[]>([{ concepto: "", cantidad: 1, valor: 0 }]);
+  const [items, setItems] = useState<Item[]>([{ concepto: "", cantidad: 1, valor: 0, producto_id: null }]);
+  const [productos, setProductos] = useState<any[]>([]);
 
   useEffect(() => {
     async function load() {
@@ -56,6 +57,8 @@ export default function FacturasPage() {
         color: prof?.color_factura || sitio?.primary_color || "#1d4ed8",
       });
 
+      const { data: prods } = await supabase.from("inventario").select("*").eq("user_id", user.id).order("nombre", { ascending: true });
+      setProductos(prods ?? []);
       const { data: f } = await supabase.from("facturas").select("*").eq("user_id", user.id).order("numero", { ascending: false });
       setFacturas(f ?? []);
       setLoading(false);
@@ -70,7 +73,15 @@ export default function FacturasPage() {
     setEditandoNegocio(false);
   }
 
-  function addItem() { setItems(prev => [...prev, { concepto: "", cantidad: 1, valor: 0 }]); }
+  function addItem() { setItems(prev => [...prev, { concepto: "", cantidad: 1, valor: 0, producto_id: null }]); }
+  function vincularProducto(i: number, productoId: string) {
+    const p = productos.find(pr => pr.id === productoId);
+    if (!p) {
+      setItems(prev => prev.map((it, idx) => idx === i ? { ...it, producto_id: null } : it));
+      return;
+    }
+    setItems(prev => prev.map((it, idx) => idx === i ? { ...it, producto_id: p.id, concepto: p.nombre, valor: Number(p.precio_venta) } : it));
+  }
   function removeItem(i: number) { setItems(prev => prev.filter((_, idx) => idx !== i)); }
   function updateItem(i: number, field: keyof Item, value: any) {
     setItems(prev => prev.map((it, idx) => idx === i ? { ...it, [field]: value } : it));
@@ -279,12 +290,23 @@ export default function FacturasPage() {
 
             <p style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", margin: "16px 0 8px" }}>Items</p>
 
+            {productos.length > 0 && (
+              <p style={{ fontSize: 11, color: "#aaa", marginBottom: 8 }}>Puedes vincular un item a un producto del inventario para descontar el stock automaticamente.</p>
+            )}
             {items.map((it, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 70px 100px 30px", gap: 8, marginBottom: 8, alignItems: "center" }}>
-                <input value={it.concepto} onChange={e => updateItem(i, "concepto", e.target.value)} placeholder="Concepto" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12 }} />
+              <div key={i} style={{ border: it.producto_id ? "1px solid rgba(124,58,237,0.3)" : "1px solid transparent", borderRadius: 8, padding: it.producto_id ? 8 : 0, marginBottom: 8 }}>
+              {productos.length > 0 && (
+                <select value={it.producto_id ?? ""} onChange={e => vincularProducto(i, e.target.value)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "6px 8px", fontSize: 11, color: "#7c3aed", marginBottom: 6 }}>
+                  <option value="">Sin vincular a inventario (item libre)</option>
+                  {productos.map(p => <option key={p.id} value={p.id}>{p.nombre} (stock: {p.stock})</option>)}
+                </select>
+              )}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 70px 100px 30px", gap: 8, alignItems: "center" }}>
+                <input value={it.concepto} onChange={e => updateItem(i, "concepto", e.target.value)} placeholder="Concepto" disabled={!!it.producto_id} style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12, background: it.producto_id ? "#f9fafb" : "#fff" }} />
                 <input type="number" value={it.cantidad} onChange={e => updateItem(i, "cantidad", Number(e.target.value))} placeholder="Cant." style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12 }} />
                 <input type="number" value={it.valor} onChange={e => updateItem(i, "valor", Number(e.target.value))} placeholder="Valor" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12 }} />
                 <button onClick={() => removeItem(i)} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 16 }}>×</button>
+              </div>
               </div>
             ))}
             <button onClick={addItem} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px dashed #7c3aed", background: "rgba(124,58,237,0.05)", color: "#7c3aed", fontSize: 12, fontWeight: 700, cursor: "pointer", marginBottom: 16 }}>+ Agregar item</button>
