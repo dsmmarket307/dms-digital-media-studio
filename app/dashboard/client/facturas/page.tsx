@@ -23,7 +23,7 @@ export default function FacturasPage() {
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(true);
   const [facturas, setFacturas] = useState<any[]>([]);
-  const [negocio, setNegocio] = useState({ nombre: "", nit: "", direccion: "", telefono: "", email: "", logo_url: "" });
+  const [negocio, setNegocio] = useState({ nombre: "", nit: "", direccion: "", telefono: "", email: "", logo_url: "", color: "#1d4ed8" });
   const [editandoNegocio, setEditandoNegocio] = useState(false);
   const [guardandoNegocio, setGuardandoNegocio] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -52,7 +52,8 @@ export default function FacturasPage() {
         direccion: prof?.direccion ?? contacto.direccion ?? "",
         telefono: prof?.phone ?? contacto.telefono ?? "",
         email: prof?.email ?? contacto.email ?? "",
-        logo_url: prof?.logo_url ?? sitio?.logo_url ?? "",
+        logo_url: sitio?.logo_url || prof?.logo_url || "",
+        color: prof?.color_factura || sitio?.primary_color || "#1d4ed8",
       });
 
       const { data: f } = await supabase.from("facturas").select("*").eq("user_id", user.id).order("numero", { ascending: false });
@@ -64,7 +65,7 @@ export default function FacturasPage() {
 
   async function guardarDatosNegocio() {
     setGuardandoNegocio(true);
-    await supabase.from("profiles").update({ nit: negocio.nit, direccion: negocio.direccion, logo_url: negocio.logo_url }).eq("id", userId);
+    await supabase.from("profiles").update({ nit: negocio.nit, direccion: negocio.direccion, logo_url: negocio.logo_url, color_factura: negocio.color }).eq("id", userId);
     setGuardandoNegocio(false);
     setEditandoNegocio(false);
   }
@@ -188,6 +189,14 @@ export default function FacturasPage() {
             <input value={negocio.direccion} onChange={e => setNegocio({ ...negocio, direccion: e.target.value })} placeholder="Direccion" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12 }} />
             <input value={negocio.telefono} onChange={e => setNegocio({ ...negocio, telefono: e.target.value })} placeholder="Telefono" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12 }} />
             <input value={negocio.email} onChange={e => setNegocio({ ...negocio, email: e.target.value })} placeholder="Email" style={{ border: "1px solid #e5e7eb", borderRadius: 8, padding: "7px 10px", fontSize: 12, gridColumn: "span 2" }} />
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Color de la factura</label>
+              <div style={{ display: "flex", gap: 8 }}>
+                {["#1d4ed8", "#7c3aed", "#059669", "#dc2626", "#ea580c", "#0f172a"].map(c => (
+                  <button key={c} onClick={() => setNegocio({ ...negocio, color: c })} style={{ width: 28, height: 28, borderRadius: 8, background: c, border: negocio.color === c ? "3px solid #111" : "1px solid #e5e7eb", cursor: "pointer" }} />
+                ))}
+              </div>
+            </div>
           </div>
         ) : (
           <div>
@@ -314,7 +323,7 @@ export default function FacturasPage() {
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 14, width: "100%", maxWidth: 620, maxHeight: "90vh", overflowY: "auto" }}>
             <div className="print-area" style={{ padding: 0 }}>
-              <div style={{ background: "#1d4ed8", color: "#fff", padding: "20px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ background: negocio.color, color: "#fff", padding: "20px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   {negocio.logo_url ? (
                     <img src={negocio.logo_url} alt="logo" style={{ height: 40, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
@@ -335,10 +344,10 @@ export default function FacturasPage() {
                 <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20 }}>
                   <thead>
                     <tr>
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>N.° DE FACTURA</th>
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>FECHA</th>
-                      {facturaVer.fecha_vencimiento && <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>VENCE</th>}
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>ESTADO</th>
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>N.° DE FACTURA</th>
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>FECHA</th>
+                      {facturaVer.fecha_vencimiento && <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>VENCE</th>}
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>ESTADO</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -354,7 +363,7 @@ export default function FacturasPage() {
                 </table>
 
                 <div style={{ marginBottom: 20 }}>
-                  <p style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", margin: "0 0 6px" }}>FACTURAR A:</p>
+                  <p style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", margin: "0 0 6px" }}>FACTURAR A:</p>
                   <p style={{ fontWeight: 700, fontSize: 13, color: "#111", margin: 0 }}>{facturaVer.cliente_nombre}</p>
                   <p style={{ fontSize: 12, color: "#888", margin: "2px 0 0" }}>{[facturaVer.cliente_email, facturaVer.cliente_telefono, facturaVer.cliente_direccion].filter(Boolean).join(" · ")}</p>
                 </div>
@@ -362,10 +371,10 @@ export default function FacturasPage() {
                 <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 16 }}>
                   <thead>
                     <tr>
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>DESCRIPCIÓN</th>
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "center" }}>CANT.</th>
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "right" }}>VALOR UNIT.</th>
-                      <th style={{ background: "#1d4ed8", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "right" }}>MONTO</th>
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "left" }}>DESCRIPCIÓN</th>
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "center" }}>CANT.</th>
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "right" }}>VALOR UNIT.</th>
+                      <th style={{ background: negocio.color, color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 12px", textAlign: "right" }}>MONTO</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -388,7 +397,7 @@ export default function FacturasPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 12px", fontSize: 13 }}>
                       <span style={{ color: "#555" }}>DESCUENTO</span><span>-{formatCOP(Number(facturaVer.descuento))}</span>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 12px", background: "#1d4ed8", color: "#fff", fontSize: 15, fontWeight: 800 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 12px", background: negocio.color, color: "#fff", fontSize: 15, fontWeight: 800 }}>
                       <span>TOTAL</span><span>{formatCOP(Number(facturaVer.total))}</span>
                     </div>
                   </div>
@@ -402,7 +411,7 @@ export default function FacturasPage() {
                 )}
 
                 <div style={{ textAlign: "center", borderTop: "1px solid #e5e7eb", paddingTop: 16 }}>
-                  <p style={{ color: "#1d4ed8", fontWeight: 800, fontSize: 16, margin: "0 0 6px" }}>GRACIAS</p>
+                  <p style={{ color: negocio.color, fontWeight: 800, fontSize: 16, margin: "0 0 6px" }}>GRACIAS</p>
                   <p style={{ fontSize: 11, color: "#888", margin: 0 }}>{[negocio.telefono, negocio.email].filter(Boolean).join(" · ")}</p>
                 </div>
               </div>
