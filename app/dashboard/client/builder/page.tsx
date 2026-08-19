@@ -839,6 +839,7 @@ export default function ClientBuilder() {
               <Field label="Descripcion" value={content.contacto.descripcion} onChange={v => updateText(["contacto","descripcion"], v)} multiline />
               <Field label="Telefono" value={content.contacto.telefono} onChange={v => updateText(["contacto","telefono"], v)} />
               <Field label="WhatsApp" value={content.contacto.whatsapp} onChange={v => updateText(["contacto","whatsapp"], v)} />
+                <Field label="Texto del globito flotante (WhatsApp)" value={content.contacto.whatsapp_texto_flotante ?? ""} onChange={v => updateText(["contacto","whatsapp_texto_flotante"], v)} />
               <Field label="Email" value={content.contacto.email} onChange={v => updateText(["contacto","email"], v)} />
               <Field label="Direccion" value={content.contacto.direccion} onChange={v => updateText(["contacto","direccion"], v)} />
             </>)}

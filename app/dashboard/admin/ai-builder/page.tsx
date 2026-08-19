@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,8 @@ export default function AIBuilder() {
     primary_color: "#7c3aed",
     secondary_color: "#000000",
   });
+  const [clientes, setClientes] = useState<any[]>([]);
+  const [clienteId, setClienteId] = useState<string>("");
 
   useEffect(() => {
     async function check() {
@@ -34,6 +36,8 @@ export default function AIBuilder() {
       if (!user) { router.push("/auth/login"); return; }
       const { data: prof } = await supabase.from("profiles").select("role").eq("id", user.id).single();
       if (prof?.role !== "admin") { router.push("/dashboard/client"); return; }
+      const { data: cl } = await supabase.from("profiles").select("id, name, email").eq("role", "client").order("name");
+      setClientes(cl ?? []);
       loadWebsites();
       setLoading(false);
     }
@@ -83,7 +87,7 @@ export default function AIBuilder() {
     setSaving(true);
     const { data: { user } } = await supabase.auth.getUser();
     await supabase.from("generated_websites").insert({
-      user_id: user?.id,
+      user_id: clienteId || user?.id,
       project_name: form.project_name,
       prompt: form.prompt,
       website_type: form.website_type,
@@ -178,7 +182,12 @@ export default function AIBuilder() {
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Configuracion del sitio</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del proyecto *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Asignar a cliente (opcional)</label>
+                      <select value={clienteId} onChange={e => setClienteId(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-600 mb-4">
+                        <option value="">Sin asignar (demo)</option>
+                        {clientes.map((c: any) => <option key={c.id} value={c.id}>{c.name ?? c.email}</option>)}
+                      </select>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del proyecto *</label>
                     <input type="text" value={form.project_name} onChange={e => setForm({ ...form, project_name: e.target.value })} placeholder="Ej: Inmobiliaria El Dorado" className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-600" />
                   </div>
                   <div>

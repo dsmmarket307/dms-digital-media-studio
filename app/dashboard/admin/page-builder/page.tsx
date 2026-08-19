@@ -20,6 +20,9 @@ export default function PageBuilderHome() {
   const router = useRouter();
   const supabase = createClient();
   const [sitios, setSitios] = useState<any[]>([]);
+  const [clientes, setClientes] = useState<any[]>([]);
+  const [asignando, setAsignando] = useState<any>(null);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState("");
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"sitios" | "plantillas">("sitios");
 
@@ -40,6 +43,14 @@ export default function PageBuilderHome() {
     if (!confirm("Eliminar este sitio?")) return;
     await supabase.from("generated_websites").delete().eq("id", id);
     setSitios(prev => prev.filter(s => s.id !== id));
+  }
+
+  async function handleAsignar() {
+    if (!asignando) return;
+    await supabase.from("generated_websites").update({ user_id: clienteSeleccionado || null }).eq("id", asignando.id);
+    setSitios(prev => prev.map(s => s.id === asignando.id ? { ...s, user_id: clienteSeleccionado || null } : s));
+    setAsignando(null);
+    setClienteSeleccionado("");
   }
 
   async function handleDuplicar(sitio: any) {
@@ -123,7 +134,10 @@ export default function PageBuilderHome() {
                         <a href={`/demo/${s.id}`} target="_blank" style={{ background: "#f3f4f6", color: "#555", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
                           Ver demo
                         </a>
-                        <button onClick={() => handleDuplicar(s)} style={{ background: "#f3f4f6", color: "#555", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
+                        <button onClick={() => { setAsignando(s); setClienteSeleccionado(s.user_id ?? ""); }} style={{ background: "#eff6ff", color: "#3b82f6", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
+                            Cliente
+                          </button>
+                          <button onClick={() => handleDuplicar(s)} style={{ background: "#f3f4f6", color: "#555", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
                           Duplicar
                         </button>
                         <button onClick={() => handleDelete(s.id)} style={{ background: "#fef2f2", color: "#ef4444", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
@@ -156,6 +170,23 @@ export default function PageBuilderHome() {
           </div>
         )}
       </div>
+
+      {asignando && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+          <div style={{ background: "#fff", borderRadius: 16, padding: 24, width: "100%", maxWidth: 420, boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: "#111", marginBottom: 4 }}>Asignar cliente</h2>
+            <p style={{ fontSize: 12, color: "#888", marginBottom: 16 }}>Sitio: {asignando.project_name}</p>
+            <select value={clienteSeleccionado} onChange={e => setClienteSeleccionado(e.target.value)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "9px 12px", fontSize: 13, outline: "none", marginBottom: 16 }}>
+              <option value="">Sin asignar (demo)</option>
+              {clientes.map((c: any) => <option key={c.id} value={c.id}>{c.name ?? c.email}</option>)}
+            </select>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => { setAsignando(null); setClienteSeleccionado(""); }} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "1px solid #e5e7eb", background: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Cancelar</button>
+              <button onClick={handleAsignar} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", background: "#7c3aed", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Guardar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
