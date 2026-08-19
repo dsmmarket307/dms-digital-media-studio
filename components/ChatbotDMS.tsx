@@ -303,7 +303,7 @@ export default function ChatbotDMS() {
                 onKeyDown={handleKey}
                 placeholder={step === "ask_name" ? "Tu nombre completo..." : step === "ask_celular" ? "Tu numero de celular..." : step === "ask_email" ? "Tu correo electronico..." : "Escribe tu mensaje..."}
                 disabled={loading}
-                style={{flex:1,border:"1px solid #e5e7eb",borderRadius:10,padding:"9px 12px",fontSize:13,outline:"none"}}
+                style={{flex:1,border:"1px solid #e5e7eb",borderRadius:10,padding:"9px 12px",fontSize:13,outline:"none",color:"#111",background:"#fff"}}
               />
               <button onClick={handleSend} disabled={loading||!input.trim()} style={{width:38,height:38,borderRadius:10,border:"none",cursor:"pointer",background:loading||!input.trim()?"#e5e7eb":"linear-gradient(135deg,#7c3aed,#4f46e5)",display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
