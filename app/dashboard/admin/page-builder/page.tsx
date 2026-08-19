@@ -34,6 +34,8 @@ export default function PageBuilderHome() {
       if (prof?.role !== "admin") { router.push("/dashboard/client"); return; }
       const { data } = await supabase.from("generated_websites").select("*").order("created_at", { ascending: false });
       setSitios(data ?? []);
+        const { data: cl } = await supabase.from("profiles").select("id, name, email").eq("role", "client").order("name");
+        setClientes(cl ?? []);
       setLoading(false);
     }
     load();
