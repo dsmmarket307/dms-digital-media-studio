@@ -26,6 +26,7 @@ export default function FacturacionManualAdmin() {
   const [facturas, setFacturas] = useState<any[]>([]);
   const [negocio, setNegocio] = useState({ nombre: "", direccion: "", telefono: "", email: "", logo_url: "" });
   const [guardandoNegocio, setGuardandoNegocio] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [facturaVer, setFacturaVer] = useState<any>(null);
@@ -55,6 +56,18 @@ export default function FacturacionManualAdmin() {
     }
     load();
   }, []);
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !userId) return;
+    setUploadingLogo(true);
+    const ext = file.name.split(".").pop();
+    const fileName = `logo-dms-${userId}-${Date.now()}.${ext}`;
+    await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+    setNegocio(prev => ({ ...prev, logo_url: data.publicUrl }));
+    setUploadingLogo(false);
+  }
 
   async function guardarDatosNegocio() {
     setGuardandoNegocio(true);
@@ -161,6 +174,19 @@ export default function FacturacionManualAdmin() {
 
       <div className="no-print" style={{ background: "#fff", borderRadius: 16, padding: "1.5rem", border: "1px solid #e8e8e8", marginBottom: 24 }}>
         <h2 style={{ fontSize: 14, fontWeight: 800, color: "#111", marginBottom: 4 }}>Datos de mi negocio (DMS)</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 10, marginBottom: 14 }}>
+          {negocio.logo_url ? (
+            <img src={negocio.logo_url} alt="Logo" style={{ width: 56, height: 56, borderRadius: 10, objectFit: "contain", border: "1px solid #e5e7eb", background: "#fff" }} />
+          ) : (
+            <div style={{ width: 56, height: 56, borderRadius: 10, border: "1px dashed #d1d5db", display: "flex", alignItems: "center", justifyContent: "center", color: "#ccc", fontSize: 10 }}>Sin logo</div>
+          )}
+          <div>
+            <label style={{ display: "inline-block", padding: "7px 14px", borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12, fontWeight: 700, color: "#555", cursor: "pointer", background: "#fff" }}>
+              {uploadingLogo ? "Subiendo..." : "Subir logo"}
+              <input type="file" accept="image/*" onChange={handleLogoUpload} disabled={uploadingLogo} style={{ display: "none" }} />
+            </label>
+          </div>
+        </div>
         <p style={{ fontSize: 12, color: "#888", marginBottom: 14 }}>Estos datos aparecen como "Supplier" en tus facturas. Todo editable.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 14 }}>
           <div>
@@ -296,28 +322,28 @@ export default function FacturacionManualAdmin() {
             <div className="print-area" style={{ padding: 36 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 30 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  {negocio.logo_url && <img src={negocio.logo_url} alt="Logo" style={{ width: 40, height: 40, objectFit: "contain" }} />}
+                  {negocio.logo_url && <img src={negocio.logo_url} alt="Logo" style={{ width: 60, height: 60, objectFit: "contain" }} />}
                   <p style={{ fontWeight: 800, fontSize: 18, color: "#111", margin: 0 }}>DMS Digital Studio</p>
                 </div>
-                <p style={{ fontSize: 22, fontWeight: 800, color: "#111", margin: 0 }}>Statement</p>
+                <p style={{ fontSize: 22, fontWeight: 800, color: "#111", margin: 0 }}>Factura</p>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 30 }}>
                 <div>
-                  <p style={{ fontSize: 10, fontWeight: 800, color: "#111", textTransform: "uppercase" as const, margin: 0, marginBottom: 6 }}>Supplier</p>
+                  <p style={{ fontSize: 10, fontWeight: 800, color: "#111", textTransform: "uppercase" as const, margin: 0, marginBottom: 6 }}>Emisor</p>
                   <p style={{ fontSize: 12, fontWeight: 700, color: "#111", margin: 0 }}>{negocio.nombre}</p>
                   <p style={{ fontSize: 11, color: "#555", margin: 0, marginTop: 2, whiteSpace: "pre-line" as const }}>{negocio.direccion}</p>
                   {negocio.telefono && <p style={{ fontSize: 11, color: "#555", margin: 0, marginTop: 2 }}>{negocio.telefono}</p>}
                   {negocio.email && <p style={{ fontSize: 11, color: "#555", margin: 0 }}>{negocio.email}</p>}
 
-                  <p style={{ fontSize: 10, fontWeight: 800, color: "#111", textTransform: "uppercase" as const, margin: 0, marginTop: 16, marginBottom: 6 }}>Customer</p>
+                  <p style={{ fontSize: 10, fontWeight: 800, color: "#111", textTransform: "uppercase" as const, margin: 0, marginTop: 16, marginBottom: 6 }}>Cliente</p>
                   <p style={{ fontSize: 12, fontWeight: 700, color: "#111", margin: 0 }}>{facturaVer.cliente_nombre}</p>
                   {facturaVer.cliente_direccion && <p style={{ fontSize: 11, color: "#555", margin: 0, marginTop: 2 }}>{facturaVer.cliente_direccion}</p>}
                   {facturaVer.cliente_email && <p style={{ fontSize: 11, color: "#555", margin: 0 }}>{facturaVer.cliente_email}</p>}
                   {facturaVer.cliente_telefono && <p style={{ fontSize: 11, color: "#555", margin: 0 }}>{facturaVer.cliente_telefono}</p>}
                 </div>
                 <div style={{ textAlign: "right", fontSize: 11, color: "#333" }}>
-                  <p style={{ margin: 0, marginBottom: 4 }}><b>Statement:</b> {facturaVer.numero}</p>
+                  <p style={{ margin: 0, marginBottom: 4 }}><b>Factura No:</b> {facturaVer.numero}</p>
                   <p style={{ margin: 0, marginBottom: 4 }}><b>Fecha:</b> {new Date(facturaVer.fecha).toLocaleDateString("es-CO")}</p>
                   {facturaVer.fecha_vencimiento && <p style={{ margin: 0, marginBottom: 4 }}><b>Vence:</b> {new Date(facturaVer.fecha_vencimiento).toLocaleDateString("es-CO")}</p>}
                   <p style={{ margin: 0 }}><b>Moneda:</b> {facturaVer.moneda ?? "COP"}</p>
@@ -329,7 +355,7 @@ export default function FacturacionManualAdmin() {
                   <tr style={{ background: "#f3f4f6" }}>
                     <th style={{ textAlign: "left", padding: "8px 10px", fontSize: 11, fontWeight: 700, color: "#333", border: "1px solid #d1d5db" }}>Descripcion</th>
                     <th style={{ textAlign: "right", padding: "8px 10px", fontSize: 11, fontWeight: 700, color: "#333", border: "1px solid #d1d5db", width: 60 }}>Cant.</th>
-                    <th style={{ textAlign: "right", padding: "8px 10px", fontSize: 11, fontWeight: 700, color: "#333", border: "1px solid #d1d5db", width: 100 }}>Amount</th>
+                    <th style={{ textAlign: "right", padding: "8px 10px", fontSize: 11, fontWeight: 700, color: "#333", border: "1px solid #d1d5db", width: 100 }}>Valor</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -359,7 +385,7 @@ export default function FacturacionManualAdmin() {
                       <td style={{ padding: "6px 10px", border: "1px solid #d1d5db", textAlign: "right", fontWeight: 800 }}>{formatMonto(Number(facturaVer.total), facturaVer.moneda ?? "COP")}</td>
                     </tr>
                     <tr>
-                      <td style={{ padding: "6px 10px", border: "1px solid #d1d5db", fontWeight: 700, color: "#333" }}>Currency</td>
+                      <td style={{ padding: "6px 10px", border: "1px solid #d1d5db", fontWeight: 700, color: "#333" }}>Moneda</td>
                       <td style={{ padding: "6px 10px", border: "1px solid #d1d5db", textAlign: "right" }}>{facturaVer.moneda ?? "COP"}</td>
                     </tr>
                   </tbody>
@@ -373,7 +399,7 @@ export default function FacturacionManualAdmin() {
                 </div>
               )}
 
-              <p style={{ fontSize: 10, color: "#999", textAlign: "center", marginTop: 24 }}>Documento generado por DMS Digital Studio — no constituye factura electronica DIAN</p>
+              
             </div>
           </div>
         </div>
