@@ -322,8 +322,8 @@ export default function FacturacionManualAdmin() {
             <div className="print-area" style={{ padding: 36 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 30 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  {negocio.logo_url && <img src={negocio.logo_url} alt="Logo" style={{ width: 60, height: 60, objectFit: "contain" }} />}
-                  <p style={{ fontWeight: 800, fontSize: 18, color: "#111", margin: 0 }}>DMS Digital Studio</p>
+                  {negocio.logo_url && <img src={negocio.logo_url} alt="Logo" style={{ width: 160, height: 160, objectFit: "contain" }} />}
+                  
                 </div>
                 <p style={{ fontSize: 22, fontWeight: 800, color: "#111", margin: 0 }}>Factura</p>
               </div>
