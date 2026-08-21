@@ -75,9 +75,12 @@ export default function FacturacionManualAdmin() {
   async function guardarFactura() {
     if (!form.cliente_nombre || items.every(it => !it.concepto)) return;
     setSaving(true);
+    const { data: { user: freshUser } } = await supabase.auth.getUser();
+    if (!freshUser) { alert("Sesion expirada, vuelve a iniciar sesion."); setSaving(false); return; }
     const siguienteNumero = (facturas[0]?.numero ?? 0) + 1;
     const { data, error } = await supabase.from("facturas").insert({
 
+      user_id: freshUser.id,
       numero: siguienteNumero,
       cliente_nombre: form.cliente_nombre,
       cliente_email: form.cliente_email || null,
