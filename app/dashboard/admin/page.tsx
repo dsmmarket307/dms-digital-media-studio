@@ -90,6 +90,7 @@ export default function AdminDashboard() {
     { href: "/dashboard/admin/mis-dominios", label: "Mis Dominios", desc: "Conecta y gestiona dominios del administrador", color: "#7c3aed", badge: 0, green: false },
     { href: "/dashboard/admin/suscripciones", label: "Suscripciones", desc: "Clientes activos, MRR y gestion de planes", color: "#059669", badge: sTrial.length, green: true },
     { href: "/dashboard/admin/centro-ayuda", label: "Centro de Ayuda", desc: "Gestiona los tutoriales y videos para clientes", color: "#7c3aed", badge: 0, green: false },
+      { href: "/dashboard/admin/facturacion-manual", label: "Facturacion Manual", desc: "Facturas DMS a clientes con condiciones especiales, COP o USD", color: "#059669", badge: 0, green: true },
   ];
 
   return (
