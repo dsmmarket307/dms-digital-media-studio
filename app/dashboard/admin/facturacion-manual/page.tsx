@@ -319,7 +319,7 @@ export default function FacturacionManualAdmin() {
               </div>
             </div>
 
-            <div className="print-area" style={{ padding: "60px 36px 36px 36px" }}>
+            <div className="print-area" style={{ padding: "100px 36px 36px 36px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 30 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   {negocio.logo_url && <img src={negocio.logo_url} alt="Logo" style={{ width: 160, height: 160, objectFit: "contain" }} />}
