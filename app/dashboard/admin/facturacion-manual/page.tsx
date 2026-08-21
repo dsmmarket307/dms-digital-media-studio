@@ -71,7 +71,7 @@ export default function FacturacionManualAdmin() {
 
   async function guardarDatosNegocio() {
     setGuardandoNegocio(true);
-    await supabase.from("profiles").update({ direccion: negocio.direccion, logo_url: negocio.logo_url }).eq("id", userId);
+    await supabase.from("profiles").update({ name: negocio.nombre, direccion: negocio.direccion, phone: negocio.telefono, logo_url: negocio.logo_url }).eq("id", userId);
     setGuardandoNegocio(false);
   }
 
