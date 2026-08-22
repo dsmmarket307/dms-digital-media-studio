@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import ImageCropperModal from "@/components/ImageCropperModal";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -117,6 +118,8 @@ export default function ClientBuilder() {
   const [secondaryColor, setSecondaryColor] = useState("#000000");
   const [images, setImages] = useState<Record<string, any>>({});
   const [imgTarget, setImgTarget] = useState("");
+    const [cropSrc, setCropSrc] = useState<string | null>(null);
+    const [cropFile, setCropFile] = useState<{ file: File; target: string } | null>(null);
   const [imagenes, setImagenes] = useState<any[]>([]);
   const [form, setForm] = useState({
     project_name: "",
@@ -187,16 +190,25 @@ export default function ClientBuilder() {
     setUploadingLogo(false);
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !imgTarget) return;
-    setUploadingImg(imgTarget);
-    const ext = file.name.split(".").pop();
-    const fileName = `img-${imgTarget}-${Date.now()}.${ext}`;
-    await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    setCropFile({ file, target: imgTarget });
+    setCropSrc(URL.createObjectURL(file));
+    if (imgRef.current) imgRef.current.value = "";
+  }
+
+  async function subirImagenRecortada(blob: Blob) {
+    if (!cropFile) return;
+    const target = cropFile.target;
+    setUploadingImg(target);
+    setCropSrc(null);
+    const fileName = `img-${target}-${Date.now()}.jpg`;
+    await supabase.storage.from("logos").upload(fileName, blob, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
-    setImages(prev => ({ ...prev, [imgTarget]: data.publicUrl }));
+    setImages(prev => ({ ...prev, [target]: data.publicUrl }));
     setUploadingImg(null);
+    setCropFile(null);
   }
 
   function triggerImg(target: string) {
@@ -884,6 +896,14 @@ export default function ClientBuilder() {
           </div>
         </div>
       </div>
+    {cropSrc && (
+      <ImageCropperModal
+        imageSrc={cropSrc}
+        aspect={1546 / 426}
+        onCancel={() => { setCropSrc(null); setCropFile(null); }}
+        onConfirm={(blob) => subirImagenRecortada(blob)}
+      />
+    )}
     </div>
   );
 }
