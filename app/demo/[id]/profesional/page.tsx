@@ -5,6 +5,7 @@ import ContactoForm from "./ContactoForm";
 import CookieBanner from "../CookieBanner";
 import PopupPromo from "../PopupPromo";
 import WhatsappWidget from "../WhatsappWidget";
+import LandingCarrusel from "../LandingCarrusel";
 import Script from "next/script";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -298,19 +299,7 @@ export default async function DemoProfesional({ params }: Props) {
 
   const script = `
     document.addEventListener('DOMContentLoaded', function() {
-      var slides = document.querySelectorAll('.hero-slide');
-      var dots = document.querySelectorAll('.dot');
-      var current = 0;
-      if (slides.length === 0) return;
-      function goTo(n) {
-        slides[current].classList.remove('active');
-        dots[current].classList.remove('active');
-        current = n;
-        slides[current].classList.add('active');
-        dots[current].classList.add('active');
-      }
-      setInterval(function(){ goTo((current + 1) % slides.length); }, 4000);
-      dots.forEach(function(d, i){ d.addEventListener('click', function(){ goTo(i); }); });
+      
       document.querySelectorAll('.faq-q').forEach(function(q){
         q.addEventListener('click', function(){
           var a = q.nextElementSibling;
@@ -366,11 +355,7 @@ export default async function DemoProfesional({ params }: Props) {
 
       <div className="hero">
         <div className="hero-slides">
-          {slides.map((img, i) => (
-            <div key={i} className={`hero-slide${i === 0 ? " active" : ""}`}>
-              <img src={img} alt={`slide ${i}`} />
-            </div>
-          ))}
+          <LandingCarrusel imagenes={slides} />
         </div>
         <div className="hero-body">
           {c?.hero?.badge && <div className="hero-badge">{c.hero.badge}</div>}
@@ -381,11 +366,6 @@ export default async function DemoProfesional({ params }: Props) {
             <a href="#contacto" className="btn-w">{c?.hero?.cta_principal}</a>
             <a href="#servicios" className="btn-o">{c?.hero?.cta_secundario}</a>
           </div>
-        </div>
-        <div className="dots">
-          {slides.map((_, i) => (
-            <div key={i} className={`dot${i === 0 ? " active" : ""}`} />
-          ))}
         </div>
       </div>
 
