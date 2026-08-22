@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import ImageCropperModal from "@/components/ImageCropperModal";
@@ -190,7 +190,7 @@ export default function ClientBuilder() {
     setUploadingLogo(false);
   }
 
-  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) { console.log("SE DISPARO handleImageUpload", e.target.files);
     const file = e.target.files?.[0];
     if (!file || !imgTarget) return;
     setCropFile({ file, target: imgTarget });
