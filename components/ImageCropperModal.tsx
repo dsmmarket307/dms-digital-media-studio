@@ -1,5 +1,6 @@
 ﻿"use client";
 import { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Cropper from "react-easy-crop";
 
 type Area = { x: number; y: number; width: number; height: number };
@@ -61,8 +62,10 @@ export default function ImageCropperModal({
     }
   }
 
-  return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 999999, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div style={{ background: "#fff", borderRadius: 16, width: "100%", maxWidth: 560, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.3)" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0" }}>
           <h2 style={{ fontSize: 15, fontWeight: 800, color: "#111", margin: 0 }}>Ajusta el encuadre</h2>
@@ -99,6 +102,7 @@ export default function ImageCropperModal({
           <button onClick={confirmar} disabled={processing} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", background: "#7c3aed", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: processing ? 0.6 : 1 }}>{processing ? "Procesando..." : "Usar esta imagen"}</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
