@@ -150,16 +150,7 @@ export default async function DemoProfesional({ params }: Props) {
   const tipografiaGeneral = c?.tipografia?.general ?? "16px";
   const tipografiaMenu = c?.tipografia?.menu ?? "14px";
 
-  let mapCoords: { lat: number; lon: number } | null = null;
-  if (c?.contacto?.mostrar_mapa && c?.contacto?.direccion) {
-    try {
-      const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(c.contacto.direccion)}`, { headers: { "User-Agent": "DMS-Digital-Media-Studio/1.0" } });
-      const geoData = await geoRes.json();
-      if (geoData?.[0]) {
-        mapCoords = { lat: parseFloat(geoData[0].lat), lon: parseFloat(geoData[0].lon) };
-      }
-    } catch {}
-  }
+  const direccionMapa = c?.contacto?.direccion ? c.contacto.direccion : null;
 
   // Usar keywords de la IA si existen (para "Otro" o cualquier tipo)
   const customKeywords = c?.meta?.pexels_keywords;
@@ -564,10 +555,10 @@ export default async function DemoProfesional({ params }: Props) {
                 {c.contacto.email && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>{c.contacto.email}</div>}
                 {c.contacto.direccion && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>{c.contacto.direccion}</div>}
                 {c.contacto.horario && <div className="contact-item"><div className="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>{c.contacto.horario}</div>}
-                {mapCoords && (
+                {direccionMapa && (
                   <div style={{ marginTop: 16, width: "100%", aspectRatio: "1 / 1", maxWidth: 260, borderRadius: 12, overflow: "hidden", border: "2px solid rgba(255,255,255,0.3)" }}>
                     <iframe
-                      src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(direccionMapa)}&output=embed`}
                       style={{ width: "100%", height: "100%", border: 0 }}
                       loading="lazy"
                       title="Ubicacion"

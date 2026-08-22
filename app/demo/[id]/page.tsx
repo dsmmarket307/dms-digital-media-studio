@@ -140,16 +140,7 @@ export default async function DemoPage({ params }: Props) {
 
   const c = site.generated_content;
 
-  let mapCoords: { lat: number; lon: number } | null = null;
-  if (c?.contacto?.mostrar_mapa && c?.contacto?.direccion) {
-    try {
-      const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(c.contacto.direccion)}`, { headers: { "User-Agent": "DMS-Digital-Media-Studio/1.0" } });
-      const geoData = await geoRes.json();
-      if (geoData?.[0]) {
-        mapCoords = { lat: parseFloat(geoData[0].lat), lon: parseFloat(geoData[0].lon) };
-      }
-    } catch {}
-  }
+  const direccionMapa = c?.contacto?.direccion ? c.contacto.direccion : null;
 
   const { data: todasResenas } = await supabase.from("resenas").select("producto_index, calificacion").eq("site_id", id);
   const promediosPorProducto = (todasResenas ?? []).reduce((acc: any, r: any) => {
@@ -539,10 +530,10 @@ export default async function DemoPage({ params }: Props) {
               {c.contacto.telefono && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.telefono}</span>}
               {c.contacto.email && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.email}</span>}
               {c.contacto.direccion && <span style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)", padding: ".75rem 1.5rem", borderRadius: 999, fontSize: ".9rem" }}>{c.contacto.direccion}</span>}
-            {mapCoords && (
+            {direccionMapa && (
               <div style={{ marginTop: 24, width: "100%", maxWidth: 400, aspectRatio: "1 / 1", margin: "24px auto 0", borderRadius: 12, overflow: "hidden", border: "2px solid rgba(255,255,255,0.3)" }}>
                 <iframe
-                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.01}%2C${mapCoords.lat - 0.01}%2C${mapCoords.lon + 0.01}%2C${mapCoords.lat + 0.01}&layer=mapnik&marker=${mapCoords.lat}%2C${mapCoords.lon}`}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(direccionMapa)}&output=embed`}
                   style={{ width: "100%", height: "100%", border: 0 }}
                   loading="lazy"
                   title="Ubicacion"
