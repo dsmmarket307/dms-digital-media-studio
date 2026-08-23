@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import EditorDescripcion from "@/components/EditorDescripcion";
+import ImageCropperModal from "@/components/ImageCropperModal";
 import { useRouter, useParams } from "next/navigation";
 
 const FONTS = [
@@ -87,6 +88,8 @@ export default function PageBuilderEditor() {
   const logoRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgTarget, setImgTarget] = useState<string>("");
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const [cropFile, setCropFile] = useState<{ file: File; target: string } | null>(null);
   const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
   const [navHidden, setNavHidden] = useState<string[]>([]);
 
@@ -173,57 +176,66 @@ export default function PageBuilderEditor() {
     setUploadingLogo(false);
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !imgTarget) return;
-    setUploadingImg(imgTarget);
-    const ext = file.name.split(".").pop();
-    const fileName = `img-${imgTarget}-${Date.now()}.${ext}`;
-    await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    setCropFile({ file, target: imgTarget });
+    setCropSrc(URL.createObjectURL(file));
+    if (imgRef.current) imgRef.current.value = "";
+  }
+
+  async function subirImagenRecortada(blob: Blob) {
+    if (!cropFile) return;
+    const target = cropFile.target;
+    setUploadingImg(target);
+    setCropSrc(null);
+    const fileName = `img-${target}-${Date.now()}.jpg`;
+    await supabase.storage.from("logos").upload(fileName, blob, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
-    if (imgTarget.startsWith("antesfoto_")) {
-      const idx = parseInt(imgTarget.split("_")[1]);
+    if (target.startsWith("antesfoto_")) {
+      const idx = parseInt(target.split("_")[1]);
       setContent((prev: any) => {
         const next = JSON.parse(JSON.stringify(prev));
         next.productos[idx].antes_after_antes = data.publicUrl;
         return next;
       });
-    } else if (imgTarget.startsWith("despuesfoto_")) {
-      const idx = parseInt(imgTarget.split("_")[1]);
+    } else if (target.startsWith("despuesfoto_")) {
+      const idx = parseInt(target.split("_")[1]);
       setContent((prev: any) => {
         const next = JSON.parse(JSON.stringify(prev));
         next.productos[idx].antes_after_despues = data.publicUrl;
         return next;
       });
-    } else if (imgTarget.startsWith("resena_")) {
-      const idx = parseInt(imgTarget.split("_")[1]);
+    } else if (target.startsWith("resena_")) {
+      const idx = parseInt(target.split("_")[1]);
       setContent((prev: any) => {
         const next = JSON.parse(JSON.stringify(prev));
         next.productos[idx].resena_foto = data.publicUrl;
         return next;
       });
-    } else if (imgTarget.startsWith("producto_")) {
-      const idx = parseInt(imgTarget.split("_")[1]);
+    } else if (target.startsWith("producto_")) {
+      const idx = parseInt(target.split("_")[1]);
       setContent((prev: any) => {
         const next = JSON.parse(JSON.stringify(prev));
         if (!next.productos[idx].imagenes) next.productos[idx].imagenes = [];
         next.productos[idx].imagenes.push(data.publicUrl);
         return next;
       });
-    } else if (imgTarget === "galeria_new") {
+    } else if (target === "galeria_new") {
       setImages(prev => ({
         ...prev,
         galeria_imgs: [...((prev.galeria_imgs as string[]) ?? []), data.publicUrl],
       }));
-    } else if (imgTarget === "carrusel_new") {
+    } else if (target === "carrusel_new") {
       setImages(prev => ({
         ...prev,
         carrusel_imgs: [...((prev.carrusel_imgs as string[]) ?? []), data.publicUrl],
       }));
     } else {
-      setImages(prev => ({ ...prev, [imgTarget]: data.publicUrl }));
+      setImages(prev => ({ ...prev, [target]: data.publicUrl }));
     }
     setUploadingImg(null);
+    setCropFile(null);
   }
 
   function updateText(path: string[], value: string) {
@@ -516,6 +528,14 @@ export default function PageBuilderEditor() {
       <style>{`@keyframes spin { to { transform: rotate(360deg); } } @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } * { box-sizing: border-box; }`}</style>
       <input ref={logoRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoUpload} />
       <input ref={imgRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
+      {cropSrc && (
+        <ImageCropperModal
+          imageSrc={cropSrc}
+          aspect={cropFile?.target?.startsWith("resena_") ? 1 : cropFile?.target === "popup_promo" ? 3 / 4 : cropFile?.target === "carrusel_new" ? 16 / 9 : 4 / 3}
+          onCancel={() => { setCropSrc(null); setCropFile(null); }}
+          onConfirm={(blob) => subirImagenRecortada(blob)}
+        />
+      )}
 
       {/* TOPBAR */}
       <div style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexShrink: 0, zIndex: 50 }}>
