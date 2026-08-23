@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
 import EstrellasProducto from "./EstrellasProducto";
 import LandingCarrusel from "./LandingCarrusel";
+import ParallaxImage from "./ParallaxImage";
 import CookieBanner from "./CookieBanner";
 import PopupPromo from "./PopupPromo";
 import WhatsappWidget from "./WhatsappWidget";
@@ -305,7 +306,7 @@ export default async function DemoPage({ params }: Props) {
           <div className="wrap">
             <p className="label">Nosotros</p>
             <h2 className="st">{c.nosotros.titulo}</h2>
-            {ci.nosotros && <img src={ci.nosotros} alt="nosotros" className="sec-img" />}
+            {ci.nosotros && <ParallaxImage src={ci.nosotros} alt="nosotros" className="sec-img" />}
             <p style={{ textAlign: "center", color: "#555", lineHeight: 1.8, maxWidth: 700, margin: "0 auto 1.5rem" }}>{c.nosotros.descripcion}</p>
             <div className="g2" style={{ marginTop: "2rem" }}>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>
@@ -326,7 +327,7 @@ export default async function DemoPage({ params }: Props) {
           <div className="wrap">
             <p className="label">Servicios</p>
             <h2 className="st">Lo que ofrecemos</h2>
-            {img1 && <img src={img1} alt="servicios" className="sec-img" />}
+            {img1 && <ParallaxImage src={img1} alt="servicios" className="sec-img" />}
             <div className="g3">
               {c.servicios.map((s: any, i: number) => (
                 <div key={i} className="card">
@@ -486,7 +487,7 @@ export default async function DemoPage({ params }: Props) {
           <div className="wrap">
             <p className="label">Testimonios</p>
             <h2 className="st">Lo que dicen nuestros clientes</h2>
-            {img2 && <img src={img2} alt="testimonios" className="sec-img" />}
+            {img2 && <ParallaxImage src={img2} alt="testimonios" className="sec-img" />}
             <div className="g2">
               {c.testimonios.map((t: any, i: number) => (
                 <div key={i} className="test">
