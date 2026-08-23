@@ -5,6 +5,7 @@ import AgenteChat from "@/components/AgenteChat";
 import EstrellasProducto from "./EstrellasProducto";
 import LandingCarrusel from "./LandingCarrusel";
 import ParallaxImage from "./ParallaxImage";
+import TestimoniosCarrusel from "./TestimoniosCarrusel";
 import CookieBanner from "./CookieBanner";
 import PopupPromo from "./PopupPromo";
 import WhatsappWidget from "./WhatsappWidget";
@@ -488,20 +489,7 @@ export default async function DemoPage({ params }: Props) {
             <p className="label">Testimonios</p>
             <h2 className="st">Lo que dicen nuestros clientes</h2>
             {img2 && <ParallaxImage src={img2} alt="testimonios" className="sec-img" />}
-            <div className="g2">
-              {c.testimonios.map((t: any, i: number) => (
-                <div key={i} className="test">
-                  <p>{t.texto}</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-                    <div className="av">{t.nombre?.charAt(0)}</div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: ".9rem" }}>{t.nombre}</div>
-                      <div style={{ fontSize: ".8rem", color: "#999" }}>{t.cargo}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <TestimoniosCarrusel testimonios={c.testimonios} accentColor={pr} />
           </div>
         </section>
       )}
