@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import EditorDescripcion from "@/components/EditorDescripcion";
@@ -173,7 +173,7 @@ export default function PageBuilderEditor() {
     setUploadingLogo(false);
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) { console.log("SE DISPARO handleImageUpload ADMIN", e.target.files, imgTarget);
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !imgTarget) return;
     setUploadingImg(imgTarget);
@@ -651,7 +651,7 @@ export default function PageBuilderEditor() {
                   {[...content.barraAnuncio.items, ...content.barraAnuncio.items].map((txt: string, i: number) => (
                     <span key={i} style={{ color: content.barraAnuncio.colorTexto || "#f5c542", fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: 20 }}>
                       {txt}
-                      <span style={{ opacity: 0.6 }}>�</span>
+                      <span style={{ opacity: 0.6 }}>•</span>
                     </span>
                   ))}
                 </div>
@@ -1234,18 +1234,18 @@ export default function PageBuilderEditor() {
             {selectedSection === "confianza" && (<>
               <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Estos mensajes aparecen en la pagina de cada producto, arriba del boton de comprar.</p>
               {(content?.confianza ?? [
-                { icono: "??", texto: "Envio GRATIS" },
-                { icono: "??", texto: "Pago Contra Entrega" },
-                { icono: "??", texto: "Compra 100% Segura" },
-                { icono: "?", texto: "Calidad Garantizada" },
+                { icono: "🚚", texto: "Envio GRATIS" },
+                { icono: "💵", texto: "Pago Contra Entrega" },
+                { icono: "🔒", texto: "Compra 100% Segura" },
+                { icono: "⭐", texto: "Calidad Garantizada" },
               ]).map((item: any, ci: number) => (
                 <div key={ci} style={{ display: "flex", gap: 6, marginBottom: 8, alignItems: "center" }}>
-                  <input value={item.icono} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "??", texto: "Envio GRATIS" }, { icono: "??", texto: "Pago Contra Entrega" }, { icono: "??", texto: "Compra 100% Segura" }, { icono: "?", texto: "Calidad Garantizada" }]; next.confianza[ci].icono = e.target.value; return next; }); }} style={{ width: 44, padding: "6px 4px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 14, textAlign: "center", outline: "none" }} />
-                  <input value={item.texto} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "??", texto: "Envio GRATIS" }, { icono: "??", texto: "Pago Contra Entrega" }, { icono: "??", texto: "Compra 100% Segura" }, { icono: "?", texto: "Calidad Garantizada" }]; next.confianza[ci].texto = e.target.value; return next; }); }} placeholder="Texto" style={{ flex: 1, padding: "6px 8px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 11, outline: "none" }} />
-                  <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "??", texto: "Envio GRATIS" }, { icono: "??", texto: "Pago Contra Entrega" }, { icono: "??", texto: "Compra 100% Segura" }, { icono: "?", texto: "Calidad Garantizada" }]; next.confianza.splice(ci, 1); return next; }); }} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "6px 8px", fontSize: 11, cursor: "pointer" }}>x</button>
+                  <input value={item.icono} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza[ci].icono = e.target.value; return next; }); }} style={{ width: 44, padding: "6px 4px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 14, textAlign: "center", outline: "none" }} />
+                  <input value={item.texto} onChange={(e) => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza[ci].texto = e.target.value; return next; }); }} placeholder="Texto" style={{ flex: 1, padding: "6px 8px", border: "1px solid #e5e7eb", borderRadius: 6, fontSize: 11, outline: "none" }} />
+                  <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza.splice(ci, 1); return next; }); }} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "6px 8px", fontSize: 11, cursor: "pointer" }}>x</button>
                 </div>
               ))}
-              <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "??", texto: "Envio GRATIS" }, { icono: "??", texto: "Pago Contra Entrega" }, { icono: "??", texto: "Compra 100% Segura" }, { icono: "?", texto: "Calidad Garantizada" }]; next.confianza.push({ icono: "?", texto: "Nuevo mensaje" }); return next; }); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>+ Agregar mensaje</button>
+              <button onClick={() => { setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.confianza) next.confianza = [{ icono: "🚚", texto: "Envio GRATIS" }, { icono: "💵", texto: "Pago Contra Entrega" }, { icono: "🔒", texto: "Compra 100% Segura" }, { icono: "⭐", texto: "Calidad Garantizada" }]; next.confianza.push({ icono: "✅", texto: "Nuevo mensaje" }); return next; }); }} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>+ Agregar mensaje</button>
             </>)}
             {selectedSection === "demo_bar" && (<>
               <p style={{ fontSize: 11, color: "#888", marginBottom: 12, lineHeight: 1.5 }}>Esta barra aparece arriba del todo en la version profesional, util para vender el sitio. Apagala cuando le muestres la propuesta final a tu cliente.</p>
@@ -1357,7 +1357,7 @@ export default function PageBuilderEditor() {
                         style={{ marginTop: 8, background: "#fff", borderRadius: 8, padding: "10px", border: "1px solid #eee", opacity: draggedItem?.p === pi && draggedItem?.i === ii ? 0.4 : 1, cursor: "grab" }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                          <span style={{ fontSize: 10, fontWeight: 700, color: "#999", display: "flex", alignItems: "center", gap: 4 }}>? Item {ii + 1}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: "#999", display: "flex", alignItems: "center", gap: 4 }}>⠿ Item {ii + 1}</span>
                           <button onClick={() => removePaginaItem(pi, ii)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "2px 6px", fontSize: 10, cursor: "pointer" }}>Eliminar</button>
                         </div>
                         <Field label="Nombre" value={it.nombre} onChange={(v) => updatePaginaItem(pi, ii, "nombre", v)} />
