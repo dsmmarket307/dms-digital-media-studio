@@ -290,15 +290,14 @@ export default async function DemoProfesional({ params }: Props) {
   `;
 
   const script = `
-    document.addEventListener('DOMContentLoaded', function() {
-      
-      document.querySelectorAll('.faq-q').forEach(function(q){
-        q.addEventListener('click', function(){
-          var a = q.nextElementSibling;
-          a.classList.toggle('open');
-          q.querySelector('.faq-arrow').textContent = a.classList.contains('open') ? '-' : '+';
-        });
-      });
+    document.addEventListener('click', function(e){
+      var q = e.target.closest('.faq-q');
+      if (!q) return;
+      var a = q.nextElementSibling;
+      if (!a) return;
+      a.classList.toggle('open');
+      var arrow = q.querySelector('.faq-arrow');
+      if (arrow) arrow.textContent = a.classList.contains('open') ? '-' : '+';
     });
   `;
 
