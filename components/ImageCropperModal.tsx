@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Cropper from "react-easy-crop";
@@ -35,11 +35,13 @@ export default function ImageCropperModal({
   aspect,
   onCancel,
   onConfirm,
+  onUseOriginal,
 }: {
   imageSrc: string;
   aspect: number;
   onCancel: () => void;
   onConfirm: (blob: Blob) => void;
+  onUseOriginal?: () => void;
 }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -97,9 +99,14 @@ export default function ImageCropperModal({
           />
         </div>
 
-        <div style={{ padding: "14px 20px", borderTop: "1px solid #f0f0f0", display: "flex", gap: 8 }}>
-          <button onClick={onCancel} disabled={processing} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "1px solid #e5e7eb", background: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Cancelar</button>
-          <button onClick={confirmar} disabled={processing} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", background: "#7c3aed", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: processing ? 0.6 : 1 }}>{processing ? "Procesando..." : "Usar esta imagen"}</button>
+        <div style={{ padding: "14px 20px", borderTop: "1px solid #f0f0f0" }}>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button onClick={onCancel} disabled={processing} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "1px solid #e5e7eb", background: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Cancelar</button>
+            <button onClick={confirmar} disabled={processing} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", background: "#7c3aed", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: processing ? 0.6 : 1 }}>{processing ? "Procesando..." : "Usar esta imagen"}</button>
+          </div>
+          {onUseOriginal && (
+            <button onClick={onUseOriginal} disabled={processing} style={{ width: "100%", marginTop: 8, padding: "8px", borderRadius: 8, border: "none", background: "transparent", color: "#7c3aed", fontSize: 12, fontWeight: 600, cursor: "pointer", textDecoration: "underline" }}>Subir imagen original sin recortar</button>
+          )}
         </div>
       </div>
     </div>,

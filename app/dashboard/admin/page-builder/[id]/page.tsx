@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import EditorDescripcion from "@/components/EditorDescripcion";
@@ -184,6 +184,20 @@ export default function PageBuilderEditor() {
     if (imgRef.current) imgRef.current.value = "";
   }
 
+  async function subirImagenOriginal() {
+    if (!cropFile) return;
+    const { file, target } = cropFile;
+    setUploadingImg(target);
+    setCropSrc(null);
+    const ext = file.name.split(".").pop();
+    const fileName = `img-${target}-${Date.now()}.${ext}`;
+    await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+    await aplicarUrlImagen(target, data.publicUrl);
+    setUploadingImg(null);
+    setCropFile(null);
+  }
+
   async function subirImagenRecortada(blob: Blob) {
     if (!cropFile) return;
     const target = cropFile.target;
@@ -236,6 +250,51 @@ export default function PageBuilderEditor() {
     }
     setUploadingImg(null);
     setCropFile(null);
+  }
+
+  async function aplicarUrlImagen(target: string, url: string) {
+    if (target.startsWith("antesfoto_")) {
+      const idx = parseInt(target.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        next.productos[idx].antes_after_antes = url;
+        return next;
+      });
+    } else if (target.startsWith("despuesfoto_")) {
+      const idx = parseInt(target.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        next.productos[idx].antes_after_despues = url;
+        return next;
+      });
+    } else if (target.startsWith("resena_")) {
+      const idx = parseInt(target.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        next.productos[idx].resena_foto = url;
+        return next;
+      });
+    } else if (target.startsWith("producto_")) {
+      const idx = parseInt(target.split("_")[1]);
+      setContent((prev: any) => {
+        const next = JSON.parse(JSON.stringify(prev));
+        if (!next.productos[idx].imagenes) next.productos[idx].imagenes = [];
+        next.productos[idx].imagenes.push(url);
+        return next;
+      });
+    } else if (target === "galeria_new") {
+      setImages(prev => ({
+        ...prev,
+        galeria_imgs: [...((prev.galeria_imgs as string[]) ?? []), url],
+      }));
+    } else if (target === "carrusel_new") {
+      setImages(prev => ({
+        ...prev,
+        carrusel_imgs: [...((prev.carrusel_imgs as string[]) ?? []), url],
+      }));
+    } else {
+      setImages(prev => ({ ...prev, [target]: url }));
+    }
   }
 
   function updateText(path: string[], value: string) {
@@ -534,6 +593,7 @@ export default function PageBuilderEditor() {
           aspect={cropFile?.target?.startsWith("resena_") ? 1 : cropFile?.target === "popup_promo" ? 3 / 4 : cropFile?.target === "carrusel_new" ? 16 / 9 : 4 / 3}
           onCancel={() => { setCropSrc(null); setCropFile(null); }}
           onConfirm={(blob) => subirImagenRecortada(blob)}
+          onUseOriginal={() => subirImagenOriginal()}
         />
       )}
 
