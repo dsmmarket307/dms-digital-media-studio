@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const PLANTILLAS = [
-  { id: "restaurante", nombre: "Restaurante", color: "#ef4444", desc: "Menu, reservas y galeria de platos" },
-  { id: "inmobiliaria", nombre: "Inmobiliaria", color: "#3b82f6", desc: "Propiedades, contacto y avaluos" },
-  { id: "spa", nombre: "Spa y Bienestar", color: "#8b5cf6", desc: "Servicios, precios y reservas" },
-  { id: "medico", nombre: "Consultorio Medico", color: "#10b981", desc: "Servicios, equipo y citas" },
-  { id: "abogados", nombre: "Firma de Abogados", color: "#1e293b", desc: "Servicios legales y contacto" },
-  { id: "gimnasio", nombre: "Gimnasio", color: "#f59e0b", desc: "Planes, clases y equipo" },
-  { id: "hotel", nombre: "Hotel", color: "#6366f1", desc: "Habitaciones, servicios y reservas" },
-  { id: "tienda", nombre: "Tienda Online", color: "#ec4899", desc: "Productos, categorias y contacto" },
-  { id: "agencia", nombre: "Agencia Marketing", color: "#7c3aed", desc: "Servicios, portafolio y equipo" },
+  { id: "restaurante", nombre: "Restaurante", color: "#ef4444", desc: "Menu, reservas y galeria de platos", website_type: "Restaurante", prompt: "Crear sitio web para un restaurante con menu destacado, opcion de reservas y galeria de platos. Tono calido y apetitoso." },
+  { id: "inmobiliaria", nombre: "Inmobiliaria", color: "#3b82f6", desc: "Propiedades, contacto y avaluos", website_type: "Inmobiliaria", prompt: "Crear sitio web para una inmobiliaria con propiedades destacadas, formulario de contacto y servicio de avaluos. Tono profesional y confiable." },
+  { id: "spa", nombre: "Spa y Bienestar", color: "#8b5cf6", desc: "Servicios, precios y reservas", website_type: "Spa", prompt: "Crear sitio web para un spa de bienestar con servicios, precios y sistema de reservas. Tono relajante y elegante." },
+  { id: "medico", nombre: "Consultorio Medico", color: "#10b981", desc: "Servicios, equipo y citas", website_type: "Medicos", prompt: "Crear sitio web para un consultorio medico con servicios, presentacion del equipo medico y agendamiento de citas. Tono profesional y de confianza." },
+  { id: "abogados", nombre: "Firma de Abogados", color: "#1e293b", desc: "Servicios legales y contacto", website_type: "Abogados", prompt: "Crear sitio web para una firma de abogados con areas de practica, servicios legales y formulario de contacto. Tono serio y profesional." },
+  { id: "gimnasio", nombre: "Gimnasio", color: "#f59e0b", desc: "Planes, clases y equipo", website_type: "Gimnasio", prompt: "Crear sitio web para un gimnasio con planes de membresia, horario de clases y presentacion del equipo de entrenadores. Tono energico y motivador." },
+  { id: "hotel", nombre: "Hotel", color: "#6366f1", desc: "Habitaciones, servicios y reservas", website_type: "Hotel", prompt: "Crear sitio web para un hotel con tipos de habitaciones, servicios del hotel y sistema de reservas. Tono acogedor y premium." },
+  { id: "tienda", nombre: "Tienda Online", color: "#ec4899", desc: "Productos, categorias y contacto", website_type: "Tienda Online", prompt: "Crear tienda online con productos destacados, categorias claras y formulario de contacto. Tono moderno y atractivo para compras." },
+  { id: "agencia", nombre: "Agencia Marketing", color: "#7c3aed", desc: "Servicios, portafolio y equipo", website_type: "Agencia", prompt: "Crear sitio web para una agencia de marketing con servicios, portafolio de trabajos y presentacion del equipo. Tono creativo y profesional." },
 ];
 
 export default function PageBuilderHome() {
@@ -172,7 +172,7 @@ export default function PageBuilderHome() {
                 </div>
                 <div style={{ padding: 16 }}>
                   <p style={{ fontSize: 12, color: "#888", marginBottom: 14 }}>{p.desc}</p>
-                  <button onClick={() => alert("Proximamente — usar plantilla " + p.nombre)} style={{ width: "100%", background: p.color, color: "#fff", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                  <button onClick={() => router.push(`/dashboard/admin/ai-builder?website_type=${encodeURIComponent(p.website_type)}&prompt=${encodeURIComponent(p.prompt)}&primary_color=${encodeURIComponent(p.color)}`)} style={{ width: "100%", background: p.color, color: "#fff", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                     Usar plantilla
                   </button>
                 </div>

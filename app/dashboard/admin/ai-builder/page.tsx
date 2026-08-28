@@ -42,6 +42,19 @@ export default function AIBuilder() {
       setLoading(false);
     }
     check();
+
+    const params = new URLSearchParams(window.location.search);
+    const qWebsiteType = params.get("website_type");
+    const qPrompt = params.get("prompt");
+    const qColor = params.get("primary_color");
+    if (qWebsiteType || qPrompt || qColor) {
+      setForm(f => ({
+        ...f,
+        website_type: qWebsiteType ?? f.website_type,
+        prompt: qPrompt ?? f.prompt,
+        primary_color: qColor ?? f.primary_color,
+      }));
+    }
   }, []);
 
   async function loadWebsites() {
