@@ -47,6 +47,12 @@ export default function PageBuilderHome() {
     setSitios(prev => prev.filter(s => s.id !== id));
   }
 
+  async function handleBloquear(sitio: any) {
+    const nuevoEstado = !sitio.bloqueado;
+    await supabase.from("generated_websites").update({ bloqueado: nuevoEstado }).eq("id", sitio.id);
+    setSitios(prev => prev.map(s => s.id === sitio.id ? { ...s, bloqueado: nuevoEstado } : s));
+  }
+
   async function handleAsignar() {
     if (!asignando) return;
     await supabase.from("generated_websites").update({ user_id: clienteSeleccionado || null }).eq("id", asignando.id);
@@ -136,7 +142,10 @@ export default function PageBuilderHome() {
                         <a href={`/demo/${s.id}`} target="_blank" style={{ background: "#f3f4f6", color: "#555", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none", textAlign: "center" }}>
                           Ver demo
                         </a>
-                        <button onClick={() => { setAsignando(s); setClienteSeleccionado(s.user_id ?? ""); }} style={{ background: "#eff6ff", color: "#3b82f6", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
+                        <button onClick={() => handleBloquear(s)} style={{ background: s.bloqueado ? "#fef2f2" : "#f0fdf4", color: s.bloqueado ? "#ef4444" : "#10b981", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
+                            {s.bloqueado ? "Desbloquear" : "Bloquear"}
+                          </button>
+                          <button onClick={() => { setAsignando(s); setClienteSeleccionado(s.user_id ?? ""); }} style={{ background: "#eff6ff", color: "#3b82f6", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
                             Cliente
                           </button>
                           <button onClick={() => handleDuplicar(s)} style={{ background: "#f3f4f6", color: "#555", padding: "8px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
