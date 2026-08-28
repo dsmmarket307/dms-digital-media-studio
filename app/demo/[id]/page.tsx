@@ -131,6 +131,20 @@ export default async function DemoPage({ params }: Props) {
     );
   }
 
+  if (!isAdmin && site.bloqueado) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+        <div style={{ background: "#fff", borderRadius: 20, padding: "3rem 2rem", textAlign: "center", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }}>
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(107,114,128,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.5rem" }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111", marginBottom: "0.75rem" }}>Sitio no disponible</h1>
+          <p style={{ color: "#888", fontSize: 14, lineHeight: 1.7 }}>Este sitio no esta disponible en este momento.</p>
+        </div>
+      </div>
+    );
+  }
+
   const headersList = await headers();
   const hostname = headersList.get("host") ?? "";
   const isCustomDomain = hostname !== "dms-digital-media-studio.vercel.app" && !hostname.includes("vercel.app") && !hostname.includes("localhost");
