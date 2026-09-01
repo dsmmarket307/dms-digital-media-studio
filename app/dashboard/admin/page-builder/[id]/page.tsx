@@ -184,14 +184,32 @@ export default function PageBuilderEditor() {
     if (imgRef.current) imgRef.current.value = "";
   }
 
+  async function comprimirImagen(file: File | Blob, maxAncho = 1600, calidad = 0.82): Promise<Blob> {
+    const bitmap = await createImageBitmap(file);
+    let { width, height } = bitmap;
+    if (width > maxAncho) {
+      height = Math.round((height * maxAncho) / width);
+      width = maxAncho;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file instanceof Blob ? file : new Blob([file]);
+    ctx.drawImage(bitmap, 0, 0, width, height);
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob || (file as Blob)), "image/jpeg", calidad);
+    });
+  }
+
   async function subirImagenOriginal() {
     if (!cropFile) return;
     const { file, target } = cropFile;
     setUploadingImg(target);
     setCropSrc(null);
-    const ext = file.name.split(".").pop();
-    const fileName = `img-${target}-${Date.now()}.${ext}`;
-    await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    const comprimido = await comprimirImagen(file);
+    const fileName = `img-${target}-${Date.now()}.jpg`;
+    await supabase.storage.from("logos").upload(fileName, comprimido, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
     await aplicarUrlImagen(target, data.publicUrl);
     setUploadingImg(null);
@@ -204,7 +222,8 @@ export default function PageBuilderEditor() {
     setUploadingImg(target);
     setCropSrc(null);
     const fileName = `img-${target}-${Date.now()}.jpg`;
-    await supabase.storage.from("logos").upload(fileName, blob, { upsert: true });
+    const comprimido = await comprimirImagen(blob);
+    await supabase.storage.from("logos").upload(fileName, comprimido, { upsert: true });
     const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
     if (target.startsWith("antesfoto_")) {
       const idx = parseInt(target.split("_")[1]);
@@ -523,8 +542,9 @@ export default function PageBuilderEditor() {
       if (!file || !file.type.startsWith("image/")) return;
       setBusy(true);
       const ext = file.name.split(".").pop();
-      const fileName = `img-pagina-${pIndex}-${iIndex}-${Date.now()}.${ext}`;
-      await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+      const comprimido = await comprimirImagen(file);
+      const fileName = `img-pagina-${pIndex}-${iIndex}-${Date.now()}.jpg`;
+      await supabase.storage.from("logos").upload(fileName, comprimido, { upsert: true });
       const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
       updatePaginaItem(pIndex, iIndex, "imagen", data.publicUrl);
       setBusy(false);
