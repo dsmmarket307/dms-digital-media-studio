@@ -28,7 +28,7 @@ export default function SoporteAdmin() {
       if (prof?.role !== "admin") { router.push("/dashboard/client"); return; }
       const [{ data: t }, { data: l }] = await Promise.all([
         supabase.from("soporte_mensajes").select("*").order("created_at", { ascending: false }),
-        supabase.from("leads").select("*").order("created_at", { ascending: false }),
+        supabase.from("leads").select("*").eq("fuente", "servicios").order("created_at", { ascending: false }),
       ]);
       setTickets(t ?? []);
       setLeads(l ?? []);
