@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import ChatbotDMS from "@/components/ChatbotDMS";
@@ -312,6 +312,8 @@ export default function Home() {
       email: form.email,
       telefono: form.telefono,
       mensaje: form.mensaje,
+      fuente: "servicios",
+      estado: "nuevo",
     }]);
     setLoading(false);
     if (error) { alert("Error al enviar el formulario"); return; }
