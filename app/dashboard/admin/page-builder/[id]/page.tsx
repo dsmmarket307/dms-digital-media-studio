@@ -301,7 +301,10 @@ export default function PageBuilderEditor() {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
       let obj = next;
-      for (let i = 0; i < path.length - 1; i++) obj = obj[path[i]];
+      for (let i = 0; i < path.length - 1; i++) {
+        if (!obj[path[i]]) obj[path[i]] = {};
+        obj = obj[path[i]];
+      }
       obj[path[path.length - 1]] = value;
       return next;
     });
