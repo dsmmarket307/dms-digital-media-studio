@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
@@ -326,7 +326,7 @@ export default async function DemoProfesional({ params }: Props) {
       {(c?.demo_bar?.activo ?? true) && (
         <div className="demo-bar">
           {c?.demo_bar?.texto ?? "Version Profesional \u2014 DMS Digital Media Studio"}
-          <a href="https://www.paypal.com/ncp/payment/GXNM85WZHXXQG" target="_blank" rel="noopener noreferrer">{c?.demo_bar?.texto_boton ?? "Quiero este sitio \u2014 $250 USD"}</a>
+          <a href={c?.demo_bar?.url_boton || "https://www.paypal.com/ncp/payment/GXNM85WZHXXQG"} target="_blank" rel="noopener noreferrer">{c?.demo_bar?.texto_boton ?? "Quiero este sitio \u2014 $250 USD"}</a>
         </div>
       )}
 
