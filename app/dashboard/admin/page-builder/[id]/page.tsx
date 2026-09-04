@@ -760,6 +760,19 @@ export default function PageBuilderEditor() {
               </button>
             </div>
             <div style={{ marginBottom: 8 }}>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>HTML personalizado</label>
+              <button onClick={() => htmlRef.current?.click()} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                {customHtml ? "Cambiar HTML" : "Subir HTML"}
+              </button>
+              {customHtml && (
+                <label style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, fontSize: 11, color: "#555", cursor: "pointer" }}>
+                  <input type="checkbox" checked={usaHtmlPersonalizado} onChange={e => setUsaHtmlPersonalizado(e.target.checked)} />
+                  Usar este HTML en el sitio publicado
+                </label>
+              )}
+            </div>
+            <div style={{ marginBottom: 8 }}>
               <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Fuente</label>
               <select value={font} onChange={e => setFont(e.target.value)} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 6, padding: "5px 6px", fontSize: 11 }}>
                 {FONTS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
