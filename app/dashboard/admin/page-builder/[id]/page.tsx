@@ -92,6 +92,8 @@ export default function PageBuilderEditor() {
   const [cropFile, setCropFile] = useState<{ file: File; target: string } | null>(null);
   const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
   const [navHidden, setNavHidden] = useState<string[]>([]);
+  const [customCss, setCustomCss] = useState("");
+  const cssRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function load() {
@@ -117,6 +119,7 @@ export default function PageBuilderEditor() {
       if (!c.barraAnuncio) c.barraAnuncio = { activo: false, colorFondo: "#111111", colorTexto: "#f5c542", items: ["+5000 clientes satisfechos", "Garantia 30 dias", "Material de alta calidad", "Entrega en 3-5 dias habiles", "Envio gratis a todo Colombia", "Contra-entrega disponible"] };
       setContent(c);
       setPrimaryColor(data.primary_color ?? "#7c3aed");
+      setCustomCss(data.custom_css ?? "");
       setSecondaryColor(data.secondary_color ?? "#000000");
       setLogoUrl(data.logo_url ?? "");
       setFont(data.font_family ?? FONTS[0].value);
@@ -149,6 +152,7 @@ export default function PageBuilderEditor() {
     await supabase.from("generated_websites").update({
       generated_content: { ...content, footer: { ...(content.footer ?? {}), navbar_hidden: navHidden } },
       primary_color: primaryColor,
+      custom_css: customCss,
       secondary_color: secondaryColor,
       logo_url: logoUrl,
       font_family: font,
@@ -176,6 +180,18 @@ export default function PageBuilderEditor() {
     setUploadingLogo(false);
   }
 
+  function handleCssUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 100 * 1024) { alert("El archivo CSS no puede superar 100 KB"); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = String(reader.result ?? "");
+      if (/<script/i.test(text)) { alert("El archivo contiene contenido no permitido"); return; }
+      setCustomCss(text);
+    };
+    reader.readAsText(file);
+  }
   function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !imgTarget) return;
@@ -610,6 +626,7 @@ export default function PageBuilderEditor() {
       <style>{`@keyframes spin { to { transform: rotate(360deg); } } @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } * { box-sizing: border-box; }`}</style>
       <input ref={logoRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoUpload} />
       <input ref={imgRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
+      <input ref={cssRef} type="file" accept=".css" style={{ display: "none" }} onChange={handleCssUpload} />
       {cropSrc && (
         <ImageCropperModal
           imageSrc={cropSrc}
@@ -714,6 +731,13 @@ export default function PageBuilderEditor() {
                 {uploadingLogo ? "Subiendo..." : logoUrl ? "Cambiar" : "Subir logo"}
               </button>
               {logoUrl && <img src={logoUrl} alt="logo" style={{ width: "100%", height: 40, objectFit: "contain", marginTop: 6, background: "#f8f8f8", borderRadius: 6 }} />}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Tema personalizado (.css)</label>
+              <button onClick={() => cssRef.current?.click()} style={{ width: "100%", padding: "6px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 11, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                {customCss ? "Cambiar tema" : "Subir tema"}
+              </button>
             </div>
             <div style={{ marginBottom: 8 }}>
               <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>Fuente</label>
