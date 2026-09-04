@@ -93,7 +93,10 @@ export default function PageBuilderEditor() {
   const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
   const [navHidden, setNavHidden] = useState<string[]>([]);
   const [customCss, setCustomCss] = useState("");
+  const [customHtml, setCustomHtml] = useState("");
+  const [usaHtmlPersonalizado, setUsaHtmlPersonalizado] = useState(false);
   const cssRef = useRef<HTMLInputElement>(null);
+  const htmlRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function load() {
@@ -120,6 +123,8 @@ export default function PageBuilderEditor() {
       setContent(c);
       setPrimaryColor(data.primary_color ?? "#7c3aed");
       setCustomCss(data.custom_css ?? "");
+      setCustomHtml(data.custom_html ?? "");
+      setUsaHtmlPersonalizado(data.usa_html_personalizado ?? false);
       setSecondaryColor(data.secondary_color ?? "#000000");
       setLogoUrl(data.logo_url ?? "");
       setFont(data.font_family ?? FONTS[0].value);
@@ -153,6 +158,8 @@ export default function PageBuilderEditor() {
       generated_content: { ...content, footer: { ...(content.footer ?? {}), navbar_hidden: navHidden } },
       primary_color: primaryColor,
       custom_css: customCss,
+      custom_html: customHtml,
+      usa_html_personalizado: usaHtmlPersonalizado,
       secondary_color: secondaryColor,
       logo_url: logoUrl,
       font_family: font,
@@ -189,6 +196,18 @@ export default function PageBuilderEditor() {
       const text = String(reader.result ?? "");
       if (/<script/i.test(text)) { alert("El archivo contiene contenido no permitido"); return; }
       setCustomCss(text);
+    };
+    reader.readAsText(file);
+  }
+
+  function handleHtmlUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 500 * 1024) { alert("El archivo HTML no puede superar 500 KB"); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = String(reader.result ?? "");
+      setCustomHtml(text);
     };
     reader.readAsText(file);
   }
@@ -627,6 +646,7 @@ export default function PageBuilderEditor() {
       <input ref={logoRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoUpload} />
       <input ref={imgRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
       <input ref={cssRef} type="file" accept=".css" style={{ display: "none" }} onChange={handleCssUpload} />
+      <input ref={htmlRef} type="file" accept=".html" style={{ display: "none" }} onChange={handleHtmlUpload} />
       {cropSrc && (
         <ImageCropperModal
           imageSrc={cropSrc}

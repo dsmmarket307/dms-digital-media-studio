@@ -8,6 +8,7 @@ import WhatsappWidget from "../WhatsappWidget";
 import LandingCarrusel from "../LandingCarrusel";
 import ParallaxImage from "../ParallaxImage";
 import Script from "next/script";
+import { renderCustomHtml } from "@/lib/render-custom-html";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -152,6 +153,17 @@ export default async function DemoProfesional({ params }: Props) {
         </div>
       </div>
     );
+  }
+
+  if (site.usa_html_personalizado && site.custom_html) {
+    const finalHtml = renderCustomHtml(site.custom_html, site.generated_content ?? {}, {
+      siteId: id,
+      userId: currentUser?.id ?? null,
+      destinoEmail: site.generated_content?.contacto?.email ?? "",
+      nombreNegocio: site.generated_content?.footer?.nombre_empresa ?? site.project_name ?? "",
+    });
+
+    return <div dangerouslySetInnerHTML={{ __html: finalHtml }} />;
   }
 
   const c = site.generated_content;
