@@ -321,16 +321,16 @@ export default async function DemoProfesional({ params }: Props) {
     .offer-marquee{background:#111;color:#fff;overflow:hidden;white-space:nowrap;padding:0.6rem 0;font-size:0.75rem;font-weight:700;letter-spacing:0.05em}
     .offer-marquee-track{display:inline-block;animation:marquee-scroll 20s linear infinite}
     @keyframes marquee-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    .g4{gap:2rem}
-    .srv-card{border-radius:4px;border:none;box-shadow:none;background:transparent;transition:opacity 0.25s ease;position:relative}
-    .srv-card:hover{transform:none;box-shadow:none;opacity:0.9}
-    .srv-card > div:first-child{height:auto;aspect-ratio:3/4;background:#f5f5f5;border-radius:4px}
-    .srv-card > div:first-child svg{width:28px;height:28px;opacity:0.3}
-    .srv-card > div:last-child{padding:1.25rem 0.25rem 0}
-    .srv-card h3{font-size:0.95rem;font-weight:500;color:#111;line-height:1.4;margin-bottom:0.5rem;letter-spacing:0.01em}
-    .srv-card p{font-size:1.05rem;font-weight:700;color:#111}
+    .g4{gap:2rem !important}
+    .srv-card{border-radius:4px !important;border:none !important;box-shadow:none !important;background:transparent !important;transition:opacity 0.25s ease;position:relative}
+    .srv-card:hover{transform:none !important;box-shadow:none !important;opacity:0.9}
+    .srv-card > div:first-child{height:auto !important;aspect-ratio:3/4 !important;background:#f5f5f5 !important;border-radius:4px !important}
+    .srv-card > div:first-child svg{width:28px !important;height:28px !important;opacity:0.3}
+    .srv-card > div:last-child{padding:1.25rem 0.25rem 0 !important}
+    .srv-card h3{font-size:0.95rem !important;font-weight:500 !important;color:#111 !important;line-height:1.4;margin-bottom:0.5rem;letter-spacing:0.01em}
+    .srv-card p{font-size:1.05rem !important;font-weight:700 !important;color:#111 !important}
     .footer-grid a:hover{opacity:0.8}
-    @media(max-width:768px){.g4{gap:1.25rem}}
+    @media(max-width:768px){.g4{gap:1.25rem !important}}
     ` : ""}
     ${site.custom_css ?? ""}
   `;
