@@ -432,9 +432,9 @@ export default async function DemoProfesional({ params }: Props) {
             )}
             <div className="g4">
               {c.productos.map((p: any, i: number) => (
-                <a key={i} href={`/demo/${id}/producto/${i}?from=profesional`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden" }}>
+                <a key={i} href={`/demo/${id}/producto/${i}?from=profesional`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden", position: "relative" }}>
                   {p.imagenes?.length > 0 ? (
-                    <div style={{ position: "relative" }}>
+                    <>
                     <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 220, objectFit: "contain", background: "#fff" }} />
                     {(() => {
                       const actual = parseFloat(String(p.precio).replace(/[^0-9.]/g, ""));
@@ -448,7 +448,7 @@ export default async function DemoProfesional({ params }: Props) {
                         </div>
                       );
                     })()}
-                  </div>
+                  </>
                   ) : (
                     <div style={{ width: "100%", height: 220, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>

@@ -1,5 +1,5 @@
 ﻿"use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type ItemCarrito = {
   productoIndex: number;
@@ -24,9 +24,26 @@ type CarritoContextType = {
 
 const CarritoContext = createContext<CarritoContextType | null>(null);
 
-export function CarritoProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<ItemCarrito[]>([]);
+export function CarritoProvider({ children, siteId }: { children: ReactNode; siteId?: string }) {
+  const storageKey = siteId ? `carrito:${siteId}` : null;
+
+  const [items, setItems] = useState<ItemCarrito[]>(() => {
+    if (typeof window === "undefined" || !storageKey) return [];
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
   const [abierto, setAbierto] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !storageKey) return;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(items));
+    } catch {}
+  }, [items, storageKey]);
 
   const agregar = (item: ItemCarrito) => {
     setItems(prev => {
