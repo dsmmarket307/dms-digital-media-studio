@@ -324,8 +324,8 @@ export default async function DemoProfesional({ params }: Props) {
     .g4{gap:2rem !important}
     a.srv-card{border-radius:4px !important;border:none !important;box-shadow:none !important;background:transparent !important;transition:opacity 0.25s ease;position:relative;display:block !important}
     a.srv-card:hover{transform:none !important;box-shadow:none !important;opacity:0.9}
-    a.srv-card > div:first-child{height:auto !important;aspect-ratio:3/4 !important;background:#f5f5f5 !important;border-radius:4px !important}
-    a.srv-card > img:first-child{width:100% !important;height:auto !important;aspect-ratio:3/4 !important;object-fit:cover !important;display:block !important;background:#f5f5f5 !important}
+    a.srv-card > div:first-child{height:auto !important;aspect-ratio:4/5 !important;background:#f5f5f5 !important;border-radius:4px !important}
+    a.srv-card > img:first-child{width:100% !important;height:auto !important;aspect-ratio:4/5 !important;object-fit:cover !important;object-position:top center !important;display:block !important;background:#f5f5f5 !important}
     a.srv-card > div:first-child svg{width:28px !important;height:28px !important;opacity:0.3}
     a.srv-card > div:last-child{padding:1.25rem 0.25rem 0 !important}
     a.srv-card h3{font-size:0.95rem !important;font-weight:500 !important;color:#111 !important;line-height:1.4;margin-bottom:0.5rem;letter-spacing:0.01em}
