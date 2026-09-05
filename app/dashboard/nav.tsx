@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -46,9 +46,9 @@ export default function DashboardNav({ name, email }: { name: string; email: str
   const [open, setOpen] = useState(false)
   const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md")
   const pathname = usePathname()
-  if (pathname.includes("page-builder") || pathname.includes("mi-sitio-dms")) return null
   const router = useRouter()
   const supabase = createClient()
+  if (pathname.includes("page-builder") || pathname.includes("mi-sitio-dms")) return null
 
   const fontSizeMap = { sm: 12, md: 13.5, lg: 15.5 }
   const fs = fontSizeMap[fontSize]
