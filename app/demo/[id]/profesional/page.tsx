@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
@@ -79,7 +79,7 @@ const CATEGORY_KEYWORDS: Record<string, string> = {
 };
 
 async function getPexelsImages(websiteType: string, count: number = 6, customKeywords?: string): Promise<string[]> {
-  // Si hay keywords personalizadas de la IA, usarlas. Si no, usar las del catÃ¡logo
+  // Si hay keywords personalizadas de la IA, usarlas. Si no, usar las del catÃƒÂ¡logo
   const query = customKeywords || CATEGORY_KEYWORDS[websiteType] || "business professional modern";
   try {
     const res = await fetch(
@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: Props) {
 
   const rubro = gc?.meta?.tipo ?? "";
   const direccion = gc?.contacto?.direccion ?? "";
-  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
+  const ciudadMatch = direccion.match(/([A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+)\s*-\s*[A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+\s*$/);
   const ciudad = ciudadMatch ? ciudadMatch[1] : "";
 
   let description: string =
@@ -359,6 +359,15 @@ export default async function DemoProfesional({ params }: Props) {
         </div>
       )}
 
+      {site.template_version === "v2" && c?.marquesina?.activo && c?.marquesina?.texto && (
+        <div className="offer-marquee">
+          <div className="offer-marquee-track">
+            {Array(2).fill(c.marquesina.texto).map((t: string, i: number) => (
+              <span key={i} style={{ marginRight: "3rem" }}>{t}</span>
+            ))}
+          </div>
+        </div>
+      )}
       <nav>
         <div className="brand">
           {logo && <img src={logo} alt="logo" style={{ height: 56, maxWidth: 200, objectFit: "contain" }} />}{!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
@@ -368,17 +377,17 @@ export default async function DemoProfesional({ params }: Props) {
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </label>
         <ul className="nav-links">
-          {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
+          {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
           <li><a href="#galeria">Galeria</a></li>
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
           {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
             const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
             return hijos.length > 0 ? (
               <li key={pi} className="nav-item-parent">
-                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} â–¾</a>
                 <ul className="nav-submenu">
                   {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
                 </ul>
@@ -412,11 +421,34 @@ export default async function DemoProfesional({ params }: Props) {
           <div className="wrap">
             <p className="label">Productos</p>
             <h2 className="st">{c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo"}</h2>
+            {site.template_version === "v2" && Array.from(new Set(c.productos.map((p: any) => p.categoria).filter(Boolean))).length > 1 && (
+              <div className="cat-pills" style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "2rem" }}>
+                {Array.from(new Set(c.productos.map((p: any) => p.categoria).filter(Boolean))).map((cat: any, i: number) => (
+                  <a key={i} href={`/demo/${id}/categoria/${encodeURIComponent(cat)}`} style={{ padding: "0.5rem 1.25rem", borderRadius: 999, border: `1px solid ${pr}`, color: pr, fontSize: "0.85rem", fontWeight: 600, textDecoration: "none", whiteSpace: "nowrap" }}>
+                    {cat}
+                  </a>
+                ))}
+              </div>
+            )}
             <div className="g4">
               {c.productos.map((p: any, i: number) => (
                 <a key={i} href={`/demo/${id}/producto/${i}?from=profesional`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden" }}>
                   {p.imagenes?.length > 0 ? (
+                    <div style={{ position: "relative" }}>
                     <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 220, objectFit: "contain", background: "#fff" }} />
+                    {(() => {
+                      const actual = parseFloat(String(p.precio).replace(/[^0-9.]/g, ""));
+                      const anterior = parseFloat(String(p.precio_anterior).replace(/[^0-9.]/g, ""));
+                      if (!p.precio_anterior || isNaN(actual) || isNaN(anterior) || anterior <= actual) return null;
+                      const pct = Math.round((1 - actual / anterior) * 100);
+                      if (pct <= 0) return null;
+                      return (
+                        <div style={{ position: "absolute", top: 10, left: 10, background: "#e11d48", color: "#fff", fontSize: "0.75rem", fontWeight: 800, padding: "0.25rem 0.6rem", borderRadius: 4 }}>
+                          -{pct}% OFF
+                        </div>
+                      );
+                    })()}
+                  </div>
                   ) : (
                     <div style={{ width: "100%", height: 220, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -454,8 +486,8 @@ export default async function DemoProfesional({ params }: Props) {
                   </div>
                 )}
                 <div className="mv-grid">
-                  <div className="mv-card"><h4>Misión</h4><p>{c.nosotros.mision}</p></div>
-                  <div className="mv-card"><h4>Visión</h4><p>{c.nosotros.vision}</p></div>
+                  <div className="mv-card"><h4>MisiÃ³n</h4><p>{c.nosotros.mision}</p></div>
+                  <div className="mv-card"><h4>VisiÃ³n</h4><p>{c.nosotros.vision}</p></div>
                 </div>
               </div>
             </div>
