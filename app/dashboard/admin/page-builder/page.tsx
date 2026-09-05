@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -66,6 +66,7 @@ export default function PageBuilderHome() {
       project_name: sitio.project_name + " (copia)",
       prompt: sitio.prompt,
       website_type: sitio.website_type,
+      template_version: sitio.template_version ?? "v1",
       theme: sitio.theme,
       primary_color: sitio.primary_color,
       secondary_color: sitio.secondary_color,

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -104,6 +104,7 @@ export default function AIBuilder() {
       project_name: form.project_name,
       prompt: form.prompt,
       website_type: form.website_type,
+      template_version: form.website_type === "Tienda Online" ? "v2" : "v1",
       theme: form.theme,
       primary_color: form.primary_color,
       secondary_color: form.secondary_color,

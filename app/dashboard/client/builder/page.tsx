@@ -262,6 +262,7 @@ export default function ClientBuilder() {
       project_name: form.project_name,
       prompt: form.prompt,
       website_type: form.website_type,
+      template_version: form.website_type === "Tienda Online" ? "v2" : "v1",
       theme: form.theme,
       primary_color: primaryColor,
       secondary_color: secondaryColor,

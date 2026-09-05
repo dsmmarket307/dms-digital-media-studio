@@ -317,6 +317,21 @@ export default async function DemoProfesional({ params }: Props) {
     .compare-btn{display:block;text-align:center;padding:1rem;border-radius:12px;font-weight:700;text-decoration:none;margin-top:1.5rem;transition:opacity 0.2s}
     .compare-btn:hover{opacity:0.9}
     @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.hamburger-label{order:-2}.brand{order:-1;flex:1;justify-content:center}.nav-cta{order:0;padding:0.4rem 0.7rem;font-size:0.68rem;flex-shrink:0;white-space:nowrap}.brand{flex-shrink:1;min-width:0}.brand img{max-width:100px;height:auto}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}.hero-body h1{font-size:2.25rem}section{padding:4rem 1.5rem}.nosotros-grid,.contact-grid,.compare-cards,.footer-grid{grid-template-columns:1fr}.galeria-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr}}
+    ${site.template_version === "v2" ? `
+    .offer-marquee{background:#111;color:#fff;overflow:hidden;white-space:nowrap;padding:0.6rem 0;font-size:0.75rem;font-weight:700;letter-spacing:0.05em}
+    .offer-marquee-track{display:inline-block;animation:marquee-scroll 20s linear infinite}
+    @keyframes marquee-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .g4{gap:2rem}
+    .srv-card{border-radius:4px;border:none;box-shadow:none;background:transparent;transition:opacity 0.25s ease;position:relative}
+    .srv-card:hover{transform:none;box-shadow:none;opacity:0.9}
+    .srv-card > div:first-child{height:auto;aspect-ratio:3/4;background:#f5f5f5;border-radius:4px}
+    .srv-card > div:first-child svg{width:28px;height:28px;opacity:0.3}
+    .srv-card > div:last-child{padding:1.25rem 0.25rem 0}
+    .srv-card h3{font-size:0.95rem;font-weight:500;color:#111;line-height:1.4;margin-bottom:0.5rem;letter-spacing:0.01em}
+    .srv-card p{font-size:1.05rem;font-weight:700;color:#111}
+    .footer-grid a:hover{opacity:0.8}
+    @media(max-width:768px){.g4{gap:1.25rem}}
+    ` : ""}
     ${site.custom_css ?? ""}
   `;
 
