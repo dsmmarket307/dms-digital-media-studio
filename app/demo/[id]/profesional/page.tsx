@@ -79,7 +79,7 @@ const CATEGORY_KEYWORDS: Record<string, string> = {
 };
 
 async function getPexelsImages(websiteType: string, count: number = 6, customKeywords?: string): Promise<string[]> {
-  // Si hay keywords personalizadas de la IA, usarlas. Si no, usar las del catÃƒÂ¡logo
+  // Si hay keywords personalizadas de la IA, usarlas. Si no, usar las del catÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡logo
   const query = customKeywords || CATEGORY_KEYWORDS[websiteType] || "business professional modern";
   try {
     const res = await fetch(
@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: Props) {
 
   const rubro = gc?.meta?.tipo ?? "";
   const direccion = gc?.contacto?.direccion ?? "";
-  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
+  const ciudadMatch = direccion.match(/([A-ZÃƒÂÃƒâ€°ÃƒÂÃƒâ€œÃƒÅ¡Ãƒâ€˜][a-zÃƒÂ¡ÃƒÂ©ÃƒÂ­ÃƒÂ³ÃƒÂºÃƒÂ±]+)\s*-\s*[A-ZÃƒÂÃƒâ€°ÃƒÂÃƒâ€œÃƒÅ¡Ãƒâ€˜][a-zÃƒÂ¡ÃƒÂ©ÃƒÂ­ÃƒÂ³ÃƒÂºÃƒÂ±]+\s*$/);
   const ciudad = ciudadMatch ? ciudadMatch[1] : "";
 
   let description: string =
@@ -391,17 +391,17 @@ export default async function DemoProfesional({ params }: Props) {
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </label>
         <ul className="nav-links">
-          {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
+          {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
           <li><a href="#galeria">Galeria</a></li>
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
           {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
             const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
             return hijos.length > 0 ? (
               <li key={pi} className="nav-item-parent">
-                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} â–¾</a>
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¾</a>
                 <ul className="nav-submenu">
                   {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
                 </ul>
@@ -445,8 +445,28 @@ export default async function DemoProfesional({ params }: Props) {
               </div>
             )}
             <div className="g4">
-              {c.productos.map((p: any, i: number) => (
-                <a key={i} href={`/demo/${id}/producto/${i}?from=profesional`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden", position: "relative" }}>
+              {Array.from(new Set((c.productos as any[]).map((p: any) => p.categoria).filter(Boolean))).map((cat: any, ci2: number) => {
+                const productosCategoria = (c.productos as any[]).filter((p: any) => p.categoria === cat);
+                const p = productosCategoria[0];
+                const totalProductos = productosCategoria.length;
+                return (
+                  <a key={`cat-${ci2}`} href={`/demo/${id}/categoria/${encodeURIComponent(cat)}`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden", position: "relative" }}>
+                    {p.imagenes?.length > 0 ? (
+                      <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 220, objectFit: "contain", background: "#fff" }} />
+                    ) : (
+                      <div style={{ width: "100%", height: 220, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                      </div>
+                    )}
+                    <div style={{ padding: "1.5rem" }}>
+                      <h3>{cat}</h3>
+                      <p style={{ fontSize: "0.85rem", color: "#888", marginTop: 4 }}>{totalProductos} producto{totalProductos !== 1 ? "s" : ""}</p>
+                    </div>
+                  </a>
+                );
+              })}
+              {(c.productos as any[]).filter((p: any) => !p.categoria).map((p: any, i: number) => (
+                <a key={`prod-${i}`} href={`/demo/${id}/producto/${(c.productos as any[]).indexOf(p)}?from=profesional`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden", position: "relative" }}>
                   {p.imagenes?.length > 0 ? (
                     <>
                     <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 220, objectFit: "contain", background: "#fff" }} />
@@ -462,7 +482,7 @@ export default async function DemoProfesional({ params }: Props) {
                         </div>
                       );
                     })()}
-                  </>
+                    </>
                   ) : (
                     <div style={{ width: "100%", height: 220, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -470,7 +490,7 @@ export default async function DemoProfesional({ params }: Props) {
                   )}
                   <div style={{ padding: "1.5rem" }}>
                     <h3>{p.nombre}</h3>
-                    <EstrellasProducto siteId={id} productoIndex={i} />
+                    <EstrellasProducto siteId={id} productoIndex={(c.productos as any[]).indexOf(p)} />
                     <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 8, flexWrap: "nowrap" }}>
                       <p style={{ fontSize: "1.1rem", fontWeight: 800, color: pr, whiteSpace: "nowrap", margin: 0 }}>{p.precio}</p>
                       {p.precio_anterior && <p style={{ fontSize: "0.8rem", color: "#aaa", textDecoration: "line-through", whiteSpace: "nowrap", margin: 0 }}>{p.precio_anterior}</p>}
@@ -500,8 +520,8 @@ export default async function DemoProfesional({ params }: Props) {
                   </div>
                 )}
                 <div className="mv-grid">
-                  <div className="mv-card"><h4>Misión</h4><p>{c.nosotros.mision}</p></div>
-                  <div className="mv-card"><h4>Visión</h4><p>{c.nosotros.vision}</p></div>
+                  <div className="mv-card"><h4>MisiÃƒÂ³n</h4><p>{c.nosotros.mision}</p></div>
+                  <div className="mv-card"><h4>VisiÃƒÂ³n</h4><p>{c.nosotros.vision}</p></div>
                 </div>
               </div>
             </div>
