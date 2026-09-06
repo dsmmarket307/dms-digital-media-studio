@@ -361,7 +361,7 @@ export default async function DemoPage({ params }: Props) {
             {c?.productos?.length > 0 && !navHidden.includes("productos") && (
         <section id="productos" style={{ padding: "5rem 2rem", background: c?.esquemas?.productos === "gris" ? "#f4f4f6" : c?.esquemas?.productos === "tinte" ? `${pr}12` : "#fff" }}>
           <div className="wrap">
-            <p className="label">Productos</p>
+            <p className="label">{c?.productosLabel ?? "Productos"}</p>
             <h2 className="st">{c?.productosTitulo || (c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo")}</h2>
             {Array.from(new Set((c.productos as any[]).map((p: any) => p.categoria).filter(Boolean))).map((cat: any) => (
               <div key={cat} style={{ marginBottom: "3rem" }}>
@@ -571,4 +571,5 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
+
 

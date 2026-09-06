@@ -433,7 +433,7 @@ export default async function DemoProfesional({ params }: Props) {
       {c?.productos?.length > 0 && (
         <section id="productos">
           <div className="wrap">
-            <p className="label">Productos</p>
+            <p className="label">{c?.productosLabel ?? "Productos"}</p>
             <h2 className="st">{c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo"}</h2>
             {site.template_version === "v2" && Array.from(new Set(c.productos.map((p: any) => p.categoria).filter(Boolean))).length > 1 && (
               <div className="cat-pills" style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "2rem" }}>

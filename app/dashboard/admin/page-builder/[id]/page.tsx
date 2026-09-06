@@ -1217,6 +1217,8 @@ export default function PageBuilderEditor() {
                   </div>
                 </div>
               ))}
+              <Field label="Etiqueta pequena" value={content?.productosLabel} onChange={(v) => updateText(["productosLabel"], v)} />
+              <Field label="Titulo seccion" value={content?.productosTitulo} onChange={(v) => updateText(["productosTitulo"], v)} />
               <button onClick={() => addArrayItem("productos", { nombre: "Nuevo producto", precio: "$0", descripcion: "Descripcion", categoria: "General", tallas: "", colores: "", imagenes: [], destacado: false })} style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Agregar producto</button>
             </>)}
             {selectedSection === "nosotros" && (<>
