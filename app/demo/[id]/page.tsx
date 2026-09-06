@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props) {
 
   const rubro = gc?.meta?.tipo ?? "";
   const direccion = gc?.contacto?.direccion ?? "";
-  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
+  const ciudadMatch = direccion.match(/([A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+)\s*-\s*[A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+\s*$/);
   const ciudad = ciudadMatch ? ciudadMatch[1] : "";
 
   let description: string =
@@ -237,7 +237,7 @@ export default async function DemoPage({ params }: Props) {
       <style dangerouslySetInnerHTML={{ __html: css }} />
       {trialActivo && (
         <div style={{ background: "#7c3aed", color: "#fff", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, position: "sticky", top: 0, zIndex: 999 }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa — Activa un plan para publicar tu sitio con tu dominio personalizado</span>
+          <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa â€” Activa un plan para publicar tu sitio con tu dominio personalizado</span>
           <a href="https://dms-digital-media-studio.vercel.app/dashboard/client/suscripcion" style={{ background: "#fff", color: "#7c3aed", padding: "6px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Activar Plan</a>
         </div>
       )}
@@ -248,7 +248,7 @@ export default async function DemoPage({ params }: Props) {
             {[...c.barraAnuncio.items, ...c.barraAnuncio.items].map((txt: string, i: number) => (
               <span key={i} style={{ color: c.barraAnuncio.colorTexto || "#f5c542", fontSize: "12px", fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: "20px" }}>
                 {txt}
-                <span style={{ opacity: 0.6 }}>•</span>
+                <span style={{ opacity: 0.6 }}>â€¢</span>
               </span>
             ))}
           </div>
@@ -264,17 +264,17 @@ export default async function DemoPage({ params }: Props) {
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </label>
         <ul className="nav-links">
-          {c?.productos?.length > 0 && !navHidden.includes("productos") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
-          {c?.nosotros && !navHidden.includes("nosotros") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
-          {c?.servicios && !navHidden.includes("servicios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
-          {c?.testimonios && !navHidden.includes("testimonios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
-          {c?.faq && !navHidden.includes("faq") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "faq"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#faq">FAQ ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#faq">FAQ</a></li>); })()}
-          {c?.contacto && !navHidden.includes("contacto") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
+          {c?.productos?.length > 0 && !navHidden.includes("productos") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
+          {c?.nosotros && !navHidden.includes("nosotros") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
+          {c?.servicios && !navHidden.includes("servicios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
+          {c?.testimonios && !navHidden.includes("testimonios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
+          {c?.faq && !navHidden.includes("faq") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "faq"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#faq">FAQ â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#faq">FAQ</a></li>); })()}
+          {c?.contacto && !navHidden.includes("contacto") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
           {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
             const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
             return hijos.length > 0 ? (
               <li key={pi} className="nav-item-parent">
-                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} â–¾</a>
                 <ul className="nav-submenu">
                   {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
                 </ul>
@@ -325,11 +325,11 @@ export default async function DemoPage({ params }: Props) {
             <p style={{ textAlign: "center", color: "#555", lineHeight: 1.8, maxWidth: 700, margin: "0 auto 1.5rem" }}>{c.nosotros.descripcion}</p>
             <div className="g2" style={{ marginTop: "2rem" }}>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>
-                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>Misión</h4>
+                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>MisiÃ³n</h4>
                 <p style={{ fontSize: ".875rem", color: "#555" }}>{c.nosotros.mision}</p>
               </div>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>
-                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>Visión</h4>
+                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>VisiÃ³n</h4>
                 <p style={{ fontSize: ".875rem", color: "#555" }}>{c.nosotros.vision}</p>
               </div>
             </div>
@@ -362,7 +362,7 @@ export default async function DemoPage({ params }: Props) {
         <section id="productos" style={{ padding: "5rem 2rem", background: c?.esquemas?.productos === "gris" ? "#f4f4f6" : c?.esquemas?.productos === "tinte" ? `${pr}12` : "#fff" }}>
           <div className="wrap">
             <p className="label">Productos</p>
-            <h2 className="st">{c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo"}</h2>
+            <h2 className="st">{c?.productosTitulo || (c.productos[0]?.categoria ? "Nuestros Productos" : "Catalogo")}</h2>
             {Array.from(new Set((c.productos as any[]).map((p: any) => p.categoria).filter(Boolean))).map((cat: any) => (
               <div key={cat} style={{ marginBottom: "3rem" }}>
                 <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem", paddingBottom: "0.5rem", borderBottom: "2px solid #f0f0f0" }}>{cat}</h3>
