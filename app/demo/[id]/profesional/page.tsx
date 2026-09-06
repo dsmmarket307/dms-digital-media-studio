@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: Props) {
 
   const rubro = gc?.meta?.tipo ?? "";
   const direccion = gc?.contacto?.direccion ?? "";
-  const ciudadMatch = direccion.match(/([A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+)\s*-\s*[A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+\s*$/);
+  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
   const ciudad = ciudadMatch ? ciudadMatch[1] : "";
 
   let description: string =
@@ -486,8 +486,8 @@ export default async function DemoProfesional({ params }: Props) {
                   </div>
                 )}
                 <div className="mv-grid">
-                  <div className="mv-card"><h4>MisiÃ³n</h4><p>{c.nosotros.mision}</p></div>
-                  <div className="mv-card"><h4>VisiÃ³n</h4><p>{c.nosotros.vision}</p></div>
+                  <div className="mv-card"><h4>Misión</h4><p>{c.nosotros.mision}</p></div>
+                  <div className="mv-card"><h4>Visión</h4><p>{c.nosotros.vision}</p></div>
                 </div>
               </div>
             </div>
