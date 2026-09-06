@@ -450,9 +450,9 @@ export default async function DemoProfesional({ params }: Props) {
                 const p = productosCategoria[0];
                 const totalProductos = productosCategoria.length;
                 return (
-                  <a key={`cat-${ci2}`} href={`/demo/${id}/categoria/${encodeURIComponent(cat)}`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden", position: "relative", display: "block", height: 360 }}>
+                  <a key={`cat-${ci2}`} href={`/demo/${id}/categoria/${encodeURIComponent(cat)}`} className="srv-card" style={{ textDecoration: "none", color: "inherit", padding: 0, overflow: "hidden", position: "relative", display: "block", aspectRatio: "3 / 4" }}>
                     {p.imagenes?.length > 0 ? (
-                      <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
+                      <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 , objectPosition: "center 20%" }} />
                     ) : (
                       <div style={{ width: "100%", height: "100%", background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -461,7 +461,6 @@ export default async function DemoProfesional({ params }: Props) {
                     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0) 65%)" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem", textAlign: "center" }}>
                       <h3 style={{ color: "#fff", textTransform: "uppercase", letterSpacing: "0.03em", fontSize: "1.05rem" }}>{cat}</h3>
-                      <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.85)", marginTop: 4 }}>{totalProductos} producto{totalProductos !== 1 ? "s" : ""}</p>
                     </div>
                   </a>
                 );
@@ -765,5 +764,7 @@ export default async function DemoProfesional({ params }: Props) {
     </>
   );
 }
+
+
 
 
