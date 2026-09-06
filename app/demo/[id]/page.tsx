@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import AgenteChat from "@/components/AgenteChat";
@@ -367,41 +367,28 @@ export default async function DemoPage({ params }: Props) {
               <div key={cat} style={{ marginBottom: "3rem" }}>
                 <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem", paddingBottom: "0.5rem", borderBottom: "2px solid #f0f0f0" }}>{cat}</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.5rem" }}>
-                  {(c.productos as any[]).filter((p: any) => p.categoria === cat).map((p: any) => (
-                    <a key={(c.productos as any[]).indexOf(p)} href={isCustomDomain ? `/producto/${(c.productos as any[]).indexOf(p)}` : `/demo/${id}/producto/${(c.productos as any[]).indexOf(p)}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
-                      {p.imagenes?.length > 0 ? (
-                        <div style={{ position: "relative", overflow: "hidden" }}>
-                          <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", width: "100%" }}>
-                            {p.imagenes.map((img: string, j: number) => (
-                              <img key={j} src={img} alt={p.nombre} style={{ minWidth: "100%", height: 240, objectFit: "contain", background: "#fff", scrollSnapAlign: "start" }} />
-                            ))}
+                  {(() => {
+                    const productosCategoria = (c.productos as any[]).filter((p: any) => p.categoria === cat);
+                    const p = productosCategoria[0];
+                    const totalProductos = productosCategoria.length;
+                    return (
+                      <a href={`/demo/${id}/categoria/${encodeURIComponent(cat)}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}>
+                        {p.imagenes?.length > 0 ? (
+                          <div style={{ position: "relative", overflow: "hidden" }}>
+                            <img src={p.imagenes[0]} alt={p.nombre} style={{ width: "100%", height: 240, objectFit: "contain", background: "#fff" }} />
                           </div>
-                          {p.imagenes.length > 1 && (
-                            <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 4 }}>
-                              {p.imagenes.map((_: any, j: number) => (
-                                <div key={j} style={{ width: 6, height: 6, borderRadius: "50%", background: j === 0 ? "#fff" : "rgba(255,255,255,0.5)" }} />
-                              ))}
-                            </div>
-                          )}
+                        ) : (
+                          <div style={{ height: 240, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                          </div>
+                        )}
+                        <div style={{ padding: "1.25rem" }}>
+                          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
+                          <p style={{ fontSize: "0.875rem", color: "#888" }}>{totalProductos} producto{totalProductos !== 1 ? "s" : ""}</p>
                         </div>
-                      ) : (
-                        <div style={{ height: 240, background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                        </div>
-                      )}
-                      <div style={{ padding: "1.25rem" }}>
-                        <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111", marginBottom: "0.5rem" }}>{p.nombre}</h3>
-                        <EstrellasProducto siteId={id} productoIndex={(c.productos as any[]).indexOf(p)} />
-                        
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "0.75rem", flexWrap: "wrap" }}>
-                        <p style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111" }}>{p.precio}</p>
-                        {p.precio_anterior && <p style={{ fontSize: "1rem", color: "#aaa", textDecoration: "line-through" }}>{p.precio_anterior}</p>}
-                      </div>
-                        
-                        
-                      </div>
-                    </a>
-                  ))}
+                      </a>
+                    );
+                  })()}
                 </div>
               </div>
             ))}
@@ -584,5 +571,4 @@ export default async function DemoPage({ params }: Props) {
     </>
   );
 }
-
 
