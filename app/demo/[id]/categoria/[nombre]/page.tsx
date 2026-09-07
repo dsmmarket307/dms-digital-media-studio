@@ -13,6 +13,8 @@ export default async function CategoriaPage({ params }: Props) {
   const c = site.generated_content as any;
   const pr = site.primary_color ?? "#7c3aed";
   const sc = site.secondary_color ?? "#0f172a";
+  const logo = site.logo_url ?? "";
+  const tipografiaMenu = c?.tipografia?.menu ?? "14px";
   const nombreDecodificado = decodeURIComponent(nombre);
 
   const productosFiltrados = (c?.productos ?? []).filter(
@@ -22,10 +24,25 @@ export default async function CategoriaPage({ params }: Props) {
   const css = `
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Segoe UI', sans-serif;color:#111}
-    .cat-nav{display:flex;align-items:center;padding:1.5rem 3rem;border-bottom:1px solid #f0f0f0}
-    .cat-nav a{color:${pr};text-decoration:none;font-weight:700;font-size:0.9rem}
-    .cat-nav span.sep{color:#bbb;margin:0 0.5rem;font-weight:400}
-    .cat-nav span.current{color:#666;font-weight:400;font-size:0.9rem}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.08)}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0;overflow:hidden}
+    .brand h1{font-size:1.1rem;font-weight:800;color:${pr}}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{text-decoration:none;color:#555;font-size:${tipografiaMenu};font-weight:500;transition:color 0.2s}
+    .nav-links a:hover{color:${pr}}
+    .nav-item-parent{position:relative}
+    .nav-submenu{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:180px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:0.5rem 0;list-style:none;z-index:200}
+    .nav-item-parent:hover .nav-submenu{display:block}
+    .nav-submenu li{width:100%}
+    .mobile-toggle{display:none}
+    .hamburger-label{display:none;cursor:pointer;padding:6px}
+    .nav-search-desktop{display:flex}
+    .nav-search-mobile-item{display:none}
+    @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.hamburger-label{order:-2}.brand{order:-1;flex:1;justify-content:center}.brand{flex-shrink:1;min-width:0}.brand img{max-width:100px;height:auto}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}.nav-search-desktop{display:none !important}.nav-search-mobile-item{display:block !important;order:-3}}
+    .cat-breadcrumb{display:flex;align-items:center;padding:1.5rem 3rem;border-bottom:1px solid #f0f0f0}
+    .cat-breadcrumb a{color:${pr};text-decoration:none;font-weight:700;font-size:0.9rem}
+    .cat-breadcrumb span.sep{color:#bbb;margin:0 0.5rem;font-weight:400}
+    .cat-breadcrumb span.current{color:#666;font-weight:400;font-size:0.9rem}
     .cat-header{padding:3rem;text-align:center;border-bottom:1px solid #f0f0f0}
     .cat-header h1{font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:2px}
     .cat-wrap{max-width:1200px;margin:0 auto;padding:3rem}
@@ -39,19 +56,47 @@ export default async function CategoriaPage({ params }: Props) {
     .cat-badge{position:absolute;top:0.75rem;left:0.75rem;background:#000;color:#fff;font-size:0.75rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:2px;z-index:2}
     .cat-price-old{text-decoration:line-through;color:#999;font-weight:400;margin-right:0.5rem;font-size:0.9rem}
     .cat-empty{text-align:center;padding:4rem;color:#888}
-    @media(max-width:768px){.cat-nav,.cat-header,.cat-wrap{padding-left:1.5rem;padding-right:1.5rem}}
+    @media(max-width:768px){.cat-breadcrumb,.cat-header,.cat-wrap{padding-left:1.5rem;padding-right:1.5rem}}
   `;
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
-      <nav className="cat-nav">
+      <nav>
+        <div className="brand">
+          {logo && <img src={logo} alt="logo" style={{ height: 56, maxWidth: 200, objectFit: "contain" }} />}
+          {!logo && <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
+        </div>
+        <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
+        <label htmlFor="mobile-toggle-check" className="hamburger-label">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </label>
+        <ul className="nav-links">
+          <li className="nav-search-mobile-item">
+            <form action={`/demo/${id}/buscar`} method="GET" style={{ display: "flex", alignItems: "center", background: "#f2f2f2", borderRadius: 999, padding: "0.5rem 1rem", width: "100%" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: "100%" }} />
+            </form>
+          </li>
+          <li><a href={`/demo/${id}/profesional#productos`}>Productos</a></li>
+          <li><a href={`/demo/${id}/profesional#nosotros`}>Nosotros</a></li>
+          <li><a href={`/demo/${id}/profesional#servicios`}>Servicios</a></li>
+          <li><a href={`/demo/${id}/profesional#galeria`}>Galeria</a></li>
+          <li><a href={`/demo/${id}/profesional#testimonios`}>Testimonios</a></li>
+          <li><a href={`/demo/${id}/profesional#contacto`}>Contacto</a></li>
+        </ul>
+        <form action={`/demo/${id}/buscar`} method="GET" className="nav-search-desktop" style={{ display: "flex", alignItems: "center", background: "#111", borderRadius: 999, padding: "0.5rem 1.1rem", marginLeft: "1rem" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: 140, color: "#fff" }} />
+        </form>
+      </nav>
+      <div className="cat-breadcrumb">
         <Link href={`/demo/${id}/profesional`}>Inicio</Link>
         <span className="sep">&rsaquo;</span>
         <Link href={`/demo/${id}/profesional#productos`}>Tienda</Link>
         <span className="sep">&rsaquo;</span>
         <span className="current">{nombreDecodificado}</span>
-      </nav>
+      </div>
       <div className="cat-header">
         <h1>{nombreDecodificado}</h1>
       </div>
@@ -86,5 +131,7 @@ export default async function CategoriaPage({ params }: Props) {
     </>
   );
 }
+
+
 
 
