@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
+import CarruselDestacados from "../CarruselDestacados";
 import CookieBanner from "../CookieBanner";
 import PopupPromo from "../PopupPromo";
 import WhatsappWidget from "../WhatsappWidget";
@@ -519,6 +520,14 @@ export default async function DemoProfesional({ params }: Props) {
             </div>
           </div>
         </section>
+
+)}
+      {c?.productos?.filter((p: any) => p.destacado).length > 0 && (
+        <CarruselDestacados
+          id={id}
+          productos={(c.productos as any[]).map((p: any, i: number) => ({ ...p, indiceOriginal: i })).filter((p: any) => p.destacado)}
+          primaryColor={pr}
+        />
       )}
 
       {c?.nosotros && (
