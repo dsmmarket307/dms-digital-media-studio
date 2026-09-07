@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -24,16 +24,20 @@ export default async function CategoriaPage({ params }: Props) {
     body{font-family:'Segoe UI', sans-serif;color:#111}
     .cat-nav{display:flex;align-items:center;padding:1.5rem 3rem;border-bottom:1px solid #f0f0f0}
     .cat-nav a{color:${pr};text-decoration:none;font-weight:700;font-size:0.9rem}
+    .cat-nav span.sep{color:#bbb;margin:0 0.5rem;font-weight:400}
+    .cat-nav span.current{color:#666;font-weight:400;font-size:0.9rem}
     .cat-header{padding:3rem;text-align:center;border-bottom:1px solid #f0f0f0}
     .cat-header h1{font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:2px}
     .cat-wrap{max-width:1200px;margin:0 auto;padding:3rem}
     .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
     a.cat-card{text-decoration:none;color:inherit;display:block;border-radius:4px;transition:opacity 0.25s ease}
     a.cat-card:hover{opacity:0.9}
-    a.cat-card > div:first-child{width:100%;aspect-ratio:4/5;background:#f5f5f5;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    a.cat-card > div:first-child{width:100%;aspect-ratio:4/5;background:#f5f5f5;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
     a.cat-card > div:first-child img{width:100%;height:100%;object-fit:cover;object-position:top center}
-    .cat-card h3{font-size:0.95rem;font-weight:500;margin-top:1rem;color:#111}
-    .cat-card p{font-size:1.05rem;font-weight:700;color:#111;margin-top:0.25rem}
+    .cat-card h3{font-size:0.95rem;font-weight:500;margin-top:1rem;color:#111;text-align:center}
+    .cat-card p{font-size:1.05rem;font-weight:700;color:#111;margin-top:0.25rem;text-align:center}
+    .cat-badge{position:absolute;top:0.75rem;left:0.75rem;background:#000;color:#fff;font-size:0.75rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:2px;z-index:2}
+    .cat-price-old{text-decoration:line-through;color:#999;font-weight:400;margin-right:0.5rem;font-size:0.9rem}
     .cat-empty{text-align:center;padding:4rem;color:#888}
     @media(max-width:768px){.cat-nav,.cat-header,.cat-wrap{padding-left:1.5rem;padding-right:1.5rem}}
   `;
@@ -42,7 +46,11 @@ export default async function CategoriaPage({ params }: Props) {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <nav className="cat-nav">
-        <Link href={`/demo/${id}/profesional`}>&larr; Volver a la tienda</Link>
+        <Link href={`/demo/${id}/profesional`}>Inicio</Link>
+        <span className="sep">&rsaquo;</span>
+        <Link href={`/demo/${id}/profesional#productos`}>Tienda</Link>
+        <span className="sep">&rsaquo;</span>
+        <span className="current">{nombreDecodificado}</span>
       </nav>
       <div className="cat-header">
         <h1>{nombreDecodificado}</h1>
@@ -56,9 +64,20 @@ export default async function CategoriaPage({ params }: Props) {
               <Link key={i} href={`/demo/${id}/producto/${p.indiceOriginal}?from=profesional`} className="cat-card">
                 <div>
                   {p.imagenes?.length > 0 && <img src={p.imagenes[0]} alt={p.nombre} />}
+                  {(() => {
+                    const actual = parseFloat(String(p.precio).replace(/[^0-9.]/g, ""));
+                    const anterior = parseFloat(String(p.precio_anterior).replace(/[^0-9.]/g, ""));
+                    if (!p.precio_anterior || isNaN(actual) || isNaN(anterior) || anterior <= actual) return null;
+                    const pct = Math.round((1 - actual / anterior) * 100);
+                    if (pct <= 0) return null;
+                    return <span className="cat-badge">-{pct}% OFF</span>;
+                  })()}
                 </div>
                 <h3>{p.nombre}</h3>
-                <p>{p.precio}</p>
+                <p>
+                  {p.precio_anterior && <span className="cat-price-old">{p.precio_anterior}</span>}
+                  {p.precio}
+                </p>
               </Link>
             ))}
           </div>
@@ -67,3 +86,5 @@ export default async function CategoriaPage({ params }: Props) {
     </>
   );
 }
+
+
