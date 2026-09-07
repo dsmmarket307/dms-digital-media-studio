@@ -427,7 +427,9 @@ export default async function DemoProfesional({ params }: Props) {
             <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: 140 , color: "#fff" }} />
           </form>
         )}
-        <a href="#contacto" className="nav-cta">{c?.hero?.cta_principal ?? "Contactar"}</a>
+        {!(c?.productos?.length > 0) && (
+          <a href="#contacto" className="nav-cta">{c?.hero?.cta_principal ?? "Contactar"}</a>
+        )}
       </nav>
 
       <div className="hero">
