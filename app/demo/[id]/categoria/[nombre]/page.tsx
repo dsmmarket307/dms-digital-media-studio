@@ -67,10 +67,10 @@ export default async function CategoriaPage({ params }: Props) {
     a.cat-card:hover{transform:translateY(-4px)}
     a.cat-card > div:first-child{width:100%;aspect-ratio:4/5;background:#f8f9fa;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
     a.cat-card > div:first-child img{width:100%;height:100%;object-fit:contain;background:#fff}
-    .cat-card h3{font-size:1rem;font-weight:700;color:#111;margin-top:0;padding:1.25rem 1.25rem 0;text-align:left}
-    .cat-card p{font-size:1.25rem;font-weight:800;color:#111;margin-top:0.5rem;padding:0 1.25rem 1.25rem;text-align:left}
-    .cat-badge{position:absolute;top:0.75rem;left:0.75rem;background:#e11d48;color:#fff;font-size:0.75rem;font-weight:800;padding:0.25rem 0.6rem;border-radius:4px;z-index:2}
-    .cat-price-old{text-decoration:line-through;color:#aaa;font-weight:400;margin-right:0.5rem;font-size:1rem}
+    .cat-card h3{font-size:0.95rem;font-weight:500;margin-top:1rem;color:#111;text-align:center}
+    .cat-card p{font-size:1.05rem;font-weight:700;color:#111;margin-top:0.25rem;text-align:center}
+    .cat-badge{position:absolute;top:0.75rem;left:0.75rem;background:#000;color:#fff;font-size:0.75rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:2px;z-index:2}
+    .cat-price-old{text-decoration:line-through;color:#999;font-weight:400;margin-right:0.5rem;font-size:0.9rem}
     .cat-empty{text-align:center;padding:4rem;color:#888}
     @media(max-width:768px){.cat-breadcrumb,.cat-header,.cat-wrap{padding-left:1.5rem;padding-right:1.5rem}}
   `;
