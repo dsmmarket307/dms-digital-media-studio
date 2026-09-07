@@ -1048,6 +1048,7 @@ export default function PageBuilderEditor() {
                   <Field label="Precio" value={p.precio} onChange={(v) => updateArray("productos", i, "precio", v)} />
                   <Field label="Precio anterior (tachado, opcional)" value={p.precio_anterior ?? ""} onChange={(v) => updateArray("productos", i, "precio_anterior", v)} />
                   <EditorDescripcion value={p.descripcion ?? ""} onChange={(v) => updateArray("productos", i, "descripcion", v)} productoIndex={i} />            <Field label="Categoria" value={p.categoria} onChange={(v) => updateArray("productos", i, "categoria", v)} />
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}><input type="checkbox" checked={!!p.destacado} onChange={(e) => updateArray("productos", i, "destacado", e.target.checked as any)} /><label style={{ fontSize: 12, color: "#111" }}>Producto destacado (aparece en el carrusel de la pagina principal)</label></div>
                   <Field label="Texto del boton de pedido" value={p.boton_texto ?? ""} onChange={(v) => updateArray("productos", i, "boton_texto", v)} />
                   <div style={{ marginBottom: 8 }}>
                     <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", marginBottom: 6 }}>Color del boton</label>

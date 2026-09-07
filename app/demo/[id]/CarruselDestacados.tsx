@@ -41,8 +41,8 @@ export default function CarruselDestacados({ id, productos, primaryColor, isCust
   return (
     <section style={{ padding: "3rem 2rem", background: "#fff" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
-        <p style={{ fontSize: "0.8rem", fontWeight: 700, color: primaryColor, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.4rem" }}>Destacados</p>
-        <h2 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem" }}>Lo mas vendido</h2>
+        <p style={{ fontSize: "0.8rem", fontWeight: 700, color: primaryColor, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.4rem", textAlign: "center" }}>Destacados</p>
+        <h2 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#111", marginBottom: "1.5rem", textAlign: "center" }}>Lo mas vendido</h2>
 
         <button
           onClick={() => scrollByCard(-1)}
