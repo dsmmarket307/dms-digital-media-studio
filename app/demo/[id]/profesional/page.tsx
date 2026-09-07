@@ -195,7 +195,7 @@ export default async function DemoProfesional({ params }: Props) {
       @keyframes wa-globito{0%,60%{opacity:0;transform:translateX(8px)}70%,95%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(8px)}}
       .wa-globito{animation:wa-globito 5s ease-in-out infinite}
     *{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:${tipografiaGeneral}}body{font-family:${font};color:#111;scroll-behavior:smooth}
+    html{font-size:${tipografiaGeneral};overflow-x:hidden}body{font-family:${font};color:#111;scroll-behavior:smooth;overflow-x:hidden;max-width:100vw}
     .demo-bar{background:linear-gradient(90deg,${pr},${sc});color:#fff;text-align:center;padding:0.6rem;font-size:0.8rem;font-weight:600}
     .demo-bar a{color:#fff;text-decoration:underline;margin-left:8px;font-weight:700}
     nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.08)}
