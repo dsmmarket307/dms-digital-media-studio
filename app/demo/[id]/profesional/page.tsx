@@ -393,12 +393,14 @@ export default async function DemoProfesional({ params }: Props) {
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </label>
         <ul className="nav-links">
-          <li className="nav-search-mobile-item">
-            <form action={`/demo/${id}/buscar`} method="GET" style={{ display: "flex", alignItems: "center", background: "#f2f2f2", borderRadius: 999, padding: "0.5rem 1rem", width: "100%", border: `2px solid ${pr}` }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: "100%" }} />
-            </form>
-          </li>
+          {c?.productos?.length > 0 && (
+            <li className="nav-search-mobile-item">
+              <form action={`/demo/${id}/buscar`} method="GET" style={{ display: "flex", alignItems: "center", background: "#f2f2f2", borderRadius: 999, padding: "0.5rem 1rem", width: "100%", border: `2px solid ${pr}` }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: "100%" }} />
+              </form>
+            </li>
+          )}
           {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
           {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
           {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
@@ -419,10 +421,13 @@ export default async function DemoProfesional({ params }: Props) {
             );
           })}
         </ul>
-        <form action={`/demo/${id}/buscar`} method="GET" className="nav-search-desktop" style={{ display: "flex", alignItems: "center", background: pr, borderRadius: 999, padding: "0.5rem 1.1rem", marginLeft: "1rem" }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: 140 , color: "#fff" }} />
-        </form>
+        {c?.productos?.length > 0 && (
+          <form action={`/demo/${id}/buscar`} method="GET" className="nav-search-desktop" style={{ display: "flex", alignItems: "center", background: pr, borderRadius: 999, padding: "0.5rem 1.1rem", marginLeft: "1rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: 140 , color: "#fff" }} />
+          </form>
+        )}
+        <a href="#contacto" className="nav-cta">{c?.hero?.cta_principal ?? "Contactar"}</a>
       </nav>
 
       <div className="hero">
