@@ -419,10 +419,9 @@ export default async function DemoProfesional({ params }: Props) {
             );
           })}
         </ul>
-        <a href="#contacto" className="nav-cta">{c?.hero?.cta_principal ?? "Contactar"}</a>
-        <form action={`/demo/${id}/buscar`} method="GET" className="nav-search-desktop" style={{ display: "flex", alignItems: "center", background: "#f2f2f2", borderRadius: 999, padding: "0.4rem 0.9rem", marginLeft: "1rem" }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: 140 }} />
+        <form action={`/demo/${id}/buscar`} method="GET" className="nav-search-desktop" style={{ display: "flex", alignItems: "center", background: "#111", borderRadius: 999, padding: "0.5rem 1.1rem", marginLeft: "1rem" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" name="q" placeholder="Buscar productos..." style={{ border: "none", background: "transparent", outline: "none", marginLeft: "0.5rem", fontSize: "0.9rem", width: 140 , color: "#fff" }} />
         </form>
       </nav>
 
@@ -776,6 +775,7 @@ export default async function DemoProfesional({ params }: Props) {
     </>
   );
 }
+
 
 
 
