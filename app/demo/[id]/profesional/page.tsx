@@ -250,7 +250,7 @@ export default async function DemoProfesional({ params }: Props) {
     .mv-card{background:#f8f9fa;border-radius:16px;padding:1.5rem;border-left:4px solid ${pr}}
     .mv-card h4{font-weight:700;color:#111;margin-bottom:0.5rem}
     .mv-card p{font-size:0.875rem;color:#666}
-    .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+    .g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
     .srv-card{background:#fff;border-radius:20px;padding:2.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid #f0f0f0;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
     .srv-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,${pr},${sc})}
     .srv-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,0.12)}
