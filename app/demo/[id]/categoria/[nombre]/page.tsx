@@ -4,6 +4,22 @@ import Link from "next/link";
 
 type Props = { params: Promise<{ id: string; nombre: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { id, nombre } = await params;
+  const supabase = await createClient();
+  const { data: site } = await supabase.from("generated_websites").select("project_name, generated_content, logo_url").eq("id", id).single();
+  const gc = site?.generated_content as any;
+  const nombreTienda = gc?.footer?.nombre_empresa ?? site?.project_name ?? "Sitio web";
+  const logo = site?.logo_url ?? null;
+  const faviconUrl = logo ? `/api/favicon?id=${id}` : undefined;
+  const nombreCategoria = decodeURIComponent(nombre);
+
+  return {
+    title: `${nombreCategoria} - ${nombreTienda}`,
+    icons: faviconUrl ? { icon: faviconUrl, apple: faviconUrl } : undefined,
+  };
+}
+
 export default async function CategoriaPage({ params }: Props) {
   const { id, nombre } = await params;
   const supabase = await createClient();
@@ -46,15 +62,15 @@ export default async function CategoriaPage({ params }: Props) {
     .cat-header{padding:3rem;text-align:center;border-bottom:1px solid #f0f0f0}
     .cat-header h1{font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:2px}
     .cat-wrap{max-width:1200px;margin:0 auto;padding:3rem}
-    .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
-    a.cat-card{text-decoration:none;color:inherit;display:block;border-radius:4px;transition:opacity 0.25s ease}
-    a.cat-card:hover{opacity:0.9}
-    a.cat-card > div:first-child{width:100%;aspect-ratio:4/5;background:#f5f5f5;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
-    a.cat-card > div:first-child img{width:100%;height:100%;object-fit:cover;object-position:top center}
-    .cat-card h3{font-size:0.95rem;font-weight:500;margin-top:1rem;color:#111;text-align:center}
-    .cat-card p{font-size:1.05rem;font-weight:700;color:#111;margin-top:0.25rem;text-align:center}
-    .cat-badge{position:absolute;top:0.75rem;left:0.75rem;background:#000;color:#fff;font-size:0.75rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:2px;z-index:2}
-    .cat-price-old{text-decoration:line-through;color:#999;font-weight:400;margin-right:0.5rem;font-size:0.9rem}
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem}
+    a.cat-card{text-decoration:none;color:inherit;display:block;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.08);border:1px solid #f0f0f0;transition:transform 0.2s}
+    a.cat-card:hover{transform:translateY(-4px)}
+    a.cat-card > div:first-child{width:100%;aspect-ratio:4/5;background:#f8f9fa;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+    a.cat-card > div:first-child img{width:100%;height:100%;object-fit:contain;background:#fff}
+    .cat-card h3{font-size:1rem;font-weight:700;color:#111;margin-top:0;padding:1.25rem 1.25rem 0;text-align:left}
+    .cat-card p{font-size:1.25rem;font-weight:800;color:#111;margin-top:0.5rem;padding:0 1.25rem 1.25rem;text-align:left}
+    .cat-badge{position:absolute;top:0.75rem;left:0.75rem;background:#e11d48;color:#fff;font-size:0.75rem;font-weight:800;padding:0.25rem 0.6rem;border-radius:4px;z-index:2}
+    .cat-price-old{text-decoration:line-through;color:#aaa;font-weight:400;margin-right:0.5rem;font-size:1rem}
     .cat-empty{text-align:center;padding:4rem;color:#888}
     @media(max-width:768px){.cat-breadcrumb,.cat-header,.cat-wrap{padding-left:1.5rem;padding-right:1.5rem}}
   `;
