@@ -239,7 +239,7 @@ export default async function DemoProfesional({ params }: Props) {
     h2.st{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;text-align:center;margin-bottom:1rem;color:#111}
     .st-sub{text-align:center;color:#666;margin-bottom:4rem;font-size:1rem;line-height:1.6;max-width:600px;margin-left:auto;margin-right:auto}
     .bg-l{background:#f8f9fa}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-bottom:4rem;text-align:center}
+    .stats{display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:4rem;text-align:center;justify-content:flex-start}.stats > div{flex:1 1 120px}
     .stat-num{font-size:3rem;font-weight:900;color:${pr}}
     .stat-label{font-size:0.875rem;color:#666;margin-top:0.25rem}
     .nosotros-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
