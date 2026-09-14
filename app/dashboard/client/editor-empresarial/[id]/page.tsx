@@ -110,7 +110,7 @@ export default function PageBuilderEditor() {
       }));
       setImages(newImages);
       if (data.status === "published") setPublishedUrl(`${window.location.origin}/demo/${id}`);
-      setPublishedVersion(data.published_version ?? "basica");
+      setPublishedVersion("profesional");
       setLoading(false);
     }
     load();
@@ -337,9 +337,9 @@ export default function PageBuilderEditor() {
             </div>
           )}
           <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#f3f4f6", borderRadius: 8, padding: 3 }}>
-            {(["basica", "profesional"] as const).map(v => (
+            {(["profesional"] as const).map(v => (
               <button key={v} onClick={() => setPublishedVersion(v)} style={{ padding: "5px 12px", borderRadius: 6, border: "none", cursor: "pointer", fontSize: 11, fontWeight: 700, background: publishedVersion === v ? "#fff" : "transparent", color: publishedVersion === v ? "#111" : "#888", boxShadow: publishedVersion === v ? "0 1px 4px rgba(0,0,0,0.1)" : "none", textTransform: "capitalize" }}>
-                {v === "basica" ? "Basica" : "Profesional"}
+                {"Profesional"}
               </button>
             ))}
           </div>
