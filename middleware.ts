@@ -17,16 +17,33 @@ export async function middleware(request: NextRequest) {
         },
       });
       const data = await res.json();
+
       if (data?.length > 0 && data[0].status === "active") {
         const siteId = data[0].site_id;
+
+        const siteRes = await fetch(
+          `${supabaseUrl}/rest/v1/generated_websites?id=eq.${siteId}&select=status,published_version&limit=1`,
+          {
+            headers: {
+              apikey: supabaseKey,
+              Authorization: `Bearer ${supabaseKey}`,
+            },
+          }
+        );
+        const siteData = await siteRes.json();
+        const site = siteData?.[0];
+        const esProfesional = site?.status === "published" && site?.published_version === "profesional";
+
         const pathname = request.nextUrl.pathname;
         const url = request.nextUrl.clone();
-        if (pathname === "/" || pathname === "") {
-          url.pathname = `/demo/${siteId}`;
-        } else {
-          url.pathname = `/demo/${siteId}${pathname}`;
+        const yaEsRutaDemo = pathname.startsWith(`/demo/${siteId}`);
+
+        if (!yaEsRutaDemo) {
+          const base = esProfesional ? `/demo/${siteId}/profesional` : `/demo/${siteId}`;
+          const resto = pathname === "/" || pathname === "" ? "" : pathname;
+          url.pathname = `${base}${resto}`;
+          return NextResponse.rewrite(url);
         }
-        return NextResponse.rewrite(url);
       }
     } catch (e) {
       console.error("Error en middleware de dominio:", e);
