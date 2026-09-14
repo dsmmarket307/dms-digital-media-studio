@@ -36,12 +36,18 @@ export async function middleware(request: NextRequest) {
 
         const pathname = request.nextUrl.pathname;
         const url = request.nextUrl.clone();
-        const yaEsRutaDemo = pathname.startsWith(`/demo/${siteId}`);
+        const prefix = `/demo/${siteId}`;
+        const traePrefijo = pathname === prefix || pathname.startsWith(`${prefix}/`);
 
-        if (!yaEsRutaDemo) {
-          const base = esProfesional ? `/demo/${siteId}/profesional` : `/demo/${siteId}`;
-          const resto = pathname === "/" || pathname === "" ? "" : pathname;
-          url.pathname = `${base}${resto}`;
+        if (traePrefijo) {
+          let resto = pathname.slice(prefix.length);
+          if (resto === "/profesional") resto = "";
+          url.pathname = resto || "/";
+          return NextResponse.redirect(url, 307);
+        } else {
+          const esRaiz = pathname === "/" || pathname === "";
+          const base = esRaiz && esProfesional ? `${prefix}/profesional` : prefix;
+          url.pathname = `${base}${esRaiz ? "" : pathname}`;
           return NextResponse.rewrite(url);
         }
       }
