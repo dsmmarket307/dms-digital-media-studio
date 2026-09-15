@@ -91,6 +91,7 @@ export default function PageBuilderEditor() {
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [cropFile, setCropFile] = useState<{ file: File; target: string } | null>(null);
   const [publishedVersion, setPublishedVersion] = useState<"basica" | "profesional">("basica");
+  const [soloProfesional, setSoloProfesional] = useState(false);
   const [navHidden, setNavHidden] = useState<string[]>([]);
   const [customCss, setCustomCss] = useState("");
   const [customHtml, setCustomHtml] = useState("");
@@ -147,6 +148,9 @@ export default function PageBuilderEditor() {
       setNavHidden(data.navbar_hidden ?? []);
       if (data.status === "published") setPublishedUrl(`${window.location.origin}/demo/${id}`);
       setPublishedVersion(data.published_version ?? "basica");
+      const { data: subDueno } = await supabase.from("subscriptions").select("plan,status").eq("user_id", data.user_id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+      const duenoTienePlanAlto = (subDueno?.plan === "profesional" || subDueno?.plan === "empresarial") && (subDueno?.status === "active" || subDueno?.status === "trial");
+      setSoloProfesional(duenoTienePlanAlto);
       setLoading(false);
     }
     load();
@@ -688,7 +692,7 @@ export default function PageBuilderEditor() {
             </div>
           )}
           <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#f3f4f6", borderRadius: 8, padding: 3 }}>
-            {(["basica", "profesional"] as const).map(v => (
+            {(soloProfesional ? (["profesional"] as const) : (["basica", "profesional"] as const)).map(v => (
               <button key={v} onClick={() => setPublishedVersion(v)} style={{ padding: "5px 12px", borderRadius: 6, border: "none", cursor: "pointer", fontSize: 11, fontWeight: 700, background: publishedVersion === v ? "#fff" : "transparent", color: publishedVersion === v ? "#111" : "#888", boxShadow: publishedVersion === v ? "0 1px 4px rgba(0,0,0,0.1)" : "none", textTransform: "capitalize" }}>
                 {v === "basica" ? "Basica" : "Profesional"}
               </button>
