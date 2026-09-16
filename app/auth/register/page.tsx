@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ export default function Register() {
   const [terminos, setTerminos] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [registrado, setRegistrado] = useState(false);
 
   async function handleRegister() {
     if (!nombre || !email || !password || !confirm) { setError("Completa todos los campos obligatorios."); return; }
@@ -26,7 +27,7 @@ export default function Register() {
     if (password.length < 6) { setError("La contrasena debe tener al menos 6 caracteres."); return; }
     setLoading(true);
     setError("");
-    const { data, error: err } = await supabase.auth.signUp({ email, password, options: { data: { name: `${nombre} ${apellido}`, phone: telefono } } });
+    const { data, error: err } = await supabase.auth.signUp({ email, password, options: { data: { name: `${nombre} ${apellido}`, phone: telefono }, emailRedirectTo: `${window.location.origin}/auth/callback` } });
     if (err) { setError(err.message); setLoading(false); return; }
     if (data.user) {
       await supabase.from("profiles").upsert({ id: data.user.id, name: `${nombre} ${apellido}`, email, phone: telefono, role: "client" });
@@ -41,7 +42,8 @@ export default function Register() {
         current_period_end: trialEnd.toISOString(),
       }, { onConflict: "user_id" });
     }
-    router.push("/dashboard/client");
+    setRegistrado(true);
+    setLoading(false);
   }
 
   async function handleGoogleLogin() {
@@ -68,6 +70,19 @@ export default function Register() {
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 480 }}>
         <div style={{ background: "#fff", borderRadius: 24, padding: "2rem", boxShadow: "0 20px 60px rgba(0,0,0,0.25)" }}>
+          {registrado ? (
+            <div style={{ textAlign: "center", padding: "1rem 0" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(124,58,237,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.5rem" }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#111", marginBottom: 10 }}>Revisa tu correo</h2>
+              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6, marginBottom: 8 }}>Te enviamos un enlace de confirmacion a</p>
+              <p style={{ fontSize: 15, color: "#111", fontWeight: 700, marginBottom: 20 }}>{email}</p>
+              <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>Haz clic en el enlace del correo para activar tu cuenta. Si no lo ves, revisa la carpeta de spam.</p>
+              <a href="/auth/login" style={{ display: "inline-block", marginTop: 24, color: "#7c3aed", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>Volver a inicio de sesion</a>
+            </div>
+          ) : (
+          <>
           <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#111", textAlign: "center", margin: 0, marginBottom: 6 }}>Registra tus Datos</h2>
           <p style={{ fontSize: 13, color: "#64748b", textAlign: "center", marginBottom: 24, marginTop: 0 }}>Ingresa tus datos para crear una cuenta en DMS</p>
 
@@ -146,6 +161,8 @@ export default function Register() {
           <p style={{ textAlign: "center", fontSize: 13, color: "#64748b", marginTop: 20, marginBottom: 0 }}>
             Ya tienes una cuenta? <a href="/auth/login" style={{ color: "#7c3aed", fontWeight: 700, textDecoration: "none" }}>Inicia Sesion</a>
           </p>
+          </>
+          )}
         </div>
       </div>
     </div>
