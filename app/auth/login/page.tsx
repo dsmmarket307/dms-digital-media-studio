@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,11 @@ export default function Login() {
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [vistaRecuperar, setVistaRecuperar] = useState(false);
+  const [emailRecuperar, setEmailRecuperar] = useState("");
+  const [recuperarEnviado, setRecuperarEnviado] = useState(false);
+  const [errorRecuperar, setErrorRecuperar] = useState("");
+  const [loadingRecuperar, setLoadingRecuperar] = useState(false);
 
   async function handleLogin() {
     if (!email || !password) { setError("Completa todos los campos."); return; }
@@ -23,6 +28,18 @@ export default function Login() {
     const { data: { user } } = await supabase.auth.getUser();
     const { data: prof } = await supabase.from("profiles").select("role").eq("id", user!.id).single();
     if (prof?.role === "admin") { router.push("/dashboard/admin"); } else { router.push("/dashboard/client"); }
+  }
+
+  async function handleRecuperar() {
+    if (!emailRecuperar) { setErrorRecuperar("Ingresa tu correo."); return; }
+    setLoadingRecuperar(true);
+    setErrorRecuperar("");
+    const { error: err } = await supabase.auth.resetPasswordForEmail(emailRecuperar, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/auth/nueva-contrasena`,
+    });
+    if (err) { setErrorRecuperar(err.message); setLoadingRecuperar(false); return; }
+    setRecuperarEnviado(true);
+    setLoadingRecuperar(false);
   }
 
   async function handleGoogleLogin() {
@@ -50,6 +67,37 @@ export default function Login() {
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 440 }}>
         <div style={{ background: "#fff", borderRadius: 24, padding: "2rem", boxShadow: "0 20px 60px rgba(0,0,0,0.25)" }}>
+          {vistaRecuperar ? (
+            recuperarEnviado ? (
+              <div style={{ textAlign: "center", padding: "1rem 0" }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(124,58,237,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.5rem" }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#111", marginBottom: 10 }}>Revisa tu correo</h2>
+                <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6, marginBottom: 8 }}>Te enviamos un enlace para recuperar tu contrasena a</p>
+                <p style={{ fontSize: 15, color: "#111", fontWeight: 700, marginBottom: 20 }}>{emailRecuperar}</p>
+                <a href="#" onClick={(e) => { e.preventDefault(); setVistaRecuperar(false); setRecuperarEnviado(false); setEmailRecuperar(""); }} style={{ display: "inline-block", marginTop: 4, color: "#7c3aed", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>Volver a inicio de sesion</a>
+              </div>
+            ) : (
+              <div>
+                <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#111", textAlign: "center", margin: 0, marginBottom: 6 }}>Recuperar contrasena</h2>
+                <p style={{ fontSize: 13, color: "#64748b", textAlign: "center", marginBottom: 24, marginTop: 0 }}>Te enviaremos un enlace a tu correo</p>
+                {errorRecuperar && <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#ef4444", marginBottom: 16 }}>{errorRecuperar}</div>}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, border: "1.5px solid #e2e8f0", borderRadius: 12, padding: "11px 14px", background: "#f8fafc" }}>
+                    <input type="email" placeholder="Correo electronico" value={emailRecuperar} onChange={e => setEmailRecuperar(e.target.value)} onKeyDown={e => e.key === "Enter" && handleRecuperar()} style={{ flex: 1, border: "none", background: "transparent", fontSize: 14, color: "#111", outline: "none" }} />
+                  </div>
+                </div>
+                <button onClick={handleRecuperar} disabled={loadingRecuperar} style={{ width: "100%", padding: "13px", borderRadius: 12, border: "none", background: loadingRecuperar ? "#c4b5fd" : "#7c3aed", color: "#fff", fontSize: 15, fontWeight: 700, cursor: loadingRecuperar ? "not-allowed" : "pointer", marginBottom: 16 }}>
+                  {loadingRecuperar ? "Enviando..." : "Enviar enlace"}
+                </button>
+                <p style={{ textAlign: "center", fontSize: 13, color: "#64748b", marginTop: 0, marginBottom: 0 }}>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setVistaRecuperar(false); }} style={{ color: "#7c3aed", fontWeight: 700, textDecoration: "none" }}>Volver a inicio de sesion</a>
+                </p>
+              </div>
+            )
+          ) : (
+          <>
           <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#111", textAlign: "center", margin: 0, marginBottom: 6 }}>Bienvenido de nuevo</h2>
           <p style={{ fontSize: 13, color: "#64748b", textAlign: "center", marginBottom: 24, marginTop: 0 }}>Ingresa tus datos para iniciar sesion</p>
 
@@ -94,7 +142,7 @@ export default function Login() {
               <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} style={{ width: 14, height: 14, accentColor: "#7c3aed" }} />
               Recordarme
             </label>
-            <a href="#" style={{ fontSize: 13, color: "#7c3aed", textDecoration: "none", fontWeight: 600 }}>Olvido su contrasena?</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); setVistaRecuperar(true); setError(""); }} style={{ fontSize: 13, color: "#7c3aed", textDecoration: "none", fontWeight: 600 }}>Olvido su contrasena?</a>
           </div>
 
           <button onClick={handleLogin} disabled={loading} style={{ width: "100%", padding: "13px", borderRadius: 12, border: "none", background: loading ? "#c4b5fd" : "#7c3aed", color: "#fff", fontSize: 15, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", transition: "background 0.2s" }}>
@@ -104,6 +152,8 @@ export default function Login() {
           <p style={{ textAlign: "center", fontSize: 13, color: "#64748b", marginTop: 20, marginBottom: 0 }}>
             No tienes una cuenta? <a href="/auth/register" style={{ color: "#7c3aed", fontWeight: 700, textDecoration: "none" }}>Registrate</a>
           </p>
+          </>
+          )}
         </div>
       </div>
     </div>
