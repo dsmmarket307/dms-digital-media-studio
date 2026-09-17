@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -66,10 +66,12 @@ Debes responder UNICAMENTE con un objeto JSON valido con esta estructura exacta:
     "tema": "${theme}",
     "color_primario": "${primary_color}",
     "color_secundario": "${secondary_color}",
-    "nombre_proyecto": "${project_name}"
+    "nombre_proyecto": "${project_name}",
+    "estilo_visual": "uno de: vibrante | elegante | minimalista | corporativo"
   }
 }
-Adapta el contenido al tipo de negocio, industria y contexto del prompt.${isTienda ? " Para la tienda genera productos reales y relevantes con precios en COP." : ""} Se creativo y profesional.`;
+Adapta el contenido al tipo de negocio, industria y contexto del prompt.${isTienda ? " Para la tienda genera productos reales y relevantes con precios en COP." : ""} Se creativo y profesional.
+Para meta.estilo_visual elige segun el rubro: "vibrante" para restaurantes, gimnasios, eventos, discotecas, heladerias, cafeterias; "elegante" para joyerias, spas, hoteles, bodas, salones de belleza; "minimalista" para tecnologia, arquitectura, fotografia, portafolios; "corporativo" para abogados, contadores, consultorias, medicos, seguros. Responde solo con uno de esos 4 valores exactos.`;
 
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",

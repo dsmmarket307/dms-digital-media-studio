@@ -167,6 +167,10 @@ export default async function DemoPage({ params }: Props) {
   }, {});
     const pr = site.primary_color ?? "#7c3aed";
   const rubro = c?.meta?.tipo ?? "";
+  const estilo = c?.meta?.estilo_visual ?? "corporativo";
+  const radioCard = estilo === "vibrante" ? "20px" : estilo === "elegante" ? "4px" : estilo === "minimalista" ? "0px" : "12px";
+  const sombraCard = estilo === "minimalista" ? "none" : estilo === "elegante" ? "0 1px 3px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.06)";
+  const fuenteHeaders = estilo === "elegante" ? "'Playfair Display', Georgia, serif" : estilo === "minimalista" ? "'Helvetica Neue', Arial, sans-serif" : "inherit";
   const nombreNeg = c?.footer?.nombre_empresa ?? site.project_name;
   const rubrosCita = ["Spa","Salon de Belleza","Barberia","Peluqueria","Optica","Odontologia","Medicos","Consultorio","Veterinaria"];
   const rubrosPedido = ["Restaurante","Panaderia","Tienda Online","Supermercado","Carniceria","Pescaderia","Catering","Farmacia"];
@@ -207,12 +211,12 @@ export default async function DemoPage({ params }: Props) {
     section{padding:5rem 2rem}
     .wrap{max-width:1100px;margin:0 auto}
     .label{font-size:.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:${pr};margin-bottom:.75rem;text-align:center}
-    h2.st{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;text-align:center;margin-bottom:3rem;color:#111}
+    h2.st{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;text-align:center;margin-bottom:3rem;color:#111;font-family:${fuenteHeaders}}
     .sec-img{width:100%;height:380px;object-fit:cover;border-radius:20px;margin-bottom:3rem;box-shadow:0 8px 32px rgba(0,0,0,0.12)}
     .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
     .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem}
-    .card{background:#fff;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #f0f0f0}
-    .card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:#111}
+    .card{background:#fff;border-radius:${radioCard};padding:2rem;box-shadow:${sombraCard};border:1px solid #f0f0f0}
+    .card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:#111;font-family:${fuenteHeaders}}
     .card p{font-size:.875rem;color:#666;line-height:1.6}
     .bg-l{background:#f8f9fa}
     .ben{display:flex;gap:1rem;align-items:flex-start;padding:1.5rem;background:#fff;border-radius:14px;border:1px solid #f0f0f0}
