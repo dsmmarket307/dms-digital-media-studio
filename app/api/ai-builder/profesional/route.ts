@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -70,11 +70,13 @@ Responde UNICAMENTE con JSON valido con esta estructura:
     "description": "meta description seo 160 caracteres",
     "tipo": "${website_type}",
     "nombre_proyecto": "${project_name}",
-    "pexels_keywords": "3 a 5 palabras en ingles para buscar imagenes en Pexels que representen perfectamente este tipo de negocio especifico"
+    "pexels_keywords": "3 a 5 palabras en ingles para buscar imagenes en Pexels que representen perfectamente este tipo de negocio especifico",
+    "estilo_visual": "uno de: vibrante | elegante | minimalista | corporativo"
   }
 }
 IMPORTANTE: En meta.pexels_keywords pon palabras en INGLES que describan visualmente este negocio especifico. Ejemplos: para panaderia pon "bakery bread fresh pastry", para joyeria pon "jewelry luxury gold rings", para barberia pon "barbershop haircut men grooming".
-Genera contenido MUY detallado, profesional y convincente. Adapta perfectamente al tipo de negocio.`;
+Genera contenido MUY detallado, profesional y convincente. Adapta perfectamente al tipo de negocio.
+Para meta.estilo_visual elige segun el rubro: "vibrante" para restaurantes, gimnasios, eventos, discotecas, heladerias, cafeterias; "elegante" para joyerias, spas, hoteles, bodas, salones de belleza; "minimalista" para tecnologia, arquitectura, fotografia, portafolios; "corporativo" para abogados, contadores, consultorias, medicos, seguros. Responde solo con uno de esos 4 valores exactos.`;
 
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",

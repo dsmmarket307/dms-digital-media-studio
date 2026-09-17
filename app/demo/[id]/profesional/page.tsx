@@ -170,6 +170,10 @@ export default async function DemoProfesional({ params }: Props) {
   const c = site.generated_content;
     const pr = site.primary_color ?? "#7c3aed";
   const rubro = c?.meta?.tipo ?? "";
+  const estilo = c?.meta?.estilo_visual ?? "corporativo";
+  const radioCard = estilo === "vibrante" ? "20px" : estilo === "elegante" ? "4px" : estilo === "minimalista" ? "0px" : "12px";
+  const sombraCard = estilo === "minimalista" ? "none" : estilo === "elegante" ? "0 1px 3px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.08)";
+  const fuenteHeaders = estilo === "elegante" ? "'Playfair Display', Georgia, serif" : estilo === "minimalista" ? "'Helvetica Neue', Arial, sans-serif" : "inherit";
   const nombreNeg = c?.footer?.nombre_empresa ?? site.project_name;
   const rubrosCita = ["Spa","Salon de Belleza","Barberia","Peluqueria","Optica","Odontologia","Medicos","Consultorio","Veterinaria"];
   const rubrosPedido = ["Restaurante","Panaderia","Tienda Online","Supermercado","Carniceria","Pescaderia","Catering","Farmacia"];
@@ -237,7 +241,7 @@ export default async function DemoProfesional({ params }: Props) {
     section{padding:6rem 3rem}
     .wrap{max-width:1200px;margin:0 auto}
     .label{font-size:0.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:${pr};margin-bottom:0.75rem;text-align:center}
-    h2.st{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;text-align:center;margin-bottom:1rem;color:#111}
+    h2.st{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;text-align:center;margin-bottom:1rem;color:#111;font-family:${fuenteHeaders}}
     .st-sub{text-align:center;color:#666;margin-bottom:4rem;font-size:1rem;line-height:1.6;max-width:600px;margin-left:auto;margin-right:auto}
     .bg-l{background:#f8f9fa}
     .stats{display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:4rem;text-align:center;justify-content:flex-start}.stats > div{flex:1 1 120px}
@@ -252,7 +256,7 @@ export default async function DemoProfesional({ params }: Props) {
     .mv-card h4{font-weight:700;color:#111;margin-bottom:0.5rem}
     .mv-card p{font-size:0.875rem;color:#666}
     .g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
-    .srv-card{background:#fff;border-radius:20px;padding:2.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid #f0f0f0;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
+    .srv-card{background:#fff;border-radius:${radioCard};padding:2.5rem;box-shadow:${sombraCard};border:1px solid #f0f0f0;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
     .srv-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,${pr},${sc})}
     .srv-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,0.12)}
     .srv-icon{width:56px;height:56px;border-radius:16px;background:${pr}18;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
