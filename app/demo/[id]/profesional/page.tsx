@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
@@ -10,6 +10,7 @@ import LandingCarrusel from "../LandingCarrusel";
 import ParallaxImage from "../ParallaxImage";
 import Script from "next/script";
 import { renderCustomHtml } from "@/lib/render-custom-html";
+import { getSeccionComponente } from "./secciones/registry";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -80,7 +81,7 @@ const CATEGORY_KEYWORDS: Record<string, string> = {
 };
 
 async function getPexelsImages(websiteType: string, count: number = 6, customKeywords?: string): Promise<string[]> {
-  // Si hay keywords personalizadas de la IA, usarlas. Si no, usar las del catálogo
+  // Si hay keywords personalizadas de la IA, usarlas. Si no, usar las del catÃ¡logo
   const query = customKeywords || CATEGORY_KEYWORDS[websiteType] || "business professional modern";
   try {
     const res = await fetch(
@@ -108,7 +109,7 @@ export async function generateMetadata({ params }: Props) {
 
   const rubro = gc?.meta?.tipo ?? "";
   const direccion = gc?.contacto?.direccion ?? "";
-  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
+  const ciudadMatch = direccion.match(/([A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+)\s*-\s*[A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+\s*$/);
   const ciudad = ciudadMatch ? ciudadMatch[1] : "";
 
   let description: string =
@@ -170,10 +171,6 @@ export default async function DemoProfesional({ params }: Props) {
   const c = site.generated_content;
     const pr = site.primary_color ?? "#7c3aed";
   const rubro = c?.meta?.tipo ?? "";
-  const estilo = c?.meta?.estilo_visual ?? "corporativo";
-  const radioCard = estilo === "vibrante" ? "20px" : estilo === "elegante" ? "4px" : estilo === "minimalista" ? "0px" : "12px";
-  const sombraCard = estilo === "minimalista" ? "none" : estilo === "elegante" ? "0 1px 3px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.08)";
-  const fuenteHeaders = estilo === "elegante" ? "'Playfair Display', Georgia, serif" : estilo === "minimalista" ? "'Helvetica Neue', Arial, sans-serif" : "inherit";
   const nombreNeg = c?.footer?.nombre_empresa ?? site.project_name;
   const rubrosCita = ["Spa","Salon de Belleza","Barberia","Peluqueria","Optica","Odontologia","Medicos","Consultorio","Veterinaria"];
   const rubrosPedido = ["Restaurante","Panaderia","Tienda Online","Supermercado","Carniceria","Pescaderia","Catering","Farmacia"];
@@ -241,7 +238,7 @@ export default async function DemoProfesional({ params }: Props) {
     section{padding:6rem 3rem}
     .wrap{max-width:1200px;margin:0 auto}
     .label{font-size:0.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:${pr};margin-bottom:0.75rem;text-align:center}
-    h2.st{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;text-align:center;margin-bottom:1rem;color:#111;font-family:${fuenteHeaders}}
+    h2.st{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;text-align:center;margin-bottom:1rem;color:#111}
     .st-sub{text-align:center;color:#666;margin-bottom:4rem;font-size:1rem;line-height:1.6;max-width:600px;margin-left:auto;margin-right:auto}
     .bg-l{background:#f8f9fa}
     .stats{display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:4rem;text-align:center;justify-content:flex-start}.stats > div{flex:1 1 120px}
@@ -256,7 +253,7 @@ export default async function DemoProfesional({ params }: Props) {
     .mv-card h4{font-weight:700;color:#111;margin-bottom:0.5rem}
     .mv-card p{font-size:0.875rem;color:#666}
     .g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
-    .srv-card{background:#fff;border-radius:${radioCard};padding:2.5rem;box-shadow:${sombraCard};border:1px solid #f0f0f0;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
+    .srv-card{background:#fff;border-radius:20px;padding:2.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid #f0f0f0;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
     .srv-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,${pr},${sc})}
     .srv-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,0.12)}
     .srv-icon{width:56px;height:56px;border-radius:16px;background:${pr}18;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
@@ -406,17 +403,17 @@ export default async function DemoProfesional({ params }: Props) {
               </form>
             </li>
           )}
-          {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
+          {c?.productos?.length > 0 && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
           <li><a href="#galeria">Galeria</a></li>
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
-          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
+          {(() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
           {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
             const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
             return hijos.length > 0 ? (
               <li key={pi} className="nav-item-parent">
-                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} â–¾</a>
                 <ul className="nav-submenu">
                   {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
                 </ul>
@@ -551,8 +548,8 @@ export default async function DemoProfesional({ params }: Props) {
                   </div>
                 )}
                 <div className="mv-grid">
-                  <div className="mv-card"><h4>Misión</h4><p>{c.nosotros.mision}</p></div>
-                  <div className="mv-card"><h4>Visión</h4><p>{c.nosotros.vision}</p></div>
+                  <div className="mv-card"><h4>MisiÃ³n</h4><p>{c.nosotros.mision}</p></div>
+                  <div className="mv-card"><h4>VisiÃ³n</h4><p>{c.nosotros.vision}</p></div>
                 </div>
               </div>
             </div>
@@ -560,31 +557,12 @@ export default async function DemoProfesional({ params }: Props) {
         </section>
       )}
 
-      {c?.servicios && (
-        <section id="servicios" className="bg-l">
-          <div className="wrap">
-            <p className="label">Servicios</p>
-            <h2 className="st">Lo que ofrecemos</h2>
-            {(ci.servicios || imagenes[2]) && <ParallaxImage src={ci.servicios || imagenes[2]} alt="servicios" style={{ width: "100%", height: 320, borderRadius: 20, marginBottom: "2rem", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }} />}
-            
-            <div className="g4">
-              {c.servicios.map((s: any, i: number) => (
-                <div key={i} className="srv-card">
-                  <div className="srv-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={pr} strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-                    </svg>
-                  </div>
-                  <h3>{s.titulo}</h3>
-                  <p>{s.descripcion}</p>
-                  {s.detalle && <div className="srv-detalle">{s.detalle}</div>}
-                  {s.precio_desde && <div className="srv-precio">Desde: {s.precio_desde}</div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {(() => {
+        const ServiciosComponente = getSeccionComponente("servicios", c?.servicios_variant);
+        return ServiciosComponente ? (
+          <ServiciosComponente c={c} pr={pr} ci={ci} imagenes={imagenes} ParallaxImage={ParallaxImage} />
+        ) : null;
+      })()}
 
       {c?.beneficios && (
         <section>
@@ -636,37 +614,12 @@ export default async function DemoProfesional({ params }: Props) {
         </div>
       </section>
 
-      {c?.testimonios && (
-        <section id="testimonios" className="bg-l">
-          <div className="wrap">
-            <p className="label">Testimonios</p>
-            <h2 className="st">Lo que dicen nuestros clientes</h2>
-            <p className="st-sub">La satisfaccion de nuestros clientes es nuestra mayor recompensa</p>
-            {(ci.testimonios || imagenes[4]) && <ParallaxImage src={ci.testimonios || imagenes[4]} alt="testimonios" style={{ width: "100%", height: 320, borderRadius: 20, marginBottom: "2rem", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }} />}
-            <div className="test-grid">
-              {c.testimonios.map((t: any, i: number) => (
-                <div key={i} className="test-card">
-                  <div className="stars">
-                    {Array(t.estrellas ?? 5).fill(0).map((_, s) => (
-                      <svg key={s} width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                      </svg>
-                    ))}
-                  </div>
-                  <p>{t.texto}</p>
-                  <div className="test-author">
-                    <div className="av">{t.nombre?.charAt(0)}</div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: "0.9rem" }}>{t.nombre}</div>
-                      <div style={{ fontSize: "0.8rem", color: "#999" }}>{t.cargo}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {(() => {
+        const TestimoniosComponente = getSeccionComponente("testimonios", c?.testimonios_variant);
+        return TestimoniosComponente ? (
+          <TestimoniosComponente c={c} pr={pr} ci={ci} imagenes={imagenes} ParallaxImage={ParallaxImage} />
+        ) : null;
+      })()}
 
       {c?.faq && (
         <section id="faq">
@@ -795,6 +748,16 @@ export default async function DemoProfesional({ params }: Props) {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

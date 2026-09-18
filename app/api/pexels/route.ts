@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 
 const CATEGORIA_KEYWORDS: Record<string, string> = {
   "Landing Page": "business professional office",
@@ -26,19 +26,30 @@ const CATEGORIA_KEYWORDS: Record<string, string> = {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const categoria = searchParams.get("categoria") ?? "business";
-  const query = CATEGORIA_KEYWORDS[categoria] ?? categoria;
+  const perPage = searchParams.get("per_page") ?? "6";
+  const queryParam = searchParams.get("query");
+  const query = queryParam || CATEGORIA_KEYWORDS[categoria] || categoria;
 
-  const res = await fetch(
-    `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=6&orientation=landscape`,
-    { headers: { Authorization: process.env.PEXELS_API_KEY! } }
-  );
+  try {
+    const res = await fetch(
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=${perPage}&orientation=landscape`,
+      { headers: { Authorization: process.env.PEXELS_API_KEY! } }
+    );
 
-  const data = await res.json();
-  const imagenes = data.photos?.map((p: any) => ({
-    url: p.src.large,
-    thumb: p.src.medium,
-    photographer: p.photographer,
-  })) ?? [];
+    if (!res.ok) {
+      return NextResponse.json({ imagenes: [], photos: [] });
+    }
 
-  return NextResponse.json({ imagenes });
+    const data = await res.json();
+
+    const imagenes = data.photos?.map((p: any) => ({
+      url: p.src.large,
+      thumb: p.src.medium,
+      photographer: p.photographer,
+    })) ?? [];
+
+    return NextResponse.json({ imagenes, photos: data.photos ?? [] });
+  } catch {
+    return NextResponse.json({ imagenes: [], photos: [] });
+  }
 }
