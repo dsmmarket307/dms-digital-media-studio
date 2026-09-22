@@ -1,10 +1,11 @@
-﻿import { createServerClient } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") ?? "";
   const mainDomain = "dms-digital-media-studio.vercel.app";
-  const isCustomDomain = hostname !== mainDomain && !hostname.includes("vercel.app") && !hostname.includes("localhost");
+  const ownDomains = ["dmsdigitalmedia.com", "www.dmsdigitalmedia.com"];
+  const isCustomDomain = hostname !== mainDomain && !ownDomains.includes(hostname) && !hostname.includes("vercel.app") && !hostname.includes("localhost");
 
   if (isCustomDomain) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
