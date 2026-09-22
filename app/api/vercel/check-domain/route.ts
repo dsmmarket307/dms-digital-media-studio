@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { checkDomainSSL } from "@/lib/vercel/checkDomainSSL";
 
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       .eq("id", domainId);
 
     return NextResponse.json({ ok: true, result });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Error verificando SSL" }, { status: 500 });
   }
 }

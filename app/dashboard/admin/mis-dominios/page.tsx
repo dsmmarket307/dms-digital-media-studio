@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ export default function AdminMisDominios() {
   const [siteSeleccionado, setSiteSeleccionado] = useState("");
   const [conectando, setConectando] = useState(false);
   const [showInstrucciones, setShowInstrucciones] = useState<any>(null);
+  const [verificandoSSLId, setVerificandoSSLId] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -97,6 +98,24 @@ export default function AdminMisDominios() {
   async function eliminarDominio(id: string) {
     await supabase.from("domains").delete().eq("id", id);
     setDominios(prev => prev.filter(d => d.id !== id));
+  }
+
+  async function verificarSSL(id: string, domain: string) {
+    setVerificandoSSLId(id);
+    try {
+      const res = await fetch("/api/vercel/check-domain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ domainId: id, domain }),
+      });
+      const data = await res.json();
+      if (data?.result) {
+        setDominios(prev => prev.map(x => x.id === id ? { ...x, ssl_status: data.result.sslStatus, dns_verified: data.result.verified } : x));
+      }
+    } catch {
+    } finally {
+      setVerificandoSSLId(null);
+    }
   }
 
   const STATUS_COLORS: Record<string, string> = {
@@ -213,6 +232,7 @@ export default function AdminMisDominios() {
                       <div style={{ display: "flex", gap: 6 }}>
                         <button onClick={() => verificarDNS(d.id, d.domain)} style={{ background: "#f0f0f0", color: "#555", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>Verificar DNS</button>
                         <button onClick={() => setShowInstrucciones(d)} style={{ background: "rgba(124,58,237,0.1)", color: "#7c3aed", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>DNS</button>
+                        <button onClick={() => verificarSSL(d.id, d.domain)} disabled={verificandoSSLId === d.id} style={{ background: "#eff6ff", color: "#2563eb", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 11, cursor: "pointer", fontWeight: 600, opacity: verificandoSSLId === d.id ? 0.6 : 1 }}>{verificandoSSLId === d.id ? "Verificando..." : "Verificar SSL"}</button>
                         <button onClick={() => eliminarDominio(d.id)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>Eliminar</button>
                       </div>
                     </td>
