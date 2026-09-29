@@ -1,4 +1,5 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import AgenteChat from "@/components/AgenteChat";
+import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EstrellasProducto from "../EstrellasProducto";
 import ContactoForm from "./ContactoForm";
@@ -353,7 +354,9 @@ export default async function DemoProfesional({ params }: Props) {
     });
   `;
 
+  const { data: agente } = await supabase.from("ai_agents").select("*").eq("user_id", site.user_id).maybeSingle();
   return (
+    <>
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
@@ -745,6 +748,8 @@ export default async function DemoProfesional({ params }: Props) {
       {(c?.cookies?.activo ?? true) && <CookieBanner texto={c?.cookies?.texto ?? "Este sitio web utiliza cookies propias y de terceros para mejorar tu experiencia de navegacion y analizar el trafico. Al continuar navegando, aceptas su uso."} linkPolitica={c?.cookies?.link_politica} primaryColor={pr} />}
       {c?.popup_promo?.activo && <PopupPromo imagen={ci.popup_promo} link={c?.popup_promo?.link} />}
       <script dangerouslySetInnerHTML={{ __html: script }} />
+    </>
+      {agente && agente.activo !== false && <AgenteChat agente={agente} siteId={id} color={site.primary_color ?? "#7c3aed"} />}
     </>
   );
 }
