@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props) {
 
   const rubro = gc?.meta?.tipo ?? "";
   const direccion = gc?.contacto?.direccion ?? "";
-  const ciudadMatch = direccion.match(/([A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+)\s*-\s*[A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zÃ¡Ã©Ã­Ã³ÃºÃ±]+\s*$/);
+  const ciudadMatch = direccion.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*-\s*[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*$/);
   const ciudad = ciudadMatch ? ciudadMatch[1] : "";
 
   let description: string =
@@ -329,11 +329,11 @@ export default async function DemoPage({ params }: Props) {
             <p style={{ textAlign: "center", color: "#555", lineHeight: 1.8, maxWidth: 700, margin: "0 auto 1.5rem" }}>{c.nosotros.descripcion}</p>
             <div className="g2" style={{ marginTop: "2rem" }}>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>
-                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>MisiÃ³n</h4>
+                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>Misión</h4>
                 <p style={{ fontSize: ".875rem", color: "#555" }}>{c.nosotros.mision}</p>
               </div>
               <div style={{ background: `${pr}10`, borderRadius: 14, padding: "1.5rem", borderLeft: `4px solid ${pr}` }}>
-                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>VisiÃ³n</h4>
+                <h4 style={{ fontWeight: 700, color: pr, marginBottom: 8 }}>Visión</h4>
                 <p style={{ fontSize: ".875rem", color: "#555" }}>{c.nosotros.vision}</p>
               </div>
             </div>
