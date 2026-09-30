@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
       urls.push(supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
     }
 
-    const { error: insErr } = await supabase.from("cotizaciones_cm").insert({
+    const { data: cotRow, error: insErr } = await supabase.from("cotizaciones_cm").insert({
       site_id: SITE_ID,
       tipo_inmueble: tipo,
       tipo_otro: tipo === "Otro" ? tipoOtro : null,
@@ -126,13 +126,14 @@ export async function POST(req: NextRequest) {
       correo,
       mensaje: mensaje || null,
       fotos: urls,
-    });
+    }).select("id").single();
     if (insErr) {
       if (subidos.length) await supabase.storage.from(BUCKET).remove(subidos);
       console.error("cotizacion-cm insert:", insErr);
       return fail("No se pudo guardar la solicitud. Intenta de nuevo.", 500);
     }
 
+    let leadId: number | null = null;
     try {
       const ownerId: string | null = (site as any).user_id ?? null;
       if (ownerId) {
@@ -144,7 +145,7 @@ export async function POST(req: NextRequest) {
         ];
         if (mensaje) partes.push("Detalle: " + mensaje);
         if (urls.length) partes.push("Fotos: " + urls.join(" "));
-        const { error: leadErr } = await supabase.from("leads").insert({
+        const { data: leadRow, error: leadErr } = await supabase.from("leads").insert({
           nombre,
           email: correo,
           telefono: celular,
@@ -155,8 +156,9 @@ export async function POST(req: NextRequest) {
           estado: "nuevo",
           fuente: "cotizacion-cm",
           user_id: ownerId,
-        });
+        }).select("id").single();
         if (leadErr) console.error("cotizacion-cm lead:", leadErr);
+        else leadId = (leadRow as any)?.id ?? null;
       }
     } catch (leadCatch) {
       console.error("cotizacion-cm lead:", leadCatch);
@@ -194,7 +196,39 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ ok: true });
+    let visitaInfo: { valor: number } | null = null;
+    if (visita === "si") {
+      try {
+        const ownerV: string | null = (site as any).user_id ?? null;
+        if (ownerV) {
+          const { data: precio } = await supabase
+            .from("precios_cm")
+            .select("valor")
+            .eq("user_id", ownerV)
+            .eq("clave", "visita_tecnica")
+            .single();
+          if (precio && precio.valor != null) {
+            const valorVisita = Number(precio.valor);
+            const { error: visErr } = await supabase.from("visitas_tecnicas").insert({
+              site_id: SITE_ID,
+              user_id: ownerV,
+              cotizacion_id: (cotRow as any)?.id ?? null,
+              lead_id: leadId,
+              estado: "pago_pendiente",
+              valor_cobrado: valorVisita,
+            });
+            if (visErr) console.error("cotizacion-cm visita:", visErr);
+            else visitaInfo = { valor: valorVisita };
+          } else {
+            console.error("cotizacion-cm visita: precio visita_tecnica no encontrado");
+          }
+        }
+      } catch (visCatch) {
+        console.error("cotizacion-cm visita:", visCatch);
+      }
+    }
+
+    return NextResponse.json(visitaInfo ? { ok: true, visita: visitaInfo } : { ok: true });
   } catch (e) {
     console.error("cotizacion-cm:", e);
     return fail("Error procesando la solicitud.", 500);
