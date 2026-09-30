@@ -54,6 +54,7 @@ export default function EditorProfesional() {
   const [saved, setSaved] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<string>("hero");
+  const [agente, setAgente] = useState<any>(null);
   const [navHidden, setNavHidden] = useState<string[]>([]);
   const [view, setView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [font, setFont] = useState(FONTS[0].value);
@@ -80,6 +81,8 @@ export default function EditorProfesional() {
       const { data } = await supabase.from("generated_websites").select("*").eq("id", id).eq("user_id", user.id).single();
       if (!data) { router.push("/dashboard/client/builder"); return; }
       setSite(data);
+      const { data: ag } = await supabase.from("ai_agents").select("id,activo").eq("user_id", user.id).maybeSingle();
+      setAgente(ag);
       const c = data.professional_content ?? data.generated_content ?? {};
       if (!c.nosotros) c.nosotros = { titulo: "Quienes somos", descripcion: "Descripcion de la empresa", mision: "Nuestra mision", vision: "Nuestra vision" };
       if (!c.galeria) c.galeria = { titulo: "Galeria", items: [] };
@@ -580,6 +583,16 @@ export default function EditorProfesional() {
               <Field label="WhatsApp" value={content?.contacto?.whatsapp} onChange={v => updateText(["contacto","whatsapp"], v)} />
               <Field label="Email" value={content?.contacto?.email} onChange={v => updateText(["contacto","email"], v)} />
               <Field label="Direccion" value={content?.contacto?.direccion} onChange={v => updateText(["contacto","direccion"], v)} />
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Chatbot activo</span>
+                {agente ? (
+                  <button onClick={async () => { const nuevo = agente.activo === false; const { error } = await supabase.from("ai_agents").update({ activo: nuevo }).eq("id", agente.id); if (!error) setAgente({ ...agente, activo: nuevo }); }} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: agente.activo !== false ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                    <span style={{ position: "absolute", top: 2, left: agente.activo !== false ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                  </button>
+                ) : (
+                  <a href="/dashboard/client/agente-ia" style={{ fontSize: 12, fontWeight: 700, color: pr }}>Crear agente IA</a>
+                )}
+              </div>
             </>)}
             {selectedSection === "footer" && (<>
               <Field label="Nombre empresa" value={content?.footer?.nombre_empresa} onChange={v => updateText(["footer","nombre_empresa"], v)} />
