@@ -3,6 +3,24 @@ import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ id: string; pagina: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { id, pagina } = await params;
+  const supabase = await createClient();
+  const { data: site } = await supabase.from("generated_websites").select("project_name, generated_content, logo_url").eq("id", id).single();
+  const gc = site?.generated_content as any;
+  const nombre = gc?.footer?.nombre_empresa ?? site?.project_name ?? "Sitio web";
+  const pg = (gc?.paginas_extra ?? []).find((p: any) => p.slug === pagina);
+  const titulo = pg?.titulo ? `${pg.titulo} - ${nombre}` : nombre;
+  const faviconUrl = site?.logo_url ? `/api/favicon?id=${id}` : undefined;
+  let description: string = (pg?.descripcion?.trim()) || (gc?.footer?.descripcion?.trim()) || (gc?.nosotros?.descripcion?.trim()) || `${nombre}.`;
+  if (description.length > 160) description = description.slice(0, 157).trimEnd() + "...";
+  return {
+    title: titulo,
+    description,
+    icons: faviconUrl ? { icon: faviconUrl, apple: faviconUrl } : undefined,
+  };
+}
+
 export default async function SubPage({ params }: Props) {
   const { id, pagina } = await params;
   const supabase = await createClient();
