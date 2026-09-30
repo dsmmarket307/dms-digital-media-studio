@@ -134,6 +134,20 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+function videoEmbed(url: string): string | null {
+  const u = String(url || "").trim();
+  let m = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+  if (m) return `https://www.youtube.com/embed/${m[1]}`;
+  m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (m) return `https://player.vimeo.com/video/${m[1]}`;
+  if (/facebook\.com|fb\.watch/.test(u)) return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(u)}&show_text=false`;
+  m = u.match(/tiktok\.com\/.*\/video\/(\d+)/);
+  if (m) return `https://www.tiktok.com/embed/v2/${m[1]}`;
+  m = u.match(/instagram\.com\/(p|reel|tv)\/([\w-]+)/);
+  if (m) return `https://www.instagram.com/${m[1]}/${m[2]}/embed`;
+  return null;
+}
+
 export default async function DemoProfesional({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
@@ -559,6 +573,21 @@ export default async function DemoProfesional({ params }: Props) {
           </div>
         </section>
       )}
+
+      {c?.video?.activo && c?.video?.url && (() => { const src = videoEmbed(c.video.url); return (
+        <section id="video">
+          <div className="wrap" style={{ textAlign: "center" }}>
+            {c.video.titulo && <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>{c.video.titulo}</h2>}
+            {src ? (
+              <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, maxWidth: 900, margin: "0 auto", borderRadius: 16, overflow: "hidden" }}>
+                <iframe src={src} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen loading="lazy" />
+              </div>
+            ) : (
+              <a href={c.video.url} target="_blank" rel="noopener noreferrer" className="nav-cta">Ver video</a>
+            )}
+          </div>
+        </section>
+      ); })()}
 
       {(() => {
         const ServiciosComponente = getSeccionComponente("servicios", c?.servicios_variant);
