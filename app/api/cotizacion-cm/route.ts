@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
 
     const { data: site } = await supabase
       .from("generated_websites")
-      .select("project_name, generated_content")
+      .select("project_name, generated_content, user_id")
       .eq("id", SITE_ID)
       .single();
     if (!site) return fail("Sitio no encontrado.", 404);
@@ -131,6 +131,35 @@ export async function POST(req: NextRequest) {
       if (subidos.length) await supabase.storage.from(BUCKET).remove(subidos);
       console.error("cotizacion-cm insert:", insErr);
       return fail("No se pudo guardar la solicitud. Intenta de nuevo.", 500);
+    }
+
+    try {
+      const ownerId: string | null = (site as any).user_id ?? null;
+      if (ownerId) {
+        const ciudadFinal = ciudad === "Otra" ? ciudadOtra : ciudad;
+        const partes: string[] = [
+          "COTIZACION WEB: " + (tipo === "Otro" ? "Otro - " + tipoOtro : tipo) + " | " + servicio,
+          "Ciudad: " + ciudadFinal + " | Direccion: " + direccion,
+          "Visita: " + (visita === "si" ? "Si" : "No") + " | Humedad: " + (humedad === "si" ? "Si" : "No") + (area === null ? "" : " | Area: " + area + " m2"),
+        ];
+        if (mensaje) partes.push("Detalle: " + mensaje);
+        if (urls.length) partes.push("Fotos: " + urls.join(" "));
+        const { error: leadErr } = await supabase.from("leads").insert({
+          nombre,
+          email: correo,
+          telefono: celular,
+          whatsapp: celular,
+          ciudad: ciudadFinal,
+          servicio,
+          mensaje: partes.join(" | "),
+          estado: "nuevo",
+          fuente: "cotizacion-cm",
+          user_id: ownerId,
+        });
+        if (leadErr) console.error("cotizacion-cm lead:", leadErr);
+      }
+    } catch (leadCatch) {
+      console.error("cotizacion-cm lead:", leadCatch);
     }
 
     if (destino && process.env.RESEND_API_KEY) {
