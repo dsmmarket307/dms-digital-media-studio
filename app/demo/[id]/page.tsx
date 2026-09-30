@@ -241,7 +241,7 @@ export default async function DemoPage({ params }: Props) {
       <style dangerouslySetInnerHTML={{ __html: css }} />
       {trialActivo && (
         <div style={{ background: "#7c3aed", color: "#fff", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, position: "sticky", top: 0, zIndex: 999 }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa â€” Activa un plan para publicar tu sitio con tu dominio personalizado</span>
+          <span style={{ fontSize: 13, fontWeight: 600 }}>Vista previa — Activa un plan para publicar tu sitio con tu dominio personalizado</span>
           <a href="https://dms-digital-media-studio.vercel.app/dashboard/client/suscripcion" style={{ background: "#fff", color: "#7c3aed", padding: "6px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Activar Plan</a>
         </div>
       )}
@@ -252,7 +252,7 @@ export default async function DemoPage({ params }: Props) {
             {[...c.barraAnuncio.items, ...c.barraAnuncio.items].map((txt: string, i: number) => (
               <span key={i} style={{ color: c.barraAnuncio.colorTexto || "#f5c542", fontSize: "12px", fontWeight: 600, whiteSpace: "nowrap", padding: "0 20px", display: "flex", alignItems: "center", gap: "20px" }}>
                 {txt}
-                <span style={{ opacity: 0.6 }}>â€¢</span>
+                <span style={{ opacity: 0.6 }}>•</span>
               </span>
             ))}
           </div>
@@ -268,17 +268,17 @@ export default async function DemoPage({ params }: Props) {
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </label>
         <ul className="nav-links">
-          {c?.productos?.length > 0 && !navHidden.includes("productos") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
-          {c?.nosotros && !navHidden.includes("nosotros") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
-          {c?.servicios && !navHidden.includes("servicios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
-          {c?.testimonios && !navHidden.includes("testimonios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
-          {c?.faq && !navHidden.includes("faq") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "faq"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#faq">FAQ â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#faq">FAQ</a></li>); })()}
-          {c?.contacto && !navHidden.includes("contacto") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto â–¾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
+          {c?.productos?.length > 0 && !navHidden.includes("productos") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "productos"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#productos">Productos ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#productos">Productos</a></li>); })()}
+          {c?.nosotros && !navHidden.includes("nosotros") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "nosotros"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#nosotros">Nosotros ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#nosotros">Nosotros</a></li>); })()}
+          {c?.servicios && !navHidden.includes("servicios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "servicios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#servicios">Servicios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#servicios">Servicios</a></li>); })()}
+          {c?.testimonios && !navHidden.includes("testimonios") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "testimonios"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#testimonios">Testimonios ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#testimonios">Testimonios</a></li>); })()}
+          {c?.faq && !navHidden.includes("faq") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "faq"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#faq">FAQ ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#faq">FAQ</a></li>); })()}
+          {c?.contacto && !navHidden.includes("contacto") && (() => { const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === "contacto"); return hijos.length > 0 ? (<li className="nav-item-parent"><a href="#contacto">Contacto ▾</a><ul className="nav-submenu">{hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}</ul></li>) : (<li><a href="#contacto">Contacto</a></li>); })()}
           {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
             const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
             return hijos.length > 0 ? (
               <li key={pi} className="nav-item-parent">
-                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} â–¾</a>
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
                 <ul className="nav-submenu">
                   {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
                 </ul>
