@@ -1372,16 +1372,6 @@ export default function PageBuilderEditor() {
               <Field label="WhatsApp" value={content?.contacto?.whatsapp} onChange={(v) => updateText(["contacto", "whatsapp"], v)} />
               <Field label="Email" value={content?.contacto?.email} onChange={(v) => updateText(["contacto", "email"], v)} />
               <Field label="Direccion" value={content?.contacto?.direccion} onChange={(v) => updateText(["contacto", "direccion"], v)} />
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Chatbot activo</span>
-                {agente ? (
-                  <button onClick={async () => { const nuevo = agente.activo === false; const { error } = await supabase.from("ai_agents").update({ activo: nuevo }).eq("id", agente.id); if (!error) setAgente({ ...agente, activo: nuevo }); }} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: agente.activo !== false ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
-                    <span style={{ position: "absolute", top: 2, left: agente.activo !== false ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
-                  </button>
-                ) : (
-                  <span style={{ fontSize: 12, color: "#888" }}>Este cliente no tiene agente IA</span>
-                )}
-              </div>
               <Field label="Facebook (url o usuario)" value={content?.contacto?.facebook} onChange={(v) => updateText(["contacto", "facebook"], v)} />
               <Field label="Instagram (url o usuario)" value={content?.contacto?.instagram} onChange={(v) => updateText(["contacto", "instagram"], v)} />
               <Field label="TikTok (url o usuario)" value={content?.contacto?.tiktok} onChange={(v) => updateText(["contacto", "tiktok"], v)} />
@@ -1409,6 +1399,16 @@ export default function PageBuilderEditor() {
                 <button onClick={() => setContent((prev: any) => { const next = JSON.parse(JSON.stringify(prev)); if (!next.contacto) next.contacto = {}; next.contacto.mostrar_mapa = !next.contacto.mostrar_mapa; return next; })} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: content?.contacto?.mostrar_mapa ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
                   <span style={{ position: "absolute", top: 2, left: content?.contacto?.mostrar_mapa ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
                 </button>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, background: "#f8f9fa", borderRadius: 10, padding: "10px 12px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>Chatbot activo</span>
+                {agente ? (
+                  <button onClick={async () => { const nuevo = agente.activo === false; const { error } = await supabase.from("ai_agents").update({ activo: nuevo }).eq("id", agente.id); if (!error) setAgente({ ...agente, activo: nuevo }); }} style={{ width: 40, height: 22, borderRadius: 999, border: "none", cursor: "pointer", background: agente.activo !== false ? pr : "#d1d5db", position: "relative", transition: "background 0.2s" }}>
+                    <span style={{ position: "absolute", top: 2, left: agente.activo !== false ? 20 : 2, width: 18, height: 18, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                  </button>
+                ) : (
+                  <span style={{ fontSize: 12, color: "#888" }}>Este cliente no tiene agente IA</span>
+                )}
               </div>
             </>)}
             {selectedSection === "confianza" && (<>
