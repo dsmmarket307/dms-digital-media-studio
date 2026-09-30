@@ -52,6 +52,7 @@ const MENU_EMPRESARIAL: any[] = [
   { href: "/dashboard/client/leads", label: "Leads", icon: "leads" },
   { href: "/dashboard/client/reservas", label: "Reservas", icon: "reservas" },
   { href: "/dashboard/client/crm", label: "CRM Pipeline", icon: "crm" },
+  { href: "/dashboard/client/visitas", label: "Visitas tecnicas", icon: "reservas", soloUser: "d0ac77a9-ce5a-43bf-aa1c-3158103477ec" },
   { section: "Inteligencia Artificial" },
   { href: "/dashboard/client/agente-ia", label: "Agente IA", icon: "agente" },
   { href: "/dashboard/client/automatizaciones", label: "Automatizaciones", icon: "auto" },
@@ -101,7 +102,7 @@ export default function ClientSidebar() {
     router.push("/auth/login");
   }
 
-  const menuItems = MENU_EMPRESARIAL;
+  const menuItems = MENU_EMPRESARIAL.filter((it: any) => !it.soloUser || it.soloUser === profile?.id);
 
   const SidebarContent = () => (
     <>
@@ -112,7 +113,7 @@ export default function ClientSidebar() {
               <p key={idx} style={{ fontSize: 9, fontWeight: 800, color: "#aaa", textTransform: "uppercase" as const, letterSpacing: 2, padding: "14px 12px 4px", margin: 0 }}>{item.section}</p>
             );
           }
-          const permitido = cargandoPlan || rutasPermitidas.includes(item.href) || item.href === "/dashboard/client/centro-ayuda";
+          const permitido = cargandoPlan || rutasPermitidas.includes(item.href) || item.href === "/dashboard/client/centro-ayuda" || item.href === "/dashboard/client/visitas";
           const activo = pathname === item.href;
           if (permitido) {
             return (

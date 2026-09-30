@@ -72,6 +72,7 @@ export default function CotizacionForm({ siteId, primaryColor }: { siteId: strin
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [visitaValor, setVisitaValor] = useState<number | null>(null);
 
   const set = (k: keyof Campos, v: string) => setF((p) => ({ ...p, [k]: v }));
 
@@ -122,6 +123,7 @@ export default function CotizacionForm({ siteId, primaryColor }: { siteId: strin
       fotos.forEach((ft) => URL.revokeObjectURL(ft.preview));
       setFotos([]);
       setF(VACIO);
+      setVisitaValor(typeof data?.visita?.valor === "number" ? data.visita.valor : null);
       setEnviado(true);
       if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
@@ -177,6 +179,16 @@ export default function CotizacionForm({ siteId, primaryColor }: { siteId: strin
         {estilos}
         <div className="cq-ok" role="status">
           <h3>Solicitud enviada</h3>
+          {visitaValor !== null && (
+            <div style={{ background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 12, padding: "1rem", margin: "0 0 1rem", textAlign: "left" }}>
+              <p><strong>Visita tecnica y diagnostico: {"$" + visitaValor.toLocaleString("es-CO")} COP</strong></p>
+              <p>Para agendar la visita debes pagar este valor por adelantado. Si luego contratas el servicio, se descuenta de la cotizacion.</p>
+              <p>Nequi: <strong>3155654948</strong></p>
+              <p>Cuenta de ahorros Davivienda: <strong>48438515568</strong></p>
+              <p>A nombre de CM Pinturas y Mantenimiento.</p>
+              <p>Envia el comprobante por WhatsApp al <strong>3155654948</strong> y te confirmaremos el agendamiento.</p>
+            </div>
+          )}
           <p>Gracias, recibimos tu solicitud. Te contactaremos pronto para brindarte una cotización personalizada.</p>
         </div>
       </div>
