@@ -58,7 +58,7 @@ export default async function SubPage({ params }: Props) {
             );
           })}
         </ul>
-        <a href={`/demo/${id}`} style={{ background:pr, color:"#fff", padding:"0.5rem 1.25rem", borderRadius:8, textDecoration:"none", fontSize:"0.875rem", fontWeight:700 }}>Volver</a>
+        <a href={site.published_version === "profesional" ? `/demo/${id}/profesional` : `/demo/${id}`} style={{ background:pr, color:"#fff", padding:"0.5rem 1.25rem", borderRadius:8, textDecoration:"none", fontSize:"0.875rem", fontWeight:700 }}>Volver</a>
       </nav>
 
       <section style={{ padding:"4rem 2rem" }}>
@@ -66,7 +66,8 @@ export default async function SubPage({ params }: Props) {
           <div style={{ marginBottom:"3rem", textAlign:"center" }}>
             <p style={{ fontSize:".7rem", fontWeight:700, letterSpacing:4, textTransform:"uppercase", color:pr, marginBottom:".75rem" }}>{c?.footer?.nombre_empresa}</p>
             <h1 style={{ fontSize:"clamp(1.5rem,3vw,2.5rem)", fontWeight:800, color:"#111", marginBottom:"1rem" }}>{page.titulo}</h1>
-            {page.descripcion && <p style={{ color:"#666", fontSize:"1rem", lineHeight:1.7, maxWidth:600, margin:"0 auto" }}>{page.descripcion}</p>}
+            {page.imagen && (<img src={page.imagen} alt={page.titulo} style={{ width:"100%", maxWidth:720, maxHeight:420, objectFit:"cover", borderRadius:16, margin:"0 auto 1.5rem", display:"block" }} />)}
+            {page.descripcion && (<div style={{ maxWidth:720, margin:"0 auto", textAlign:"left" }}>{(() => { const partes = String(page.descripcion).split(/\n+/).filter(Boolean); const bloques: string[] = partes.length > 1 ? partes : (String(page.descripcion).match(/[^.!?]+[.!?]+\s*|[^.!?]+$/g) ?? [String(page.descripcion)]).reduce((a: string[], s: string, i: number) => { if (i % 2 === 0) a.push(s.trim()); else a[a.length - 1] += " " + s.trim(); return a; }, []); return bloques.map((b: string, i: number) => (<p key={i} style={{ color:"#555", fontSize:"1rem", lineHeight:1.8, marginBottom:"1rem" }}>{b}</p>)); })()}</div>)}
           </div>
 
           {page.items && page.items.length > 0 && (
