@@ -136,7 +136,7 @@ export default function CotizacionForm({ siteId, primaryColor }: { siteId: strin
   const estilos = (
     <style>{`
       .cq{background:#fff;border-radius:24px;padding:2.5rem;max-width:860px;margin:0 auto;box-shadow:0 2px 20px rgba(0,0,0,.08);border:1px solid #f0f0f0;position:relative}
-      .cq-intro{color:#555;font-size:.95rem;line-height:1.6;text-align:center;margin-bottom:.4rem}
+      .cq-intro{color:#111;font-size:clamp(1.15rem,2.6vw,1.5rem);font-weight:700;line-height:1.4;text-align:center;margin-bottom:.75rem}
       .cq-note{font-size:.75rem;color:#6b7280;text-align:center;margin-bottom:1.5rem}
       .cq-sec{padding-top:1.5rem;margin-top:1.5rem;border-top:1px solid #f0f0f0}
       .cq-sec h3{font-size:1.05rem;font-weight:800;color:#111;margin-bottom:1.25rem;display:flex;align-items:center;gap:.6rem}
