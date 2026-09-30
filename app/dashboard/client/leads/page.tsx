@@ -118,7 +118,7 @@ export default function LeadsCliente() {
             {[["nombre","Nombre *"],["email","Correo"],["telefono","Telefono"],["mensaje","Mensaje"]].map(([field, label]) => (
               <div key={field} style={{ marginBottom: 12 }}>
                 <label style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, display: "block", marginBottom: 4 }}>{label}</label>
-                <input value={(form as any)[field]} onChange={e => setForm(prev => ({ ...prev, [field]: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />
+                {field === "mensaje" ? (<textarea rows={7} value={(form as any)[field]} onChange={e => setForm(prev => ({ ...prev, [field]: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const, resize: "vertical" as const, fontFamily: "inherit", lineHeight: 1.4 }} />) : (<input value={(form as any)[field]} onChange={e => setForm(prev => ({ ...prev, [field]: e.target.value }))} style={{ width: "100%", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 13, outline: "none", boxSizing: "border-box" as const }} />)}
               </div>
             ))}
             <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
