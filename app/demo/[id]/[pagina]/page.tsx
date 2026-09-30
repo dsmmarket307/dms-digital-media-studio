@@ -1,5 +1,6 @@
 ﻿import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
+import CotizacionForm from "./CotizacionForm";
 
 type Props = { params: Promise<{ id: string; pagina: string }> };
 
@@ -162,6 +163,14 @@ export default async function SubPage({ params }: Props) {
           )}
         </div>
       </section>
+
+      {id === "e3d015d2-02d6-4356-81b6-501675297e60" && pagina === "solicita-tu-cotizacion" && (
+        <section style={{ padding: "0 2rem 4rem" }}>
+          <div className="wrap">
+            <CotizacionForm siteId={id} primaryColor={pr} />
+          </div>
+        </section>
+      )}
 
       <footer>
         <div className="wrap">
