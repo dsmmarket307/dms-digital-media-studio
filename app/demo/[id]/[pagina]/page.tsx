@@ -16,14 +16,19 @@ export default async function SubPage({ params }: Props) {
   const paginas = c?.paginas_extra ?? [];
   const page = paginas.find((p: any) => p.slug === pagina);
   if (!page) notFound();
+  const base = `/demo/${id}/profesional`;
+  const secciones = [["productos", "Productos"], ["nosotros", "Nosotros"], ["servicios", "Servicios"], ["galeria", "Galeria"], ["testimonios", "Testimonios"], ["contacto", "Contacto"]];
 
   return (
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:'Segoe UI',sans-serif;color:#111}
-        nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
         .wrap{max-width:1100px;margin:0 auto;padding:0 1rem}
+        nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.08)}
+        .brand{display:flex;align-items:center;gap:12px;min-width:0;overflow:hidden}
+        .brand h1{font-size:1.1rem;font-weight:800;color:${pr}}
+        .brand img{height:70px;object-fit:contain}
         .nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
         .nav-links a{text-decoration:none;color:#555;font-size:0.875rem;font-weight:500;transition:color 0.2s}
         .nav-links a:hover{color:${pr}}
@@ -31,34 +36,57 @@ export default async function SubPage({ params }: Props) {
         .nav-submenu{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:180px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:0.5rem 0;list-style:none;z-index:200}
         .nav-item-parent:hover .nav-submenu{display:block}
         .nav-submenu li{width:100%}
-        .nav-submenu a{display:block;padding:0.5rem 1rem;white-space:nowrap}
+        .nav-submenu a{display:block;padding:0.5rem 1rem;white-space:nowrap;color:#555}
         .nav-submenu a:hover{background:#f8f8f8}
+        .nav-cta{background:${pr};color:#fff;padding:0.625rem 1.5rem;border-radius:8px;text-decoration:none;font-size:0.875rem;font-weight:700;transition:opacity 0.2s}
+        .nav-cta:hover{opacity:0.9}
+        .mobile-toggle{display:none}
+        .hamburger-label{display:none;cursor:pointer;padding:6px}
+        @media(max-width:768px){nav{padding:1rem}.hamburger-label{display:block}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:1rem 2rem;gap:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.12)}.mobile-toggle:checked ~ .nav-links{display:flex}.hamburger-label{order:-2}.brand{order:-1;flex:1;justify-content:center;flex-shrink:1;min-width:0}.nav-cta{order:0;padding:0.4rem 0.7rem;font-size:0.68rem;flex-shrink:0;white-space:nowrap}.brand img{max-width:100px;height:auto}.nav-submenu{position:static;box-shadow:none;padding-left:1rem}}
         .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
         .card{background:#fff;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #f0f0f0}
-        @media(max-width:768px){nav{padding:1rem}.g3{grid-template-columns:1fr}}
+        @media(max-width:768px){.g3{grid-template-columns:1fr}}
       `}</style>
 
       <nav>
-        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          {logo && <img src={logo} alt="logo" style={{ height:44, objectFit:"contain" }} />}
-          <span style={{ fontWeight:700, fontSize:"1.1rem", color:pr }}>{c?.footer?.nombre_empresa ?? site.project_name}</span>
+        <div className="brand">
+          <a href={base} style={{ display: "flex", alignItems: "center" }}>
+            {logo ? <img src={logo} alt="logo" /> : <h1>{c?.footer?.nombre_empresa ?? site.project_name}</h1>}
+          </a>
         </div>
+        <input type="checkbox" id="mobile-toggle-check" className="mobile-toggle" />
+        <label htmlFor="mobile-toggle-check" className="hamburger-label">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </label>
         <ul className="nav-links">
-          {(c?.paginas_extra || []).filter((p: any) => !p.padre).map((p: any, pi: number) => {
-            const hijos = (c?.paginas_extra || []).filter((h: any) => h.padre === p.slug);
+          {secciones.filter((s) => s[0] !== "productos" || c?.productos?.length > 0).map((s) => {
+            const hijos = paginas.filter((h: any) => h.padre === s[0]);
             return hijos.length > 0 ? (
-              <li key={pi} className="nav-item-parent">
-                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} ▾</a>
+              <li key={s[0]} className="nav-item-parent">
+                <a href={`${base}#${s[0]}`}>{s[1]} &#9662;</a>
                 <ul className="nav-submenu">
                   {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
                 </ul>
               </li>
             ) : (
-              <li key={pi}><a href={`/demo/${id}/${p.slug}`}>{p.titulo}</a></li>
+              <li key={s[0]}><a href={`${base}#${s[0]}`}>{s[1]}</a></li>
+            );
+          })}
+          {paginas.filter((p: any) => !p.padre).map((p: any, pi: number) => {
+            const hijos = paginas.filter((h: any) => h.padre === p.slug);
+            return hijos.length > 0 ? (
+              <li key={"x" + pi} className="nav-item-parent">
+                <a href={`/demo/${id}/${p.slug}`}>{p.titulo} &#9662;</a>
+                <ul className="nav-submenu">
+                  {hijos.map((h: any, hi: number) => (<li key={hi}><a href={`/demo/${id}/${h.slug}`}>{h.titulo}</a></li>))}
+                </ul>
+              </li>
+            ) : (
+              <li key={"x" + pi}><a href={`/demo/${id}/${p.slug}`}>{p.titulo}</a></li>
             );
           })}
         </ul>
-        <a href={site.published_version === "profesional" ? `/demo/${id}/profesional` : `/demo/${id}`} style={{ background:pr, color:"#fff", padding:"0.5rem 1.25rem", borderRadius:8, textDecoration:"none", fontSize:"0.875rem", fontWeight:700 }}>Volver</a>
+        <a href={`${base}#contacto`} className="nav-cta">Contactar</a>
       </nav>
 
       <section style={{ padding:"4rem 2rem" }}>
