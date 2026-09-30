@@ -632,7 +632,68 @@ export default function PageBuilderEditor() {
         </div>
       </div>
     );
-  }if (loading) return (
+  }
+
+    function PaginaImgDrop({ pIndex, value }: { pIndex: number; value: string }) {
+    const [dragOver, setDragOver] = useState(false);
+    const [busy, setBusy] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    async function handleFile(file: File) {
+      if (!file || !file.type.startsWith("image/")) return;
+      setBusy(true);
+      const ext = file.name.split(".").pop();
+      const comprimido = await comprimirImagen(file);
+      const fileName = `img-pagina-${pIndex}-main-${Date.now()}.jpg`;
+      await supabase.storage.from("logos").upload(fileName, comprimido, { upsert: true });
+      const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+      updatePagina(pIndex, "imagen", data.publicUrl);
+      setBusy(false);
+    }
+
+    return (
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ display: "block", fontSize: 10, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, marginBottom: 4 }}>Imagen de la pagina</label>
+        <div
+          onClick={() => inputRef.current?.click()}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            const file = e.dataTransfer.files?.[0];
+            if (file) handleFile(file);
+          }}
+          onPaste={(e) => {
+            const item = Array.from(e.clipboardData.items).find((i) => i.type.startsWith("image/"));
+            const file = item?.getAsFile();
+            if (file) handleFile(file);
+          }}
+          tabIndex={0}
+          style={{
+            border: `2px dashed ${dragOver ? primaryColor : "#ddd"}`,
+            borderRadius: 8,
+            padding: value ? 0 : "16px",
+            textAlign: "center" as const,
+            cursor: "pointer",
+            background: dragOver ? `${primaryColor}10` : "#fafafa",
+            overflow: "hidden",
+            position: "relative" as const,
+          }}
+        >
+          <input ref={inputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+          {value ? (
+            <img src={value} alt="preview" style={{ width: "100%", height: 100, objectFit: "cover", display: "block" }} />
+          ) : (
+            <span style={{ fontSize: 11, color: "#999" }}>{busy ? "Subiendo..." : "Arrastra, pega (Ctrl+V) o haz clic"}</span>
+          )}
+          {busy && value && <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>Subiendo...</div>}
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ width: 40, height: 40, border: "3px solid #e9d5ff", borderTopColor: "#7c3aed", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -1505,6 +1566,7 @@ export default function PageBuilderEditor() {
                   <Field label="Slug (url)" value={p.slug} onChange={(v) => updatePagina(pi, "slug", v)} />
                   <Field label="Titulo" value={p.titulo} onChange={(v) => updatePagina(pi, "titulo", v)} />
                   <Field label="Descripcion" value={p.descripcion} onChange={(v) => updatePagina(pi, "descripcion", v)} multiline />
+                  <PaginaImgDrop pIndex={pi} value={p.imagen} />
                   <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" as const, marginBottom: 6, marginTop: 10 }}>Depende de (opcional)</label>
                   <select value={p.padre || ""} onChange={(e) => updatePagina(pi, "padre", e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid #ddd", fontSize: 13, marginBottom: 8, background: "#fff" }}>
                     <option value="">Ninguna (menu principal)</option>
