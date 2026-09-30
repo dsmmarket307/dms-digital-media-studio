@@ -140,6 +140,7 @@ export default function AgenteChat({ agente, color, siteId }: { agente: any; col
         #cb-btn{position:fixed;bottom:24px;right:90px;z-index:9998;width:56px;height:56px;border-radius:50%;background:${color};border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;}
         #cb-win{display:none;position:fixed;bottom:90px;right:24px;width:340px;max-height:500px;background:#fff;border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,0.18);z-index:9998;flex-direction:column;overflow:hidden;}
         #cb-win.open{display:flex;}
+        @media(max-width:600px){#cb-btn{right:16px;bottom:96px;}#cb-win{right:16px;left:16px;width:auto;bottom:164px;max-height:calc(100vh - 190px);}}
         #cb-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;}
         .cb-b{background:#f3f4f6;border-radius:12px 12px 12px 0;padding:9px 13px;font-size:13px;color:#111;max-width:85%;line-height:1.5;}
         .cb-u{background:${color};border-radius:12px 12px 0 12px;padding:9px 13px;font-size:13px;color:#fff;max-width:85%;align-self:flex-end;line-height:1.5;}
