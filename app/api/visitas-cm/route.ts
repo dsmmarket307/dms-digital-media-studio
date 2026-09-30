@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         user_id: OWNER, tipo: "ingreso", concepto: "Visita tecnica y diagnostico", categoria: "Visita tecnica",
         monto: valor, fecha: dia, notas: "Metodo: " + metodo + (referencia ? " | Ref: " + referencia : ""),
       }).select("id").single();
-      if (me || !mov) { console.error("visitas-cm movimiento:", me); return fail("No se pudo registrar el ingreso.", 500); }
+      if (me || !mov) { console.error("visitas-cm movimiento:", me); return NextResponse.json({ error: "No se pudo registrar el ingreso.", detalle: String((me as any)?.message || "sin detalle") + " | " + String((me as any)?.code || "") + " | " + String((me as any)?.details || "") }, { status: 500 }); }
       const { error: ue } = await sb.from("visitas_tecnicas").update({
         estado: "pendiente_agendamiento", pago_fecha: new Date(dia + "T12:00:00-05:00").toISOString(), pago_valor: valor,
         pago_metodo: metodo, pago_referencia: referencia || null, pago_registrado_por: OWNER, movimiento_id: mov.id,
