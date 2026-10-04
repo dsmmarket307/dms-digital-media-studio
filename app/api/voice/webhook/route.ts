@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
   if (event === "call_analyzed" && resumen && !previa?.resumen) {
     const { error: errorLead } = await supabase.from("leads").insert({
       nombre: datos.nombre ?? call.from_number ?? "Llamada IA",
-      telefono: call.from_number ?? null,
+      telefono: datos.telefono || call.from_number || null,
+      email: datos.correo || null,
       mensaje: resumen,
       estado: "nuevo",
       fuente: "voz-ia",
