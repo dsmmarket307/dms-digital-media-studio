@@ -17,11 +17,12 @@ export async function verifiedBody(req: NextRequest) {
 }
 
 export async function userForAgent(agentId: string) {
-  const { data } = await db()
+  const { data, error } = await db()
     .from("voice_agents")
     .select("user_id")
     .eq("provider_agent_id", agentId)
     .eq("activo", true)
     .maybeSingle();
+  if (error) console.error("voice-webhook error buscando agente:", error.message);
   return data?.user_id as string | undefined;
 }
