@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       user_id: userId,
     });
     if (errorLead) console.error("Error creando lead de voz:", errorLead.message);
-    if (datos.resultado === "cita_agendada") {
+    if (datos.resultado === "cita_agendada" && userId === "d0ac77a9-ce5a-43bf-aa1c-3158103477ec") {
       const tipos = ["Casa", "Apartamento", "Local comercial", "Oficina"];
       const servicios = [
         "Pintura exterior",
