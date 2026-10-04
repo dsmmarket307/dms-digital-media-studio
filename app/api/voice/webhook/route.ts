@@ -6,11 +6,13 @@ export async function POST(req: NextRequest) {
   if (!body) return NextResponse.json({ error: "firma invalida" }, { status: 401 });
 
   const { event, call } = body;
+  console.log("voice-webhook evento:", event, "agent_id:", call?.agent_id);
   if (event !== "call_ended" && event !== "call_analyzed") {
     return NextResponse.json({ ok: true });
   }
 
   const userId = await userForAgent(call.agent_id);
+  console.log("voice-webhook usuario encontrado:", Boolean(userId));
   if (!userId) return NextResponse.json({ ok: true, ignorado: "agente sin usuario" });
 
   const supabase = db();
