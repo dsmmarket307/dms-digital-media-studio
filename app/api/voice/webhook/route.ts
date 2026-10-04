@@ -63,6 +63,41 @@ export async function POST(req: NextRequest) {
       user_id: userId,
     });
     if (errorLead) console.error("Error creando lead de voz:", errorLead.message);
+    if (datos.resultado === "cita_agendada") {
+      const tipos = ["Casa", "Apartamento", "Local comercial", "Oficina"];
+      const servicios = [
+        "Pintura exterior",
+        "Pintura interior",
+        "Pintura de fachada",
+        "Mantenimiento de techos",
+        "Mantenimiento de pisos",
+        "Tratamiento de humedad",
+        "Pintura y mantenimiento general",
+      ];
+      const ciudades = ["Pereira", "Dosquebradas", "Cerritos"];
+      const tipo = tipos.includes(datos.tipo_inmueble) ? datos.tipo_inmueble : "Otro";
+      const ciudad = ciudades.includes(datos.ciudad) ? datos.ciudad : "Otra";
+      const area = Number(String(datos.area_m2 ?? "").replace(",", "."));
+      const { error: errorCot } = await supabase.from("cotizaciones_cm").insert({
+        site_id: "e3d015d2-02d6-4356-81b6-501675297e60",
+        tipo_inmueble: tipo,
+        tipo_otro: tipo === "Otro" ? (datos.tipo_inmueble || "No indicado") : null,
+        area_m2: area > 0 ? area : null,
+        servicio: servicios.includes(datos.servicio)
+          ? datos.servicio
+          : "Pintura y mantenimiento general",
+        humedad: false,
+        ciudad,
+        ciudad_otra: ciudad === "Otra" ? (datos.ciudad || "No indicada") : null,
+        direccion: datos.direccion || "No indicada",
+        visita_diagnostico: true,
+        nombre: datos.nombre || "Cliente (llamada IA)",
+        celular: datos.telefono || call.from_number || "",
+        correo: datos.correo || "",
+        mensaje: "LLAMADA IA: " + resumen,
+      });
+      if (errorCot) console.error("Error creando cotizacion de voz:", errorCot.message);
+    }
   }
 
   return NextResponse.json({ ok: true });
