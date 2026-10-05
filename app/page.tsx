@@ -18,7 +18,7 @@ const SERVICIOS = [
   {
     slug: "diseno-web",
     title: "Sitios Web con IA",
-    desc: "Crea paginas web profesionales optimizadas para captar clientes en minutos.",
+    desc: "Crea páginas web profesionales optimizadas para captar clientes en minutos.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
@@ -27,8 +27,8 @@ const SERVICIOS = [
   },
   {
     slug: "publicidad-digital",
-    title: "Marketing y Captacion",
-    desc: "Genera mas oportunidades con herramientas de crecimiento digital.",
+    title: "Marketing y Captación",
+    desc: "Genera más oportunidades con herramientas de crecimiento digital.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
@@ -47,7 +47,7 @@ const SERVICIOS = [
   },
   {
     slug: "redes-sociales",
-    title: "Gestion de Clientes",
+    title: "Gestión de Clientes",
     desc: "Organiza contactos, oportunidades y ventas desde un CRM integrado.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -89,7 +89,7 @@ const REDES = [
 
 const SITIOS_IA = [
   { nombre: "Aura Spa & Wellness", categoria: "Spa / Bienestar", img: "/sitio-spa.webp" },
-  { nombre: "Restaurante La Brasa", categoria: "Gastronomia", img: "/sitio-restaurante.webp" },
+  { nombre: "Restaurante La Brasa", categoria: "Gastronomía", img: "/sitio-restaurante.webp" },
   { nombre: "Tu Sonrisa", categoria: "Salud / Dental", img: "/sitio-dental.webp" },
   { nombre: "Carlos Inmobiliaria", categoria: "Inmobiliaria", img: "/sitio-inmobiliaria.webp" },
   { nombre: "Moto Rize", categoria: "Automotriz", img: "/sitio-moto.webp" },
@@ -108,7 +108,7 @@ const DEFAULT_LANDING = {
   hero: {
     titulo: "Tu negocio digital completo en",
     titulo_resaltado: "minutos",
-    subtitulo: "Crea tu pagina web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma, con soporte real de nuestro equipo en Colombia.",
+    subtitulo: "Crea tu página web con IA, gestiona clientes, automatiza procesos y aumenta tus ventas desde una sola plataforma, con soporte real de nuestro equipo en Colombia.",
     boton_principal: "Crear mi negocio digital",
     boton_secundario: "Ver como funciona",
     video_url: "/sitio-demo.mp4",
@@ -116,16 +116,16 @@ const DEFAULT_LANDING = {
   servicios: {
     badge: "SOPORTE LOCAL EN PEREIRA, COLOMBIA",
     titulo: "Todo lo que necesitas para crecer online",
-    subtitulo: "Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma, con atencion cercana y en espanol de nuestro equipo colombiano.",
+    subtitulo: "Crea tu presencia digital, gestiona clientes y automatiza tu negocio desde una sola plataforma, con atención cercana y en español de nuestro equipo colombiano.",
   },
   como_funciona: {
-    titulo: "Como funciona DMS",
+    titulo: "Cómo funciona DMS",
     subtitulo: "Pon tu negocio online y comienza a captar clientes en pocos pasos.",
     boton: "Comenzar ahora",
   },
   estadisticas: {
     titulo: "Resultados que hablan por nosotros",
-    subtitulo: "Empresas y emprendedores que ya confian en DMS Digital Media Studio",
+    subtitulo: "Empresas y emprendedores que ya confían en DMS Digital Media Studio",
   },
   portafolio: {
     badge: "GENERADO CON IA",
@@ -135,7 +135,7 @@ const DEFAULT_LANDING = {
   },
   planes: {
     titulo: "Planes para tu negocio",
-    subtitulo: "Sin pagos unicos. Sin contratos. Cancela cuando quieras. Prueba 7 dias gratis.",
+    subtitulo: "Sin pagos únicos. Sin contratos. Cancela cuando quieras. Prueba 7 días gratis.",
   },
   testimonios: {
     titulo: "Lo que dicen nuestros clientes",
@@ -146,11 +146,11 @@ const DEFAULT_LANDING = {
     subtitulo: "Todo lo que necesitas saber antes de empezar.",
   },
   contacto: {
-    titulo: "Tienes dudas? Hablemos",
-    subtitulo: "Escribenos y te ayudamos a elegir el plan ideal para tu negocio en menos de 24 horas.",
+    titulo: "¿Tienes dudas? Hablemos",
+    subtitulo: "Escríbenos y te ayudamos a elegir el plan ideal para tu negocio en menos de 24 horas.",
   },
   footer: {
-    descripcion: "Desarrollo web, marketing digital, automatizacion e inteligencia artificial para empresas y emprendedores.",
+    descripcion: "Desarrollo web, marketing digital, automatización e inteligencia artificial para empresas y emprendedores.",
     email: "contacto@dmsdigitalstudio.com",
     telefono: "+57 315 565 4948",
     ciudad: "Pereira, Colombia",
@@ -448,7 +448,7 @@ export default function Home() {
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{lc.como_funciona.subtitulo}</p>
         <div className="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
           {[
-            { num: "01", title: "Elige un plan", desc: "Selecciona la solucion ideal para tu negocio." },
+            { num: "01", title: "Elige un plan", desc: "Selecciona la solución ideal para tu negocio." },
             { num: "02", title: "Crea tu sitio con IA", desc: "Genera una web profesional optimizada para convertir visitantes en clientes." },
             { num: "03", title: "Activa tus herramientas", desc: "Conecta CRM, formularios, reservas y automatizaciones." },
             { num: "04", title: "Comienza a vender", desc: "Gestiona clientes y haz crecer tu negocio desde una sola plataforma." },
@@ -479,8 +479,8 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32 }}>
             {[
               { value: clientes, suffix: "+", label: "Clientes satisfechos", icon: STAT_ICONS[0] },
-              { value: paises, suffix: "+", label: "Paises atendidos", icon: STAT_ICONS[1] },
-              { value: anos, suffix: "+", label: "Anos de experiencia", icon: STAT_ICONS[2] },
+              { value: paises, suffix: "+", label: "Países atendidos", icon: STAT_ICONS[1] },
+              { value: anos, suffix: "+", label: "Años de experiencia", icon: STAT_ICONS[2] },
               { value: sitios, suffix: "+", label: "Sitios web creados", icon: STAT_ICONS[3] },
             ].map((stat, i) => (
               <div key={i} style={{ textAlign: "center", background: "rgba(255,255,255,0.12)", borderRadius: 20, padding: "32px 20px", border: "1px solid rgba(255,255,255,0.2)" }}>
@@ -527,19 +527,19 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-4">{lc.planes.titulo}</h2>
         <p className="text-center text-gray-500 mb-4 max-w-xl mx-auto">{lc.planes.subtitulo}</p>
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginBottom: 40 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#166534", background: "#dcfce7", padding: "6px 14px", borderRadius: 20 }}>Garantia los primeros 7 dias</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#166534", background: "#dcfce7", padding: "6px 14px", borderRadius: 20 }}>Garantía los primeros 7 días</span>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#3730a3", background: "#e0e7ff", padding: "6px 14px", borderRadius: 20 }}>Pago seguro con Mercado Pago</span>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#374151", background: "#f3f4f6", padding: "6px 14px", borderRadius: 20 }}>Visa - Mastercard</span>
         </div>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {[
-            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", usd: 15, incluye: "", popular: false, items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Finanzas, facturas e inventario", "Soporte basico"] },
-            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", usd: 30, incluye: "Todo lo del plan Basico, mas:", popular: true, items: ["1 Sitio profesional", "Editor Profesional", "Galeria de imagenes", "Formulario de contacto", "SEO basico", "Reservas", "Leads integrados", "1 dominio personalizado", "Meta Pixel"] },
-            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", usd: 60, incluye: "", popular: false, items: ["Hasta 3 sitios activos", "Editor Avanzado", "SEO Avanzado", "Galeria de imagenes", "3 dominios personalizados", "Formulario de contacto", "Reservas", "Leads integrados", "CRM Pipeline", "Agente IA", "Automatizaciones IA", "Estadisticas", "Meta Pixel", "Finanzas, facturas e inventario", "Centro de ayuda", "Soporte prioritario"] },
+            { slug: "basico", name: "Básico", price: "$49.000", per: "COP / mes", usd: 15, incluye: "", popular: false, items: ["1 Landing Page activa", "Editor Básico", "Diseño responsive", "Botón de WhatsApp", "Subdominio DMS", "Finanzas, facturas e inventario", "Soporte básico"] },
+            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", usd: 30, incluye: "Todo lo del plan Básico, más:", popular: true, items: ["1 Sitio profesional", "Editor Profesional", "Galería de imágenes", "Formulario de contacto", "SEO básico", "Reservas", "Leads integrados", "1 dominio personalizado", "Meta Pixel"] },
+            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", usd: 60, incluye: "", popular: false, items: ["Hasta 3 sitios activos", "Editor Avanzado", "SEO Avanzado", "Galería de imágenes", "3 dominios personalizados", "Formulario de contacto", "Reservas", "Leads integrados", "CRM Pipeline", "Agente IA", "Automatizaciones IA", "Estadísticas", "Meta Pixel", "Finanzas, facturas e inventario", "Centro de ayuda", "Soporte prioritario"] },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-xl p-8 flex flex-col relative bg-white ${plan.popular ? "border-2 border-purple-600 shadow-lg" : "border border-gray-200 hover:shadow-lg transition-shadow"}`}>
               {plan.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-4 py-1 rounded-full font-semibold">Mas popular</span>
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-4 py-1 rounded-full font-semibold">Más popular</span>
               )}
               <h3 className={`font-bold text-xl ${plan.popular ? "text-purple-600" : "text-gray-800"}`}>{plan.name}</h3>
               <div className="flex items-baseline gap-2 mt-4">
@@ -571,9 +571,9 @@ export default function Home() {
             <div>
               <span className="inline-block text-xs font-bold tracking-widest bg-white/15 px-3 py-1 rounded-full mb-4">COMPLEMENTO</span>
               <h3 className="text-3xl font-bold leading-tight">Agente de voz con IA</h3>
-              <p className="mt-3 text-sm leading-relaxed" style={{ color: "#e9d5ff" }}>Contesta tus llamadas, agenda visitas o citas y envia todo a tus leads y reservas. Se contrata aparte y requiere plan Profesional o Empresarial.</p>
+              <p className="mt-3 text-sm leading-relaxed" style={{ color: "#e9d5ff" }}>Contesta tus llamadas, agenda visitas o citas y envía todo a tus leads y reservas. Se contrata aparte y requiere plan Profesional o Empresarial.</p>
               <ul className="mt-6 space-y-3 text-sm">
-                {["Atiende llamadas las 24 horas", "Agenda citas y visitas automaticamente", "Guarda cada llamada con su resumen en tus leads"].map((b) => (
+                {["Atiende llamadas las 24 horas", "Agenda citas y visitas automáticamente", "Guarda cada llamada con su resumen en tus leads"].map((b) => (
                   <li key={b} className="flex items-center gap-3">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                     {b}
@@ -600,7 +600,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-xs" style={{ color: "#e9d5ff" }}>Minuto extra: US$ 0.18 (se cobra $600 COP). La configuracion inicial se cotiza aparte.</p>
+              <p className="mt-5 text-center text-xs" style={{ color: "#e9d5ff" }}>Minuto extra: US$ 0.18 (se cobra $600 COP). La configuración inicial se cotiza aparte.</p>
             </div>
           </div>
         </div>
@@ -620,12 +620,12 @@ export default function Home() {
           <div className="dms-testi-track" style={{ display: "flex", gap: 24, transition: "transform 0.6s ease" }}>
           {(() => {
             const items = [
-              { nombre: "Carlos Ramirez", cargo: "Dueno de Restaurante, Pereira", texto: "Cree mi sitio web en minutos con la IA de DMS. En 30 dias ya tenia reservas online todos los dias.", inicial: "C", color: "linear-gradient(135deg,#7c3aed,#4f46e5)" },
-              { nombre: "Maria Gonzalez", cargo: "Directora, Clinica Estetica Cali", texto: "El agente IA atiende a mis clientes las 24 horas. Ya no pierdo consultas por no responder rapido.", inicial: "M", color: "linear-gradient(135deg,#ec4899,#db2777)" },
-              { nombre: "Andres Torres", cargo: "Gerente, Inmobiliaria El Dorado", texto: "El CRM me ayuda a hacer seguimiento a cada cliente. Cerre 15 negocios en 2 meses desde que use DMS.", inicial: "A", color: "linear-gradient(135deg,#0ea5e9,#0284c7)" },
-              { nombre: "Laura Ospina", cargo: "Emprendedora, Boutique Moda", texto: "En menos de 10 minutos tenia mi landing page lista. Mis clientes me dicen que se ve muy profesional.", inicial: "L", color: "linear-gradient(135deg,#f59e0b,#d97706)" },
-              { nombre: "Ricardo Mejia", cargo: "Abogado, Firma Mejia y Asociados", texto: "Mi sitio aparece en Google y los clientes me encuentran solos. DMS cambio mi negocio completamente.", inicial: "R", color: "linear-gradient(135deg,#10b981,#059669)" },
-              { nombre: "Sandra Perez", cargo: "Gerente, Spa Zen Bogota", texto: "El formulario de reservas y la galeria de fotos hicieron que mis ventas subieran un 40% el primer mes.", inicial: "S", color: "linear-gradient(135deg,#8b5cf6,#6d28d9)" },
+              { nombre: "Carlos Ramírez", cargo: "Dueño de Restaurante, Pereira", texto: "Creé mi sitio web en minutos con la IA de DMS. En 30 días ya tenía reservas online todos los días.", inicial: "C", color: "linear-gradient(135deg,#7c3aed,#4f46e5)" },
+              { nombre: "Maria Gonzalez", cargo: "Directora, Clínica Estética Cali", texto: "El agente IA atiende a mis clientes las 24 horas. Ya no pierdo consultas por no responder rápido.", inicial: "M", color: "linear-gradient(135deg,#ec4899,#db2777)" },
+              { nombre: "Andres Torres", cargo: "Gerente, Inmobiliaria El Dorado", texto: "El CRM me ayuda a hacer seguimiento a cada cliente. Cerré 15 negocios en 2 meses desde que use DMS.", inicial: "A", color: "linear-gradient(135deg,#0ea5e9,#0284c7)" },
+              { nombre: "Laura Ospina", cargo: "Emprendedora, Boutique Moda", texto: "En menos de 10 minutos tenía mi landing page lista. Mis clientes me dicen que se ve muy profesional.", inicial: "L", color: "linear-gradient(135deg,#f59e0b,#d97706)" },
+              { nombre: "Ricardo Mejía", cargo: "Abogado, Firma Mejía y Asociados", texto: "Mi sitio aparece en Google y los clientes me encuentran solos. DMS cambió mi negocio completamente.", inicial: "R", color: "linear-gradient(135deg,#10b981,#059669)" },
+              { nombre: "Sandra Pérez", cargo: "Gerente, Spa Zen Bogotá", texto: "El formulario de reservas y la galería de fotos hicieron que mis ventas subieran un 40% el primer mes.", inicial: "S", color: "linear-gradient(135deg,#8b5cf6,#6d28d9)" },
             ];
             return [...items, ...items];
           })().map((t, i) => (
@@ -662,12 +662,12 @@ export default function Home() {
         <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">{lc.faq.subtitulo}</p>
         <div className="max-w-3xl mx-auto space-y-4">
           {[
-            { q: "Cuanto cuesta usar DMS?", a: "Los planes van desde $49.000/mes. Todos incluyen 7 dias de prueba gratis sin necesidad de tarjeta de credito." },
-            { q: "En cuanto tiempo puedo tener mi sitio web listo?", a: "Con nuestro constructor de IA tu sitio puede estar listo en minutos. Solo describes tu negocio y la IA genera todo automaticamente." },
-            { q: "Necesito conocimientos tecnicos?", a: "No. DMS esta disenado para que cualquier persona pueda crear y gestionar su sitio sin saber programacion." },
-            { q: "Que incluye el plan Profesional?", a: "Sitio completo, editor profesional, galeria, SEO basico, formulario de contacto, reservas, dominio personalizado y leads integrados. Todo desde $99.000/mes." },
-            { q: "Puedo cancelar cuando quiera?", a: "Si. No hay contratos de permanencia. Cancelas cuando quieras desde tu panel sin ninguna penalizacion." },
-            { q: "Como funciona el pago?", a: "Los pagos son mensuales a traves de Mercado Pago. Los primeros 7 dias son completamente gratis, luego se cobra automaticamente segun el plan elegido." },
+            { q: "¿Cuánto cuesta usar DMS?", a: "Los planes van desde $49.000/mes. Todos incluyen 7 días de prueba gratis sin necesidad de tarjeta de crédito." },
+            { q: "¿En cuánto tiempo puedo tener mi sitio web listo?", a: "Con nuestro constructor de IA tu sitio puede estar listo en minutos. Solo describes tu negocio y la IA genera todo automáticamente." },
+            { q: "¿Necesito conocimientos técnicos?", a: "No. DMS está diseñado para que cualquier persona pueda crear y gestionar su sitio sin saber programación." },
+            { q: "¿Qué incluye el plan Profesional?", a: "Sitio completo, editor profesional, galería, SEO básico, formulario de contacto, reservas, dominio personalizado y leads integrados. Todo desde $99.000/mes." },
+            { q: "¿Puedo cancelar cuando quiera?", a: "Sí. No hay contratos de permanencia. Cancelas cuando quieras desde tu panel sin ninguna penalizacion." },
+            { q: "¿Cómo funciona el pago?", a: "Los pagos son mensuales a través de Mercado Pago. Los primeros 7 días son completamente gratis, luego se cobra automáticamente según el plan elegido." },
           ].map((faq, i) => (
             <div key={i} className="border border-gray-200 rounded-2xl p-6 hover:border-purple-300 transition-colors">
               <p className="font-bold text-gray-900 mb-2">{faq.q}</p>
@@ -730,7 +730,7 @@ export default function Home() {
             <div>
               <h3 style={{ fontWeight: 700, fontSize: 15, marginBottom: 16, color: "#fff" }}>Legal</h3>
               <ul style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[{ href: "/politica-de-privacidad", label: "Politica de Privacidad" }, { href: "/terminos-y-condiciones", label: "Terminos y Condiciones" }, { href: "/tratamiento-de-datos", label: "Tratamiento de Datos" }].map(l => (
+                {[{ href: "/politica-de-privacidad", label: "Política de Privacidad" }, { href: "/terminos-y-condiciones", label: "Términos y Condiciones" }, { href: "/tratamiento-de-datos", label: "Tratamiento de Datos" }].map(l => (
                   <li key={l.label}><Link href={l.href} style={{ color: "#aaa", fontSize: 13, textDecoration: "none" }} className="hover:text-purple-400 transition-colors">{l.label}</Link></li>
                 ))}
               </ul>
