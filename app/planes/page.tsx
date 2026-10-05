@@ -34,11 +34,11 @@ const PLANES = [
     price: 199000,
     per: "mes",
     desc: "Solucion completa con hasta 3 sitios, CRM, IA y soporte prioritario.",
-    items: ["Hasta 3 sitios activos", "Editor Avanzado", "SEO Avanzado", "CRM integrado", "Automatizaciones IA", "Agente IA", "Estadisticas", "3 dominios personalizados", "Soporte prioritario"],
+    items: ["Hasta 3 sitios activos", "Editor Avanzado", "SEO Avanzado", "Galeria de imagenes", "3 dominios personalizados", "Formulario de contacto", "Reservas", "Leads integrados", "CRM Pipeline", "Agente IA", "Automatizaciones IA", "Estadisticas", "Meta Pixel", "Finanzas, facturas e inventario", "Centro de ayuda", "Soporte prioritario"],
     popular: false,
     color: "#0f172a",
     usd: 60,
-    incluye: "Todo lo del plan Profesional, mas:",
+    incluye: "",
     limit: "3 sitios activos",
   },
 ];
