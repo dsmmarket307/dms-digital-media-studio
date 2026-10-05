@@ -5,6 +5,25 @@ import Link from "next/link";
 import Image from "next/image";
 
 const SERVICIOS: Record<string, any> = {
+  "gestion-clientes": {
+    title: "Gestión de Clientes",
+    desc: "Organiza contactos, oportunidades y ventas desde un CRM integrado.",
+    detalle: "Centraliza en un solo lugar los clientes que llegan desde tu sitio web, tus formularios, tus reservas y tu chatbot, y dale seguimiento a cada oportunidad hasta cerrar la venta.",
+    beneficios: [
+      { titulo: "Todo en un solo lugar", desc: "Contactos, leads y reservas organizados en tu panel." },
+      { titulo: "Seguimiento de oportunidades", desc: "Mueve cada cliente por tu embudo de ventas hasta el cierre." },
+      { titulo: "Captación automática", desc: "Los datos de tu sitio y tu chatbot llegan solos a tu lista de leads." },
+      { titulo: "Decisiones con datos", desc: "Estadísticas para saber qué funciona y dónde mejorar." },
+    ],
+    items: ["CRM integrado", "Gestión de contactos", "Seguimiento de ventas", "Oportunidades", "Reservas", "Estadísticas"],
+    proceso: ["Conectamos tu sitio, formularios y chatbot", "Organizamos tus contactos y las etapas de venta", "Activamos el seguimiento de oportunidades", "Revisas tus estadísticas y cierras más ventas"],
+    resultados: ["Menos clientes perdidos por falta de seguimiento", "Información de ventas ordenada y a la mano", "Más tiempo para vender y menos para organizar"],
+    faqs: [
+      { q: "¿Qué plan incluye el CRM?", a: "El CRM Pipeline y las estadísticas están en el plan Empresarial. Los leads y las reservas están desde el plan Profesional." },
+      { q: "¿Cómo llegan los clientes al CRM?", a: "Automáticamente desde el formulario de tu sitio, tus reservas y tu chatbot." },
+      { q: "¿Necesito conocimientos técnicos?", a: "No. Todo se gestiona desde tu panel, sin saber programación." },
+    ],
+  },
   "publicidad-digital": {
     title: "Publicidad Digital",
     desc: "Campanas publicitarias que llegan a tu cliente ideal y generan resultados medibles desde el primer dia.",

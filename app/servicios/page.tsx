@@ -36,7 +36,7 @@ const SERVICIOS = [
     ),
   },
   {
-    slug: "redes-sociales",
+    slug: "gestion-clientes",
     title: "Gestion de Clientes",
     desc: "Organiza contactos, oportunidades y ventas desde un CRM integrado.",
     items: ["CRM integrado", "Gestion de contactos", "Seguimiento de ventas", "Oportunidades"],
