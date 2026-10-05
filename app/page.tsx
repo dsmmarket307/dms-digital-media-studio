@@ -533,9 +533,9 @@ export default function Home() {
         </div>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {[
-            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", popular: false, items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Soporte basico"] },
-            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", popular: true, items: ["1 Sitio profesional", "Editor Profesional", "Diseno Responsive", "Galeria de imagenes", "SEO basico", "Formulario de contacto", "Reservas", "Dominio personalizado", "Leads integrados"] },
-            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", popular: false, items: ["Hasta 3 sitios activos", "Editor Avanzado", "Diseno Responsive", "Galeria de imagenes", "SEO Avanzado", "Formulario de contacto", "Reservas", "CRM integrado", "Automatizaciones IA", "Agente IA", "Estadisticas", "Dominios personalizados", "Soporte prioritario"] },
+            { slug: "basico", name: "Basico", price: "$49.000", per: "COP / mes", usd: 15, incluye: "", popular: false, items: ["1 Landing Page activa", "Editor Basico", "Diseno Responsive", "Boton WhatsApp", "Subdominio DMS", "Finanzas, facturas e inventario", "Soporte basico"] },
+            { slug: "profesional", name: "Profesional", price: "$99.000", per: "COP / mes", usd: 30, incluye: "Todo lo del plan Basico, mas:", popular: true, items: ["1 Sitio profesional", "Editor Profesional", "Galeria de imagenes", "Formulario de contacto", "SEO basico", "Reservas", "Leads integrados", "1 dominio personalizado", "Meta Pixel"] },
+            { slug: "empresarial", name: "Empresarial", price: "$199.000", per: "COP / mes", usd: 60, incluye: "Todo lo del plan Profesional, mas:", popular: false, items: ["Hasta 3 sitios activos", "Editor Avanzado", "SEO Avanzado", "CRM integrado", "Automatizaciones IA", "Agente IA", "Estadisticas", "3 dominios personalizados", "Soporte prioritario"] },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-xl p-8 flex flex-col relative bg-white ${plan.popular ? "border-2 border-purple-600 shadow-lg" : "border border-gray-200 hover:shadow-lg transition-shadow"}`}>
               {plan.popular && (
@@ -543,9 +543,11 @@ export default function Home() {
               )}
               <h3 className={`font-bold text-xl ${plan.popular ? "text-purple-600" : "text-gray-800"}`}>{plan.name}</h3>
               <div className="flex items-baseline gap-2 mt-4">
-                  <p className="text-4xl font-bold text-gray-900">{plan.price}</p>
-                  <p className="text-gray-400 text-sm">{plan.per}</p>
+                  <p className="text-4xl font-bold text-gray-900">US$ {plan.usd}</p>
+                  <p className="text-gray-400 text-sm">USD / mes</p>
                 </div>
+              <p className="text-xs text-gray-400 mt-1">Se cobra en pesos: {plan.price} COP al mes</p>
+              {plan.incluye ? <p className="text-xs font-semibold text-purple-700 mt-4">{plan.incluye}</p> : null}
               <ul className="mt-6 space-y-2 text-sm text-gray-600 flex-1">
                 {plan.items.map((item) => (
                   <li key={item} className="flex items-center gap-2">
@@ -562,6 +564,31 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="px-6 md:px-10 pb-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto rounded-2xl border border-purple-200 bg-purple-50 p-8">
+          <h3 className="font-bold text-gray-900 text-lg">Agente de voz con IA (complemento)</h3>
+          <p className="text-gray-600 text-sm mt-1">Atiende llamadas, agenda visitas o citas y envia los datos a tus leads y reservas. Se contrata aparte con un asesor y requiere plan Profesional o Empresarial. La configuracion inicial se cotiza aparte.</p>
+          <div className="grid md:grid-cols-3 gap-4 mt-6">
+            {[
+              { name: "Voz Inicial", detail: "100 minutos al mes", cop: 79000, usd: 24 },
+              { name: "Voz Pro", detail: "300 minutos al mes", cop: 149000, usd: 45 },
+              { name: "Minuto extra", detail: "Cuando superas tus minutos", cop: 600, usd: 0.18 },
+            ].map((v) => (
+              <div key={v.name} className="bg-white rounded-xl border border-purple-100 p-5 text-center">
+                <p className="font-bold text-gray-900">{v.name}</p>
+                <p className="text-xs text-gray-500 mt-1">{v.detail}</p>
+                <p className="text-2xl font-bold text-gray-900 mt-3">US$ {v.usd}</p>
+                <p className="text-xs text-gray-400">Se cobra: ${v.cop.toLocaleString("es-CO")} COP</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <Link href="/#contacto" className="inline-block bg-purple-600 text-white px-8 py-3 rounded-xl font-semibold text-sm hover:bg-purple-700 transition-colors">
+              Solicitar agente de voz
+            </Link>
+          </div>
+        </div>
+      </section>
       {/* TESTIMONIOS */}
       <section className="px-6 md:px-10 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">{lc.testimonios.titulo}</h2>

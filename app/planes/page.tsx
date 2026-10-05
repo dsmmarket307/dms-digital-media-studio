@@ -82,9 +82,9 @@ export default function PlanesPage() {
                 <h2 className="text-xl font-bold text-gray-900">{plan.name}</h2>
                 <p className="text-gray-500 text-sm mt-2 leading-relaxed">{plan.desc}</p>
                 <div className="mt-6 mb-2">
-                  <span className="text-4xl font-bold text-gray-900">${plan.price.toLocaleString("es-CO")}</span>
-                  <span className="text-gray-400 text-sm ml-2">COP / {plan.per}</span>
-                  <span className="block text-xs text-gray-400 mt-1">aprox. US$ {plan.usd} al mes (se cobra en COP)</span>
+                  <span className="text-4xl font-bold text-gray-900">US$ {plan.usd}</span>
+                  <span className="text-gray-400 text-sm ml-2">USD / {plan.per}</span>
+                  <span className="block text-xs text-gray-400 mt-1">Se cobra en pesos: ${plan.price.toLocaleString("es-CO")} COP al mes</span>
                 </div>
                 <div className="mb-6">
                   <span className="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">
@@ -141,8 +141,8 @@ export default function PlanesPage() {
               <div key={v.name} className="bg-white rounded-xl border border-purple-100 p-5 text-center">
                 <p className="font-bold text-gray-900">{v.name}</p>
                 <p className="text-xs text-gray-500 mt-1">{v.detail}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-3">${v.cop.toLocaleString("es-CO")}</p>
-                <p className="text-xs text-gray-400">COP - aprox. US$ {v.usd}</p>
+                <p className="text-2xl font-bold text-gray-900 mt-3">US$ {v.usd}</p>
+                <p className="text-xs text-gray-400">Se cobra: ${v.cop.toLocaleString("es-CO")} COP</p>
               </div>
             ))}
           </div>
