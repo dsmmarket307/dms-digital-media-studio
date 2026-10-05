@@ -565,28 +565,45 @@ export default function Home() {
       </section>
 
       <section className="px-6 md:px-10 pb-20 bg-gray-50">
-        <div className="max-w-5xl mx-auto rounded-2xl border border-purple-200 bg-purple-50 p-8">
-          <h3 className="font-bold text-gray-900 text-lg">Agente de voz con IA (complemento)</h3>
-          <p className="text-gray-600 text-sm mt-1">Atiende llamadas, agenda visitas o citas y envia los datos a tus leads y reservas. Se contrata aparte con un asesor y requiere plan Profesional o Empresarial. La configuracion inicial se cotiza aparte.</p>
-          <div className="grid md:grid-cols-3 gap-4 mt-6">
-            {[
-              { name: "Voz Inicial", detail: "100 minutos al mes", cop: 79000, usd: 24 },
-              { name: "Voz Pro", detail: "300 minutos al mes", cop: 149000, usd: 45 },
-              { name: "Minuto extra", detail: "Cuando superas tus minutos", cop: 600, usd: 0.18 },
-            ].map((v) => (
-              <div key={v.name} className="bg-white rounded-xl border border-purple-100 p-5 text-center">
-                <p className="font-bold text-gray-900">{v.name}</p>
-                <p className="text-xs text-gray-500 mt-1">{v.detail}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-3">US$ {v.usd}</p>
-                <p className="text-xs text-gray-400">Se cobra: ${v.cop.toLocaleString("es-CO")} COP</p>
+        <div className="max-w-5xl mx-auto">
+<div className="rounded-3xl p-8 md:p-12 text-white" style={{ background: "linear-gradient(135deg,#2e1065,#6d28d9)" }}>
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold tracking-widest bg-white/15 px-3 py-1 rounded-full mb-4">COMPLEMENTO</span>
+              <h3 className="text-3xl font-bold leading-tight">Agente de voz con IA</h3>
+              <p className="mt-3 text-sm leading-relaxed" style={{ color: "#e9d5ff" }}>Contesta tus llamadas, agenda visitas o citas y envia todo a tus leads y reservas. Se contrata aparte y requiere plan Profesional o Empresarial.</p>
+              <ul className="mt-6 space-y-3 text-sm">
+                {["Atiende llamadas las 24 horas", "Agenda citas y visitas automaticamente", "Guarda cada llamada con su resumen en tus leads"].map((b) => (
+                  <li key={b} className="flex items-center gap-3">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/#contacto" className="mt-8 inline-block bg-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-purple-50 transition-colors" style={{ color: "#5b21b6" }}>
+                Solicitar agente de voz
+              </Link>
+            </div>
+            <div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { name: "Voz Inicial", detail: "100 minutos al mes", cop: 79000, usd: 24, rec: false },
+                  { name: "Voz Pro", detail: "300 minutos al mes", cop: 149000, usd: 45, rec: true },
+                ].map((v) => (
+                  <div key={v.name} className="relative rounded-2xl bg-white p-6 text-center" style={{ color: "#111827", border: v.rec ? "2px solid #c4b5fd" : "2px solid transparent" }}>
+                    {v.rec && <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-3 py-1 rounded-full" style={{ background: "#7c3aed" }}>Recomendado</span>}
+                    <p className="font-bold">{v.name}</p>
+                    <p className="text-xs mt-1" style={{ color: "#6b7280" }}>{v.detail}</p>
+                    <p className="text-4xl font-bold mt-4">US$ {v.usd}</p>
+                    <p className="text-xs" style={{ color: "#9ca3af" }}>USD / mes</p>
+                    <p className="text-xs mt-3" style={{ color: "#6b7280" }}>Se cobra: ${v.cop.toLocaleString("es-CO")} COP</p>
+                  </div>
+                ))}
               </div>
-            ))}
+              <p className="mt-5 text-center text-xs" style={{ color: "#e9d5ff" }}>Minuto extra: US$ 0.18 (se cobra $600 COP). La configuracion inicial se cotiza aparte.</p>
+            </div>
           </div>
-          <div className="mt-6 text-center">
-            <Link href="/#contacto" className="inline-block bg-purple-600 text-white px-8 py-3 rounded-xl font-semibold text-sm hover:bg-purple-700 transition-colors">
-              Solicitar agente de voz
-            </Link>
-          </div>
+        </div>
         </div>
       </section>
       {/* TESTIMONIOS */}
