@@ -12,6 +12,7 @@ import ParallaxImage from "../ParallaxImage";
 import Script from "next/script";
 import { renderCustomHtml } from "@/lib/render-custom-html";
 import { getSeccionComponente } from "./secciones/registry";
+import Equipo from "./secciones/Equipo";
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
   "Landing Page": "business marketing professional office",
@@ -645,6 +646,8 @@ export default async function DemoProfesional({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {c?.equipo?.miembros?.length > 0 && <Equipo c={c} pr={pr} />}
 
       {(() => {
         const TestimoniosComponente = getSeccionComponente("testimonios", c?.testimonios_variant);

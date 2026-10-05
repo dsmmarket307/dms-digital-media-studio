@@ -65,6 +65,7 @@ export default function PageBuilderEditor() {
   const [logoUrl, setLogoUrl] = useState("");
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingImg, setUploadingImg] = useState<string | null>(null);
+  const [uploadingFoto, setUploadingFoto] = useState<number | null>(null);
   const [images, setImages] = useState<Record<string, string>>({});
   const logoRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
@@ -163,6 +164,20 @@ export default function PageBuilderEditor() {
     setUploadingImg(null);
   }
 
+  async function handleFotoMiembro(e: React.ChangeEvent<HTMLInputElement>, i: number) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingFoto(i);
+    const ext = file.name.split(".").pop();
+    const fileName = `equipo-${Date.now()}-${i}.${ext}`;
+    const { error } = await supabase.storage.from("logos").upload(fileName, file, { upsert: true });
+    if (!error) {
+      const { data } = supabase.storage.from("logos").getPublicUrl(fileName);
+      updateNestedArray("equipo", "miembros", i, "foto", data.publicUrl);
+    }
+    setUploadingFoto(null);
+    e.target.value = "";
+  }
   function updateText(path: string[], value: string) {
     setContent((prev: any) => {
       const next = JSON.parse(JSON.stringify(prev));
@@ -673,6 +688,13 @@ export default function PageBuilderEditor() {
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                     <span style={{ fontSize: 11, fontWeight: 700, color: "#888" }}>Miembro {i + 1}</span>
                     <button onClick={() => removeNestedItem("equipo", "miembros", i)} style={{ background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: 6, padding: "3px 8px", fontSize: 11, cursor: "pointer" }}>Eliminar</button>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                    {m.foto ? <img src={m.foto} alt="foto" style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", objectPosition: "center top" }} /> : <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#888" }}>Sin foto</div>}
+                    <label style={{ padding: "7px 12px", borderRadius: 8, border: `1px dashed ${pr}`, background: `${pr}08`, color: pr, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                      {uploadingFoto === i ? "Subiendo..." : m.foto ? "Cambiar foto" : "Subir foto"}
+                      <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => handleFotoMiembro(e, i)} />
+                    </label>
                   </div>
                   <Field label="Nombre" value={m.nombre} onChange={(v) => updateNestedArray("equipo", "miembros", i, "nombre", v)} />
                   <Field label="Cargo" value={m.cargo} onChange={(v) => updateNestedArray("equipo", "miembros", i, "cargo", v)} />
